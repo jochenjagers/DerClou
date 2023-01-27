@@ -374,15 +374,18 @@ ubyte Say(ulong TextID,ubyte activ,uword person,char *text)
 		} else {
 			dskBuildPathName(AUDIO_DIRECTORY, text, wavName);
 			strcat(wavName, ".wav");
+			if ((Config.VoiceVolume > 0) && (dskFileLength(wavName) > 0)) {	// 2018-10-08
+				sndFading(16);
 
-			sndFading(16);
-
-			MXR_SetInput(pAudioMixer, MXR_INPUT_VOICE, MXR_CreateInputWAV(wavName));
-			MXR_SetInputVolume(pAudioMixer, MXR_INPUT_VOICE, Config.VoiceVolume);	// 2018-09-25
+				MXR_SetInput(pAudioMixer, MXR_INPUT_VOICE, MXR_CreateInputWAV(wavName));
+				MXR_SetInputVolume(pAudioMixer, MXR_INPUT_VOICE, Config.VoiceVolume);	// 2018-09-25
 			
-			choice = Bubble(bubble,activ,NULL,0L);
+				choice = Bubble(bubble,activ,NULL,0L);
 			
-			MXR_SetInput(pAudioMixer, MXR_INPUT_VOICE, NULL);
+				MXR_SetInput(pAudioMixer, MXR_INPUT_VOICE, NULL);
+			} else {
+				choice = Bubble(bubble,activ,NULL,0L);
+			}
 		}
 		sndFading(0);
 

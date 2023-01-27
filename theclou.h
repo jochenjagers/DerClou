@@ -8,7 +8,7 @@
 #define THECLOU_MODULE
 
 #define __COSP__
-#define COSP_VERSION	"0.7a"
+#define COSP_VERSION	"0.7b"
 #define COSP_TITLE		"Der Clou! Open Source Project"
 
 typedef struct {

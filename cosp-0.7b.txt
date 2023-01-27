@@ -1,4 +1,4 @@
-Der Clou! Open Source Project V0.7a (2018-09-26)
+Der Clou! Open Source Project V0.7b (2018-10-08)
 
 http://sourceforge.net/projects/cosp
 
@@ -31,6 +31,9 @@ license contained in the included 'mame.txt' file.
 ================================================================================
   CHANGES/FIXES
 ================================================================================
+
+v0.7b (2018-10-08)
+- fix: don't fade music volume when there's no voice (reported by MvGulik)
 
 v0.7a (2018-09-26)
 - fix: repainting car shows wrong colors
