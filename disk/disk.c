@@ -5,15 +5,12 @@
    Based on the original by neo Software GmbH
 */
 #include "disk\disk.h"
-#include "disk\disk.eh"
+#include "disk\disk_e.h"
 
 char RootPathName[256];
 
-#ifdef THECLOU_CDROM_VERSION
-char CDDrive[8] = "X:\\";
-#endif
 
-void dskSetRootPath(char *newRootPath)
+void dskSetRootPath(const char *newRootPath)
 {
 	strcpy(RootPathName, newRootPath);
 }
@@ -24,22 +21,23 @@ char *dskGetRootPath(char *result)
 	return result;
 }
 
-FILE *dskOpen(ubyte *puch_Pathname, ubyte *puch_Mode, uword us_DiskId)
+FILE *dskOpen(const char *puch_Pathname, const char *puch_Mode, uword us_DiskId)
 {
 	FILE *p_File = NULL;
 
 	us_DiskId = 0; /* just to have no warnings */
 
+	//Log("%s|%s: %s(%s)", __FILE__, __func__, puch_Pathname, puch_Mode);
+
 	if (!(p_File = fopen(puch_Pathname, puch_Mode)))
 	{
-		Log(puch_Pathname);
 		NewErrorMsg(Disk_Defect, __FILE__, __func__, ERR_DISK_OPEN_FAILED);
 	}
 
 	return(p_File);
 }
 
-void dskLoad(ubyte *puch_Pathname, void *p_MemDest, uword us_DiskId)
+long dskLoad(const char *puch_Pathname, void *p_MemDest, uword us_DiskId)
 {
 	FILE *p_File = NULL;
 	long ul_SizeOfFile;
@@ -50,32 +48,18 @@ void dskLoad(ubyte *puch_Pathname, void *p_MemDest, uword us_DiskId)
 		{
 			dskRead(p_File, p_MemDest, ul_SizeOfFile);
 			dskClose(p_File);
+			return(ul_SizeOfFile);
 		}
 	}
+	return(0);
 }
 
-void dskBuildPathName(ubyte *puch_Directory, ubyte *puch_Filename, ubyte *puch_Result)
+void dskBuildPathName(const char *puch_Directory, const char *puch_Filename, char *puch_Result)
 {
-	#ifdef THECLOU_CDROM_VERSION
-	{
-		if (!strcmp(puch_Directory, DATADISK))
-			sprintf(puch_Result, "%s\\%s", puch_Directory, puch_Filename);
-		else
-		#ifdef THECLOU_PROFIDISK
-		if (!strcmp(puch_Directory, TEXT_DIRECTORY))
-			sprintf(puch_Result, "%s\\%s", puch_Directory, puch_Filename);
-		else
-			sprintf(puch_Result, "%s%s\\%s", CDDrive, puch_Directory, puch_Filename);
-		#else
-			sprintf(puch_Result, "%s%s\\%s", CDDrive, puch_Directory, puch_Filename);
-		#endif
-	}
-	#else
 	sprintf(puch_Result, "%s\\%s\\%s", RootPathName, puch_Directory, puch_Filename);
-	#endif
 }
 
-long dskFileLength (ubyte *puch_Pathname)
+long dskFileLength (const char *puch_Pathname)
 {
 	long l_Size = 0;
 	FILE *file;
@@ -126,20 +110,15 @@ int dskIsEOF(FILE *p_File)
 // fgets() has this CR/LF problem
 char *dskGets(char *text, int n, FILE *file)
 {
-	int c, i;
-	for (i = 0; i < n-1; i++)
-	{
-		c = fgetc(file);
-		if (c == EOF)
-		{
-			if (!i) return(NULL);
-			break;
+	char *p;
+	if (fgets(text, n, file)) {
+		if (p = strrchr(text, 13)) {
+			*p = '\0';
 		}
-
-		if (c == 13) i--;	// ignore
-		else if (c == 10) break;
-		else text[i] = c;
+		if (p = strrchr(text, 10)) {
+			*p = '\0';
+		}
+		return(text);
 	}
-	text[i] = 0;
-	return(text);
+	return(NULL);
 }

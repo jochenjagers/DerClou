@@ -26,7 +26,7 @@
 #endif
 void Log(const char *s, ...);
 
-#define ERROR_MODULE_BASE		 3
+#define ERROR_MODULE_BASE		3
 #define ERROR_MODULE_TXT		 4
 #define ERROR_MODULE_DISK		 5
 #define ERROR_MODULE_MEMORY	 6

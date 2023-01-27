@@ -64,7 +64,7 @@ void tcOrganisationSetCar(void)
 
 	Organisation.CarID = OL_NR(LIST_HEAD(ObjectList));
 
-	car = dbGetObject(Organisation.CarID);
+	car = (Car)dbGetObject(Organisation.CarID);
 
 	Organisation.PlacesInCar = car->PlacesInCar;
 	}
@@ -103,7 +103,8 @@ ubyte tcMakeCarOk(void)
 ulong tcOrganisation(void)
 	{
 	LIST  *menu  = txtGoKey(MENU_TXT,"ORGANISATION");
-	ubyte  activ = 0, ende = 0, line[TXT_KEY_LENGTH];
+	ubyte  activ = 0, ende = 0;
+	char line[TXT_KEY_LENGTH];
 
 	/***********************************************
 	 * erstes oder gemerktes Geb„ude aktivieren !
@@ -139,7 +140,7 @@ ulong tcOrganisation(void)
 
 		Organisation.CarID = OL_NR(LIST_HEAD(ObjectList));
 
-		car = dbGetObject(Organisation.CarID);
+		car = (Car)dbGetObject(Organisation.CarID);
 
 		Organisation.PlacesInCar = car->PlacesInCar;
 		}
@@ -230,51 +231,54 @@ ulong tcOrganisation(void)
 	}
 
 ubyte tcCheckOrganisation(void)
-	{
-	Player player = dbGetObject(Player_Player_1);
+{
+	Player player = (Player)dbGetObject(Player_Player_1);
 	ubyte check=0;
 
 	if (Organisation.BuildingID)
-		{
+	{
 		if ((((Building)dbGetObject(Organisation.BuildingID))->Exactlyness) > 127)
-			{
+		{
 			if (Organisation.DriverID)
-				{
+			{
 				if (player->NrOfBurglaries == 8)
-					{
+				{
 					if (Organisation.CarID == Car_Jaguar_XK_1950)
 						check = 1;
 					else
 						Say(BUSINESS_TXT,0,MATT_PICTID,"PLAN_NO_JAGUAR");
-					}
-				else
-               #ifdef THECLOU_PROFIDISK
-               {
-               if (Organisation.BuildingID == Building_Westminster_Abbey)
-                    {
-                    if ((Organisation.CarID == Car_Fiat_634_N_1936) || (Organisation.CarID == Car_Fiat_634_N_1943))
-                         check = 1;
-                    else
-                         Say(BUSINESS_TXT,0,MATT_PICTID,"PLAN_NO_FIAT");
-                    }
-               else
-                    check = 1;
-               }
-               #else
-               check = 1;
-               #endif
 				}
+				else
+				{
+					if (bProfidisk)
+					{
+						if (Organisation.BuildingID == Building_Westminster_Abbey)
+						{
+							if ((Organisation.CarID == Car_Fiat_634_N_1936) || (Organisation.CarID == Car_Fiat_634_N_1943))
+								check = 1;
+							else
+								Say(BUSINESS_TXT,0,MATT_PICTID,"PLAN_NO_FIAT");
+						}
+						else
+							check = 1;
+					}
+					else
+					{
+						check = 1;
+					}
+				}
+			}
 			else
 				Say(BUSINESS_TXT,0,MATT_PICTID,"PLAN_NO_DRIVER");
-			}
+		}
 		else
 			Say(BUSINESS_TXT,0,MATT_PICTID,"PLAN_NO_KNOWL");
-		}
+	}
 	else
 		Say(BUSINESS_TXT,0,MATT_PICTID,"PLAN_NO_BUILDING");
 
 	return(check);
-	}
+}
 
 ulong tcChooseDriver(ulong persID)
 	{
@@ -304,7 +308,7 @@ ulong tcChooseDriver(ulong persID)
 
 			if (!has(newPersID, Ability_Autos))
 				{
-				Person pers = dbGetObject(newPersID);
+				Person pers = (Person)dbGetObject(newPersID);
 
 				Say(BUSINESS_TXT,0,pers->PictID,"PLAN_CANT_DRIVE");
 				}
@@ -432,7 +436,8 @@ void tcChooseGuys(void)
 	else
 		{
 		LIST  *menu = txtGoKey(MENU_TXT,"ORG_KOMPLIZEN");
-		ubyte  line[TXT_KEY_LENGTH],activ=0;
+		char  line[TXT_KEY_LENGTH];
+		ubyte activ=0;
 
 		ShowMenuBackground ();
 

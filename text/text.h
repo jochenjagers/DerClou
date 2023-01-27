@@ -75,6 +75,6 @@ void txtSetLanguage(ubyte lang);
 ubyte txtGetLanguage(void);
 
 // get a temporary string
-ubyte *txtGetTemporary(void);
+char *txtGetTemporary(void);
 
 #endif

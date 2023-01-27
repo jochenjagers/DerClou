@@ -34,7 +34,7 @@
 extern void	InitAnimHandler(void);
 extern void	CloseAnimHandler(void);
 
-extern void	PlayAnim(ubyte *AnimID,word how_often,ulong mode);	/* -> docs vom 16.08.92 ! */
+extern void	PlayAnim(char *AnimID,word how_often,ulong mode);	/* -> docs vom 16.08.92 ! */
 extern void	StopAnim(void);
 
 extern void animator(void);

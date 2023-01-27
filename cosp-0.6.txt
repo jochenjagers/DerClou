@@ -1,0 +1,116 @@
+Der Clou! Open Source Project V0.6 (2017-11-16)
+
+http://sourceforge.net/projects/cosp
+
+================================================================================
+  CREDITS
+================================================================================
+
+Idea & concept:  ...and avoid panic by
+Programming:     Helmut Gaberschek, Kaweh Kazemi
+Graphics:        Markus Hudolin
+Story:           Karam Nada
+Sound & music:   Hannes Seifert
+
+SDL conversion:  Oliver Gantert (LucyG)
+Contributions:   Baris Elmas (devkid82)
+                 Ronny Thiemann (templer)
+                 Thomas Trummer (LordSkaven)
+Playtesting:     Baris Elmas (devkid82) - first to finish German version
+                 Martin Banas (srandista) - first to finish Czech version
+                 Neno - the bug reporter :)
+
+IFF ANIM decoder C++ class by Markus Wolf (murkymind.de)
+Ported to C by Oliver Gantert.
+
+Sound playback by Vasco Alexandre da Silva Costa and Jens Granseuer
+ ( http://web.ist.utl.pt/~ist62669/theclue )
+HSC music player by Thomas Trummer
+The fmopl YM3812 emulator from MAME is under a no distribution for profit
+license contained in the included 'mame.txt' file.
+
+================================================================================
+  CHANGES/FIXES
+================================================================================
+
+v0.6 (2017-11-16)
+- new: completely rewritten audio player and mixer (LucyG)
+       (volume settings still not working)
+- fix: memory leak in the intro (LucyG)
+
+  To play CDROM voice from HD, you will need the AUDIO directory
+  from "cosp-cdaudio-22khz.zip" and of course play the CD version
+  without the CD in drive.
+
+  Um die Sprachausgabe der CD von Festplatte abzuspielen, wird das
+  AUDIO Verzeichnis aus "cosp-cdaudio-22khz.zip" benötigt und man
+  muss natürlich die CDROM-Version spielen, ohne CD im Laufwerk.
+
+v0.5a (2017-10-31)
+- fix: crash on planning Natural Museum (LucyG, reported by Neno)
+- fix: crash on visiting Buckingham Palace (LucyG, reported by Neno)
+
+v0.5 (2017-10-29)
+- new: joystick support (see clou.cfg) (LucyG)
+- new: support CDROM speech as WAV files (experimental) (LucyG)
+- fix: guard paths and alarm connections missing (LucyG, reported by Neno)
+
+v0.4f (2017-10-28)
+- fix: missing percentage on progressbars in the thinking bubble (LucyG)
+
+v0.4e (2015-01-10)
+- fix: crash with Czech localization when talking to Dan Stanford (LucyG,
+       reported by srandista)
+- fix: crash in exploding Jaguar scene (devkid82)
+- new: use mouse wheel to scroll text in bubbles (devkid82)
+
+v0.4d (2015-01-04)
+- fix: crash on executing Chiswick House (LucyG)
+
+v0.4c (2014-07-17)
+- new: intro for CD version with voice (LucyG)
+- fix: fade music volume while playing voice from CD (LucyG)
+
+v0.4b (2014-07-14)
+- new: take screenshots (BMP) with F12 (LucyG)
+- new: use custom mouse arrow (templer)
+- fix: standard disk version crashed (templer)
+
+v0.4a (2014-07-13)
+- fix: playing the CD version without CD in drive crashed (LucyG)
+
+v0.4 (2014-07-12)
+- fix: several random crashes when entering planing mode (LucyG)
+- new: config file (cosp.cfg) replaces command line parameters (LucyG)
+- new: more flexible gfx filtering "system" (LucyG)
+- fix: fullscreen modes with letterboxing (LucyG)
+- new: borrowed music and sample player from Mr da Silva Costa (LucyG)
+- fix: some changes to the sample player (LucyG)
+- fix: intro now with sound and music, no voice yet (LucyG)
+- new: automatic version detection, same exe for all versions (templer)
+- fix: savegame compatibility improved (templer)
+- new: CD-ROM handling (templer)
+- new: config parameter to disable font shadow (LucyG)
+- new: config parameter to skip intro (LucyG)
+
+v0.3 (2014-07-04)
+- fix: better timing, input handling, gfx refresh (LucyG)
+- fix: abilities corrupted (LucyG)
+- fix: dealers didn't buy anything (LucyG)
+- new: play intro animations (LucyG)
+- now also compiles with Visual C++ 2010 Express
+
+v0.2a (2014-06-27)
+- fix: no collision on background color (templer)
+- new: automatic language detection (templer)
+- replaced xmsCopyXXX macros with memcpy for clarity (LucyG)
+
+v0.2 (2014-06-25)
+- fix: load/save functionality fixed (templer)
+- fix: mouse handling (templer)
+
+v0.1d (2003-12-04)
+- initial release
+- compiled with lcc-win32
+
+================================================================================

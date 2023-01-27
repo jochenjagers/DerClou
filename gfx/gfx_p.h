@@ -12,8 +12,8 @@
 
 #define GFX_DECR_BUFFER_SIZE			STD_BUFFER1_SIZE
 
-#define GFX_BUBBLE_FONT_NAME			((ubyte*)"bubble.fnt")
-#define GFX_MENU_FONT_NAME				((ubyte*)"menu.fnt")
+#define GFX_BUBBLE_FONT_NAME			((char*)"bubble.fnt")
+#define GFX_MENU_FONT_NAME				((char*)"menu.fnt")
 
 #define GFX_CMAP_OFFSET					61440	// -> Maximalgroesse 320 * 192
 
@@ -103,6 +103,6 @@ static void gfxInitPictList(void);
 
 static void gfxGetCMAP(ubyte *p_Data, ubyte *p_Dest);
 
-static struct Font *gfxOpenFont(ubyte *puch_FileName, uword us_Width, uword us_Height, ubyte uch_FirstChar, ubyte uch_LastChar, uword us_TotalWidth, uword us_TotalHeight);
+static struct Font *gfxOpenFont(char *puch_FileName, uword us_Width, uword us_Height, ubyte uch_FirstChar, ubyte uch_LastChar, uword us_TotalWidth, uword us_TotalHeight);
 static void gfxCloseFont(struct Font *font);
 

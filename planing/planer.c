@@ -90,6 +90,7 @@ static void plActionGo(void)
 {
 	ulong choice = 0L;
 	ubyte direction;
+	ubyte collision;
 	struct Action *action = CurrentAction(plSys);
 
 	plMessage("WALK", PLANING_MSG_REFRESH);
@@ -107,7 +108,7 @@ static void plActionGo(void)
 		if (choice & INP_LBUTTONP)
 			break;
 
-		if (!(choice & INP_MOUSE))
+		if (!(choice & INP_MOUSE) && !(choice & INP_MOUSEWHEEL))
 		{
 			if (choice & INP_ESC)
 			{
@@ -128,7 +129,11 @@ static void plActionGo(void)
 				if (choice & INP_DOWN)
 					direction += LS_SCROLL_DOWN;
 
-				if (!lsInitScrollLandScape(direction, LS_SCROLL_PREPARE))
+				/* 2014-07-06 LucyG
+				TODO: allow the character to change direction without walking if there's a collision
+				*/
+				collision = lsInitScrollLandScape(direction, LS_SCROLL_PREPARE);
+				if (!collision)
 				{
 					if (!action || (action->Type != ACTION_GO))
 					{
@@ -144,14 +149,12 @@ static void plActionGo(void)
 						}
 					}
 
-					if (ActionData(action,struct ActionGo *)->Direction == (uword)direction)
+					if (ActionData(action,struct ActionGo *)->Direction == (uword)direction) {
 						IncCurrentTimer(plSys, 1, 1);
-					else
-					    {
-						if (action = InitAction(plSys, ACTION_GO, direction, 0L, 1L))
+					} else {
+						if (action = InitAction(plSys, ACTION_GO, direction, 0L, 1L)) {
 							PlanChanged = 1;
-						else
-						    {
+						} else {
 							plSay("PLANING_END", CurrentPerson);
 							inpSetKeyRepeat((1<<5) | 10);
 							inpTurnMouse(1);
@@ -407,7 +410,7 @@ static void plLevelDesigner(LSObject lso)
 
 		case PLANING_LD_OK:
 			{
-				ubyte fileName[TXT_KEY_LENGTH],areaName[TXT_KEY_LENGTH];
+				char fileName[TXT_KEY_LENGTH],areaName[TXT_KEY_LENGTH];
 
 				dbGetObjectName(area, areaName);
 				strcat(areaName, ".dat");
@@ -470,7 +473,7 @@ static void plActionOpenClose(uword what)
 			choice1 = OL_NR(GetNthNode(actionList, choice1));
 
 			if (GamePlayMode & GP_LEVEL_DESIGN)
-				plLevelDesigner(dbGetObject(choice1));
+				plLevelDesigner((LSObject)dbGetObject(choice1));
 			else
 			    if ((CurrentPerson >= BurglarsNr) || !CHECK_STATE(lsGetObjectState(choice1), Const_tcIN_PROGRESS_BIT))
 			{
@@ -531,7 +534,7 @@ static void plActionTake(void)
 		plMessage("NO_OBJECTS", PLANING_MSG_WAIT);
 	else
 	    {
-		LIST *takeableList = CreateList(0L);
+		LIST *takeableList = (LIST*)CreateList(0L);
 		struct ObjectNode *n, *h, *h2;
 
 		for (n = (struct ObjectNode *)LIST_HEAD(actionList); NODE_SUCC(n); n = (struct ObjectNode *)NODE_SUCC(n))
@@ -796,11 +799,11 @@ static void plActionUse(void)
 		if (LIST_EMPTY(ObjectList))
 			plMessage("USE_1", PLANING_MSG_WAIT);
 		else
-		    {
+		{
 			if (LIST_EMPTY(actionList))
 				plMessage("NO_OBJECTS", PLANING_MSG_WAIT);
 			else
-			    {
+			{
 				plMessage("USE_3", PLANING_MSG_REFRESH);
 
 				SetPictID(((Person)dbGetObject(OL_NR(GetNthNode (PersonsList, CurrentPerson))))->PictID);
@@ -842,7 +845,7 @@ static void plActionUse(void)
 					{
 						if (has(OL_NR(GetNthNode(PersonsList, CurrentPerson)), Ability_Kampf))
 						{
-							LIST *objList = CreateList(0L);
+							LIST *objList = (LIST*)CreateList(0L);
 
 							dbAddObjectNode(objList, Tool_Hand, OLF_INCLUDE_NAME|OLF_INSERT_STAR);
 							dbAddObjectNode(objList, Tool_Fusz, OLF_INCLUDE_NAME|OLF_INSERT_STAR);
@@ -874,16 +877,16 @@ static void plActionUse(void)
 									livRefreshAll();
 								}
 								else
-								    plSay("PLANING_END", CurrentPerson);
+									plSay("PLANING_END", CurrentPerson);
 							}
 
 							RemoveList(objList);
 						}
 						else
-						    plMessage("WRONG_ABILITY", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
+							plMessage("WRONG_ABILITY", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
 					}
 					else
-					    {
+					{
 						state = lsGetObjectState(choice1);
 
 						if (!CHECK_STATE(state, Const_tcIN_PROGRESS_BIT))
@@ -904,7 +907,7 @@ static void plActionUse(void)
 								}
 							}
 							else
-							    {
+							{
 								if (!CHECK_STATE(state, Const_tcLOCK_UNLOCK_BIT))
 								{
 									plMessage("USE_2", PLANING_MSG_REFRESH);
@@ -969,10 +972,10 @@ static void plActionUse(void)
 																	plMessage("POWER_ON", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
 																}
 																else
-																    plMessage("ALARM_ON", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
+																	plMessage("ALARM_ON", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
 															}
 															else
-															    {
+															{
 																lsSetObjectState(choice1, Const_tcON_OFF, 1);   /* off setzen */
 
 																if (plIgnoreLock(choice1) == PLANING_POWER)
@@ -982,7 +985,7 @@ static void plActionUse(void)
 																	plMessage("POWER_OFF", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
 																}
 																else
-																    plMessage("ALARM_OFF", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
+																	plMessage("ALARM_OFF", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
 															}
 														}
 
@@ -990,67 +993,67 @@ static void plActionUse(void)
 														livRefreshAll();
 													}
 													else
-													    plSay("PLANING_END", CurrentPerson);
+														plSay("PLANING_END", CurrentPerson);
 												}
 												else
-												    plMessage("DOES_NOT_WORK", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
+													plMessage("DOES_NOT_WORK", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
 											}
 											else
-											    plMessage("TOOL_DOES_NOT_WORK", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
+												plMessage("TOOL_DOES_NOT_WORK", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
 										}
 										else
-										    plMessage("WRONG_ABILITY", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
+											plMessage("WRONG_ABILITY", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
 									}
 								}
 								else if ((((LSObject)dbGetObject(choice1))->Type == Item_Fenster))
 								{
-#ifdef THECLOU_PROFIDISK
-									if (Planing_BldId == Building_Postzug)
+
+									if ((bProfidisk) && (Planing_BldId == Building_Postzug))
 										plSay ("PLANING_TRAIN", CurrentPerson);
 									else
-#endif
-									    if (CHECK_STATE(lsGetObjectState(choice1), Const_tcOPEN_CLOSE_BIT))
-									{
-										if (has(Person_Matt_Stuvysunt, Tool_Strickleiter))
+
+										if (CHECK_STATE(lsGetObjectState(choice1), Const_tcOPEN_CLOSE_BIT))
 										{
-											uword xpos, ypos;
-
-											if (InitAction(plSys, ACTION_USE, choice1, 0L, PLANING_TIME_THROUGH_WINDOW * PLANING_CORRECT_TIME))
+											if (has(Person_Matt_Stuvysunt, Tool_Strickleiter))
 											{
-												PlanChanged = 1;
+												uword xpos, ypos;
 
-												lsWalkThroughWindow((LSObject)dbGetObject(choice1), livGetXPos(Planing_Name[CurrentPerson]), livGetYPos(Planing_Name[CurrentPerson]), &xpos, &ypos);
+												if (InitAction(plSys, ACTION_USE, choice1, 0L, PLANING_TIME_THROUGH_WINDOW * PLANING_CORRECT_TIME))
+												{
+													PlanChanged = 1;
 
-												livSetPos(Planing_Name[CurrentPerson], xpos, ypos);
-												plSync(PLANING_ANIMATE_NO, GetMaxTimer(plSys), PLANING_TIME_THROUGH_WINDOW * PLANING_CORRECT_TIME, 1);
-												livRefreshAll();
+													lsWalkThroughWindow((LSObject)dbGetObject(choice1), livGetXPos(Planing_Name[CurrentPerson]), livGetYPos(Planing_Name[CurrentPerson]), &xpos, &ypos);
+
+													livSetPos(Planing_Name[CurrentPerson], xpos, ypos);
+													plSync(PLANING_ANIMATE_NO, GetMaxTimer(plSys), PLANING_TIME_THROUGH_WINDOW * PLANING_CORRECT_TIME, 1);
+													livRefreshAll();
+												}
+												else
+													plSay("PLANING_END", CurrentPerson);
 											}
 											else
-											    plSay("PLANING_END", CurrentPerson);
+												plMessage("NO_STAIRS", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
 										}
 										else
-										    plMessage("NO_STAIRS", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
-									}
-									else
-									    plMessage("WALK_WINDOW", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
+											plMessage("WALK_WINDOW", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
 								}
 								else
-								    plMessage("UNLOCK_UNLOCKED", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
+									plMessage("UNLOCK_UNLOCKED", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
 							}
 						}
 						else
-						    plMessage("IN_PROGRESS", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
+							plMessage("IN_PROGRESS", PLANING_MSG_REFRESH|PLANING_MSG_WAIT);
 					}
 				}
 			}
 		}
 	}
 	else
-	    {
+	{
 		if (LIST_EMPTY(actionList))
 			plMessage("NO_OBJECTS", PLANING_MSG_WAIT);
 		else
-		    {
+		{
 			plMessage("CONTROL", PLANING_MSG_REFRESH);
 
 			SetPictID(((Person)dbGetObject(OL_NR(GetNthNode (PersonsList, CurrentPerson))))->PictID);
@@ -1074,7 +1077,7 @@ static void plActionUse(void)
 					livRefreshAll();
 				}
 				else
-				    plSay("PLANING_END", CurrentPerson);
+					plSay("PLANING_END", CurrentPerson);
 			}
 		}
 	}

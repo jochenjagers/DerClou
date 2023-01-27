@@ -9,9 +9,9 @@
 static long tcGetWeightOfNerves(long teamMood);
 static long tcIsConnectedWithEnabledAlarm(ulong lsoId);
 
-#define tcESCAPE_MOOD         30   /* ab hier flÅchtet einer ! */
+#define tcESCAPE_MOOD         30   /* ab hier fl¸Åchtet einer ! */
 #define tcWALK_LOUDNESS       20
-#define tcPATROL_ALARM        5   /* ab 5 % verÑnderte Objekte schlÑgt Patrolie Alarm */
+#define tcPATROL_ALARM        5   /* ab 5 % ver‰nderte Objekte schl‰gt Patrolie Alarm */
 
 #define tcPIXEL_PER_SECCOND   4
 
@@ -45,7 +45,7 @@ ubyte tcSpendMoney(long money,ubyte breakAnim)
 
 /* berechnet Auswirkung eines Funkspruches
  * setzt Auswirkungen automatisch
- * pro Funkspruch sinkt Wirkung um 30 Punkte (von 255) -> ab dem 6 Spruch
+ * pro Funkspruch sinkt Wirkung um 30 Punkte (von 255) -> ab dem 6. Spruch
  * automatisch demotivierend.
  */
 void tcCalcCallValue(ulong callNr, ulong timer, ulong persId)
@@ -58,7 +58,7 @@ void tcCalcCallValue(ulong callNr, ulong timer, ulong persId)
 
 	  if(persId)
 			 {
-			 guy = dbGetObject(persId);
+			 guy = (Person)dbGetObject(persId);
 		nerves = 255 - guy->Panic;
 			 }
 
@@ -99,13 +99,13 @@ void tcCalcCallValue(ulong callNr, ulong timer, ulong persId)
 	Search.CallValue = ChangeAbs(Search.CallValue, good, -500, 500);
 	}
 
-/* Berechnet ÅberschlagsmÑÑ·ig den Ausgang der Flucht */
+/* Berechnet Å¸berschlagsm‰ssig den Ausgang der Flucht */
 /* basiert alleine auf den Koordinaten */
-/* vernachlÑssigt Stockwerke und Personen */
+/* vernachl‰ssigt Stockwerke und Personen */
 long tcCalcEscapeTime()
 	{
 	long time = 0, i;
-	Building build = dbGetObject(Search.BuildingId);
+	Building build = (Building)dbGetObject(Search.BuildingId);
 
 	for (i = 0; i < 4; i++)
 		{
@@ -122,16 +122,17 @@ long tcCalcEscapeTime()
 			}
 		}
 
-	time = time / 4;    /* Fluchtzeit kÅrzen - war zu lang! */
+	time = time / 4;    /* Fluchtzeit k¸Årzen - war zu lang! */
 
 	return time;
 	}
+
 /* bestimmt den Ausgang eines Kampfes */
 /* Werkzeug wirkt sich nur in Geschwindigkeit und Verletzung aus */
 long tcKillTheGuard(ulong guyId, ulong buildingId)
 	{
-	Person p = dbGetObject(guyId);
-	Building b = dbGetObject (buildingId);
+	Person p = (Person)dbGetObject(guyId);
+	Building b = (Building)dbGetObject (buildingId);
 	ulong power = hasGet(guyId, Ability_Kampf);
 
 	if (power >=  b->GuardStrength)
@@ -178,7 +179,7 @@ long tcGuyTellsAll(Person p)
 long tcGetCarTraderOffer(Car car)
 	{
 	long offer  = tcGetCarPrice(car);
-	Person marc = dbGetObject(Person_Marc_Smith);
+	Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
 	offer = CalcValue (offer, 1, 0xffff, 0, 25);      /* 25% weniger */
 	offer = CalcValue (offer, 1, 0xffff, 126 + (marc->Known / 2), 30);
@@ -272,7 +273,7 @@ ulong tcGetPersOffer(Person person,ubyte persCount)
 
 	/* MOD 18-02-04 HG 92 statt 100 (Marx Testspielempfehlung) */
 	offer = 100 / persCount;                             /* sein Anteil bei gleichen Teilen */
-	offer = (offer * assesment) / 92;                    /* ... gewichtet mit FÑhigkeiten   */
+	offer = (offer * assesment) / 92;                    /* ... gewichtet mit F‰higkeiten   */
 
 	/* Beispiel zu oben: 2 Personen -> offer = 50, assesment = 200 */
 	/* (andere Person ist "zweimal so gut") -> offer = 50 * 300 / 200 = 75 % */
@@ -286,7 +287,7 @@ ulong tcGetPersOffer(Person person,ubyte persCount)
 void tcPersonLearns(ulong pId)
 	{
 	struct ObjectNode *n;
-	Person pers = dbGetObject(pId);
+	Person pers = (Person)dbGetObject(pId);
 	long ability, count, growth;
 
 	/* Abilites */
@@ -294,7 +295,7 @@ void tcPersonLearns(ulong pId)
 
 	for (n = (struct ObjectNode *) LIST_HEAD(ObjectList); NODE_SUCC(n); n = (struct ObjectNode *) NODE_SUCC(n))
 		{
-		ability = hasGet(pId, OL_NR(n));   /* Jetztzustand der FÑhigkeit */
+		ability = hasGet(pId, OL_NR(n));   /* Jetztzustand der F‰higkeit */
 
 		if(learned(pId, OL_NR(n)))         /* er hat dazugelernt ! */
 			{
@@ -339,7 +340,7 @@ ulong tcGetBuildValues(Building bui)
 
 /*
  * Berechnet Teamstimmung
- * zu verwenden fÅr Anzeige der Teamstimmung
+ * zu verwenden fÅ¸r Anzeige der Teamstimmung
  * 0 - 255
  */
 
@@ -362,8 +363,8 @@ long tcGetTeamMood(ulong *guyId, ulong timer)   /* ptr auf 4 ulongs */
 	}
 
 /*
- * retourniert neuen Erschîpfungszustand eines Einbrechers
- * Aufzurufen, wenn Person Aktion durchfÅhrt
+ * retourniert neuen Erschˆpfungszustand eines Einbrechers
+ * Aufzurufen, wenn Person Aktion durchf¸Åhrt
  * nur alle x Aktionsschritte aufrufen !
  */
 
@@ -372,7 +373,7 @@ long tcGuyInAction(ulong persId, long exhaustion)
 	long state = tcGetGuyState(persId);
 
 	if(CalcRandomNr(0, 15) == 1)
-		state = (255 - state) / 90;   /* Erschîpfungszuwachs = Invers von Zustand */
+		state = (255 - state) / 90;   /* Erschˆpfungszuwachs = Invers von Zustand */
 	else
 		state = 0;
 
@@ -380,7 +381,7 @@ long tcGuyInAction(ulong persId, long exhaustion)
 	}
 
 /*
- * Setzt die Erschîpfungsabnahme eines Einbrechers
+ * Setzt die Erschˆpfungsabnahme eines Einbrechers
  * Aufzurufen, wenn Person wartet
  * nur alle x Warteschritte aufrufen !
  */
@@ -390,7 +391,7 @@ long tcGuyIsWaiting(ulong persId, long exhaustion)
 	long state = tcGetGuyState(persId);
 
 	if(CalcRandomNr(0, 4) == 1)
-		state = state / 10;   /* Erschîpfungsabnahme */
+		state = state / 10;   /* Erschˆpfungsabnahme */
 	else
 		state = 0;
 
@@ -403,11 +404,11 @@ long tcGuyIsWaiting(ulong persId, long exhaustion)
  * 255 : Plan wird (zeitlich) zu 100% eingehalten
  */
 /* bei jeder Warnung eines Aufpasser , wird dieser Wert nach unten */
-/* korriegiert */
-/* RÅckgabewert steigt mit Zunahme der Zeit (Einbrecher werden immer
+/* korrigiert */
+/* R¸Åckgabewert steigt mit Zunahme der Zeit (Einbrecher werden immer
 	selbstsicherer
-	udn sinkt mit der Differenz der RealitÑt zum Plan!
-	durch FunksprÅche diesen RÅckgabewert beeinflussen!
+	und sinkt mit der Differenz der Realit‰t zum Plan!
+	durch Funkspr¸Åche diesen R¸Åckgabewert beeinflussen!
 */
 
 static long tcIsPlanPerfect(ulong timer)
@@ -439,7 +440,7 @@ long tcGetTrail(Person p, ubyte which)
 			trail = CalcValue (trail, 0, 255, 255 - p->Health , 10);
 			break;
 		case 1:   /* Wait */
-			trail = (p->Panic) / 4;   /* umso grî·er Panik umso mehr Spuren! */
+			trail = (p->Panic) / 4;   /* umso grˆsser Panik umso mehr Spuren! */
 			break;
 		case 2:   /* Work */
 			trail = (255 - p->Skill) / 4;
@@ -503,7 +504,7 @@ static ulong tcGetNecessaryAbility(ulong persId, ulong toolId)
 	}
 
 /*
- * Berechnet Zeit, die Einbrecher fÅr eine Aktion benîtigt
+ * Berechnet Zeit, die Einbrecher f¸År eine Aktion benˆtigt
  */
 
 ulong tcGuyUsesToolInPlayer(ulong persId, Building b, ulong toolId, ulong itemId, ulong needTime)
@@ -523,11 +524,11 @@ ulong tcGuyUsesToolInPlayer(ulong persId, Building b, ulong toolId, ulong itemId
 
 ulong tcGuyUsesTool(ulong persId, Building b, ulong toolId, ulong itemId)
 	/*
-	 * diese Funktion darf keine ZufÑlligkeit enthalten -> Sync!!
+	 * diese Funktion darf keine Zuf‰lligkeit enthalten -> Sync!!
 	 */
 	{
 	ulong origin, time;
-	Person p = dbGetObject(persId);
+	Person p = (Person)dbGetObject(persId);
 
 	origin = time = breakGet(itemId, toolId);
 
@@ -580,7 +581,7 @@ ulong tcGuyUsesTool(ulong persId, Building b, ulong toolId, ulong itemId)
 
 		time = CalcValue(time, 0, origin * 4, 127 + ((255 - (tcGetNecessaryAbility(persId, toolId))) / 2), 50);
 
-		switch(itemId)  /* Alarmanglagen bonus! */
+		switch(itemId)  /* Alarmanlagen bonus! */
 			{
 			case Item_Alarmanlage_Z3:
 				  break;
@@ -610,7 +611,7 @@ ulong tcGuyUsesTool(ulong persId, Building b, ulong toolId, ulong itemId)
 
 long tcGetDanger(ulong persId, ulong toolId, ulong itemId)
 	{
-	Person p = dbGetObject(persId);
+	Person p = (Person)dbGetObject(persId);
 	long danger = hurtGet(itemId, toolId);
 
 	danger = CalcValue (danger, 0, 255, 255 - p->Skill, 30);
@@ -634,13 +635,13 @@ long tcGetDanger(ulong persId, ulong toolId, ulong itemId)
 	}
 
 /*
- * berechnet die LautstÑrke einer Aktion
+ * berechnet die Lautst‰rke einer Aktion
  *
  */
 
 long tcGetToolLoudness(ulong persId, ulong toolId, ulong itemId)
 	{
-	Person p = dbGetObject(persId);
+	Person p = (Person)dbGetObject(persId);
 	long loudness = soundGet(itemId, toolId);
 
 	loudness = CalcValue (loudness, 0, 255, 255 - p->Skill, 10);
@@ -650,7 +651,7 @@ long tcGetToolLoudness(ulong persId, ulong toolId, ulong itemId)
 	}
 
 /*
- * berechnet die LautstÑrke vom Gehen
+ * berechnet die Lautst‰rke vom Gehen
  */
 
 long tcGetWalkLoudness(void)
@@ -663,7 +664,7 @@ long tcGetWalkLoudness(void)
 	}
 
 /*
- * berechnet LautstÑrkenpegel aller 4 Einbrecher
+ * berechnet Lautst‰rkenpegel aller 4 Einbrecher
  */
 
 long tcGetTotalLoudness(long loudp0, long loudp1, long loudp2, long loudp3)
@@ -674,15 +675,15 @@ long tcGetTotalLoudness(long loudp0, long loudp1, long loudp2, long loudp3)
 	total = max(total, loudp2);
 	total = max(total, loudp3);
 
-	total = CalcValue (total, 0, 255, 255, 20);   /* um ca 20 % erhîhen */
+	total = CalcValue (total, 0, 255, 255, 20);   /* um ca 20 % erhˆhen */
 
 	return (total);
 	}
 
 /*
  * stellen fest, ob ein Funkspruch aufgefangen oder
- * ob durch die LautstÑrke ein Passant, Nachbar die Polizei alarmiert wurde
- * wenn diese Funktionen 1 zurÅckliefern, ab jetzt stÑndig WatchDog
+ * ob durch die Lautst‰rke ein Passant, Nachbar die Polizei alarmiert wurde
+ * wenn diese Funktionen 1 zur¸Åckliefern, ab jetzt st‰ndig WatchDog
  * aufrufen
  */
 
@@ -715,57 +716,67 @@ long tcAlarmByPatrol(Building b, uword objChangedCount, uword totalCount, ubyte 
 		return 0;
 	}
 
-/* fÅr jedes Objekt, das vom WÑchter kontrolliert wird, aufrufen! */
+/* f¸År jedes Objekt, das vom W‰chter kontrolliert wird, aufrufen! */
 /* wenn 1 -> richtiger Alarm! */
 
 long tcGuardChecksObject(LSObject lso)
-	{
-	/* hier darf NICHT das OPEN_CLOSE_BIT sonst, schlÑgt der WÑchter */
-	/* Alarm, wenn er eine TÅr îffnet!                               */
+{
+	/* hier darf NICHT das OPEN_CLOSE_BIT sonst schl‰gt der W‰chter */
+	/* Alarm, wenn er eine TÅ¸r ˆffnet!                              */
 	if ((lso->ul_Status & (1<<Const_tcIN_PROGRESS_BIT)) ||
-		 (lso->ul_Status & (1<<Const_tcLOCK_UNLOCK_BIT)))
+		(lso->ul_Status & (1<<Const_tcLOCK_UNLOCK_BIT)))
 		return 1;
 	else
-		{
+	{
 		switch(lso->Type)
+		{
+		case Item_Alarmanlage_Z3:
+		case Item_Alarmanlage_X3:
+		case Item_Alarmanlage_Top:
+		case Item_Steuerkasten:
+			/* hier darf NICHT das OPEN_CLOSE_BIT gepr¸Åft werden */
+			/* sonst schl‰gt der W‰chter Alarm, wenn er es ˆffnet! */
+			if (lso->ul_Status & (1 << Const_tcON_OFF))
+				return 1;
+			break;
+		case Item_Bild:
+		case Item_Vase:
+		case Item_Gemaelde:
+		case Item_Statue:
+			if (lso->uch_Visible == 0)
+				return 1;
+			break;
+		default:
+			break;
+		}
+		if (bProfidisk)
+		{
+			switch(lso->Type)
 			{
-			case Item_Alarmanlage_Z3:
-			case Item_Alarmanlage_X3:
-			case Item_Alarmanlage_Top:
-			case Item_Steuerkasten:
-				  /* hier darf NICHT das OPEN_CLOSE_BIT geprÅft werden */
-				  /* sonst schlÑgt der WÑchter Alarm, wenn er es îffnet! */
-				  if (lso->ul_Status & (1 << Const_tcON_OFF))
-						return 1;
-				  break;
-			case Item_Bild:
-			case Item_Vase:
-			case Item_Gemaelde:
-			case Item_Statue:
-         #ifdef THECLOU_PROFIDISK
-         case Item_Heiligenstatue:
-         case Item_Kerzenstaender:
-         case Item_Kirchenkreuz:
+			case Item_Heiligenstatue:
+			case Item_Kerzenstaender:
+			case Item_Kirchenkreuz:
 
-         case Item_Hottentotten_Figur:
-         case Item_Batman_Figur:
-         case Item_Dicker_Man:
-         case Item_Unbekannter:
-         case Item_Jack_the_Ripper_Figur:
-         case Item_Koenigs_Figur:
-         case Item_Wache_Figur:
-         case Item_Miss_World_1952:
-         #endif
-				  if (lso->uch_Visible == 0)
-						return 1;
-				  break;
+			case Item_Hottentotten_Figur:
+			case Item_Batman_Figur:
+			case Item_Dicker_Man:
+			case Item_Unbekannter:
+			case Item_Jack_the_Ripper_Figur:
+			case Item_Koenigs_Figur:
+			case Item_Wache_Figur:
+			case Item_Miss_World_1952:
+				if (lso->uch_Visible == 0)
+					return 1;
+				break;
 			default:
-				  break;
+				break;
 			}
 		}
 
-	return 0;
 	}
+
+	return 0;
+}
 
 /* vor Beginn jeder Arbeit oder alle 32 Pixel die ein Einbrecher geht,
  * aufrufen!
@@ -779,7 +790,7 @@ long tcAlarmByMicro(uword us_XPos, uword us_YPos, long loudness)
 	}
 
 /*
- * sobald ein Alarm Marke "Nachbar" existiert, fÅr jeden Aufpasser, der gerade
+ * sobald ein Alarm Marke "Nachbar" existiert, fÅ¸r jeden Aufpasser, der gerade
  * wartet, diese Funktion aufrufen
  * wenn diese Funktion 1 retourniert -> Aufpasser hat etwas bemerkt ->
  * Warnung an Matt !
@@ -792,7 +803,7 @@ long tcWatchDogWarning(ulong persId)
 
 	random = CalcRandomNr(0, 200) +    /* Joe soll nicht gleich in der ersten */
 				CalcRandomNr(0, 200) +    /* Sekunde etwas bemerken!             */
-				CalcRandomNr(0, 200);     /* Risiko wird durch Addition GRô·ER!! */
+				CalcRandomNr(0, 200);     /* Risiko wird durch Addition GR÷SSER!! */
 
 	if ((watch > random) && (CalcRandomNr(0, 40) == 1))
 		return 1;
@@ -801,7 +812,7 @@ long tcWatchDogWarning(ulong persId)
 	}
 
 /*
- * sobald KEIN Alarm Marke "Nachbar" existiert, fÅr jeden Aufpasser, der
+ * sobald KEIN Alarm Marke "Nachbar" existiert, f¸År jeden Aufpasser, der
  * gerade wartet, diese Funktion aufrufen (Fehlalarm)
  */
 
@@ -837,7 +848,7 @@ long tcIsCarRecognised(Car car, long time)
 
 static long tcGetGuyState(ulong persId)
 	{
-	Person p = dbGetObject(persId);
+	Person p = (Person)dbGetObject(persId);
 	long state;
 
 	state = tcGetPersHealth(p);
@@ -872,7 +883,7 @@ long tcCalcMattsPart(void)
 	return 100 - part;
 	}
 
-/* immer wenn eine Stechuhr betÑtigt wird */
+/* immer wenn eine Stechuhr bet‰tigt wird */
 
 void tcRefreshTimeClock(ulong buildId, ulong timerId)
 	{
@@ -920,7 +931,7 @@ static long tcInsideSameRoom(LIST *roomsList, word polX, word polY, word livX, w
 
      for (node = (NODE*) LIST_HEAD(roomsList); NODE_SUCC(node) && detected==0; node = (NODE*) NODE_SUCC(node))
           {
-          room = OL_DATA(node);
+          room = (LSRoom)OL_DATA(node);
 
           if ((polX >= room->us_LeftEdge) && (polX <= room->us_LeftEdge + room->us_Width) &&
               (polY >= room->us_TopEdge ) && (polY <= room->us_TopEdge  + room->us_Height))
@@ -939,7 +950,7 @@ static long tcInsideSameRoom(LIST *roomsList, word polX, word polY, word livX, w
 /* XPos, YPos = Position des WÑchters */
 /* wenn 1 -> Alarm! */
 
-long tcGuardDetectsGuy(LIST *roomsList, uword us_XPos, uword us_YPos, ubyte uch_ViewDirection, ubyte *puch_GuardName, ubyte *puch_LivingName)
+long tcGuardDetectsGuy(LIST *roomsList, uword us_XPos, uword us_YPos, ubyte uch_ViewDirection, char *puch_GuardName, char *puch_LivingName)
 	{
 	ubyte detected = 0;
 	uword livXPos = livGetXPos(puch_LivingName);
@@ -959,7 +970,7 @@ long tcGuardDetectsGuy(LIST *roomsList, uword us_XPos, uword us_YPos, ubyte uch_
 
 long tcAlarmByTouch(ulong lsoId)
 	{
-	LSObject lso = dbGetObject(lsoId);
+	LSObject lso = (LSObject)dbGetObject(lsoId);
 
 	if (lso->uch_Chained & Const_tcCHAINED_TO_ALARM)
 		if (tcIsConnectedWithEnabledAlarm(lsoId)) return 1;
@@ -988,7 +999,7 @@ long tcAlarmByPowerLoss (ulong powerId)
 
 	for (n = (NODE *) LIST_HEAD(friendlyList); NODE_SUCC(n); n = (NODE*) NODE_SUCC(n))
 		{
-		LSObject lso = OL_DATA(n);
+		LSObject lso = (LSObject)OL_DATA(n);
 
 		if (lso->ul_Status & Const_tcCHAINED_TO_ALARM)
 			if (tcIsConnectedWithEnabledAlarm (OL_NR(n)))
@@ -1015,7 +1026,7 @@ static long tcIsConnectedWithEnabledAlarm(ulong lsoId)
 
 	for (n = (NODE *) LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE*) NODE_SUCC(n))
 		{
-		LSObject alarm = OL_DATA(n);
+		LSObject alarm = (LSObject)OL_DATA(n);
 
 			 if (!(alarm->ul_Status & (1L<<Const_tcON_OFF)))
 			return 1;
@@ -1031,11 +1042,11 @@ static long tcGetWeightOfNerves(long teamMood)
 
 void tcInsertGuard(LIST *list, LIST *roomsList, uword x, uword y, uword width, uword height, ulong guardId, ubyte livId, ulong areaId)
 	{
-	ubyte name[TXT_KEY_LENGTH] = {0};
+	char name[TXT_KEY_LENGTH] = {0};
 	uword gx, gy;
 	ulong guardedArea = isGuardedbyGet(lsGetCurrBuildingID(), guardId);
 
-	sprintf (name, "Police_%d", livId);
+	sprintf ((char*)name, "Police_%d", livId);
 
 	gx = livGetXPos(name);
 	gy = livGetYPos(name);

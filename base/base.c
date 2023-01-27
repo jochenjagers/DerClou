@@ -6,14 +6,22 @@
 */
 #include "SDL.h"
 #include "base\base.h"
+#include "intro\intro.h"
 
 // cheat function
 #include "base\fullenv.c"
+
+Configuration_t Config;
 
 void *StdBuffer0 = 0;
 void *StdBuffer1 = 0;
 
 char prgname[255];
+
+/************************************************/
+char bProfidisk=0; //default = 0
+char bCDRom=0; //default = 0
+/************************************************/
 
 void tcClearStdBuffer(void *p_Buffer)
 {
@@ -34,9 +42,11 @@ void tcClearStdBuffer(void *p_Buffer)
 static void tcDone(void)
 {
 	plDone();
-	sndDoneFX(); // achtung
+	sndDoneFX(); // Attention!
 	sndDone();
-	if (FXBase.us_SoundBlasterOk) RemoveSBlast();
+
+	RemoveAudio();
+
 	dbDone();
 	CloseAnimHandler();
 	txtDone();
@@ -44,13 +54,14 @@ static void tcDone(void)
 	gfxDone();
 	rndDone();
 
-	#ifdef THECLOU_CDROM_VERSION
-	if (CDRomInstalled)
+	if (bCDRom)
 	{
-		CDROM_StopAudioTrack();
-		CDROM_UnInstall();
+		if (CDRomInstalled)
+		{
+			CDROM_StopAudioTrack();
+			CDROM_UnInstall();
+		}
 	}
-	#endif
 
 	if (StdBuffer0)
 		MemFree(StdBuffer0, STD_BUFFER0_SIZE);
@@ -58,43 +69,121 @@ static void tcDone(void)
 	if (StdBuffer1)
 		MemFree(StdBuffer1, STD_BUFFER1_SIZE);
 
-	if (memGetAllocatedMem())
-		Log("WARNING! Memory Leak (%d bytes)", memGetAllocatedMem());
+	if (MemGetAllocated()) {
+		Log("WARNING! Memory Leak (%d bytes)", MemGetAllocated());
+
+		Log("Total memory used: %d bytes", MemGetMaxAllocated());
+	}
 
 	pcErrClose();
 }
 
-static long tcInit(void)
+/* 2014-06-27 templer
+Suggestion for automatic detection of the language of the game
+*/
+static ubyte detectLanguage(void)
+{
+	char languageMark[4] = {'E', 'D', 'F', 'S'};
+    int count = 0;
+
+	for (count = 0; count < sizeof(languageMark) / sizeof(languageMark[0]); count++)
+	{
+	    char fileName[TXT_KEY_LENGTH];
+	    char fileWithPath[TXT_KEY_LENGTH];
+	    FILE *p_File;
+
+	    sprintf(fileName,"tcmaine%c.txt", languageMark[count]);
+	    dskBuildPathName(TEXT_DIRECTORY, fileName, fileWithPath);
+	    if (p_File = fopen(fileWithPath, "r"))
+	    {
+			fclose(p_File);
+	        return (ubyte)count;
+	    }
+	}
+
+	Log("couldn't detect language of the game!");
+	NewErrorMsg(Internal_Error, __FILE__, __func__, 1);
+	return 0;
+}
+
+/* 2014-07-01 templer
+ * detect the game version (STD/PROFI/CD) based on the "please wait loading" text in "THECLOUx.TXT"
+ * must call after txtInit */
+static void detectGameVersionType(void)
+{
+	if (txtKeyExists(THECLOU_TXT, "BITTE_WARTEN_PC_CD_ROM")) // || (txtKeyExists(THECLOU_TXT, "BITTE_WARTEM_PC_CD_ROM"))
+	{
+		bProfidisk = 0;
+		bCDRom = 1; 
+	}
+	else if (txtKeyExists(THECLOU_TXT, "BITTE_WARTEN_PC_CD_ROM_PROFI"))
+	{
+		bProfidisk = 1;
+		bCDRom = 1;
+	}
+	else if (txtKeyExists(THECLOU_TXT, "BITTE_WARTEN_PC_PROFI"))
+	{
+		bProfidisk = 1;
+		bCDRom = 0;
+
+	}
+	else if (txtKeyExists(THECLOU_TXT, "BITTE_WARTEN_PC"))
+	{
+		bProfidisk = 0;
+		bCDRom = 0;
+	}
+
+}
+
+static int tcInit(void)
 {
 	pcErrOpen(ERR_NO_OUTPUT, tcDone, NULL);
-
-	long *p, i;
-
-	if (!InitSBlaster()) FXBase.us_SoundBlasterOk = 1;
 
 	StdBuffer0 = (void *)MemAlloc(STD_BUFFER0_SIZE);
 	StdBuffer1 = (void *)MemAlloc(STD_BUFFER1_SIZE);
 
-	#ifdef THECLOU_CDROM_VERSION
-	if (CDRomInstalled = CDROM_Install())
-		CDROM_WaitForMedia();
-	else return(0);
-	#endif
 
 	if (StdBuffer0 && StdBuffer1)
 	{
 		gfxInit();
 		inpOpenAllInputDevs();
 
-		#ifdef THECLOU_VERSION_ENGLISH
-		txtInit(TXT_LANG_ENGLISH);
-		#else
-		txtInit(TXT_LANG_GERMAN);
-		#endif
+		txtInit(detectLanguage());	/* 2014-06-27 templer */
+
+		detectGameVersionType(); /* 2014-07-01 templer */
+
+		if (bCDRom) /* 2014-07-01 templer */
+		{
+			char flag=0;
+			while (!flag)
+			{
+				if (CDROM_Install() != 0) 
+				{
+					flag=1;
+				}
+				else
+				{
+					Log("%s|%s: could not find or read CD/DVD", __FILE__, __func__);
+					/* BAD: Windows specific code..., sorry templer
+					mID = MessageBox(NULL,(LPCWSTR)"could not find or read CD/DVD \n press 'Cancel' to continue without CD",(LPCWSTR)"CD/DVD Error!", MB_ICONWARNING | MB_RETRYCANCEL | MB_DEFBUTTON2);
+					if (mID == IDRETRY)
+					{
+						CDROM_SetGameCDDrive();
+					}
+					else 
+					*/
+					{
+						flag = 1;
+					}
+				}
+			}
+		}
 
 		InitAnimHandler();
 
 		dbInit();
+
+		InitAudio();
 
 		sndInit();
 
@@ -103,7 +192,7 @@ static long tcInit(void)
 
 		plInit();
 
-		gfxCopyCollToXMS(128, &StdRP0InXMS);    // MenÅ nach StdRP0InXMS
+		gfxCopyCollToXMS(128, &StdRP0InXMS);    // MenÅ¸ nach StdRP0InXMS
 		gfxCopyCollToXMS(129, &StdRP1InXMS);    // Bubbles etc nach StdRP1InXMS
 
 		CurrentBackground = BGD_LONDON;
@@ -115,40 +204,29 @@ static long tcInit(void)
 
 static void InitData(void)
 {
-	ubyte MainData[TXT_KEY_LENGTH] = {0};
-	ubyte BuildData[TXT_KEY_LENGTH] = {0};
-	ubyte MainRel[TXT_KEY_LENGTH] = {0};
-	ubyte BuildRel[TXT_KEY_LENGTH] = {0};
-	ubyte RootPath[TXT_KEY_LENGTH] = {0};
+	char MainData[TXT_KEY_LENGTH] = {0};
+	char BuildData[TXT_KEY_LENGTH] = {0};
+	char MainRel[TXT_KEY_LENGTH] = {0};
+	char BuildRel[TXT_KEY_LENGTH] = {0};
+	char RootPath[TXT_KEY_LENGTH] = {0};
 	ubyte result = 0;
 
-	dskGetRootPath(RootPath);
 
-	sprintf(MainData,  "%s\\%s\\%s%s",RootPath, DATA_DIRECTORY,MAIN_DATA_NAME,GAME_DATA_EXT);
-	sprintf(BuildData, "%s\\%s\\%s%s",RootPath, DATA_DIRECTORY,BUILD_DATA_NAME, GAME_DATA_EXT);
+	dskBuildPathName(DATA_DIRECTORY, MAIN_DATA_NAME GAME_DATA_EXT, MainData);
+    dskBuildPathName(DATA_DIRECTORY, BUILD_DATA_NAME GAME_DATA_EXT, BuildData);
 
-	sprintf(MainRel,  "%s\\%s\\%s%s",RootPath, DATA_DIRECTORY,MAIN_DATA_NAME,GAME_REL_EXT);
-	sprintf(BuildRel, "%s\\%s\\%s%s",RootPath, DATA_DIRECTORY,BUILD_DATA_NAME, GAME_REL_EXT);
-
-	#ifdef THECLOU_PROFIDISK
-	#ifdef THECLOU_CDROM_VERSION
-	sprintf(MainData,  "%s\\%s%s", DATA_DIRECTORY,MAIN_DATA_NAME,GAME_DATA_EXT);
-	sprintf(BuildData, "%s\\%s%s", DATA_DIRECTORY,BUILD_DATA_NAME, GAME_DATA_EXT);
-
-	sprintf(MainRel,  "%s\\%s%s", DATA_DIRECTORY,MAIN_DATA_NAME,GAME_REL_EXT);
-	sprintf(BuildRel, "%s\\%s%s", DATA_DIRECTORY,BUILD_DATA_NAME, GAME_REL_EXT);
-	#endif
-	#endif
+    dskBuildPathName(DATA_DIRECTORY, MAIN_DATA_NAME GAME_REL_EXT, MainRel);
+    dskBuildPathName(DATA_DIRECTORY, BUILD_DATA_NAME GAME_REL_EXT, BuildRel);
 
 	txtReset(OBJECTS_TXT);
 
-	if (dbLoadAllObjects(MainData, 0))
+	if (dbLoadAllObjects((char*)MainData, 0))
 	{
-		if (dbLoadAllObjects(BuildData, 0))
+		if (dbLoadAllObjects((char*)BuildData, 0))
 		{
-			if (LoadRelations(MainRel, 0))
+			if (LoadRelations((char*)MainRel, 0))
 			{
-				if (LoadRelations(BuildRel, 0))
+				if (LoadRelations((char*)BuildRel, 0))
 				{
 					InitTaxiLocations();
 					result = 1;
@@ -212,29 +290,38 @@ static ubyte StartupMenu(void)
 {
 	LIST *menu = txtGoKey(MENU_TXT, "STARTUP_MENU");
 	ulong activ;
-	FILE *fh;
-	ubyte line[TXT_KEY_LENGTH] = {0};
+	char line[TXT_KEY_LENGTH] = COSP_TITLE " v" COSP_VERSION;
 	ubyte ret = 0;
 
 	ShowMenuBackground();
 
-	#ifndef THECLOU_PROFIDISK
-	#ifndef THECLOU_CDROM_VERSION
-	//txtGetFirstLine(THECLOU_TXT, "BITTE_WARTEN_PC", line);
-	strcpy(line, "Der Clou! Deluxe V" THECLOU_VERSION " (Standard)");
-	#else
-	//txtGetFirstLine(THECLOU_TXT, "BITTE_WARTEN_PC_CD_ROM", line);
-	strcpy(line, "Der Clou! Deluxe V" THECLOU_VERSION " (Std. CD-ROM)");
-	#endif
-	#else
-	#ifndef THECLOU_CDROM_VERSION
-	//txtGetFirstLine(THECLOU_TXT, "BITTE_WARTEN_PC_PROFI", line);
-	strcpy(line, "Der Clou! Deluxe V" THECLOU_VERSION " (Profidisk)");
-	#else
-	//txtGetFirstLine(THECLOU_TXT, "BITTE_WARTEN_PC_CD_ROM_PROFI", line);
-	strcpy(line, "Der Clou! Deluxe V" THECLOU_VERSION " (Prof. CD-ROM)");
-	#endif
-	#endif
+	//2014-07-01 templer
+	if (!bProfidisk)
+	{
+		if (!bCDRom)
+		{
+			//txtGetFirstLine(THECLOU_TXT, "BITTE_WARTEN_PC", line);
+			strcat(line, " (Standard)");
+		}
+		else
+		{
+			//txtGetFirstLine(THECLOU_TXT, "BITTE_WARTEN_PC_CD_ROM", line);
+			strcat(line, " (Std. CD-ROM)");
+		}
+	}
+	else
+	{
+		if (!bCDRom)
+		{
+			//txtGetFirstLine(THECLOU_TXT, "BITTE_WARTEN_PC_PROFI", line);
+			strcat(line, " (Profidisk)");
+		}
+		else
+		{
+			//txtGetFirstLine(THECLOU_TXT, "BITTE_WARTEN_PC_CD_ROM_PROFI", line);
+			strcat(line, " (Prof. CD-ROM)");
+		}
+	}
 
 	PrintStatus(line);
 
@@ -248,12 +335,12 @@ static ubyte StartupMenu(void)
 
 	switch (activ)
 	{
-		case 0:			// Neues Spiel
+		case 0:			// New Game
 			InitData();
 			ret = 1;
 		break;
 
-		case 1:			// Spiel laden
+		case 1:			// Load Game
 			txtReset(OBJECTS_TXT);
 			if (tcLoadTheClou())
 			{
@@ -262,7 +349,7 @@ static ubyte StartupMenu(void)
 			}
 		break;
 
-		case 2:			// Beenden
+		case 2:			// Quit Game
 			ret = 2;
 		break;
 	}
@@ -280,10 +367,10 @@ static void tcDo(void)
 
 	tcSetPermanentColors();
 
-	// um die Menufarben auch einmal zu blenden:
+	// to fade in the menu colors once:
 	gfxShow(CurrentBackground, GFX_ONE_STEP|GFX_NO_REFRESH|GFX_BLEND_UP, 0, -1, -1);
 
-	// Maus auf weiss - auf Verdacht 15 und 16 setzen
+	// set mouse cursor to white - on spec set color 15 and 16 to white
 	gfxSetRGB(NULL, 15, 255, 255, 255);
 	gfxSetRGB(NULL, 16, 255, 255, 255);
 
@@ -318,32 +405,120 @@ static void tcDo(void)
 	}
 }
 
-static int ArgsIndex(const char *str, int argc, char **argv)
+// remove tabs and spaces
+static char *trimstr(char *str)
 {
-	int i;
-	for (i = 1; i < argc; i++)
-	{
-		if (!strnicmp(argv[i], str, strlen(str))) return(i);
+	char *p;
+
+	str += strspn(str, " \t");
+	while (p = strrchr(str, ' ')) {
+		*p = '\0';
 	}
-	return(0);
+	while (p = strrchr(str, '\t')) {
+		*p = '\0';
+	}
+	return(str);
+}
+
+static void loadConfig(const char *rootPath)
+{
+	char config_file[256], line[256], *pParam, *pValue, *p;
+	FILE *file;
+
+	// set defaults
+	Config.gfxScreenWidth = 320;
+	Config.gfxScreenHeight = 200;
+	Config.gfxFullScreen = 0;
+	Config.gfxNoFontShadow = 0;
+	Config.NoIntro = 0;
+	Config.MusicVolume = SND_MAX_VOLUME;
+	Config.SfxVolume = SND_MAX_VOLUME;
+	Config.UseJoystick = 0;
+
+	sprintf(config_file, "%s\\%s", rootPath, "cosp.cfg");
+	file = dskOpen(config_file, "rb", 0);
+	if (!file) {
+		Log("Failed to open cosp.cfg");
+		return;
+	}
+
+	while (dskGets(line, sizeof(line)-1, file)) {
+		line[sizeof(line)-1] = '\0';	// just to be safe
+
+		if (p = strchr(line, ';')) {
+			*p = '\0';
+		}
+		if (p = strchr(line, '#')) {
+			*p = '\0';
+		}
+
+		if (pValue = strchr(line, '=')) {
+			*pValue++ = '\0';
+			pValue = trimstr(pValue);
+			if (*pValue == '\0') {	// no value after =
+				continue;
+			}
+			pParam = trimstr(line);
+
+			if (!stricmp(pParam, "screenwidth")) {
+				Config.gfxScreenWidth = atoi(pValue);
+			} else if (!stricmp(pParam, "screenheight")) {
+				Config.gfxScreenHeight = atoi(pValue);
+			} else if (!stricmp(pParam, "fullscreen")) {
+				Config.gfxFullScreen = atoi(pValue) ? 1 : 0;
+			} else if (!stricmp(pParam, "scale2x")) {
+				Config.gfxScaleNx = atoi(pValue) ? 1 : 0;
+			} else if (!stricmp(pParam, "soundvolume")) {
+				Config.SfxVolume = atoi(pValue);
+			} else if (!stricmp(pParam, "musicvolume")) {
+				Config.MusicVolume = atoi(pValue);
+			} else if (!stricmp(pParam, "nofontshadow")) {
+				Config.gfxNoFontShadow = atoi(pValue) ? 1 : 0;
+			} else if (!stricmp(pParam, "nointro")) {
+				Config.NoIntro = atoi(pValue) ? 1 : 0;
+			} else if (!stricmp(pParam, "usejoystick")) {
+				Config.UseJoystick = atoi(pValue);
+			} else if (!stricmp(pParam, "demo") && (atoi(pValue) == 42)) {
+				GamePlayMode |= GP_DEMO|GP_STORY_OFF;
+			} else if (!stricmp(pParam, "storyoff") && (atoi(pValue) == 42)) {
+				GamePlayMode |= GP_STORY_OFF;
+			} else if (!stricmp(pParam, "fullenv") && (atoi(pValue) == 42)) {
+				GamePlayMode |= GP_FULL_ENV;
+			} else if (!stricmp(pParam, "leveldesign") && (atoi(pValue) == 42)) {
+				GamePlayMode |= GP_LEVEL_DESIGN;
+			} else if (!stricmp(pParam, "guarddesign") && (atoi(pValue) == 42)) {
+				GamePlayMode |= GP_GUARD_DESIGN;
+			} else if (!stricmp(pParam, "nosamples") && (atoi(pValue) == 42)) {
+				GamePlayMode |= GP_NO_SAMPLES;
+			} else if (!stricmp(pParam, "nocollision") && (atoi(pValue) == 42)) {
+				GamePlayMode |= GP_COLLISION_CHECKING_OFF;
+			} else if (!stricmp(pParam, "showrooms") && (atoi(pValue) == 42)) {
+				GamePlayMode |= GP_SHOW_ROOMS;
+			} else if (!stricmp(pParam, "moremoney") && (atoi(pValue) == 42)) {
+				GamePlayMode |= GP_MORE_MONEY;
+			}
+		}
+	}
+
+	dskClose(file);
 }
 
 int SDL_main(int argc, char **argv)
 {
-	remove(LOG_FILENAME);
-
-	if (SDL_Init(SDL_INIT_TIMER)) return(0);
-
 	char result[256], res;
 	long i;
-	int t;
+
+#ifdef THECLOU_DEBUG_ALLOC
+	MemInit();
+#endif
+
+	remove(LOG_FILENAME);
+
+	if (SDL_InitSubSystem(SDL_INIT_TIMER)) return(0);	// 2015-01-10 LucyG : SDL_Init is already called earlier
 
 	strcpy(prgname, argv[0]);
 
 	rndInit();
-
-	// KB Buffer lîschen
-	inpClearKbBuffer();
 
 	strcpy(result, argv[0]);
 
@@ -356,47 +531,36 @@ int SDL_main(int argc, char **argv)
 		}
 	}
 
-	if (argc > 1)
-	{
-		/* Options */
-
-		if (ArgsIndex("full", argc, argv)||ArgsIndex("screen", argc, argv))
-			bFullscreen = 1;
-		else if (ArgsIndex("small", argc, argv)||ArgsIndex("original", argc, argv))
-			bScale2x = 0;
-
-		/* Cheats/Debugging (start with '+') */
-
-		if (ArgsIndex("+demo", argc, argv))
-			GamePlayMode |= GP_DEMO|GP_STORY_OFF;
-
-		if (ArgsIndex("+storyoff", argc, argv))
-			GamePlayMode |= GP_STORY_OFF;
-
-		if (ArgsIndex("+fullenv", argc, argv))
-			GamePlayMode |= GP_FULL_ENV;
-
-		if (ArgsIndex("+leveldesign", argc, argv))
-			GamePlayMode |= GP_LEVEL_DESIGN;
-
-		if (ArgsIndex("+guarddesign", argc, argv))
-			GamePlayMode |= GP_GUARD_DESIGN;
-
-		if (ArgsIndex("+nosamples", argc, argv))
-			GamePlayMode |= GP_NO_SAMPLES;
-
-		if (ArgsIndex("+nocollision", argc, argv))
-			GamePlayMode |= GP_COLLISION_CHECKING_OFF;
-
-		if (ArgsIndex("+showrooms", argc, argv))
-			GamePlayMode |= GP_SHOW_ROOMS;
-	}
-
-	// und den Pfad fÅr BuildPathName setzen!
+	// und den Pfad f¸År BuildPathName setzen!
 	dskSetRootPath(result);
 
-	if (res = tcInit())
+	loadConfig(result);
+
+	if (Config.gfxScreenWidth < 320) {
+		Config.gfxScreenWidth = 320;
+	}
+	if (Config.gfxScreenHeight < 200) {
+		Config.gfxScreenHeight = 200;
+	}
+	if (Config.MusicVolume < 0) {
+		Config.MusicVolume = 0;
+	} else if (Config.MusicVolume > SND_MAX_VOLUME) {
+		Config.MusicVolume = SND_MAX_VOLUME;
+	}
+	if (Config.SfxVolume < 0) {
+		Config.SfxVolume = 0;
+	} else if (Config.SfxVolume > SND_MAX_VOLUME) {
+		Config.SfxVolume = SND_MAX_VOLUME;
+	}
+
+	if (res = tcInit()) {
+		if (!Config.NoIntro) {
+			tcIntro();	// 2014-06-29 LucyG
+		} else {
+			sndPlaySound("title.bk", 0);
+		}
 		tcDo();
+	}
 
 	tcDone();
 
@@ -406,5 +570,9 @@ int SDL_main(int argc, char **argv)
 	{
 		Log("Error: %s|%s|tcInit", __FILE__, __func__);
 	}
+
+#ifdef THECLOU_DEBUG_ALLOC
+	MemQuit();
+#endif
 	return(0);
 }

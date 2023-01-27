@@ -40,7 +40,7 @@ void tcAsDaysGoBy(ulong day, ulong stepSize)
 
 void tcMattGoesTo(ulong locNr)
 {
-	NODE *node = GetNthNode(film->loc_names,locNr);
+	NODE *node = (NODE*)GetNthNode(film->loc_names,locNr);
 
 	SetLocation(locNr);
 	tcRefreshLocationInTitle(locNr);
@@ -62,11 +62,14 @@ void tcMovePersons(ulong personCount,ulong time)
 
 	for (i=0;i<personCount;i++)
 	{
-		#ifdef THECLOU_PROFIDISK
-		persID = CalcRandomNr(Person_Paul_O_Conner, Person_Pere_Ubu + 1);
-		#else
-		persID = CalcRandomNr(Person_Paul_O_Conner, Person_Red_Stanson + 1);
-		#endif
+		if (bProfidisk)
+		{
+			persID = CalcRandomNr(Person_Paul_O_Conner, Person_Pere_Ubu + 1);
+		}
+		else
+		{
+			persID = CalcRandomNr(Person_Paul_O_Conner, Person_Red_Stanson + 1);
+		}
 
 		if (livesIn(London_London_1,persID))
 		{
@@ -113,7 +116,7 @@ ulong tcBurglary(ulong buildingID)
 {
 	ulong succNr;
 	long  ret;
-	Building b = dbGetObject(buildingID);
+	Building b = (Building)dbGetObject(buildingID);
 
 	if (buildingID == Building_Seniorenheim)
 		ret = plPlayer(buildingID, 200, tcKarateOpa);
@@ -170,13 +173,13 @@ ulong tcBurglary(ulong buildingID)
 
 void tcRefreshLocationInTitle(ulong locNr)
 {
-	ubyte date[TXT_KEY_LENGTH], line[TXT_KEY_LENGTH];
+	char date[TXT_KEY_LENGTH], line[TXT_KEY_LENGTH];
 	NODE  *node;
 
 	gfxSetPens(m_wrp,3, GFX_SAME_PEN, GFX_SAME_PEN);
 
 	BuildDate(GetDay, txtGetLanguage(), date);
-	node = GetNthNode(film->loc_names, locNr);
+	node = (NODE*)GetNthNode(film->loc_names, locNr);
 
 	sprintf(line, "%s %s", NODE_NAME(node), date);
 	ShowMenuBackground();
@@ -203,7 +206,7 @@ void StdInit(void)
 
 	tcRefreshLocationInTitle(sc->LocationNr);
 
-	node = GetNthNode(film->loc_names,sc->LocationNr);
+	node = (NODE*)GetNthNode(film->loc_names,sc->LocationNr);
 
 	if ((RefreshMode) || (!sameLocation))
 	{
@@ -292,7 +295,6 @@ void tcPlayStreetSound()
 	{
 		switch(GetCurrentScene()->EventNr)
 		{
-		#ifdef THECLOU_PROFIDISK
 		case SCENE_PROFI_21:
 			sndPlaySound("snd21.bk", 0);
 			break;
@@ -317,7 +319,6 @@ void tcPlayStreetSound()
 		case SCENE_PROFI_28:
 			sndPlaySound("snd28.bk", 0);
 			break;
-		#endif
 
 		default:
 			{
@@ -356,7 +357,7 @@ void tcPlayStreetSound()
 
 void ShowTime(ulong delay)
 {
-	ubyte time[TXT_KEY_LENGTH];
+	char time[TXT_KEY_LENGTH];
 
 	BuildTime(GetMinute,txtGetLanguage(),time);
 
@@ -374,7 +375,7 @@ ulong StdHandle(ulong choice)
 {
 	ulong succ_eventnr = 0L, locNr, objNr;
 	struct Scene *scene;
-	ubyte line[TXT_KEY_LENGTH];
+	char line[TXT_KEY_LENGTH];
 	Location loc;
 
 	scene = GetCurrentScene();
@@ -392,7 +393,7 @@ ulong StdHandle(ulong choice)
 
 					if (objNr)
 					{
-						loc = dbGetObject(objNr);
+						loc = (Location)dbGetObject(objNr);
 
 						if ((GetMinute < loc->OpenFromMinute) || (GetMinute > loc->OpenToMinute))
 						{
@@ -436,8 +437,7 @@ ulong StdHandle(ulong choice)
 		case CALL_TAXI:
 			if (CalcRandomNr(0, 10) == 1)
 			{
-				sndPrepareFX("taxi.voc");
-				sndPlayFX();
+				sndPlayFX("taxi.voc");
 			}
 			succ_eventnr = GetLocScene(8)->EventNr; /* taxi */
 		break;
@@ -519,15 +519,17 @@ void StdDone(void)
 			if (!(SceneArgs.Moeglichkeiten & BUSINESS_TALK))
 				SceneArgs.Moeglichkeiten |= (BUSINESS_TALK & film->EnabledChoices);
 
-		#ifdef THECLOU_PROFIDISK
-		if (GetCurrentScene()->EventNr == SCENE_PROFI_26)
-		{
-			Environment env = (Environment)dbGetObject(Environment_TheClou);
 
-			if (env->PostzugDone)
-				SceneArgs.Moeglichkeiten &= ~INVESTIGATE;
+		if (bProfidisk)
+		{
+			if (GetCurrentScene()->EventNr == SCENE_PROFI_26)
+			{
+				Environment env = (Environment)dbGetObject(Environment_TheClou);
+
+				if (env->PostzugDone)
+					SceneArgs.Moeglichkeiten &= ~INVESTIGATE;
+			}
 		}
-		#endif
 
 		if (SceneArgs.Moeglichkeiten)
 		{
@@ -604,16 +606,17 @@ void InitTaxiLocations(void)
 			AddTaxiLocation(47); /* tower */
 			AddTaxiLocation(58); /* vict */
 
-			#ifdef THECLOU_PROFIDISK
-			AddTaxiLocation(81); /* bulstrode */
-			AddTaxiLocation(79); /* buck */
-			AddTaxiLocation(77); /* tate */
-			AddTaxiLocation(75); /* train */
-			AddTaxiLocation(74); /* downing */
-			AddTaxiLocation(72); /* abbey */
-			AddTaxiLocation(70); /* madame */
-			AddTaxiLocation(68); /* baker */
-			#endif
+			if (bProfidisk)
+			{
+				AddTaxiLocation(81); /* bulstrode */
+				AddTaxiLocation(79); /* buck */
+				AddTaxiLocation(77); /* tate */
+				AddTaxiLocation(75); /* train */
+				AddTaxiLocation(74); /* downing */
+				AddTaxiLocation(72); /* abbey */
+				AddTaxiLocation(70); /* madame */
+				AddTaxiLocation(68); /* baker */
+			}
 		}
 	}
 	else
@@ -717,7 +720,9 @@ void LinkScenes(void)
 	SetFunc( GetScene(SCENE_TOWER_INSIDE),StdInit, DoneInsideHouse);
 	SetFunc( GetScene(SCENE_KASERNE_INSIDE), StdInit, DoneInsideHouse);
 
-	#ifdef THECLOU_PROFIDISK
+	
+	if (bProfidisk)
+	{
 	SetFunc( GetScene(SCENE_PROFI_21_INSIDE),StdInit, DoneInsideHouse);
 	SetFunc( GetScene(SCENE_PROFI_22_INSIDE),StdInit, DoneInsideHouse);
 	SetFunc( GetScene(SCENE_PROFI_23_INSIDE),StdInit, DoneInsideHouse);
@@ -726,7 +731,7 @@ void LinkScenes(void)
 	//SetFunc( GetScene(SCENE_PROFI_26_INSIDE),StdInit, DoneInsideHouse);
 	SetFunc( GetScene(SCENE_PROFI_27_INSIDE),StdInit, DoneInsideHouse);
 	SetFunc( GetScene(SCENE_PROFI_28_INSIDE),StdInit, DoneInsideHouse);
-	#endif
+	}
 }
 
 void SetFunc(struct Scene *sc,void (*init)(void),void (*done)(void))
@@ -741,29 +746,30 @@ ubyte tcPersonIsHere(void)
 
 	if (locNr)
 	{
-		switch(locNr)
+		if(locNr == Location_Fat_Mans_Pub)
 		{
-		case Location_Fat_Mans_Pub:
 			tcMoveAPerson(Person_Richard_Doil,locNr);
-			break;
-		case Location_Cars_Vans_Office:
+		}
+		else if (locNr == Location_Cars_Vans_Office)
+		{
 			tcMoveAPerson(Person_Marc_Smith,locNr);
-			break;
-		case Location_Walrus:
+		}
+		else if (locNr == Location_Walrus)
+		{
 			tcMoveAPerson(Person_Thomas_Smith,locNr);
-			break;
-		case Location_Holland_Street:
+		}
+		else if (locNr == Location_Holland_Street)
+		{
 			tcMoveAPerson(Person_Frank_Maloya,locNr);
-			break;
-		case Location_Policestation:
+		}
+		else if (locNr == Location_Policestation)
+		{
 			tcMoveAPerson(Person_John_Gludo,locNr);
 			tcMoveAPerson(Person_Miles_Chickenwing,locNr);
-			break;
-		case Location_Hotel:
+		}
+		else if (locNr == Location_Hotel)
+		{
 			tcMoveAPerson(Person_Ben_Riggley, locNr);
-			break;
-		default:
-			break;
 		}
 
 		hasAll(locNr, 0, Object_Person);
@@ -771,7 +777,7 @@ ubyte tcPersonIsHere(void)
 		if (LIST_EMPTY(ObjectList))
 			return(0);
 		else
-		    return(1);
+			return(1);
 	}
 	return(0);
 }
@@ -798,7 +804,7 @@ void tcPersonGreetsMatt(void)
 
 				if (knows(Person_Matt_Stuvysunt,persNr))
 				{
-					Person pers   = dbGetObject(persNr);
+					Person pers   = (Person)dbGetObject(persNr);
 
 					Say(BUSINESS_TXT,0,pers->PictID,"HI_MATT");
 				}
@@ -808,10 +814,10 @@ void tcPersonGreetsMatt(void)
 	ShowTime(0);
 }
 
-void tcGetLastName(ubyte *Name, ubyte *dest, ulong maxLength)
+void tcGetLastName(char *Name, char *dest, ulong maxLength)
 {
 	long i;
-	ubyte lastName[TXT_KEY_LENGTH];
+	char lastName[TXT_KEY_LENGTH];
 
 	for (i=0; i < strlen(Name); i++)
 		if (Name[i]==' ') break;
@@ -824,10 +830,10 @@ void tcGetLastName(ubyte *Name, ubyte *dest, ulong maxLength)
 	strcpy(dest, lastName);
 }
 
-void tcCutName(ubyte *Name, ubyte Sign, ulong maxLength)
+void tcCutName(char *Name, char Sign, ulong maxLength)
 {
 	long i,j;
-	ubyte Source[TXT_KEY_LENGTH];
+	char Source[TXT_KEY_LENGTH];
 
 	strcpy(Source,Name);
 

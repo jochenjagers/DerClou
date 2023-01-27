@@ -5,7 +5,7 @@
    Based on the original by neo Software GmbH
 */
 #include "landscap\landscap.h"
-#include "landscap\landscap.ph"
+#include "landscap\landscap_p.h"
 
 static void lsInitObjects(void);
 
@@ -18,7 +18,7 @@ void lsInitLandScape(ulong bID,ubyte mode)   	/* initialisiert das Landschaftsmo
 	long i;
 
 	if(!ls)
-		ls = MemAlloc(sizeof(struct LandScape));
+		ls = (struct LandScape*)MemAlloc(sizeof(struct LandScape));
 
 	ls->ul_BuildingID = bID;
 
@@ -51,7 +51,7 @@ void lsInitLandScape(ulong bID,ubyte mode)   	/* initialisiert das Landschaftsmo
 	// einer kleiner Prioritaet haben (unter den Maxis erscheinen)
 	for (i = 9701; i <= 9708; i++)
 		{
-		LSObject lso = dbGetObject(i);
+		LSObject lso = (LSObject)dbGetObject(i);
 
 		// OffsetFact wird am PC nicht fr den Offset in der Plane
 		// sondern als Handle des Bob verwendet
@@ -67,7 +67,7 @@ void lsInitLandScape(ulong bID,ubyte mode)   	/* initialisiert das Landschaftsmo
 	ls->us_DoorXOffset = 0;
 	ls->us_DoorYOffset = 32;	// oben sind noch die 16er Objekte
 
-	ls->p_DoorRefreshList = CreateList(0);
+	ls->p_DoorRefreshList = (LIST*)CreateList(0);
 
 	lsInitFloorSquares();
 
@@ -75,7 +75,7 @@ void lsInitLandScape(ulong bID,ubyte mode)   	/* initialisiert das Landschaftsmo
 	lsShowEscapeCar();
 	}
 
-void lsInitActivArea(ulong areaID,uword x,uword y, ubyte *livingName)
+void lsInitActivArea(ulong areaID,uword x,uword y, char *livingName)
 	{
 	LSArea area = (LSArea) dbGetObject(areaID);
 
@@ -108,7 +108,7 @@ void lsInitActivArea(ulong areaID,uword x,uword y, ubyte *livingName)
 
 void lsInitRelations(ulong areaID)
 	{
-	LSArea area = dbGetObject(areaID);
+	LSArea area = (LSArea)dbGetObject(areaID);
 
 	AddRelation(area->ul_ObjectBaseNr + REL_CONSIST_OFFSET);
 	AddRelation(area->ul_ObjectBaseNr + REL_HAS_LOCK_OFFSET);
@@ -120,7 +120,7 @@ void lsInitRelations(ulong areaID)
 
 void lsSetRelations(ulong areaID)
 	{
-	LSArea area = dbGetObject(areaID);
+	LSArea area = (LSArea)dbGetObject(areaID);
 
 	ConsistOfRelationID = area->ul_ObjectBaseNr + REL_CONSIST_OFFSET;
 	hasLockRelationID   = area->ul_ObjectBaseNr + REL_HAS_LOCK_OFFSET;
@@ -173,7 +173,7 @@ static void lsInitObjects(void)
 
 void lsLoadGlobalData(ulong bld, ulong ul_AreaId)
 	{
-	ubyte areaName[TXT_KEY_LENGTH], fileName[TXT_KEY_LENGTH];
+	char areaName[TXT_KEY_LENGTH], fileName[TXT_KEY_LENGTH];
 
 	dbGetObjectName(ul_AreaId, areaName);
 	areaName[strlen(areaName)-1] = '\0';
@@ -182,12 +182,6 @@ void lsLoadGlobalData(ulong bld, ulong ul_AreaId)
 
 	dskBuildPathName(DATA_DIRECTORY, areaName, fileName);
 
-	#ifdef THECLOU_PROFIDISK
-		#ifdef THECLOU_CDROM_VERSION
-			if (((Building)dbGetObject(bld))->DiskId == 8) // bedeutet auf der Festplatte
-				sprintf(fileName, "%s\\%s", DATA_DIRECTORY, areaName);
-		#endif
-	#endif
 
 
 	if(!(LoadRelations(fileName, 0)))
@@ -196,18 +190,12 @@ void lsLoadGlobalData(ulong bld, ulong ul_AreaId)
 
 void lsInitObjectDB(ulong bld, ulong areaID)
 	{
-	ubyte fileName[TXT_KEY_LENGTH],areaName[TXT_KEY_LENGTH];
+	char fileName[TXT_KEY_LENGTH],areaName[TXT_KEY_LENGTH];
 
 	dbGetObjectName(areaID ,areaName);
 	strcat(areaName,OBJ_DATA_EXTENSION);
 	dskBuildPathName(DATA_DIRECTORY,areaName,fileName);
 
-	#ifdef THECLOU_PROFIDISK
-		#ifdef THECLOU_CDROM_VERSION
-			if (((Building)dbGetObject(bld))->DiskId == 8) // bedeutet auf der Festplatte
-				sprintf(fileName, "%s\\%s", DATA_DIRECTORY, areaName);
-		#endif
-	#endif
 
 	dbSetLoadObjectsMode(DB_LOAD_MODE_NO_NAME);	// dont fetch names of objects
 
@@ -217,12 +205,6 @@ void lsInitObjectDB(ulong bld, ulong areaID)
 		strcat(areaName,OBJ_REL_EXTENSION);
 		dskBuildPathName(DATA_DIRECTORY,areaName,fileName);
 
-		#ifdef THECLOU_PROFIDISK
-			#ifdef THECLOU_CDROM_VERSION
-				if (((Building)dbGetObject(bld))->DiskId == 8) // bedeutet auf der Festplatte
-					sprintf(fileName, "%s\\%s", DATA_DIRECTORY, areaName);
-			#endif
-		#endif
 
 		if (!(LoadRelations(fileName, 0)))
 			NewErrorMsg(Disk_Defect, __FILE__, __func__, 3);
@@ -239,7 +221,7 @@ static void lsInitFloorSquares(void)
 	{
 	ulong count;
 	long i;
-	ubyte fileName[TXT_KEY_LENGTH], areaName[TXT_KEY_LENGTH];
+	char fileName[TXT_KEY_LENGTH], areaName[TXT_KEY_LENGTH];
 	NODE *n;
 	LIST *areas;
 
@@ -256,7 +238,7 @@ static void lsInitFloorSquares(void)
 		{
 		ulong size = (ulong) count * (sizeof(struct LSFloorSquare));
 
-		ls->p_AllFloors[i]    = MemAlloc(size);
+		ls->p_AllFloors[i]    = (struct LSFloorSquare*)MemAlloc(size);
 		ls->ul_FloorAreaId[i] = OL_NR(n);
 
 		dbGetObjectName(ls->ul_FloorAreaId[i],areaName);
@@ -264,16 +246,6 @@ static void lsInitFloorSquares(void)
 
 		dskBuildPathName(DATA_DIRECTORY,areaName,fileName);
 
-		#ifdef THECLOU_PROFIDISK
-			#ifdef THECLOU_CDROM_VERSION
-				{
-				Building bld = (Building)dbGetObject(ls->ul_BuildingID);
-
-				if (bld->DiskId == 8)	// bedeutet auf der Festplatte
-					sprintf(fileName, "%s\\%s", DATA_DIRECTORY, areaName);
-				}
-			#endif
-		#endif
 
 		dskLoad(fileName, ls->p_AllFloors[i], 0);
 		}
@@ -283,7 +255,7 @@ static void lsInitFloorSquares(void)
 
 static void lsLoadAllSpots(void)
 	{
-	ubyte fileName[TXT_KEY_LENGTH];
+	char fileName[TXT_KEY_LENGTH];
 	LIST  *areas;
 	NODE  *n;
 
@@ -341,7 +313,7 @@ static void lsDoneFloorSquares(void)
 
 void lsDoneObjectDB(ulong areaID)
 	{
-	LSArea area = dbGetObject(areaID);
+	LSArea area = (LSArea)dbGetObject(areaID);
 
 	RemRelations(area->ul_ObjectBaseNr, DB_tcBuild_SIZE);
 	dbDeleteAllObjects(area->ul_ObjectBaseNr, DB_tcBuild_SIZE);
@@ -387,7 +359,7 @@ void lsDoneLandScape(void)
 
 		for (i = 9701; i <= 9708; i++)
 			{
-			LSObject lso = dbGetObject(i);
+			LSObject lso = (LSObject)dbGetObject(i);
 
 			BobDone(lso->us_OffsetFact);
 			}

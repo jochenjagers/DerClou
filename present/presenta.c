@@ -6,8 +6,8 @@
 */
 void InitEvidencePresent(ulong nr, LIST *presentationData, LIST *texts)
 {
-	Evidence e = dbGetObject(nr);
-	ubyte data[TXT_KEY_LENGTH];
+	Evidence e = (Evidence)dbGetObject(nr);
+	char data[TXT_KEY_LENGTH];
 
 	dbGetObjectName(e->pers, data);
 
@@ -24,7 +24,7 @@ void InitEvidencePresent(ulong nr, LIST *presentationData, LIST *texts)
 
 void InitLootPresent(ulong nr, LIST *presentationData, LIST *texts)
 {
-	CompleteLoot comp = dbGetObject(CompleteLoot_LastLoot);
+	CompleteLoot comp = (CompleteLoot)dbGetObject(CompleteLoot_LastLoot);
 	ulong total;
 
 	RemoveList(tcMakeLootList(Person_Matt_Stuvysunt, Relation_has));
@@ -48,8 +48,8 @@ void InitLootPresent(ulong nr, LIST *presentationData, LIST *texts)
 
 void InitOneLootPresent(ulong nr, LIST *presentationData, LIST *texts)
 {
-	Loot loot = dbGetObject(nr);
-	ubyte data[TXT_KEY_LENGTH];
+	Loot loot = (Loot)dbGetObject(nr);
+	char data[TXT_KEY_LENGTH];
 	ulong value;
 
 	if (loot->Name == Kein_Name)
@@ -70,8 +70,8 @@ void InitOneLootPresent(ulong nr, LIST *presentationData, LIST *texts)
 
 void InitObjectPresent(ulong nr, LIST *presentationData, LIST *texts)
 {
-	LSObject lso = dbGetObject(nr);
-	ubyte data[TXT_KEY_LENGTH];
+	LSObject lso = (LSObject)dbGetObject(nr);
+	char data[TXT_KEY_LENGTH];
 	LIST *l;
 
 	dbGetObjectName(lso->Type, data);
@@ -97,7 +97,7 @@ void InitObjectPresent(ulong nr, LIST *presentationData, LIST *texts)
 
 void InitToolPresent(ulong nr,LIST *presentationData,LIST *texts)
 {
-	ubyte data[TXT_KEY_LENGTH], i;
+	char data[TXT_KEY_LENGTH], i;
 	Tool  obj;
 	NODE  *n;
 	LIST  *tools     = txtGoKey(OBJECTS_ENUM_TXT,"enum_ItemE");
@@ -129,7 +129,7 @@ void InitToolPresent(ulong nr,LIST *presentationData,LIST *texts)
 
 		for(n = (NODE*) LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE*)NODE_SUCC(n))
 		{
-			Ability ability = OL_DATA(n);
+			Ability ability = (Ability)OL_DATA(n);
 
 			AddPresentLine(presentationData,PRESENT_AS_BAR,(ulong)toolRequiresGet(nr, OL_NR(n)),255L,abilities,(uword)ability->Name);
 		}
@@ -146,7 +146,7 @@ void InitToolPresent(ulong nr,LIST *presentationData,LIST *texts)
 	{
 		ulong itemNr = OL_NR(n);
 		ulong time   = breakGet(nr, itemNr);
-		Item  item   = OL_DATA(n);
+		Item  item   = (Item)OL_DATA(n);
 
 		sprintf(data,"%0.2ld:%0.2ld", time / 60, time % 60);
 
@@ -159,7 +159,7 @@ void InitToolPresent(ulong nr,LIST *presentationData,LIST *texts)
 
 void InitBuildingPresent(ulong nr,LIST *presentationData,LIST *texts)
 {
-	ubyte data[TXT_KEY_LENGTH];
+	char data[TXT_KEY_LENGTH];
 	Building obj;
 
 	obj=(Building)dbGetObject(nr);
@@ -196,7 +196,7 @@ void InitPlayerPresent(ulong nr,LIST *presentationData,LIST *texts)
 
 void InitPersonPresent(ulong nr,LIST *presentationData,LIST *texts)
 {
-	ubyte   data[TXT_KEY_LENGTH],i;
+	char   data[TXT_KEY_LENGTH],i;
 	LIST    *abilities=NULL;
 	NODE    *node;
 	ulong   abiNr;
@@ -253,7 +253,7 @@ void InitPersonPresent(ulong nr,LIST *presentationData,LIST *texts)
 
 void InitCarPresent(ulong nr,LIST *presentationData,LIST *texts)
 {
-	ubyte data[TXT_KEY_LENGTH];
+	char data[TXT_KEY_LENGTH];
 	Car obj;
 
 	obj=(Car)dbGetObject(nr);
@@ -274,10 +274,9 @@ void InitCarPresent(ulong nr,LIST *presentationData,LIST *texts)
 	AddPresentLine(presentationData,PRESENT_AS_BAR,(ulong)obj->BodyWorkState,255L,texts,8);
 	AddPresentLine(presentationData,PRESENT_AS_BAR,(ulong)obj->TyreState,255L,texts,9);
 	AddPresentLine(presentationData,PRESENT_AS_BAR,(ulong)obj->MotorState,255L,texts,10);
-	#ifndef THECLOU_PROFIDISK
-	AddPresentLine(presentationData,PRESENT_AS_BAR,(ulong)obj->Capacity,7000000L,texts,11);
-	#else
-	AddPresentLine(presentationData,PRESENT_AS_BAR,(ulong)obj->Capacity,9000000L,texts,11);
-	#endif
+	if (!bProfidisk)
+		AddPresentLine(presentationData,PRESENT_AS_BAR,(ulong)obj->Capacity,7000000L,texts,11);
+	else
+		AddPresentLine(presentationData,PRESENT_AS_BAR,(ulong)obj->Capacity,9000000L,texts,11);
 	AddPresentLine(presentationData,PRESENT_AS_BAR,(ulong)tcGetCarStrike(obj),255L,texts,12);
 }

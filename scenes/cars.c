@@ -8,7 +8,6 @@
 
 void SetCarColors(ubyte index)
 {
-	long i;
 	ubyte Col[10][4][3]= {
           {{ 8,  8,  8}, { 7,  7,  7}, { 6,  6,  6}, { 5,  5,  5}},
 	     {{ 1, 12,  8}, { 3,  9,  6}, { 3,  6,  4}, { 2,  5,  3}},
@@ -32,10 +31,10 @@ void SetCarColors(ubyte index)
 	gfxSetRGB(l_wrp,43,(long)Col[index][3][0]<<2,(long)Col[index][3][1]<<2,(long)Col[index][3][2]<<2);
 }
 
-ubyte *tcShowPriceOfCar(ulong nr, ulong type, void *data)
+char *tcShowPriceOfCar(ulong nr, ulong type, void *data)
 	{
-	static ubyte line [TXT_KEY_LENGTH];
-	ubyte        line1[TXT_KEY_LENGTH];
+	static char line [TXT_KEY_LENGTH];
+	char        line1[TXT_KEY_LENGTH];
 	Car car = (Car) data;
 
 	txtGetFirstLine (BUSINESS_TXT,"PRICE_AND_MONEY",line1);
@@ -53,7 +52,7 @@ void tcBuyCar(void)
 
 	while ((choice1!=2) && (choice != GET_OUT))
 		{
-		ObjectListSuccString = (char * (*)())tcShowPriceOfCar;
+		ObjectListSuccString = (char *(__cdecl *)(ulong,ulong,void *))tcShowPriceOfCar;
 		ObjectListWidth = 48;
 
 		hasAll(Person_Marc_Smith, OLF_ALIGNED|OLF_PRIVATE_LIST|OLF_INCLUDE_NAME|OLF_INSERT_STAR|OLF_ADD_SUCC_STRING, Object_Car);
@@ -236,6 +235,9 @@ void tcSellCar(ulong ObjectID)
 
 	if ((Say(BUSINESS_TXT,0,MATT_PICTID,"VERKAUF"))==0)
 		{
+		if (GamePlayMode & GP_MORE_MONEY) {	// Lucy 2017-11-08 new cheat
+			if (offer > 0) offer = (offer * 3) / 2;
+		}
 		tcAddPlayerMoney(offer);
 
 		hasSet(Person_Marc_Smith,ObjectID);
@@ -246,9 +248,9 @@ void tcSellCar(ulong ObjectID)
 	AddVTime(97);
 	}
 
-void tcRepairCar(Car car,ubyte *repairWhat)
+void tcRepairCar(Car car,char *repairWhat)
 	{
-	LIST   *presentationData = CreateList(0);
+	LIST   *presentationData = (LIST*)CreateList(0);
 	LIST   *list = NULL;
 	ubyte  *item=NULL,enough=1,type=7,ready=0;
 	ulong  costs=0L,choice=0L,totalCosts=0L;
@@ -380,15 +382,17 @@ ulong tcChooseCar(ulong backgroundNr)
 	bubble = ObjectListPrivate;
 
 	if (!(LIST_EMPTY(bubble)))
-		{
+	{
 		carCount = GetNrOfNodes(bubble);
 
+		choice = 0;	// 2014-07-01 LucyG: initialize
+
 		if(carCount == 1)
-			{
+		{
 			carID = OL_NR(LIST_HEAD(bubble));
-			}
+		}
 		else
-			{
+		{
 			char exp[TXT_KEY_LENGTH];
 
 			txtGetFirstLine (BUSINESS_TXT, "NO_CHOICE", exp);
@@ -396,20 +400,21 @@ ulong tcChooseCar(ulong backgroundNr)
 
 			Say(BUSINESS_TXT,0,7,"ES GEHT UM..");
 
-			if (ChoiceOk(choice =  Bubble(bubble,0,0L,0L), GET_OUT, bubble))
+			choice = Bubble(bubble,0,0L,0L);
+			if (ChoiceOk(choice, GET_OUT, bubble))
 				carID  =  OL_NR(GetNthNode(bubble,(ulong)choice));
 			else
 				choice = GET_OUT;
-			}
+		}
 
 		if (choice != GET_OUT)
-			{
+		{
 			matts_car = (Car)dbGetObject(carID);
 			SetCarColors((ubyte)matts_car->ColorIndex);
 			gfxShow(backgroundNr,GFX_NO_REFRESH|GFX_ONE_STEP,0L,-1L,-1L);
 			gfxShow((uword)matts_car->PictID,GFX_NO_REFRESH|GFX_OVERLAY,1L,-1L,-1L);
-			}
 		}
+	}
 
 	RemoveList(bubble);
 
@@ -418,7 +423,7 @@ ulong tcChooseCar(ulong backgroundNr)
 
 void tcCarGeneralOverhoul(Car car)
 	{
-	Person marc = dbGetObject(Person_Marc_Smith);
+	Person marc = (Person)dbGetObject(Person_Marc_Smith);
 	LIST *bubble;
 	ubyte choice;
 

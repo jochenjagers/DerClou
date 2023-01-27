@@ -13,7 +13,11 @@
 #include "error\error.h"
 #endif
 
+//#define THECLOU_DEBUG_ALLOC	1
+
 #ifdef THECLOU_DEBUG_ALLOC
+extern void MemInit(void);
+extern void MemQuit(void);
 extern void *MemAllocDbg(unsigned long size, const char *file, const char *func);
 extern void MemFreeDbg(void *mem, unsigned long size, const char *file, const char *func);
 #define MemAlloc(size)		MemAllocDbg(size,__FILE__,__func__)
@@ -24,9 +28,6 @@ extern void MemFree(void *mem, unsigned long size);
 #endif
 extern unsigned long MemAvail(void);
 extern long MemGetAllocated(void);
-
-#define memGetAllocatedMem()	MemGetAllocated()
-#define xmsCopyDown(handle,offset,ptr,size)	memcpy(ptr,handle,size)
-#define xmsCopyUp(handle,offset,ptr,size)	memcpy(handle,ptr,size)
+extern long MemGetMaxAllocated(void);
 
 #endif /* MODULE_MEMORY */

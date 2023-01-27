@@ -5,7 +5,7 @@
    Based on the original by neo Software GmbH
 */
 #include "present\present.h"
-#include "present\present.ph"
+#include "present\present_p.h"
 
 struct PresentControl PresentControl = {
 	NULL, 0, 0};
@@ -60,14 +60,16 @@ void DrawPresent (LIST *present, ubyte firstLine, struct RastPort *rp, ubyte max
 			gfxSetPens  (&RefreshRP, 249, 252, 253);
 
 			gfxSetRect  (206, 316-206);
-			sprintf  (s,"%ld %",(p->extendedNr * 100)/(p->maxNr));
+			sprintf  (s,"%ld %%",(p->extendedNr * 100)/(p->maxNr));	// 2017-10-28 LucyG : %%
 
 			gfxPrint    (&RefreshRP,s,j,GFX_PRINT_CENTER);
 			break;
 		}
 
-		gfxSetPens (&RefreshRP, 252, 224, GFX_SAME_PEN);
-		gfxPrintExact(&RefreshRP, txt, 89, j+1);
+		if (!Config.gfxNoFontShadow) {	// 2014-07-13 LucyG : forgot this in v0.4
+			gfxSetPens (&RefreshRP, 252, 224, GFX_SAME_PEN);
+			gfxPrintExact(&RefreshRP, txt, 89, j+1);
+		}
 
 		gfxSetPens (&RefreshRP, 254, 224, GFX_SAME_PEN);
 		gfxPrintExact(&RefreshRP, txt, 88, j);
@@ -76,15 +78,18 @@ void DrawPresent (LIST *present, ubyte firstLine, struct RastPort *rp, ubyte max
 	gfxBlit(&RefreshRP, 88, 3, rp, 88, 3, 228, 46, GFX_ONE_STEP);
 }
 
-ubyte Present (ulong nr, ubyte *presentationText,void (*initPresentation)(ulong, LIST*, LIST*))
+ubyte Present (ulong nr, const char *presentationText,void (*initPresentation)(ulong, LIST*, LIST*))
 {
-	ubyte firstVis = 0;
-	ubyte max      = 0;
-
-	ubyte exit = 0;
+	ubyte firstVis;
+	ubyte maxNr;
+	ubyte exitLoop;
 	ulong action;
+	LIST *presentationData, *list;
+	Person obj;
+	Evidence e;
+	uword y;
 
-	LIST *presentationData = CreateList(0), *list;
+	presentationData = (LIST*)CreateList(0);
 
 	SuspendAnim();
 
@@ -92,80 +97,70 @@ ubyte Present (ulong nr, ubyte *presentationText,void (*initPresentation)(ulong,
 
 	inpTurnFunctionKey(0);
 
-	if (dbIsObject (nr, Object_Person))
-	{
-		Person obj=(Person)dbGetObject(nr);
-
-		gfxShow (obj->PictID, GFX_NO_REFRESH|GFX_OVERLAY|GFX_BLEND_UP, 0, -1, -1);
+	if (dbIsObject(nr, Object_Person)) {
+		obj = (Person)dbGetObject(nr);
+		gfxShow(obj->PictID, GFX_NO_REFRESH|GFX_OVERLAY|GFX_BLEND_UP, 0, -1, -1);
+	} else if (dbIsObject(nr, Object_Evidence)) {
+		e = (Evidence)dbGetObject(nr);
+		gfxShow((uword)((Person)dbGetObject(e->pers))->PictID, GFX_NO_REFRESH|GFX_OVERLAY|GFX_BLEND_UP, 0, -1, -1);
+	} else if (dbIsObject(nr, Object_Tool)) {
+		gfxShow(((Tool)(dbGetObject(nr)))->PictID, GFX_NO_REFRESH|GFX_OVERLAY|GFX_BLEND_UP, 0, -1, -1);
+	} else if (dbIsObject(nr, Object_Loot)) {
+		gfxShow(((Loot)(dbGetObject(nr)))->PictID, GFX_NO_REFRESH|GFX_OVERLAY|GFX_BLEND_UP, 0, -1, -1);
 	}
-	else if (dbIsObject (nr, Object_Evidence))
-	{
-		Evidence e = dbGetObject(nr);
 
-		gfxShow ((uword)((Person)dbGetObject(e->pers))->PictID, GFX_NO_REFRESH|GFX_OVERLAY|GFX_BLEND_UP, 0, -1, -1);
+	gfxShow((uword)BIG_SHEET, GFX_NO_REFRESH|GFX_OVERLAY, 0, -1, -1); /* nur die Farben ! */
+
+	list = txtGoKey(PRESENT_TXT, (char *)presentationText);
+
+	if (list) {
+		initPresentation(nr, presentationData, list);
 	}
-	else if (dbIsObject (nr, Object_Tool))
-		gfxShow (((Tool)(dbGetObject(nr)))->PictID, GFX_NO_REFRESH|GFX_OVERLAY|GFX_BLEND_UP, 0, -1, -1);
-	else if (dbIsObject (nr, Object_Loot))
-		gfxShow (((Loot)(dbGetObject(nr)))->PictID, GFX_NO_REFRESH|GFX_OVERLAY|GFX_BLEND_UP, 0, -1, -1);
 
-	gfxShow ((uword)BIG_SHEET, GFX_NO_REFRESH|GFX_OVERLAY, 0, -1, -1); /* nur die Farben ! */
+	maxNr = GetNrOfNodes(presentationData);
 
-	list = txtGoKey(PRESENT_TXT,presentationText);
+	gfxSetDrMd(&RefreshRP, GFX_JAM_1);
+	gfxSetFont(&RefreshRP, bubbleFont);
 
-	if (list)
-		initPresentation(nr,presentationData,list);
+	firstVis = 0;
+	DrawPresent(presentationData, firstVis, u_wrp, maxNr);
 
-	max = GetNrOfNodes (presentationData);
-
-	gfxSetDrMd (&RefreshRP, GFX_JAM_1);
-	gfxSetFont (&RefreshRP, bubbleFont);
-
-	DrawPresent (presentationData, firstVis, u_wrp, max);
-
-	while (!exit)
-	{
+	exitLoop = 0;
+	while (!exitLoop) {
 		action = inpWaitFor (INP_UP+INP_DOWN+INP_LBUTTONP+INP_RBUTTONP);
 
-		if ((action & INP_ESC) || (action & INP_RBUTTONP))
-			exit = 1;
-
-		if (action & INP_LBUTTONP)
-			exit = 2;
-
-		if (action & INP_MOUSE)
-		{
-			uword y = inpGetMouseY(u_wrp);
-
-			while ((y < 9) && (firstVis > 0))      /* Scroll up */
-			{
-				DrawPresent (presentationData, --firstVis, u_wrp, max);
-				y = inpGetMouseY(u_wrp);
-			}
-
-			while ((y > 50) && (y <= 59) && (firstVis < (max - 5))) /* Scroll down */
-			{
-				DrawPresent (presentationData, ++firstVis, u_wrp, max);
-				y = inpGetMouseY(u_wrp);
-			}
+		if ((action & INP_ESC) || (action & INP_RBUTTONP)) {
+			exitLoop = 1;
 		}
-		else
-		    {
-			if (action & INP_UP)
-			{
-				if (firstVis > 0)
-				{
+
+		if (action & INP_LBUTTONP) {
+			exitLoop = 2;
+		}
+
+		if (action & INP_MOUSE) {
+			y = inpGetMouseY(u_wrp);
+
+			while ((y < 9) && (firstVis > 0)) {      /* Scroll up */
+				DrawPresent(presentationData, --firstVis, u_wrp, maxNr);
+				y = inpGetMouseY(u_wrp);
+			}
+
+			while ((y > 50) && (y <= 59) && (firstVis < (maxNr - 5))) { /* Scroll down */
+				DrawPresent (presentationData, ++firstVis, u_wrp, maxNr);
+				y = inpGetMouseY(u_wrp);
+			}
+		} else {
+			if (action & INP_UP) {
+				if (firstVis > 0) {
 					firstVis --;
-					DrawPresent (presentationData, firstVis, u_wrp, max);
+					DrawPresent (presentationData, firstVis, u_wrp, maxNr);
 				}
 			}
 
-			if (action & INP_DOWN)
-			{
-				if ((max-NRBLINES > 0) && (firstVis < (max - NRBLINES)))
-				{
+			if (action & INP_DOWN) {
+				if ((maxNr-NRBLINES > 0) && (firstVis < (maxNr - NRBLINES))) {
 					firstVis++;
-					DrawPresent (presentationData, firstVis, u_wrp, max);
+					DrawPresent (presentationData, firstVis, u_wrp, maxNr);
 				}
 			}
 		}
@@ -178,40 +173,43 @@ ubyte Present (ulong nr, ubyte *presentationText,void (*initPresentation)(ulong,
 
 	ContinueAnim();
 
-	if (exit == 1)
+	if (exitLoop == 1) {
 		return ((ubyte)GET_OUT);
-	else
-	    return ((ubyte)(exit - 1));
+	} else {
+	    return ((ubyte)(exitLoop - 1));
+	}
 }
 
-void AddPresentLine(LIST *l,ubyte presentHow,ulong data,ulong max,LIST *texts,uword textNr)
+void AddPresentLine(LIST *l, ubyte presentHow, ulong data, ulong maxNr, LIST *texts, uword textNr)
 {
-	ubyte *name=NULL;
+	char *name = NULL;
 	struct presentationInfo *p;
 
-	if(textNr != ((uword)-1))
-		name = NODE_NAME(GetNthNode(texts,(ulong)textNr));
+	if (textNr != ((uword)-1)) {
+		name = NODE_NAME(GetNthNode(texts, (ulong)textNr));
+	}
 
-	p = (struct presentationInfo*) CreateNode (l, (ulong) sizeof (struct presentationInfo), name);
+	p = (struct presentationInfo *)CreateNode(l, (ulong)sizeof(struct presentationInfo), name);
 
 	p->presentHow = presentHow;
-	p->maxNr      =  max;
+	p->maxNr      = maxNr;
 
-	if(presentHow==PRESENT_AS_TEXT)
-	{
-		if(data)  strcpy (p->extendedText, (ubyte*)data);
-		else      strcpy (p->extendedText, "");
+	switch (presentHow) {
+		case PRESENT_AS_TEXT: {
+			if (data) {
+				strcpy(p->extendedText, (char *)data);
+			} else {
+				strcpy (p->extendedText, "");
+			}
+		} break;
+		case PRESENT_AS_NUMBER: {
+			sprintf(p->extendedText, "%ld", data);
+			p->presentHow = PRESENT_AS_TEXT;
+		} break;
+		case PRESENT_AS_BAR: {
+			p->extendedNr = data;
+		} break;
 	}
-
-	if(presentHow==PRESENT_AS_NUMBER)
-	{
-		sprintf (p->extendedText, "%ld", data);
-
-		p->presentHow=PRESENT_AS_TEXT;
-	}
-
-	if(presentHow==PRESENT_AS_BAR)
-		p->extendedNr=(ulong)(data);
 }
 
 void prSetBarPrefs(struct RastPort *p_RP,uword us_BarWidth,uword us_BarHeight,ubyte uch_FCol,ubyte uch_BCol, ubyte uch_TCol)
@@ -224,7 +222,7 @@ void prSetBarPrefs(struct RastPort *p_RP,uword us_BarWidth,uword us_BarHeight,ub
 	PresentControl.uch_TCol		= uch_TCol;
 }
 
-void prDrawTextBar(ubyte *puch_Text,ulong ul_Value,ulong ul_Max,uword us_XPos,uword us_YPos)
+void prDrawTextBar(char *puch_Text,ulong ul_Value,ulong ul_Max,uword us_XPos,uword us_YPos)
 {
 	struct RastPort *p_RP = PresentControl.p_CurrRP;
 	uword us_Width        = PresentControl.us_BarWidth;

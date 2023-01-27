@@ -5,6 +5,7 @@
    Based on the original by neo Software GmbH
 */
 #include "error\error.h"
+#include "text\text.h"
 
 #define ERR_EXIT_ERROR      20L
 #define ERR_EXIT_SHUTDOWN   30L
@@ -57,6 +58,8 @@ void pcErrClose()
 
 void NewErrorMsg(long l_ErrorType, const char *filename, const char *funcname, ulong ul_ErrorId)
 {
+	ubyte lang = txtGetLanguage();	/* 2014-06-27 templer */
+
 	Log("Error %ld in %s|%s", ul_ErrorId, filename, funcname);
 
 	if (ErrorHandler.fp_CloseAll)
@@ -65,27 +68,27 @@ void NewErrorMsg(long l_ErrorType, const char *filename, const char *funcname, u
 	switch (l_ErrorType)
 	{
 		case Internal_Error:
-			#ifdef THECLOU_VERSION_ENGLISH
-			Log("Internal Error!");
-			#else
-			Log("Interner Fehler!");
-			#endif
+			if (lang == TXT_LANG_GERMAN) {
+				Log("Interner Fehler!");
+			} else {
+				Log("Internal Error!");
+			}
 		break;
 
 		case No_Mem:
-			#ifdef THECLOU_VERSION_ENGLISH
-			Log("You don't have enough memory!");
-			#else
-			Log("Sie haben nicht genug Speicher!");
-			#endif
+			if (lang == TXT_LANG_GERMAN) {
+				Log("Sie haben nicht genug Speicher!");
+			} else {
+				Log("You don't have enough memory!");
+			}
 		break;
 
 		case Disk_Defect:
-			#ifdef THECLOU_VERSION_ENGLISH
-			Log("Can't open file!");
-			#else
-			Log("Kann Datei nicht oeffnen!");
-			#endif
+			if (lang == TXT_LANG_GERMAN) {
+				Log("Kann Datei nicht oeffnen!");
+			} else {
+				Log("Can't open file!");
+			}
 		break;
 	}
 

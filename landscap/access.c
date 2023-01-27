@@ -5,7 +5,7 @@
    Based on the original by neo Software GmbH
 */
 #include "landscap\landscap.h"
-#include "landscap\landscap.ph"
+#include "landscap\landscap_p.h"
 
 long lsIsLSObjectInActivArea(LSObject lso)
 	{
@@ -67,14 +67,19 @@ long lsIsObjectADoor(LSObject lso)
 	}
 
 long lsIsObjectAWall(LSObject lso)
-	{
+{
 	switch(lso->Type)
+	{
+	case Item_Mauer:
+	case Item_Mauerecke:
+	case Item_Steinmauer:
+	case Item_Sockel:
+		return 1;
+	}
+	if (bProfidisk)
+	{
+		switch(lso->Type)
 		{
-		case Item_Mauer:
-		case Item_Mauerecke:
-		case Item_Steinmauer:
-		case Item_Sockel:
-		#ifdef THECLOU_PROFIDISK
 		case Item_verzierte_Saeule:
 		case Item_Gelaender:
 		case Item_Absperrung:
@@ -85,19 +90,21 @@ long lsIsObjectAWall(LSObject lso)
 		case Item_Lokomotive_seitlich:
 		case Item_Lokomotive_Kabine:
 		case Item_Lokomotive_Tuer:
-		#endif
-				return 1;
+			return 1;
 		}
 
-	return 0;
 	}
+
+	return 0;
+}
 
 // Objekte die den gleichen Refresh wie Tueren benoetigen
 long lsIsObjectSpecial(LSObject lso)
 {
-	#ifdef THECLOU_PROFIDISK
-	switch (lso->Type)
+	if (bProfidisk)
 	{
+		switch (lso->Type)
+		{
 		case Item_Heiligenstatue:
 		case Item_Hottentotten_Figur:
 		case Item_Batman_Figur:
@@ -108,8 +115,8 @@ long lsIsObjectSpecial(LSObject lso)
 		case Item_Wache_Figur:
 		case Item_Miss_World_1952:
 			return 1;
+		}
 	}
-	#endif
 
 	return 0;
 }
@@ -173,7 +180,7 @@ ubyte lsGetLoudness(uword x, uword y)
 
 ulong lsGetObjectState(ulong objID)
 	{
-	LSObject obj = dbGetObject(objID);
+	LSObject obj = (LSObject)dbGetObject(objID);
 
 	return(lsGetNewState(obj));
 	}
@@ -203,17 +210,17 @@ uword lsGetFloorIndex(uword x,uword y)
 
 static void lsExtendGetList(LIST *list, ulong nr, ulong type, void *data)
 	{
-	struct ObjectNode *new = dbAddObjectNode(list, type, OLF_INCLUDE_NAME|OLF_INSERT_STAR);
+	struct ObjectNode *newNode = dbAddObjectNode(list, type, OLF_INCLUDE_NAME|OLF_INSERT_STAR);
 
-	new->nr   = nr;
-	new->type = type;
-	new->data = data;
+	newNode->nr   = nr;
+	newNode->type = type;
+	newNode->data = data;
 	}
 
 LIST *lsGetObjectsByList(uword x, uword y, uword width, uword height, ubyte showInvisible, ubyte addLootBags)
 	{
 	struct ObjectNode *node;
-	LIST *list  = CreateList(0);
+	LIST *list  = (LIST*)CreateList(0);
 	ulong i;
 
 	/* diverse Objekte eintragen */
@@ -233,7 +240,7 @@ LIST *lsGetObjectsByList(uword x, uword y, uword width, uword height, ubyte show
 		{
 		for (i = 9701; i <= 9708; i++)
 			{
-			LSObject lso = dbGetObject(i);
+			LSObject lso = (LSObject)dbGetObject(i);
 
 			if (lso->uch_Visible == LS_OBJECT_VISIBLE)
 				if (lsIsInside(lso, x, y, x+width, y+height))
@@ -271,7 +278,7 @@ LIST *lsGetRoomsOfArea(ulong ul_AreaId)
 
 	for (room = LIST_HEAD(ObjectListPrivate); NODE_SUCC(room); room = NODE_SUCC(room))
 		{
-		LSRoom myroom = OL_DATA(room);
+		LSRoom myroom = (LSRoom)OL_DATA(room);
 
 		if ((word)myroom->us_LeftEdge < 0)
 			myroom->us_LeftEdge = 0;

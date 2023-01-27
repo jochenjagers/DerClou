@@ -138,7 +138,7 @@ ubyte plOpen(ulong objId, ubyte mode, FILE **fh)
 				sprintf(name2, "MODE_%d", mode);
 				plMessage(name2, PLANING_MSG_REFRESH);
 
-				PlanList = CreateList(0L);
+				PlanList = (LIST*)CreateList(0L);
 
 				dbGetObjectName(objId, name1);
 

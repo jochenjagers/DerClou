@@ -45,7 +45,7 @@ void tcDisplayOrganisation(void)
 void tcDisplayCommon(void)
 {
 	LIST     *texts;
-	ubyte    line[TXT_KEY_LENGTH], name[TXT_KEY_LENGTH];
+	char    line[TXT_KEY_LENGTH], name[TXT_KEY_LENGTH];
 	Building building;
 
 	texts = txtGoKey(BUSINESS_TXT,"PLAN_COMMON_DATA");
@@ -53,7 +53,7 @@ void tcDisplayCommon(void)
 	gfxSetDestRPForShow(&RefreshRP);
 	gfxShow(ORG_PICT_ID, GFX_ONE_STEP|GFX_NO_REFRESH, 0, -1, -1);
 
-	/* Geb„ude anzeigen  */
+	/* Gebäude anzeigen  */
 
 	gfxSetFont  (&RefreshRP, menuFont);
 	gfxSetDrMd  (&RefreshRP, GFX_JAM_1);
@@ -130,7 +130,7 @@ void tcDisplayCommon(void)
 	*/
 
 	gfxSetRect (0,106);
-	strcpy  (line, NODE_NAME(GetNthNode(texts, 3L)));
+	strcpy (line, NODE_NAME(GetNthNode(texts, 3L)));	// "Fluchtweg: "
 
 	if (Organisation.BuildingID)
 	{
@@ -155,7 +155,8 @@ void tcDisplayCommon(void)
 
 	if (Organisation.BuildingID)
 	{
-		sprintf(name,"%d (km)",building->EscapeRouteLength);
+		/* 2014-06-28 LucyG : space added */
+		sprintf(name," %d (km)",building->EscapeRouteLength);
 		strcat(line, name);
 	}
 	else
@@ -170,7 +171,8 @@ void tcDisplayCommon(void)
 	gfxSetRect (212,106);
 	strcpy  (line, NODE_NAME(GetNthNode(texts, 5L)));
 
-	sprintf (name, " %d%",tcCalcMattsPart());
+	/* 2014-06-28 LucyG : missing percent sign */
+	sprintf (name, " %d%%",tcCalcMattsPart());
 	strcat (line, name);
 
 	gfxPrint (&RefreshRP, line, 35, GFX_PRINT_RIGHT);
@@ -182,7 +184,7 @@ void tcDisplayPerson(ulong displayMode)
 {
 	ulong  objNr,i;
 	NODE   *node;
-	ubyte  line[TXT_KEY_LENGTH];
+	char  line[TXT_KEY_LENGTH];
 	LIST   *guys;
 
 	joined_byAll(Person_Matt_Stuvysunt, OLF_INCLUDE_NAME|OLF_PRIVATE_LIST, Object_Person);
@@ -216,6 +218,7 @@ void tcDisplayAbilities(ulong personNr,ulong displayData)
 	LIST  *abilities;
 	NODE  *node;
 	ulong i,abiNr, ability;
+	char line[TXT_KEY_LENGTH];
 
 	hasAll(personNr,OLF_PRIVATE_LIST|OLF_INCLUDE_NAME,Object_Ability);
 	abilities = ObjectListPrivate;
@@ -226,12 +229,13 @@ void tcDisplayAbilities(ulong personNr,ulong displayData)
 	{
 		for (node=(NODE*)LIST_HEAD(abilities),i=0;NODE_SUCC(node);node=(NODE*)NODE_SUCC(node),i++)
 		{
-			ubyte line[TXT_KEY_LENGTH];
-
 			abiNr =  ((struct ObjectNode *)GetNthNode(abilities,(ulong)i))->nr;
 			ability = hasGet(personNr, abiNr);
 
-			sprintf(line, "%s %d%",NODE_NAME(node),(uword)((ability * 100) / 255));
+			/* 2014-06-27 templer
+			missing percent sign in the following line to display the percent sign in the output
+			*/
+			sprintf(line, "%s %d%%",NODE_NAME(node),(uword)((ability * 100) / 255));
 
 			prDrawTextBar(line,ability, 255L,
 				displayData * ORG_DISP_GUY_WIDTH + 5,
@@ -239,9 +243,8 @@ void tcDisplayAbilities(ulong personNr,ulong displayData)
 		}
 	}
 	else
-	    {
-		ubyte line[TXT_KEY_LENGTH];
-
+	{
+		i = 0; // 2014-06-30 LucyG: i is used, but was never initialised
 		txtGetFirstLine (BUSINESS_TXT, "PLAN_NO_CAPABILITY", line);
 		gfxSetRect (ORG_DISP_GUY_WIDTH * i + 5, ORG_DISP_GUY_WIDTH -5);
 		gfxSetDrMd (&RefreshRP, GFX_JAM_1);

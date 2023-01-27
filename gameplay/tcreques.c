@@ -7,7 +7,7 @@
 #include "gameplay\gp.h"
 #include "gameplay\gp_app.h"
 
-void PrintStatus(ubyte *text)
+void PrintStatus(char *text)
 	{
 	gfxSetDrMd(m_wrp,GFX_JAM_1);
 	gfxSetRect(0,320);
@@ -22,7 +22,7 @@ ulong ShowTheClouRequester(long error_class)
 	LIST *menu;
 	ulong answer = 0;
 	ubyte choices;
-	Player player = dbGetObject(Player_Player_1); // MOD hg, 29-04-94
+	Player player = (Player)dbGetObject(Player_Player_1); // MOD hg, 29-04-94
 
 	inpTurnESC(0);
 
@@ -57,7 +57,7 @@ ulong ShowTheClouRequester(long error_class)
 					ShowMenuBackground();
 					break;
 				case 2:
-					tcSaveTheClou();
+					tcSaveTheClou(0);
 					player->CurrScene = 0L; // MOD hg, 29-04-94
 					ShowMenuBackground();
 					tcRefreshLocationInTitle(GetLocation);

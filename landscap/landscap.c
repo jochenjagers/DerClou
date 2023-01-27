@@ -5,7 +5,7 @@
    Based on the original by neo Software GmbH
 */
 #include "landscap\landscap.h"
-#include "landscap\landscap.ph"
+#include "landscap\landscap_p.h"
 
 static void lsInitDoorRefresh(ulong ObjId);
 
@@ -71,7 +71,7 @@ static void lsShowRooms(void)
 
 	for (room = LIST_HEAD(rooms); NODE_SUCC(room); room = NODE_SUCC(room))
 		{
-		LSRoom myroom = OL_DATA(room);
+		LSRoom myroom = (LSRoom)OL_DATA(room);
 
 		gfxSetPens(l_wrp, 249, 0, 249);
 
@@ -90,6 +90,7 @@ void lsBuildScrollWindow(void)
 	NODE *node;
 	LSArea area = (LSArea) dbGetObject(ls->ul_AreaID);
 	ubyte colortable[768];
+	LSObject lso;
 
 	gfxSetColorRange(0, 127);
 	gfxChangeColors(NULL, 0, GFX_FADE_OUT, 0);
@@ -114,7 +115,7 @@ void lsBuildScrollWindow(void)
 	/* Objekte setzen - zuerst W„nde*/
 	for (node = (NODE*)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE*) NODE_SUCC(node))
 		{
-		LSObject lso = OL_DATA(node);
+		lso = (LSObject)OL_DATA(node);
 
 		if (lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_WALL|LS_SHOW_PREPARE_FROM_XMS))
 			lsTurnObject(lso, lso->uch_Visible, LS_COLLISION);
@@ -124,7 +125,7 @@ void lsBuildScrollWindow(void)
 	/* dann andere */
 	for (node = (NODE*)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE*)NODE_SUCC(node))
 		{
-		LSObject lso = OL_DATA(node);
+		lso = (LSObject)OL_DATA(node);
 
 		if (lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_OTHER_0|LS_SHOW_PREPARE_FROM_XMS))
 			lsTurnObject(lso, lso->uch_Visible, LS_COLLISION);
@@ -133,7 +134,7 @@ void lsBuildScrollWindow(void)
 	/* jetzt noch ein paar Sondef„lle (Kassa, Vase, ...) */
 	for (node = (NODE*)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE*)NODE_SUCC(node))
 		{
-		LSObject lso = OL_DATA(node);
+		lso = (LSObject)OL_DATA(node);
 
 		if (lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_OTHER_1|LS_SHOW_PREPARE_FROM_XMS))
 			lsTurnObject(lso, lso->uch_Visible, LS_COLLISION);
@@ -148,7 +149,7 @@ void lsBuildScrollWindow(void)
 	// jetzt alle fr alle Tren & Special objects Refresh erzeugen
 	for (node = (NODE*)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE*) NODE_SUCC(node))
 		{
-		LSObject lso = OL_DATA(node);
+		lso = (LSObject)OL_DATA(node);
 
 		if (lsIsObjectADoor(lso))
 			lsInitDoorRefresh(OL_NR(node));
@@ -159,7 +160,7 @@ void lsBuildScrollWindow(void)
 	// zuletzt mssen am PC die Tren & Specials aufgebaut werden
 	for (node = (NODE*)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE*)NODE_SUCC(node))
 		{
-		LSObject lso = OL_DATA(node);
+		lso = (LSObject)OL_DATA(node);
 
 		if (lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_SPECIAL|LS_SHOW_PREPARE_FROM_XMS))
 			lsTurnObject(lso, lso->uch_Visible, LS_COLLISION);
@@ -167,14 +168,14 @@ void lsBuildScrollWindow(void)
 
 	for (node = (NODE*)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE*) NODE_SUCC(node))
 		{
-		LSObject lso = OL_DATA(node);
+		lso = (LSObject)OL_DATA(node);
 
 		if (lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_DOOR|LS_SHOW_PREPARE_FROM_XMS))
 			{
 			if (!(lso->ul_Status & 1<<Const_tcOPEN_CLOSE_BIT))
-				lsTurnObject(OL_DATA(node), lso->uch_Visible, LS_COLLISION);
+				lsTurnObject((LSObject)OL_DATA(node), lso->uch_Visible, LS_COLLISION);
 			else
-				lsTurnObject(OL_DATA(node), lso->uch_Visible, LS_NO_COLLISION);
+				lsTurnObject((LSObject)OL_DATA(node), lso->uch_Visible, LS_NO_COLLISION);
 			}
 		}
 
@@ -218,16 +219,7 @@ void lsBuildScrollWindow(void)
 
 void lsSetDarkness(ubyte value) // entweder
 {
-	Log("%s|%s(%d) not implemented", __FILE__, __func__, value);
-
-	#ifndef __COSP__
-	if (value==LS_BRIGHTNESS)
-	{
-	}
-	else
-	{
-	}
-	#endif
+	gfxSetDarkness(value);
 }
 
 void lsTurnObject(LSObject lso, ubyte status, ubyte Collis)
@@ -258,11 +250,11 @@ ubyte lsIsInside(LSObject lso,uword x,uword y,uword x1,uword y1)
 		return(0);
 	}
 
-void lsSetActivLiving(ubyte *Name,uword x,uword y)
+void lsSetActivLiving(char *Name,uword x,uword y)
 	{
 	if(Name)
 		{
-		strcpy(ls->uch_ActivLiving, Name);
+		strcpy((char *)ls->uch_ActivLiving, Name);
 
 		if(x == (uword) -1)    x = livGetXPos(Name);
 		if(y == (uword) -1)    y = livGetYPos(Name);
@@ -294,8 +286,8 @@ word lsSortByXCoord(struct ObjectNode *n1, struct ObjectNode *n2)
 	{
 	LSObject lso1, lso2;
 
-	lso1 = OL_DATA(n1);
-	lso2 = OL_DATA(n2);
+	lso1 = (LSObject)OL_DATA(n1);
+	lso2 = (LSObject)OL_DATA(n2);
 
 	if (lso1->us_DestX > lso2->us_DestX)
 		return(1);
@@ -307,8 +299,8 @@ word lsSortByYCoord(struct ObjectNode *n1, struct ObjectNode *n2)
 	{
 	LSObject lso1, lso2;
 
-	lso1 = OL_DATA(n1);
-	lso2 = OL_DATA(n2);
+	lso1 = (LSObject)OL_DATA(n1);
+	lso2 = (LSObject)OL_DATA(n2);
 
 	if(lso1->us_DestY  < lso2->us_DestY)
 		return(1);
@@ -333,8 +325,8 @@ static void lsSortObjectList(LIST **l)
 			do
 				{
 				node1 = (NODE*) NODE_SUCC(node1);
-				lso1  = OL_DATA(node);
-				lso2  = OL_DATA(node1);
+				lso1  = (LSObject)OL_DATA(node);
+				lso2  = (LSObject)OL_DATA(node1);
 				}
 				while((lso1->us_DestY == lso2->us_DestY) && NODE_SUCC(NODE_SUCC(node1)));
 
@@ -364,8 +356,6 @@ static void lsSortObjectList(LIST **l)
 
 void lsRefreshObjectList(ulong areaID)
 	{
-	NODE *n;
-
 	SetObjectListAttr (OLF_PRIVATE_LIST, Object_LSObject);
 	AskAll (dbGetObject(areaID), ConsistOfRelationID, BuildObjectList);
 	ls->p_ObjectRetrieval = ObjectListPrivate;
@@ -375,7 +365,7 @@ void lsRefreshObjectList(ulong areaID)
 
 ulong lsAddLootBag(uword x, uword y, ubyte bagNr) /* bagNr : 1 - 8! */
 	{
-	LSObject lso = dbGetObject (9700 + bagNr);
+	LSObject lso = (LSObject)dbGetObject (9700 + bagNr);
 
 	lso->uch_Visible = LS_OBJECT_VISIBLE;
 
@@ -396,7 +386,7 @@ ulong lsAddLootBag(uword x, uword y, ubyte bagNr) /* bagNr : 1 - 8! */
 
 void lsRemLootBag(ulong bagId)
 	{
-	LSObject lso = dbGetObject(bagId);
+	LSObject lso = (LSObject)dbGetObject(bagId);
 
 	lso->uch_Visible = LS_OBJECT_INVISIBLE;
 
@@ -408,12 +398,13 @@ void lsRemLootBag(ulong bagId)
 void lsRefreshAllLootBags(void)
 	{
 	ulong i;
+	LSObject lso;
 
 	livPrepareAnims();
 
 	for (i = 1; i < 9; i++)
 		{
-		LSObject lso = dbGetObject(9700 + i);
+		lso = (LSObject)dbGetObject(9700 + i);
 
 		if ((lso->uch_Visible == LS_OBJECT_VISIBLE) && (hasLootBag(ls->ul_AreaID, (ulong) (9700 + i))))
 			{
@@ -475,10 +466,10 @@ void lsWalkThroughWindow(LSObject lso, uword us_LivXPos, uword us_LivYPos, uword
 		(*us_YPos) += deltaY;	/* horizontal */
 	}
 
-// bei einigen Objekten werden im LDesigner die Status Bits nicht richtig
-// gesetzt, und mssen hier zu Laufzeit gepatcht werden
+/* for some objects the LDesigner does not set the status bits correctly,
+   so they need to patch at runtime here*/
 void lsPatchObjects(void)
-	{
+{
 	NODE *n;
 	LSObject lso;
 	Item item;
@@ -486,39 +477,49 @@ void lsPatchObjects(void)
 	((Item)dbGetObject(Item_Fenster))->OffsetFact = 16;
 
 	for (n = (NODE*) LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(n); n = (NODE*) NODE_SUCC(n))
-		{
-		lso = OL_DATA(n);
+	{
+		lso = (LSObject)OL_DATA(n);
 
-		item = dbGetObject(lso->Type);
+		item = (Item)dbGetObject(lso->Type);
 
-		lso->uch_Size = item->Size;	// Gr”áen stimmen nicht berall berein!
+		lso->uch_Size = item->Size;	// Größen stimmen nicht überall überein!
 
 		switch(lso->Type)
+		{
+		case Item_Statue:
+			lso->ul_Status |= (1L<<Const_tcACCESS_BIT);
+			break;
+		case Item_WC:
+		case Item_Kuehlschrank:
+		case Item_Nachtkaestchen:
+			lso->ul_Status |= (1L<<Const_tcLOCK_UNLOCK_BIT);  /* unlocked! */
+			break;
+		case Item_Steinmauer:
+		case Item_Tresen:
+		case Item_Vase:
+		case Item_Sockel:
+		case Item_Leiter:
+			lso->ul_Status &= (~(1L<<Const_tcACCESS_BIT));      /* stone wall and so on, no Access */
+			break;
+		default:
+			break;
+		}
+
+		if (bProfidisk)
+		{
+			switch (lso->Type)
 			{
-			case Item_Statue:
-				  lso->ul_Status |= (1L<<Const_tcACCESS_BIT);
-				  break;
-			case Item_WC:
-			case Item_Kuehlschrank:
-			case Item_Nachtkaestchen:
-			#ifdef THECLOU_PROFIDISK
 			case Item_Beichtstuhl:
 			case Item_Postsack:
-			#endif
-				  lso->ul_Status |= (1L<<Const_tcLOCK_UNLOCK_BIT);  /* unlocked! */
-				  break;
-			case Item_Steinmauer:
-			case Item_Tresen:
-			case Item_Vase:
-			case Item_Sockel:
-			#ifdef THECLOU_PROFIDISK
+				lso->ul_Status |= (1L<<Const_tcLOCK_UNLOCK_BIT);  /* unlocked! */
+				break;
 			case Item_Leiter:
-			#endif
-				  lso->ul_Status &= (~(1L<<Const_tcACCESS_BIT));      /* Steinmauern kein Access */
-				  break;
+				lso->ul_Status &= (~(1L<<Const_tcACCESS_BIT));      /* ladder, no Access */
+				break;
 			default:
-				  break;
+				break;
 			}
+		}
 
 		if (OL_NR(n) == tcLAST_BURGLARY_LEFT_CTRL_OBJ)
 			lso->ul_Status |= (1 << Const_tcON_OFF);
@@ -529,12 +530,12 @@ void lsPatchObjects(void)
 		lso->us_DestX -= 9;
 		lso->us_DestY += 17;
 		*/
-		}
 	}
+}
 
 void lsCalcExactSize(LSObject lso, uword *x0, uword *y0, uword *x1, uword *y1)
 	{
-	Item item = dbGetObject(lso->Type);
+	Item item = (Item)dbGetObject(lso->Type);
 	ubyte vertical = 0;
 
 	(*x0) = lso->us_DestX;
@@ -565,11 +566,11 @@ void lsCalcExactSize(LSObject lso, uword *x0, uword *y0, uword *x1, uword *y1)
 		}
 	}
 
-// kopiert den Hintergrund, der durch eine Tr verdeckt wird
+// kopiert den Hintergrund, der durch eine Tür verdeckt wird
 // in einen XMS Buffer
 static void lsInitDoorRefresh(ulong ObjId)
 	{
-	LSObject lso  = dbGetObject(ObjId);
+	LSObject lso  = (LSObject)dbGetObject(ObjId);
 	uword    width, height, destX, destY;
 	struct   LSDoorRefreshNode *drn;
 	ubyte		found = 0;
@@ -580,8 +581,15 @@ static void lsInitDoorRefresh(ulong ObjId)
 				found = 1;
 
 	if (!found)
-		{
-		xmsCopyDown(LS_DOOR_REFRESH_XMS_RP.p_MemHandle, 0, LS_PREPARE_BUFFER, LS_PREPARE_BUFFER_SIZE);
+	{
+		/* 2014-07-06 LucyG */
+		ulong buffer_size = LS_PREPARE_BUFFER_SIZE;
+		if (buffer_size > (LS_DOOR_REFRESH_XMS_RP.us_Width * LS_DOOR_REFRESH_XMS_RP.us_Height)) {
+			buffer_size = (LS_DOOR_REFRESH_XMS_RP.us_Width * LS_DOOR_REFRESH_XMS_RP.us_Height);
+			//Log("Warning: %s|%s: buffer size changed from %d to %d", __FILE__, __func__, LS_PREPARE_BUFFER_SIZE, buffer_size);
+			memset(LS_PREPARE_BUFFER, 0, LS_PREPARE_BUFFER_SIZE);
+		}
+        memcpy(LS_PREPARE_BUFFER, LS_DOOR_REFRESH_XMS_RP.p_MemHandle, buffer_size);
 
 		width  = lso->uch_Size;
 		height = lso->uch_Size;
@@ -591,7 +599,7 @@ static void lsInitDoorRefresh(ulong ObjId)
 
 		gfxNCH4PutNCH4ToMCGA(l_wrp->p_BitMap, LS_PREPARE_BUFFER, lso->us_DestX, lso->us_DestY, destX, destY, width, height, 160, 320);
 
-		xmsCopyUp(LS_DOOR_REFRESH_XMS_RP.p_MemHandle, 0, LS_PREPARE_BUFFER, LS_PREPARE_BUFFER_SIZE);
+        memcpy(LS_DOOR_REFRESH_XMS_RP.p_MemHandle, LS_PREPARE_BUFFER, buffer_size);
 
 		drn = (struct LSDoorRefreshNode *)
 			CreateNode(ls->p_DoorRefreshList, sizeof(struct LSDoorRefreshNode), 0L);
@@ -615,12 +623,19 @@ static void lsInitDoorRefresh(ulong ObjId)
 	}
 
 void lsDoDoorRefresh(LSObject lso)
-	// restauriert aus einem XMS Buffer den Hintergrund einer Tr
+	// restauriert aus einem XMS Buffer den Hintergrund einer Tür
 	{
 	struct   LSDoorRefreshNode *drn;
 	uword width, height;
 
-	xmsCopyDown(LS_DOOR_REFRESH_XMS_RP.p_MemHandle, 0, LS_PREPARE_BUFFER, LS_PREPARE_BUFFER_SIZE);
+	/* 2014-07-06 LucyG */
+	ulong buffer_size = LS_PREPARE_BUFFER_SIZE;
+	if (buffer_size > (LS_DOOR_REFRESH_XMS_RP.us_Width * LS_DOOR_REFRESH_XMS_RP.us_Height)) {
+		buffer_size = (LS_DOOR_REFRESH_XMS_RP.us_Width * LS_DOOR_REFRESH_XMS_RP.us_Height);
+		//Log("Warning: %s|%s: buffer size changed from %d to %d", __FILE__, __func__, LS_PREPARE_BUFFER_SIZE, buffer_size);
+		memset(LS_PREPARE_BUFFER, 0, LS_PREPARE_BUFFER_SIZE);
+	}
+    memcpy(LS_PREPARE_BUFFER, LS_DOOR_REFRESH_XMS_RP.p_MemHandle, buffer_size);
 
 	for (drn = (struct LSDoorRefreshNode *) LIST_HEAD(ls->p_DoorRefreshList);
 		  NODE_SUCC(drn); drn = (struct LSDoorRefreshNode *) NODE_SUCC(drn))

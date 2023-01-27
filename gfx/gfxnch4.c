@@ -13,7 +13,7 @@ ulong gfxNCH4GetCurrScrollOffset(void)
 	return(GFX_NCH4_SCROLLOFFSET + ScrX + (ScrY * 640));
 }
 
-void gfxNCH4PrintExact(struct RastPort *rp, ubyte *puch_Text, uword us_X, uword us_Y)
+void gfxNCH4PrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword us_Y)
 {
 	ubyte *DestPtr = &((ubyte*)rp->p_BitMap)[us_X + us_Y * 640];
 	ubyte *FontPtr = (ubyte*)rp->p_Font->p_BitMap;
@@ -50,7 +50,9 @@ void gfxNCH4PrintExact(struct RastPort *rp, ubyte *puch_Text, uword us_X, uword 
 
 void gfxNCH4RectFill(struct RastPort *rp, uword us_SX, uword us_SY, uword us_EX, uword us_EY)
 {
-	uword us_W, us_H, W1, H1;
+	uword us_W, us_H;
+	ubyte *bm;
+	uword i, j;
 
 	if ( !((us_SY >= rp->us_Height) && (us_EY >= rp->us_Height)) ||
 		  ((us_SX >= rp->us_Width) && (us_EX >= rp->us_Width)) )
@@ -79,8 +81,7 @@ void gfxNCH4RectFill(struct RastPort *rp, uword us_SX, uword us_SY, uword us_EX,
 		us_H = us_EY - us_SY + 1;
 	}
 
-	ubyte *bm = &((ubyte*)rp->p_BitMap)[us_SX + us_SY * 640];
-	uword i, j;
+	bm = &((ubyte*)rp->p_BitMap)[us_SX + us_SY * 640];
 	for (j = 0; j < us_H; j++)
 	{
 		for (i = 0; i < us_W; i++)

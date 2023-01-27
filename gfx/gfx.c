@@ -17,27 +17,109 @@
 #include "text\text.h"
 #endif
 
-#include "gfx\gfx.ph"
-
-/************************************************/
-
-char bFullscreen = 0;	// default, don't change
-char bScale2x = 1;		// default, don't change
-
-/************************************************/
-
-#include "gfx\scale2x.h"
-static FUNCTION_SCALE2X(scale2x, ubyte, 320, 200)
-
-/************************************************/
-
+#include "gfx\gfx_p.h"
+#include "gfx\filter.h"
 #include "port\port.h"
+
+/************************************************/
+
+static char bGfxInvalidate = 0;
+static char	bGfxPaletteChanged = 0;
+
+int gfxScalingOffsetX = 0;
+int gfxScalingOffsetY = 0;
+int gfxScalingFactor = 1;
+
+static gfxFilterFunc gfxFilter = gfxFilter_x1_Copy;
+
+ubyte gfxPaletteGlobal[256*4];
+
+/************************************************/
 
 #define GFX_BOARD_SIZE	(640*328)
 
 SDL_Surface *SurfaceScreen = NULL;
-static const char *TitleStr = "Der Clou!";
+static const char *TitleStr = COSP_TITLE;
 static ubyte *NCH4Buffer = NULL;
+
+/************************************************/
+
+static void SetWindowIcon(char *icon)
+{
+	unsigned int    colorkey;
+	SDL_Surface     *image = NULL;
+
+	image = SDL_LoadBMP(icon);
+
+	if (image)
+	{
+		colorkey = SDL_MapRGB(image->format, 2, 5, 1);
+
+		SDL_SetColorKey(image, SDL_SRCCOLORKEY, colorkey);              
+
+		SDL_WM_SetIcon(image,NULL);
+	}
+
+}
+
+ubyte *gfxGetGfxBoardBase(void)
+{
+	return(GfxBoardBase);
+}
+
+void gfxInvalidate(void)
+{
+	bGfxInvalidate = 1;
+}
+
+// 2014-07-13 LucyG : guess what this one does
+void gfxScreenshot(void)
+{
+	static int screenshotsTaken = 0;
+	char fileName[256];
+
+	sprintf(fileName, ".\\screenshot%02d.bmp", screenshotsTaken + 1);
+	if (!SDL_SaveBMP(SurfaceScreen, fileName)) {
+		screenshotsTaken++;
+	}
+}
+
+/************************************************/
+
+void gfxSetDarkness(ubyte value)
+{
+    ubyte *dp;
+    int h, i;
+    static ubyte ScrDark;
+
+	dp = (ubyte *)l_wrp->p_BitMap;
+
+    if (value == LS_BRIGHTNESS) {
+        h = LS_MAX_AREA_WIDTH;
+
+        do {
+            i = LS_MAX_AREA_HEIGHT;
+
+            do {
+                *dp++ |= 64;
+            } while (--i);
+        } while (--h);
+    } else {
+        h = LS_MAX_AREA_WIDTH;
+
+        do {
+            i = LS_MAX_AREA_HEIGHT;
+
+            do {
+                *dp++ &= ~64;
+            } while (--i);
+        } while (--h);
+    }
+
+    ScrDark = value;
+
+	bGfxInvalidate = 1;
+}
 
 /************************************************/
 
@@ -45,24 +127,63 @@ int gfxInitSDL(void)
 {
 	if (!SDL_InitSubSystem(SDL_INIT_VIDEO))
 	{
-		Uint16 w = 320, h = 200;
 		Uint32 flags = SDL_SWSURFACE;
-		if (bFullscreen)
-		{
+		char iconPath[TXT_KEY_LENGTH];
+
+		if (Config.gfxFullScreen) {
 			flags |= SDL_FULLSCREEN;
-			h += 40;
-			bScale2x = 1;
 		}
-		if (bScale2x)
-		{
-			w <<= 1;
-			h <<= 1;
+
+		gfxScalingFactor = min((Config.gfxScreenWidth / 320), (Config.gfxScreenHeight / 200));
+		if (gfxScalingFactor > 4) {
+			gfxScalingFactor = 4;
+		} else if (gfxScalingFactor < 1) {
+			Log("%s|%s: screen too small", __FILE__, __func__);
+			gfxScalingFactor = 1;
+			Config.gfxScreenWidth = 320;
+			Config.gfxScreenHeight = 200;
 		}
-		//SDL_WM_SetIcon(SDL_LoadBMP("pictures\\icon.bmp"), NULL);
-		SurfaceScreen = SDL_SetVideoMode(w, h, 8, flags);
+
+		switch (gfxScalingFactor) {
+			case 2:
+				if (Config.gfxScaleNx) {
+					gfxFilter = gfxFilter_x2_Scale2x;
+				} else {
+					gfxFilter = gfxFilter_x2_Copy;
+				}
+			break;
+			case 3:
+				if (Config.gfxScaleNx) {
+					gfxFilter = gfxFilter_x3_Scale3x;
+				} else {
+					gfxFilter = gfxFilter_x3_Copy;
+				}
+			break;
+			case 4:
+				if (Config.gfxScaleNx) {
+					gfxFilter = gfxFilter_x4_Scale4x;
+					gfxFilter_x4_Buffer = (unsigned char *)MemAlloc(640*400);
+					if (!gfxFilter_x4_Buffer) {
+						gfxFilter = gfxFilter_x4_Copy;
+					}
+				} else {
+					gfxFilter = gfxFilter_x4_Copy;
+				}
+			break;
+			default:
+				gfxFilter = gfxFilter_x1_Copy;
+			break;
+		}
+
+		gfxScalingOffsetX = (Config.gfxScreenWidth - (320 * gfxScalingFactor)) / 2;
+		gfxScalingOffsetY = (Config.gfxScreenHeight - (200 * gfxScalingFactor)) / 2;
+
+		dskBuildPathName(PICTURE_DIRECTORY, "icon.bmp", iconPath);
+		SetWindowIcon(iconPath);
+		SurfaceScreen = SDL_SetVideoMode(Config.gfxScreenWidth, Config.gfxScreenHeight, 8, flags);
 		if (SurfaceScreen)
 		{
-			if (!bFullscreen) SDL_WM_SetCaption(TitleStr, TitleStr);
+			SDL_WM_SetCaption(TitleStr, TitleStr);
 			GfxBoardBase = (ubyte *)MemAlloc(GFX_BOARD_SIZE);
 			if (GfxBoardBase)
 			{
@@ -79,19 +200,19 @@ void gfxDoneSDL(void)
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 	if (GfxBoardBase) MemFree(GfxBoardBase, GFX_BOARD_SIZE);
 	if (NCH4Buffer) MemFree(NCH4Buffer, GFX_PAGE_SIZE);
+	if (gfxFilter_x4_Buffer) {
+		MemFree(gfxFilter_x4_Buffer, 640*400);
+	}
 }
 
 void gfxUpdateSDL(struct RastPort *rp)
 {
 	ubyte *src, *dst;
+	long dstpitch;
+
 	if ((rp != &RefreshRP) && (rp != &PrepareRP))
 	{
-		SDL_LockSurface(SurfaceScreen);
-
 		src = GfxBoardBase;
-		dst = SurfaceScreen->pixels;
-
-		if (bFullscreen) dst += 640*40;
 
 		if (GfxBase.uch_VideoMode == GFX_VIDEO_NCH4)
 		{
@@ -100,13 +221,30 @@ void gfxUpdateSDL(struct RastPort *rp)
 			src = NCH4Buffer;
 		}
 
-		if (bScale2x) scale2x(src, dst);
-		else memcpy(dst, src, GFX_PAGE_SIZE);
+		if (bGfxPaletteChanged) {
+			SDL_SetPalette(SurfaceScreen, SDL_LOGPAL|SDL_PHYSPAL, (SDL_Color *)gfxPaletteGlobal, 0, 256);
+			bGfxPaletteChanged = 0;
+		}
+
+		SDL_LockSurface(SurfaceScreen);
+
+		dst = (ubyte*)SurfaceScreen->pixels;
+		dstpitch = SurfaceScreen->pitch;
+
+		if (gfxScalingOffsetX > 0) {
+			dst += gfxScalingOffsetX;
+		}
+		if (gfxScalingOffsetY > 0) {
+			dst += dstpitch * gfxScalingOffsetY;
+		}
+
+		gfxFilter(src, 320, 200, dst, dstpitch);
 
 		SDL_UnlockSurface(SurfaceScreen);
 
 		SDL_UpdateRect(SurfaceScreen, 0,0,0,0);
 	}
+	bGfxInvalidate = 0;
 }
 
 /********************************************************************
@@ -122,14 +260,14 @@ void gfxInit(void)
 
 	gfxSetDestRPForShow(NULL);
 
-	/* diese RP mssen nur ein Bild maximaler Gr”áe aufnehmen k”nnen */
-	/* in anderen Modulen wird vorausgesetzt, daá alle RastPorts gleich */
-	/* groá sind und auch gleich groá wie die StdBuffer sind */
+	/* diese RP muessen nur ein Bild maximaler Groesse aufnehmen koennen */
+	/* in anderen Modulen wird vorausgesetzt, dass alle RastPorts gleich */
+	/* gross sind und auch gleich gross wie die StdBuffer sind */
 	/* StdBuffer = 61 * 1024 = 62464, XMS: 62400 */
 
-	/* Ausnahme (nachtr„glich) : der RefreshRP ist nur 320 * 140 Pixel groá!! */
+	/* Ausnahme (nachtraeglich) : der RefreshRP ist nur 320 * 140 Pixel gross!! */
 
-	gfxInitXMSRastPort(&StdRP0InXMS    , 320, 195);	/* CMAP muá auch Platz haben ! */
+	gfxInitXMSRastPort(&StdRP0InXMS    , 320, 195);	/* CMAP muss auch Platz haben ! */
 	gfxInitXMSRastPort(&StdRP1InXMS    , 320, 195);
 	gfxInitXMSRastPort(&AnimRPInXMS    , 320, 195);
 	gfxInitXMSRastPort(&AddRPInXMS     , 320, 195);
@@ -137,7 +275,7 @@ void gfxInit(void)
 
 	gfxInitXMSRastPort(&LSFloorRPInXMS, 320, 32);
 
-	/* der RefreshRP muá den ganzen Bildschirm aufnehmen k”nnen */
+	/* der RefreshRP muss den ganzen Bildschirm aufnehmen koennen */
 	gfxInitXMSRastPort(&RefreshRPInXMS, 320, 200);
 
 	gfxInitRastPort(&RefreshRP, 0,   0, 320, 140,   0,   0, GFX_LOAD_BUFFER);
@@ -170,6 +308,8 @@ void gfxInit(void)
 	gfxInitPictList();
 
 	gfxSetVideoMode(GFX_VIDEO_MCGA); // nach RastPorts !!
+
+	bGfxInvalidate = 1;
 }
 
 void gfxDone(void)
@@ -258,36 +398,37 @@ void gfxCorrectUpperRPBitmap(void)
 static void gfxInitCollList(void)
 {
 	char pathname[TXT_KEY_LENGTH];
-	LIST *tempList = CreateList(0);
+	LIST *tempList = (LIST*)CreateList(0);
 	NODE *n;
+	struct Collection *coll;
 
-	CollectionList = CreateList(0);
+	CollectionList = (LIST*)CreateList(0);
 
 	dskBuildPathName(TEXT_DIRECTORY, COLL_LIST_TXT, pathname);
 	ReadList(tempList, 0, pathname, 0);
 
 	for (n = (NODE *) LIST_HEAD(tempList); NODE_SUCC(n); n = (NODE *) NODE_SUCC(n))
 	{
-		struct Collection *coll;
-
-		coll = CreateNode(CollectionList, sizeof(struct Collection), txtGetKey(2, NODE_NAME(n)));
+		coll = (struct Collection*)CreateNode(CollectionList, sizeof(struct Collection), txtGetKey(2, NODE_NAME(n)));
 
 		coll->us_CollId     = (uword)  txtGetKeyAsULONG(1, NODE_NAME(n));
 
-		coll->puch_Filename = NODE_NAME(coll);
+		coll->puch_Filename = (ubyte*)NODE_NAME(coll);
 		coll->p_Prepared    = 0;
 
 		coll->us_TotalWidth  = (uword) txtGetKeyAsULONG(3, NODE_NAME(n));
 		coll->us_TotalHeight = (uword) txtGetKeyAsULONG(4, NODE_NAME(n));
 
-		coll->uch_ColorRangeStart = (uword) txtGetKeyAsULONG(5, NODE_NAME(n));
-		coll->uch_ColorRangeEnd   = (uword) txtGetKeyAsULONG(6, NODE_NAME(n));
+		coll->uch_ColorRangeStart = (ubyte) txtGetKeyAsULONG(5, NODE_NAME(n));
+		coll->uch_ColorRangeEnd   = (ubyte) txtGetKeyAsULONG(6, NODE_NAME(n));
 
-		#ifdef THECLOU_PROFIDISK
-		#ifdef THECLOU_CDROM_VERSION
-		coll->fromDisk = (ubyte)txtGetKeyAsULONG(7, NODE_NAME(n));
-		#endif
-		#endif
+		if (bProfidisk)  
+		{
+			if (bCDRom)
+			{
+				coll->fromDisk = (ubyte)txtGetKeyAsULONG(7, NODE_NAME(n)); //is nonessential,because all the data are read from the hard disk
+			}
+		}
 	}
 
 	RemoveList(tempList);
@@ -296,19 +437,18 @@ static void gfxInitCollList(void)
 static void gfxInitPictList(void)
 {
 	char pathname[TXT_KEY_LENGTH];
-	LIST *tempList = CreateList(0);
+	LIST *tempList = (LIST*)CreateList(0);
 	NODE *n;
+	struct Picture *pict;
 
-	PictureList = CreateList(0);
+	PictureList = (LIST*)CreateList(0);
 
 	dskBuildPathName(TEXT_DIRECTORY, PICT_LIST_TXT, pathname);
 	ReadList(tempList, 0, pathname, 0);
 
 	for (n = (NODE *) LIST_HEAD(tempList); NODE_SUCC(n); n = (NODE *) NODE_SUCC(n))
 	{
-		struct Picture *pict;
-
-		pict = CreateNode(PictureList, sizeof(struct Picture), NULL);
+		pict = (struct Picture*)CreateNode(PictureList, sizeof(struct Picture), NULL);
 
 		pict->us_PictId = (uword) txtGetKeyAsULONG(1, NODE_NAME(n));
 		pict->us_CollId = (uword) txtGetKeyAsULONG(2, NODE_NAME(n));
@@ -340,7 +480,10 @@ static void gfxInitXMSRastPort(struct XMSRastPort *rp, uword us_Width, uword us_
 
 static void gfxDoneXMSRastPort(struct XMSRastPort *rp)
 {
-	MemFree(rp->p_MemHandle, (ulong)rp->us_Width * (ulong)rp->us_Height);
+	if (rp->p_MemHandle) {
+		MemFree(rp->p_MemHandle, (ulong)rp->us_Width * (ulong)rp->us_Height);
+		rp->p_MemHandle = NULL;
+	}
 }
 
 static void gfxInitRastPort(struct RastPort *rp, uword us_LeftEdge, uword us_TopEdge, uword us_Width, uword us_Height, ubyte uch_ColorStart, ubyte uch_ColorEnd, void *p_BitMap)
@@ -367,12 +510,11 @@ static void gfxInitRastPort(struct RastPort *rp, uword us_LeftEdge, uword us_Top
  * gfxCloseFont
  */
 
-static struct Font *gfxOpenFont(ubyte *puch_FileName, uword us_Width, uword us_Height, ubyte uch_FirstChar, ubyte uch_LastChar, uword us_TotalWidth, uword us_TotalHeight)
+static struct Font *gfxOpenFont(char *puch_FileName, uword us_Width, uword us_Height, ubyte uch_FirstChar, ubyte uch_LastChar, uword us_TotalWidth, uword us_TotalHeight)
 {
 	char Result[TXT_KEY_LENGTH];
-	struct Font *font = MemAlloc(sizeof(struct Font));
-	char *p;
-	long i, size;
+	struct Font *font = (struct Font*)MemAlloc(sizeof(struct Font));
+	long size;
 
 	font->us_Width  = us_Width;
 	font->us_Height = us_Height;
@@ -383,17 +525,17 @@ static struct Font *gfxOpenFont(ubyte *puch_FileName, uword us_Width, uword us_H
 	font->us_TotalWidth  = us_TotalWidth;
 	font->us_TotalHeight = us_TotalHeight;
 
-	size = (long) font->us_TotalWidth * font->us_TotalHeight; // MUá NICHT IMMER STIMMEN !!!
+	size = (long) font->us_TotalWidth * font->us_TotalHeight; // MUST NOT ALWAYS AGREE !!!
 
 	font->p_BitMap = MemAlloc(size);
 
 	dskBuildPathName(PICTURE_DIRECTORY, puch_FileName, Result);
 	dskLoad(Result, GFX_LOAD_BUFFER, 0);
 
-	/* Buffer l”schen! */
+	/* clear Buffer with 0! */
 	memset(font->p_BitMap, 0, size);
 
-	gfxILBMToRAW(GFX_LOAD_BUFFER, font->p_BitMap);
+	gfxILBMToRAW((ubyte*)GFX_LOAD_BUFFER, (ubyte*)font->p_BitMap);
 
 	return font;
 }
@@ -425,38 +567,61 @@ static void gfxCloseFont(struct Font *font)
 
 void gfxDraw(struct RastPort *rp, uword us_X, uword us_Y)
 {
-	uword dex, dey, sx, sy, i;
-	ubyte col;
+	/* LucyG 2017-10-29 : this never worked at all! */
+	/* Hell, it's a simple line drawing function :D */
 
-	if (( us_X < rp->us_Width ) && ( us_Y < rp->us_Height ))
-	{
+	int sx, sy, dx, dy, i;
+	ubyte col;
+	ubyte *bm;
+
+	if (!rp) {
+		Log("%s|%s: RastPort is NULL", __FILE__, __func__);
+		return;
+	}
+
+	if ((us_X >= 0) && (us_X < rp->us_Width) && (us_Y >= 0) && (us_Y < rp->us_Height)) {
 		col  = rp->uch_FrontPenAbs;
 
-		sx = min((int)us_X, (int)rp->us_CursorXPosAbs);
-		sy = min((int)us_Y, (int)rp->us_CursorYPosAbs);
+		sx = min(us_X, rp->us_CursorXPosAbs);
+		sy = min(us_Y, rp->us_CursorYPosAbs);
+		dx = max(us_X, rp->us_CursorXPosAbs);
+		dy = max(us_Y, rp->us_CursorYPosAbs);
 
-		dex = abs((int)rp->us_CursorXPosAbs - (int)us_X) + 1;
-		dey = abs((int)rp->us_CursorYPosAbs - (int)us_Y) + 1;
+		// the starting position
+		bm = &((ubyte *)rp->p_BitMap)[sy * rp->us_Width + sx];
 
-		if (dey == 1)
-		{
-			for (i = sx; i < dex; i++) ((ubyte*)rp->p_BitMap)[i] = col;
-		}
-		else if (dex == 1)
-		{
-			for (i = sy; i < dey; i++) ((ubyte*)rp->p_BitMap)[i*320+sx] = col;
+		if (sy == dy) {
+			// horizontal
+			for (i = sx; i <= dx; i++) {
+				*bm++ = col;
+			}
+		} else if (sx == dx) {
+			// vertical
+			for (i = sy; i <= dy; i++) {
+				*bm = col;
+				bm += rp->us_Width;
+			}
+		} else {
+			// diagonal (not used?)
+			Log("%s|%s: diagonal line not implemented *****", __FILE__, __func__);
 		}
 
 		rp->us_CursorXPosAbs = us_X;
 		rp->us_CursorYPosAbs = us_Y;
 	}
 
-	gfxUpdateSDL(rp);
+	//gfxUpdateSDL(rp);
+	bGfxInvalidate = 1;
 }
 
 ubyte gfxReadPixel(struct RastPort *rp, uword us_X, uword us_Y)
 {
 	ubyte col;
+
+	if (!rp) {
+		Log("%s: RastPort is NULL", __func__);
+		return(0);
+	}
 
 	if (rp->uch_VideoMode == GFX_VIDEO_MCGA)
 		col = gfxMCGAReadPixel(rp, us_X, us_Y);
@@ -469,12 +634,20 @@ ubyte gfxReadPixel(struct RastPort *rp, uword us_X, uword us_Y)
 
 void gfxMoveCursor(struct RastPort *rp, uword us_X, uword us_Y)
 {
+	if (!rp) {
+		Log("%s: RastPort is NULL", __func__);
+		return;
+	}
 	rp->us_CursorXPosAbs = us_X;
 	rp->us_CursorYPosAbs = us_Y;
 }
 
 void gfxSetPens(struct RastPort *rp, ubyte uch_Front, ubyte uch_Back, ubyte uch_Out)
 {
+	if (!rp) {
+		Log("%s: RastPort is NULL", __func__);
+		return;
+	}
 	if (uch_Front != GFX_SAME_PEN)
 		rp->uch_FrontPenAbs   = uch_Front;
 
@@ -485,32 +658,52 @@ void gfxSetPens(struct RastPort *rp, ubyte uch_Front, ubyte uch_Back, ubyte uch_
 		rp->uch_OutlinePenAbs = uch_Out;
 }
 
-// Minimalgroesse: 3 * 3 Pixel !
+// minimum size: 3 * 3 pixel !
 void gfxRectFill(struct RastPort *rp, uword us_SX, uword us_SY, uword us_EX, uword us_EY)
 {
-	if (rp->uch_VideoMode == GFX_VIDEO_MCGA)
+	if (!rp) {
+		Log("%s: RastPort is NULL", __func__);
+		return;
+	}
+	if (rp->uch_VideoMode == GFX_VIDEO_MCGA) {
 		gfxMCGARectFill(rp, us_SX, us_SY, us_EX, us_EY);
+	}
 
-	if (rp->uch_VideoMode == GFX_VIDEO_NCH4)
+	if (rp->uch_VideoMode == GFX_VIDEO_NCH4) {
 		gfxNCH4RectFill(rp, us_SX, us_SY, us_EX, us_EY);
+	}
 
-	gfxUpdateSDL(rp);
+	//gfxUpdateSDL(rp);
+	bGfxInvalidate = 1;
 }
 
 void gfxSetDrMd(struct RastPort *rp, uword us_DrawMode)
 {
+	if (!rp) {
+		Log("%s: RastPort is NULL", __func__);
+		return;
+	}
 	rp->us_DrawMode = us_DrawMode;
 }
 
 void gfxSetFont(struct RastPort *rp, struct Font *font)
 {
+	if (!rp) {
+		Log("%s: RastPort is NULL", __func__);
+		return;
+	}
 	rp->p_Font = font;
 }
 
-/* berechnet die L„nge eines Textes in Pixel */
-long gfxTextLength(struct RastPort *rp, ubyte *puch_Text, uword us_CharCount)
+/* calculates the length of a text in pixels */
+long gfxTextLength(struct RastPort *rp, char *puch_Text, uword us_CharCount)
 {
-	long length = (long) strlen(puch_Text);
+	long length;
+	if (!rp) {
+		Log("%s: RastPort is NULL", __func__);
+		return(0);
+	}
+	length = (long) strlen(puch_Text);
 	return (length * (rp->p_Font->us_Width));
 }
 
@@ -520,16 +713,15 @@ long gfxTextLength(struct RastPort *rp, ubyte *puch_Text, uword us_CharCount)
 
 struct Collection *gfxGetCollection(uword us_CollId)
 {
-	return GetNthNode(CollectionList, (ulong) (us_CollId - 1));
+	return (struct Collection*)GetNthNode(CollectionList, (ulong) (us_CollId - 1));
 }
 
 struct Picture *gfxGetPicture(uword us_PictId)
 {
-	return GetNthNode(PictureList, (ulong) (us_PictId - 1));
+	return (struct Picture*)GetNthNode(PictureList, (ulong) (us_PictId - 1));
 }
 
-// die Kollektion muá einen Schritt davor hergerichtet (PrepareColl)
-// worden sein
+// The Collection must be prepared one step before (with gfxPrepareColl)
 void gfxGetColorTable(uword us_CollId, ubyte *puch_ColorTable)
 {
 	long i;
@@ -541,11 +733,15 @@ void gfxGetColorTable(uword us_CollId, ubyte *puch_ColorTable)
 
 static long gfxGetRealDestY(struct RastPort *rp, long destY)
 {
+	if (!rp) {
+		Log("%s: RastPort is NULL", __func__);
+		return(0);
+	}
 	if (rp->uch_VideoMode == GFX_VIDEO_NCH4)
 	{
 		// dieser RastPort vereingt im NCH4-mode sowohl den Upper als auch
 		// den "normalen" Menurp
-		// beim MenuRp muá die TopEdge abgezogen werden, beim UpperRp darf
+		// beim MenuRp muss die TopEdge abgezogen werden, beim UpperRp darf
 		// dies nicht geschehen
 
 		if (destY >= m_wrp->us_TopEdge)
@@ -566,46 +762,41 @@ static long gfxGetRealDestY(struct RastPort *rp, long destY)
 struct RastPort *gfxPrepareColl(uword us_CollId)
 {
 	struct Collection *coll = gfxGetCollection(us_CollId);
+	if (!coll) {
+		Log("gfxPrepareColl: coll %d is NULL", us_CollId);
+	} else {
+		if (!coll->p_Prepared)
+		{
+			char Result[TXT_KEY_LENGTH];
+			void *cmap = (void *) ((ulong) GFX_DECR_BUFFER + (ulong) GFX_CMAP_OFFSET);
 
-	if (!coll->p_Prepared)
-	{
-		char Result[TXT_KEY_LENGTH];
-		void *cmap = (void *) ((ulong) GFX_DECR_BUFFER + (ulong) GFX_CMAP_OFFSET);
+			/* Dateiname erstellen */
+			dskBuildPathName(PICTURE_DIRECTORY, (char*)coll->puch_Filename, Result);
 
-		/* Dateiname erstellen */
-		dskBuildPathName(PICTURE_DIRECTORY, coll->puch_Filename, Result);
+			/* load collection */
+			dskLoad(Result, GFX_LOAD_BUFFER, DSK_DUMMY_DISK_ID);
 
-		#ifdef THECLOU_PROFIDISK
-		#ifdef THECLOU_CDROM_VERSION
-		if (coll->fromDisk)
-			sprintf(Result, "%s\\%s", PICTURE_DIRECTORY, coll->puch_Filename);
-		#endif
-		#endif
+			tcClearStdBuffer(GFX_DECR_BUFFER);
+			/* Collection entpacken */
+			/* der Decr Buffer entspricht dem PrepareRP */
+			gfxILBMToRAW((ubyte*)GFX_LOAD_BUFFER, (ubyte*)GFX_DECR_BUFFER);
 
-		/* Collection laden */
-		dskLoad(Result, GFX_LOAD_BUFFER, DSK_DUMMY_DISK_ID);
+			gfxGetCMAP((ubyte*)GFX_LOAD_BUFFER, (ubyte*)cmap);
 
-		tcClearStdBuffer(GFX_DECR_BUFFER);
-		/* Collection entpacken */
-		/* der Decr Buffer entspricht dem PrepareRP */
-		gfxILBMToRAW(GFX_LOAD_BUFFER, GFX_DECR_BUFFER);
-
-		gfxGetCMAP(GFX_LOAD_BUFFER, cmap);
-
-		/* coll->p_Prepared wird nicht mit dem PrepareRP initialisert, da */
-		/* es sonst zu Inkonsistenzen kommen k”nnte. Collections im PrepareRP */
-		/* werden als nicht vorbereitet betrachtet, da der PrepareRP st„ndig */
-		/* durch andere Bilder berschrieben wird */
-		coll->p_Prepared = 0;
+			/* coll->p_Prepared wird nicht mit dem PrepareRP initialisert, da */
+			/* es sonst zu Inkonsistenzen kommen koennte. Collections im PrepareRP */
+			/* werden als nicht vorbereitet betrachtet, da der PrepareRP staendig */
+			/* durch andere Bilder berschrieben wird */
+			coll->p_Prepared = 0;
+		}
+		else
+		{
+			/* vom aktuellen RP(muss XMS sein) in den PrepareRP kopieren */
+			/* coll->p_Prepared darf nicht initialisert werden! */
+			/* siehe oben! */
+			memcpy(PrepareRP.p_BitMap, coll->p_Prepared->p_MemHandle, coll->p_Prepared->us_Width * coll->p_Prepared->us_Height);
+		}
 	}
-	else
-	{
-		/* vom aktuellen RP(muá XMS sein) in den PrepareRP kopieren */
-		/* coll->p_Prepared darf nicht initialisert werden! */
-		/* siehe oben! */
-		memcpy(PrepareRP.p_BitMap, coll->p_Prepared->p_MemHandle, coll->p_Prepared->us_Width * coll->p_Prepared->us_Height);
-	}
-
 	return &PrepareRP;
 }
 
@@ -617,22 +808,36 @@ void gfxUnPrepareColl(uword us_CollId)
 void gfxCopyCollFromXMS(uword us_CollId, void *p_Buffer)
 {
 	struct Collection *coll = gfxGetCollection(us_CollId);
-
-	if (coll->p_Prepared)
-		memcpy(p_Buffer, coll->p_Prepared->p_MemHandle, coll->p_Prepared->us_Width * coll->p_Prepared->us_Height);
+	if (!coll) {
+		Log("gfxCopyCollFromXMS: coll %d is NULL", us_CollId);
+	} else {
+		if (coll->p_Prepared) {
+			memcpy(p_Buffer, coll->p_Prepared->p_MemHandle, coll->p_Prepared->us_Width * coll->p_Prepared->us_Height);
+		}
+	}
 }
 
 void gfxCopyCollToXMS(uword us_CollId, struct XMSRastPort *rp)
 {
+	long size;
+	struct Collection *oldColl;
 	struct Collection *coll = gfxGetCollection(us_CollId);
-	long size = rp->us_Width * rp->us_Height;
+	if (!coll) {
+		Log("gfxCopyCollToXMS: coll %d is NULL", us_CollId);
+	}
+
+	size = rp->us_Width * rp->us_Height;
 
 	// wenn sich in diesem XMS RastPort ein anderes Bild befindet so wird dieses
 	// nun aus dem XMS RastPort "entfernt"
 	if ((rp->us_CollId != GFX_NO_COLL_IN_XMS) && (us_CollId != rp->us_CollId))
 	{
-		struct Collection *oldColl = gfxGetCollection(rp->us_CollId);
-		oldColl->p_Prepared = 0;
+		oldColl = gfxGetCollection(rp->us_CollId);
+		if (!oldColl) {
+			Log("gfxCopyCollToXMS: oldColl %d is NULL", rp->us_CollId);
+		} else {
+			oldColl->p_Prepared = 0;
+		}
 	}
 
 	gfxPrepareColl(us_CollId);
@@ -640,7 +845,9 @@ void gfxCopyCollToXMS(uword us_CollId, struct XMSRastPort *rp)
 	memcpy(rp->p_MemHandle, GFX_DECR_BUFFER, size);
 
 	// in der neuen Collection wird der XMS RastPort eingetragen
-	coll->p_Prepared = rp;
+	if (coll) {
+		coll->p_Prepared = rp;
+	}
 
 	rp->us_CollId = us_CollId;
 }
@@ -655,22 +862,33 @@ void gfxSetRect(uword us_X, uword us_Width)
 	GlobalPrintRect.us_Width = us_Width;
 }
 
-void gfxPrintExact(struct RastPort *rp, ubyte *puch_Text, uword us_X, uword us_Y)
+void gfxPrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword us_Y)
 {
+	if (!rp) {
+		Log("%s: RastPort is NULL", __func__);
+		return;
+	}
 	if (rp->uch_VideoMode == GFX_VIDEO_MCGA)
 		gfxMCGAPrintExact(rp, puch_Text, us_X, us_Y);
 
 	if (rp->uch_VideoMode == GFX_VIDEO_NCH4)
 		gfxNCH4PrintExact(rp, puch_Text, us_X, us_Y);
 
-	gfxUpdateSDL(rp);
+	//gfxUpdateSDL(rp);
+	bGfxInvalidate = 1;
 }
 
-void gfxPrint(struct RastPort *rp, ubyte *puch_Text, uword us_Y, ulong ul_Mode)
+void gfxPrint(struct RastPort *rp, char *puch_Text, uword us_Y, ulong ul_Mode)
 {
-	uword x = GlobalPrintRect.us_X;
-	uword y = us_Y;
-	uword l = gfxTextLength(rp, puch_Text, strlen(puch_Text));
+	uword x, y, l;
+
+	if (!rp) {
+		Log("%s: RastPort is NULL", __func__);
+		return;
+	}
+	x = GlobalPrintRect.us_X;
+	y = us_Y;
+	l = gfxTextLength(rp, puch_Text, strlen(puch_Text));
 
 	if (ul_Mode & GFX_PRINT_RIGHT)
 		x += GlobalPrintRect.us_Width - l;
@@ -683,10 +901,12 @@ void gfxPrint(struct RastPort *rp, ubyte *puch_Text, uword us_Y, ulong ul_Mode)
 
 	if (ul_Mode & GFX_PRINT_SHADOW)
 	{
-		ubyte APen = rp->uch_FrontPenAbs;
-		rp->uch_FrontPenAbs = rp->uch_BackPenAbs;
-		gfxPrintExact(rp, puch_Text, x + 1, y + 1);
-		rp->uch_FrontPenAbs = APen;
+		if (!Config.gfxNoFontShadow) {
+			ubyte APen = rp->uch_FrontPenAbs;
+			rp->uch_FrontPenAbs = rp->uch_BackPenAbs;
+			gfxPrintExact(rp, puch_Text, x + 1, y + 1);
+			rp->uch_FrontPenAbs = APen;
+		}
 	}
 
 	gfxPrintExact(rp, puch_Text, x, y);
@@ -700,6 +920,10 @@ void gfxPrint(struct RastPort *rp, ubyte *puch_Text, uword us_Y, ulong ul_Mode)
 void gfxPrepareRefresh(void)
 {
 	ubyte *mem = (ubyte*)RefreshRPInXMS.p_MemHandle;
+	if (!mem) {
+		Log("%s: p_MemHandle is NULL", __func__);
+		return;
+	}
 
 	switch (GfxBase.uch_VideoMode)
 	{
@@ -717,6 +941,10 @@ void gfxPrepareRefresh(void)
 void gfxRefresh(void)
 {
 	ubyte *mem = (ubyte*)RefreshRPInXMS.p_MemHandle;
+	if (!mem) {
+		Log("%s: p_MemHandle is NULL", __func__);
+		return;
+	}
 
 	switch (GfxBase.uch_VideoMode)
 	{
@@ -741,7 +969,16 @@ void gfxBlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY,
 				 struct RastPort *drp, uword us_DestX, uword us_DestY,
 				 uword us_Width, uword us_Height, ulong ul_BlitMode)
 {
-	gfxWaitTOF();
+	if (!srp) {
+		Log("%s: RastPort is NULL", __func__);
+		return;
+	}
+	if (!drp) {
+		Log("%s: RastPort is NULL", __func__);
+		return;
+	}
+
+	//gfxWaitTOF();
 
 	if ((srp->uch_VideoMode == GFX_VIDEO_MCGA) && (drp->uch_VideoMode == GFX_VIDEO_MCGA))
 	{
@@ -760,7 +997,8 @@ void gfxBlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY,
 				us_DestX, us_DestY,us_Width, us_Height, 320, 160);
 	}
 
-	gfxUpdateSDL(drp);
+	//gfxUpdateSDL(rp);
+	bGfxInvalidate = 1;
 }
 
 struct RastPort *gfxGetDestRP(long l_DestX, long l_DestY)
@@ -799,16 +1037,20 @@ struct RastPort *gfxGetDestRP(long l_DestX, long l_DestY)
 }
 
 void wfr()
-// fr Bildschirmsync verwenden!!!
+// fuer Bildschirmsync verwenden!!!
 {
-	gfxUpdateSDL(NULL);
+	if (bGfxInvalidate || bGfxPaletteChanged) {
+		gfxUpdateSDL(NULL);
+	} else {
+		SDL_Delay(1);
+	}
 }
 
 void wfd(void)
 // sperrt im Gegensatz zu wfr die Interrupts nicht
-// wenn die Musik l„uft kann es daher vorkommen, daá
+// wenn die Musik laeuft kann es daher vorkommen, dass
 // dieses wfd einmal aussetzt
-// !!! NICHT fr Bildschirmsync verwenden!!
+// !!! NICHT fuer Bildschirmsync verwenden!!
 {
 	wfr();
 }
@@ -816,6 +1058,11 @@ void wfd(void)
 void gfxClearArea(struct RastPort *rp)
 {
 	ubyte uch_APen, uch_BPen, uch_OPen;
+
+	if (!rp) {
+		Log("%s: RastPort is NULL", __func__);
+		return;
+	}
 
 	uch_APen = rp->uch_FrontPenAbs;
 	uch_BPen = rp->uch_BackPenAbs;
@@ -828,24 +1075,44 @@ void gfxClearArea(struct RastPort *rp)
 
 void gfxSetRGB(struct RastPort *rp, ubyte uch_ColNr, ubyte uch_Red, ubyte uch_Green, ubyte uch_Blue)
 {
-	SDL_Color color;
-	color.r = uch_Red;
-	color.g = uch_Green;
-	color.b = uch_Blue;
-	SDL_SetColors(SurfaceScreen, &color, uch_ColNr, 1);
+	long n4 = (long)uch_ColNr << 2;
+	gfxPaletteGlobal[n4  ] = uch_Red;
+	gfxPaletteGlobal[n4+1] = uch_Green;
+	gfxPaletteGlobal[n4+2] = uch_Blue;
+	gfxPaletteGlobal[n4+3] = 0;
+	bGfxPaletteChanged = 1;
+	bGfxInvalidate = 1;
 }
 
-void gfxSetPalette(struct RastPort *rp, ubyte uch_ColStart, ubyte uch_ColEnd, ubyte *p_ColorTable)
+void gfxSetPalette24(struct RastPort *rp, ubyte uch_ColStart, ubyte uch_ColEnd, ubyte *p_ColorTable24)
 {
-	SDL_Color colors[256];
-	uword us_NumColors = (uword)(uch_ColEnd - uch_ColStart) + 1;
-	for (uword i = 0; i < us_NumColors; i++)
-	{
-		colors[i].r = p_ColorTable[((uword)uch_ColStart+i)*3  ];
-		colors[i].g = p_ColorTable[((uword)uch_ColStart+i)*3+1];
-		colors[i].b = p_ColorTable[((uword)uch_ColStart+i)*3+2];
+	int i, i3, i4;
+	for (i = uch_ColStart; i < uch_ColEnd; i++) {
+		i3 = i * 3;
+		i4 = i << 2;
+
+		gfxPaletteGlobal[i4  ] = p_ColorTable24[i3  ];
+		gfxPaletteGlobal[i4+1] = p_ColorTable24[i3+1];
+		gfxPaletteGlobal[i4+2] = p_ColorTable24[i3+2];
+		gfxPaletteGlobal[i4+3] = 0;
 	}
-	SDL_SetColors(SurfaceScreen, colors, uch_ColStart, us_NumColors);
+	bGfxPaletteChanged = 1;
+	bGfxInvalidate = 1;
+}
+
+void gfxSetPalette32(struct RastPort *rp, ubyte uch_ColStart, ubyte uch_ColEnd, ubyte *p_ColorTable32)
+{
+	int i, i4;
+	for (i = uch_ColStart; i < uch_ColEnd; i++) {
+		i4 = i << 2;
+
+		gfxPaletteGlobal[i4  ] = p_ColorTable32[i4  ];
+		gfxPaletteGlobal[i4+1] = p_ColorTable32[i4+1];
+		gfxPaletteGlobal[i4+2] = p_ColorTable32[i4+2];
+		gfxPaletteGlobal[i4+3] = 0;
+	}
+	bGfxPaletteChanged = 1;
+	bGfxInvalidate = 1;
 }
 
 void gfxSetColorRange(ubyte uch_ColorStart, ubyte uch_ColorEnd)
@@ -854,40 +1121,26 @@ void gfxSetColorRange(ubyte uch_ColorStart, ubyte uch_ColorEnd)
 	GlobalColorRange.uch_End   = uch_ColorEnd;
 }
 
-void gfxGetColorTableFromReg(char *puch_Colortable)
+void gfxGetColorTableFromReg(ubyte *puch_Colortable)
 {
-	SDL_LockSurface(SurfaceScreen);
-
-	SDL_Palette *palette;
-	palette = SurfaceScreen->format->palette;
-	if (palette)
-	{
-		SDL_Color *colors;
-		colors = palette->colors;
-
-		ubyte *table = (ubyte*)puch_Colortable;
-
-		for (uword t = 256; t--;)
-		{
-			*table++ = colors->r;
-			*table++ = colors->g;
-			*table++ = colors->b;
-			colors++;
-		}
+	int i, i3, i4;
+	for (i = 0; i < 256; i++) {
+		i3 = i * 3;
+		i4 = i << 2;
+		puch_Colortable[i3  ] = gfxPaletteGlobal[i4  ];
+		puch_Colortable[i3+1] = gfxPaletteGlobal[i4+1];
+		puch_Colortable[i3+2] = gfxPaletteGlobal[i4+2];
 	}
-
-	SDL_UnlockSurface(SurfaceScreen);
 }
 
 #define interpol(i,f,d)	(ubyte)((float)(i) + ((float)(f) - (float)(i)) * (float)(d))
 
-void gfxChangeColors(struct RastPort *rp, long l_Delay, ulong ul_Mode, char *colorTable)
+void gfxChangeColors(struct RastPort *rp, long l_Delay, ulong ul_Mode, ubyte *colorTable)
 {
 	ubyte cols[768];
 	ubyte cols2[768];
 	uword st,en,st3,en3;
 	uword i;
-	ubyte r,g,b;
 	float e,f;
 
 	if (rp)
@@ -906,6 +1159,8 @@ void gfxChangeColors(struct RastPort *rp, long l_Delay, ulong ul_Mode, char *col
 
 	l_Delay = max(l_Delay, 1);	// l_Delay may not be zero!
 
+	inpSetWaitTicks(l_Delay);
+
 	f = 0.0f;
 	e = 1.0f / (float)(l_Delay+1);
 
@@ -922,9 +1177,8 @@ void gfxChangeColors(struct RastPort *rp, long l_Delay, ulong ul_Mode, char *col
 					cols2[i+2] = interpol(cols[i+2], 48, f);
 				}
 				f += e;
-				gfxSetPalette(rp, st, en, cols2);
-				gfxUpdateSDL(rp);
-				SDL_Delay(10);
+				gfxSetPalette24(rp, st, en, cols2);
+				inpWaitFor(INP_TIME);
 			} while (--l_Delay);
 			for (i = st3; i <= en3; i += 3)
 			{
@@ -932,8 +1186,8 @@ void gfxChangeColors(struct RastPort *rp, long l_Delay, ulong ul_Mode, char *col
 				cols2[i+1] = 64;
 				cols2[i+2] = 48;
 			}
-			gfxSetPalette(rp, st, en, cols2);
-			gfxUpdateSDL(rp);
+			gfxSetPalette24(rp, st, en, cols2);
+			inpWaitFor(INP_TIME);
 		break;
 		case GFX_BLEND_UP:		// fade to colorTable
 			do
@@ -945,24 +1199,39 @@ void gfxChangeColors(struct RastPort *rp, long l_Delay, ulong ul_Mode, char *col
 					cols[i+2] = interpol(48, ((ubyte*)colorTable)[i+2], f);
 				}
 				f += e;
-				gfxSetPalette(rp, st, en, cols);
-				gfxUpdateSDL(rp);
-				SDL_Delay(10);
+				gfxSetPalette24(rp, st, en, cols);
+				inpWaitFor(INP_TIME);
 			} while (--l_Delay);
-			gfxSetPalette(rp, st, en, (ubyte*)colorTable);
-			gfxUpdateSDL(rp);
+			gfxSetPalette24(rp, st, en, (ubyte*)colorTable);
+			inpWaitFor(INP_TIME);
 		break;
 	}
 }
 
 void gfxShow(uword us_PictId, ulong ul_Mode, long l_Delay, long l_XPos, long l_YPos)
 {
-	struct Picture    *pict = gfxGetPicture(us_PictId);
-	struct Collection *coll = gfxGetCollection(pict->us_CollId);
+	struct Picture    *pict;
+	struct Collection *coll;
 	struct RastPort   *destRP;
-	char   *colorTable = (char *) PrepareRP.p_BitMap + GFX_CMAP_OFFSET;
-	long   destX = pict->us_DestX;
-	long   destY = pict->us_DestY;
+	ubyte   *colorTable;
+	long   destX;
+	long   destY;
+
+	pict = gfxGetPicture(us_PictId);
+	if (!pict) {
+		Log("gfxShow: Picture %d is NULL", us_PictId);
+		return;
+	}
+	coll = gfxGetCollection(pict->us_CollId);
+	if (!coll) {
+		Log("gfxShow: Picture %d Collection %d is NULL", us_PictId, pict->us_CollId);
+	}
+	colorTable = (ubyte *) PrepareRP.p_BitMap + GFX_CMAP_OFFSET;
+	if (!colorTable) {
+		Log("gfxShow: colorTable is NULL");
+	}
+	destX = pict->us_DestX;
+	destY = pict->us_DestY;
 
 	if (l_XPos != -1)
 		destX = l_XPos;
@@ -987,16 +1256,20 @@ void gfxShow(uword us_PictId, ulong ul_Mode, long l_Delay, long l_XPos, long l_Y
 
 	if (ul_Mode & GFX_FADE_OUT)
 	{
-		gfxSetColorRange(coll->uch_ColorRangeStart, coll->uch_ColorRangeEnd);
-		gfxChangeColors(NULL, l_Delay, GFX_FADE_OUT, 0);
+		if (coll) {
+			gfxSetColorRange(coll->uch_ColorRangeStart, coll->uch_ColorRangeEnd);
+			gfxChangeColors(NULL, l_Delay, GFX_FADE_OUT, 0);
+		}
 	}
 
 	if (!l_Delay)
 	{
 		if (ul_Mode & GFX_BLEND_UP)
 		{
-			gfxSetColorRange(coll->uch_ColorRangeStart, coll->uch_ColorRangeEnd);
-			gfxChangeColors(NULL , l_Delay, GFX_BLEND_UP, colorTable);
+			if (coll && colorTable) {
+				gfxSetColorRange(coll->uch_ColorRangeStart, coll->uch_ColorRangeEnd);
+				gfxChangeColors(NULL , l_Delay, GFX_BLEND_UP, colorTable);
+			}
 		}
 	}
 
@@ -1012,8 +1285,10 @@ void gfxShow(uword us_PictId, ulong ul_Mode, long l_Delay, long l_XPos, long l_Y
 	{
 		if (ul_Mode & GFX_BLEND_UP)
 		{
-			gfxSetColorRange(coll->uch_ColorRangeStart, coll->uch_ColorRangeEnd);
-			gfxChangeColors(NULL , l_Delay, GFX_BLEND_UP, colorTable);
+			if (coll && colorTable) {
+				gfxSetColorRange(coll->uch_ColorRangeStart, coll->uch_ColorRangeEnd);
+				gfxChangeColors(NULL , l_Delay, GFX_BLEND_UP, colorTable);
+			}
 		}
 	}
 

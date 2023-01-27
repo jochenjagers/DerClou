@@ -8,7 +8,23 @@
 #define THECLOU_MODULE
 
 #define __COSP__
-#define THECLOU_VERSION	"0.1d"
+#define COSP_VERSION	"0.6"
+#define COSP_TITLE		"Der Clou! Open Source Project"
+
+typedef struct {
+	int gfxScreenWidth;
+	int gfxScreenHeight;
+	char gfxFullScreen;
+	char gfxScaleNx;
+	char gfxNoFontShadow;
+	char NoIntro;
+
+	int SfxVolume;
+	int MusicVolume;
+	
+	unsigned char UseJoystick;
+} Configuration_t;
+extern Configuration_t Config;	/* base.c */
 
 /*
  * MemAlloc/MemFree logging to
@@ -27,13 +43,23 @@ typedef unsigned long	ulong;
 
 #define EOS 	 ((char)'\0')
 
-// ADDITIONAL VERSION DEFINES
-//#define THECLOU_CDROM_VERSION
-#define THECLOU_PROFIDISK
+#if _MSC_VER
+// defines for Visual C++
+#define max(a,b)    (((a) > (b)) ? (a) : (b))
+#define min(a,b)    (((a) < (b)) ? (a) : (b))
+#define __func__	__FUNCTION__
+#endif
 
-// LANGUAGE DEFINES
-#define THECLOU_VERSION_GERMAN
-//#define THECLOU_VERSION_ENGLISH
+#ifndef FALSE
+#define FALSE 0
+#endif
+#ifndef TRUE
+#define TRUE (~0)
+#endif
+
+// ADDITIONAL VERSION DEFINES
+extern char bProfidisk;
+extern char bCDRom;
 
 // SPECIALS DEFINES
 #define THECLOU_JOYSTICK_DISABLED
@@ -53,8 +79,8 @@ typedef unsigned long	ulong;
 #define LIV_ANIM_TEMPLATE_LIST	"Template.lst"
 #define LIV_LIVINGS_LIST		"livings.lst"
 
-#define SND_SOUND_LIST			((ubyte*)"sounds.list")
-#define SND_SOUND_DIRECTORY		((ubyte*)"sounds")
+#define SND_SOUND_LIST			"sounds.list"
+#define SND_SOUND_DIRECTORY		"sounds"
 
 /*
  * Namen der anderen Dateien
@@ -102,25 +128,26 @@ typedef unsigned long	ulong;
  *
  */
 
-#define PICTURE_DIRECTORY	((ubyte*)"pictures")
-#define TEXT_DIRECTORY		((ubyte*)"texts")
-#define INCLUDE_DIRECTORY	((ubyte*)"Include")
-#define DATA_DIRECTORY		((ubyte*)"data")
-#define SOUND_DIRECTORY 	((ubyte*)"sounds")
-#define SAMPLES_DIRECTORY	((ubyte*)"samples")
+#define PICTURE_DIRECTORY	"pictures"
+#define TEXT_DIRECTORY		"texts"
+#define INCLUDE_DIRECTORY	"Include"
+#define DATA_DIRECTORY		"data"
+#define SOUND_DIRECTORY 	"sounds"
+#define SAMPLES_DIRECTORY	"samples"
+#define AUDIO_DIRECTORY		"audio"
 
-#define DATADISK			((ubyte*)"datadisk")
+#define DATADISK			"datadisk"
 
-#define BUILD_DATA_NAME 	((ubyte*)"tcbuild")
-#define MAIN_DATA_NAME		((ubyte*)"tcmain")
-#define GAME_DATA_EXT		((ubyte*)".dat")
-#define GAME_REL_EXT 		((ubyte*)".rel")
-#define TAXI_LOC_EXT 		((ubyte*)".loc")
+#define BUILD_DATA_NAME 	"tcbuild"
+#define MAIN_DATA_NAME		"tcmain"
+#define GAME_DATA_EXT		".dat"
+#define GAME_REL_EXT 		".rel"
+#define TAXI_LOC_EXT 		".loc"
 
-#define STORY_DATA_NAME 	((ubyte*)"tcstory")
+#define STORY_DATA_NAME 	"tcstory"
 
 /*
- * defines fr Error Modul
+ * defines fuer Error Modul
  *
  */
 

@@ -30,11 +30,7 @@
 #endif
 
 #ifndef MODULE_TCDATA
-#ifndef THECLOU_PROFIDISK
-#include "data\objstd\tcdata.h"
-#else
-#include "data\objprofi\tcdata.h"
-#endif
+#include "data\tcdata.h"
 #endif
 
 #ifndef MODULE_EVIDENCE
@@ -63,7 +59,7 @@ extern long  tcCalcEscapeTime(void);
 extern long  tcKillTheGuard(ulong guyId, ulong buildingId);
 extern long  tcAlarmByPowerLoss (ulong powerId);
 extern long  tcAlarmByTouch(ulong lsoId);
-extern long  tcGuardDetectsGuy(LIST *roomsList, uword us_XPos, uword us_YPos, ubyte uch_ViewDirection, ubyte *puch_GuardName, ubyte *puch_LivingName);
+extern long  tcGuardDetectsGuy(LIST *roomsList, uword us_XPos, uword us_YPos, ubyte uch_ViewDirection, char *puch_GuardName, char *puch_LivingName);
 extern long  tcGetCarStrike(Car car);
 extern long  tcCalcEscapeOfTeam(void);
 extern long  tcGuyTellsAll(Person p);

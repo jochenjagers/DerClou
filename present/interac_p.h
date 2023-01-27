@@ -16,9 +16,6 @@
 #define TXT_1ST_MENU_LINE_Y     24
 #define TXT_2ND_MENU_LINE_Y     36
 
-#define TRUE				  1
-#define FALSE				  0
-
 #define INT_BUBBLE_WIDTH		 200
 
 // misc

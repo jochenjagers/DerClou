@@ -5,7 +5,9 @@
    Based on the original by neo Software GmbH
 */
 #include "present\interac.h"
-#include "present\interac.ph"
+#include "present\interac_p.h"
+
+extern void PlayFromCDROM(void);
 
 void SetBubbleType (uword type)
 {
@@ -27,12 +29,12 @@ void SetMenuTimeOutFunc(void *func)
 	MenuTimeOutFunc = (void (*)()) func;
 }
 
-ubyte ChoiceOk (ubyte choice, ubyte exit, LIST *l)
+ubyte ChoiceOk (ubyte choice, ubyte xit, LIST *l)
 {
 	if (choice == GET_OUT)
 		return 0;
 
-	if (choice == exit)
+	if (choice == xit)
 		return 0;
 
 	if (l && !LIST_EMPTY(l))
@@ -49,7 +51,7 @@ ubyte ChoiceOk (ubyte choice, ubyte exit, LIST *l)
 void DrawMenu (LIST *menu, ubyte nr, long mode)
 {
 	ubyte i;
-	char *m1, *m2;
+	char *m1 = 0, *m2 = 0;
 	long x = 8, lastx = 0;
 
 	if (mode == ACTIV_POSS)
@@ -166,6 +168,7 @@ ubyte Menu (LIST *menu, ulong possibility, ubyte activ, void (*func)(ubyte), ulo
 	char ende = FALSE;
 	uword x;
 	NODE *n;
+	uword l1, l2;
 
 	if (menu && !LIST_EMPTY(menu))
 	{
@@ -178,7 +181,8 @@ ubyte Menu (LIST *menu, ulong possibility, ubyte activ, void (*func)(ubyte), ulo
 		{
 			if ((ub_max % 2) == 0)
 			{
-				uword l1 = 0, l2 = 0;
+				l1 = 0;
+				l2 = 0;
 
 				MenuCoords[ub_max/2] = x;
 
@@ -252,66 +256,115 @@ ubyte Menu (LIST *menu, ulong possibility, ubyte activ, void (*func)(ubyte), ulo
 						if (func)
 							func (activ);
 					}
+				}				
+			}
+			else if (action & INP_MOUSEWHEEL)    
+			{
+				i = 0;
+
+				if (action & INP_UP)
+				{
+					i = 1;
+					do
+					{
+						nextActiv = SearchActiv(-i, activ, possibility, ub_max);
+						i++;
+
+						if (i = 255 && nextActiv == (char)-1)
+						{
+							nextActiv = activ;
+							break;
+						}
+
+					} while (nextActiv == (char)-1);
 				}
+				else if (action & INP_DOWN)
+				{
+					i = 1;
+					do
+					{
+						nextActiv = SearchActiv(i, activ, possibility, ub_max);
+						i++;
+
+						if (i = 255 && nextActiv == (char)-1)
+						{
+							nextActiv = activ;
+							break;
+						}
+
+					} while (nextActiv == (char)-1);
+				}
+
+				DrawMenu(menu, activ, INACTIV_POSS);
+				activ = nextActiv;
+				DrawMenu(menu, activ, ACTIV_POSS);
+
+				if (func)
+					func(activ);
 			}
 			else
 			{
-				if ((action & INP_UP) && (activ & 1))
+				if (action & INP_UP || action & INP_DOWN || action & INP_LEFT || action & INP_RIGHT)
 				{
-					if ((nextActiv = SearchActiv (-1, activ, possibility, ub_max)) != (char) -1)
+					i = 0;
+
+					if (action & INP_UP)
 					{
-						if (!(nextActiv & 1))
+						i = 1;
+						do
 						{
-							DrawMenu (menu, activ, INACTIV_POSS);
-							activ = nextActiv;
-							DrawMenu (menu, activ, ACTIV_POSS);
+							nextActiv = SearchActiv(-i, activ, possibility, ub_max);
+							i++;
 
-							if (func)
-								func (activ);
-						}
+							if (i = 255 && nextActiv == (char)-1)
+							{
+								nextActiv = activ;								
+								break;
+							}
+
+						} while (nextActiv == (char)-1);
 					}
-				}
-
-				if ((action & INP_DOWN) && !(activ & 1))
-				{
-					if ((nextActiv = SearchActiv (+1, activ, possibility, ub_max)) != (char)-1)
+					else if (action & INP_DOWN)
 					{
-						if (nextActiv & 1)
+						i = 1;
+						do
 						{
-							DrawMenu (menu, activ, INACTIV_POSS);
-							activ = nextActiv;
-							DrawMenu (menu, activ, ACTIV_POSS);
+							nextActiv = SearchActiv(i, activ, possibility, ub_max);
+							i++;
 
-							if (func)
-								func (activ);
-						}
+							if (i = 255 && nextActiv == (char)-1)
+							{
+								nextActiv = activ;
+								break;
+							}
+
+						} while (nextActiv == (char)-1);
 					}
-				}
-
-				if (action & INP_LEFT)
-				{
-					if ((nextActiv = SearchActiv (-2, activ, possibility, ub_max)) != (char) -1)
+					else if (action & INP_LEFT)
 					{
-						DrawMenu (menu, activ, INACTIV_POSS);
-						activ = nextActiv;
-						DrawMenu (menu, activ, ACTIV_POSS);
-
-						if (func)
-							func (activ);
+						i = 2;
+						do
+						{
+							nextActiv = SearchActiv(-i, activ, possibility, ub_max);
+							i--;
+						} while (nextActiv == (char)-1);
 					}
-				}
-
-				if (action & INP_RIGHT)
-				{
-					if ((nextActiv = SearchActiv (+2, activ, possibility, ub_max)) != (char) -1)
+					else if (action & INP_RIGHT)
 					{
-						DrawMenu (menu, activ, INACTIV_POSS);
-						activ = nextActiv;
-						DrawMenu (menu, activ, ACTIV_POSS);
-
-						if (func)
-							func (activ);
+						i = 2;
+						do
+						{
+							nextActiv = SearchActiv(i, activ, possibility, ub_max);							
+							i--;	
+						} while (nextActiv == (char)-1);
 					}
+
+					DrawMenu(menu, activ, INACTIV_POSS);
+					activ = nextActiv;
+					DrawMenu(menu, activ, ACTIV_POSS);
+
+					if (func)
+						func(activ);
 				}
 			}
 		}
@@ -355,8 +408,10 @@ void DrawBubble (LIST *bubble, ubyte firstLine, ubyte activ, struct RastPort *rp
 
 		if (*line != '*')
 		{
-			gfxSetPens (&RefreshRP, BG_TXT_COLOR, GFX_SAME_PEN, GFX_SAME_PEN);
-			gfxPrintExact(&RefreshRP, line, X_OFFSET, j+1);
+			if (!Config.gfxNoFontShadow) {
+				gfxSetPens (&RefreshRP, BG_TXT_COLOR, GFX_SAME_PEN, GFX_SAME_PEN);
+				gfxPrintExact(&RefreshRP, line, X_OFFSET, j+1);
+			}
 
 			gfxSetPens (&RefreshRP, VG_TXT_COLOR, GFX_SAME_PEN, GFX_SAME_PEN);
 			gfxPrintExact(&RefreshRP, line, X_OFFSET, j);
@@ -365,12 +420,14 @@ void DrawBubble (LIST *bubble, ubyte firstLine, ubyte activ, struct RastPort *rp
 		{
 			line = line+1;
 
-			if (activ == i)
-				gfxSetPens (&RefreshRP, BG_ACTIVE_COLOR, GFX_SAME_PEN, GFX_SAME_PEN);
-			else
-				gfxSetPens (&RefreshRP, BG_INACTIVE_COLOR, GFX_SAME_PEN, GFX_SAME_PEN);
+			if (!Config.gfxNoFontShadow) {
+				if (activ == i)
+					gfxSetPens (&RefreshRP, BG_ACTIVE_COLOR, GFX_SAME_PEN, GFX_SAME_PEN);
+				else
+					gfxSetPens (&RefreshRP, BG_INACTIVE_COLOR, GFX_SAME_PEN, GFX_SAME_PEN);
 
-			gfxPrintExact(&RefreshRP, line, X_OFFSET+1, j+1);
+				gfxPrintExact(&RefreshRP, line, X_OFFSET+1, j+1);
+			}
 
 			if (activ == i)
 				gfxSetPens (&RefreshRP, VG_ACTIVE_COLOR, GFX_SAME_PEN, GFX_SAME_PEN);
@@ -390,6 +447,8 @@ ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), ulong waitTime)
 	ubyte ende = FALSE;
 	ulong action;
 	long l_max = GetNrOfNodes(bubble);
+	uword x, y;
+	ubyte newactiv;
 
 	SuspendAnim();
 
@@ -422,9 +481,11 @@ ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), ulong waitTime)
 	gfxSetFont (&RefreshRP, bubbleFont);
 	DrawBubble (bubble, firstVis, activ, u_wrp, l_max);
 
-	#ifdef THECLOU_CDROM_VERSION
-	PlayFromCDROM();
-	#endif
+	
+	if (bCDRom)
+	{
+		PlayFromCDROM();
+	}
 
 	if (waitTime)
 	{
@@ -443,9 +504,9 @@ ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), ulong waitTime)
 	}
 	else
 	{
-		while (ende != TRUE)
+		while (!ende)
 		{
-			action = inpWaitFor (INP_UP | INP_DOWN | INP_LBUTTONP | INP_RBUTTONP | INP_LEFT | INP_RIGHT);
+			action = inpWaitFor (INP_UP | INP_DOWN | INP_LBUTTONP | INP_RBUTTONP | INP_LEFT | INP_RIGHT );
 
 			ExtBubbleActionInfo = action;
 
@@ -455,14 +516,13 @@ ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), ulong waitTime)
 				ende  = TRUE;
 			}
 
-			if (ende != TRUE)
+			if (!ende)
 			{
 				if (action & INP_LBUTTONP)
 					ende = TRUE;
 
 				if (action & INP_MOUSE)
 				{
-					uword x, y;
 					inpGetMouseXY(u_wrp, &x, &y);
 
 					if ((x >= X_OFFSET) && (x <= X_OFFSET + INT_BUBBLE_WIDTH))
@@ -500,7 +560,7 @@ ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), ulong waitTime)
 						}
 						else if ((y >= 4) && (y <= 48))
 						{
-							ubyte newactiv = firstVis + (y - 4) / 9;
+							newactiv = firstVis + (y - 4) / 9;
 
 							if (newactiv != activ)
 							{
@@ -520,6 +580,57 @@ ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), ulong waitTime)
 								if (func)
 									func (activ);
 							}
+						}
+					}
+				}
+				else if (action & INP_MOUSEWHEEL)
+				{
+					if (action & INP_UP)
+					{
+						if (activ > 0)
+						{
+							int cl = abs(firstVis - activ) + 1;
+
+							while ((activ > 0) && cl)
+							{
+								activ--;
+								cl--;
+
+								if (*NODE_NAME(GetNthNode(bubble, activ)) == '*')
+									break;
+							}
+
+							if (activ < firstVis)
+								firstVis = activ;
+
+							DrawBubble(bubble, firstVis, activ, u_wrp, l_max);
+
+							if (func)
+								func(activ);
+						}
+					}
+					else if (action & INP_DOWN)
+					{
+						if (activ < l_max - 1)
+						{
+							int cl = NRBLINES - abs(firstVis - activ);
+
+							while ((activ < l_max - 1) && cl)
+							{
+								activ++;
+								cl--;
+
+								if (*NODE_NAME(GetNthNode(bubble, activ)) == '*')
+									break;
+							}
+
+							if (activ >(firstVis + NRBLINES - 1))
+								firstVis = activ - NRBLINES + 1;
+
+							DrawBubble(bubble, firstVis, activ, u_wrp, l_max);
+
+							if (func)
+								func(activ);
 						}
 					}
 				}

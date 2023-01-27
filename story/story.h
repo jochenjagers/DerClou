@@ -46,11 +46,7 @@
 #endif
 
 #ifndef MODULE_TCDATA
-#ifndef THECLOU_PROFIDISK
-#include "data\objstd\tcdata.h"
-#else
-#include "data\objprofi\tcdata.h"
-#endif
+#include "data\tcdata.h"
 #endif
 
 #ifndef MODULE_SCENES
@@ -204,7 +200,6 @@
 #define SCENE_KASERNE_INSIDE  47185920L
 #define SCENE_KASERNE_OUTSIDE 47448064L
 
-#ifdef THECLOU_PROFIDISK
 #define SCENE_PROFI_21        52428800
 #define SCENE_PROFI_22        51380224
 #define SCENE_PROFI_23        48496640
@@ -222,7 +217,6 @@
 #define SCENE_PROFI_26_INSIDE                               // NO TRAIN INSIDE
 #define SCENE_PROFI_27_INSIDE 49807360
 #define SCENE_PROFI_28_INSIDE 50331648
-#endif
 
 #define FACE_GLUDO_SAILOR     126
 #define FACE_GLUDO_MAGIC      124
@@ -296,8 +290,6 @@ void tcCheckForBones(void);
 
 ulong tcLastBurglary(void);
 
-#ifdef THECLOU_PROFIDISK
 void tcCheckForDowning(void);
-#endif
 
 #endif

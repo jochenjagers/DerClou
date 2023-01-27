@@ -4,6 +4,8 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
+/* modified 2014-07-01 by byteranger*/
+
 #ifndef MODULE_TCDATA
 #define MODULE_TCDATA
 
@@ -221,54 +223,70 @@
 #define usesGet(l,r)       GetP   (dbGetObject (l), 9, dbGetObject (r))
 
 
-#define Location_Chiswick_Out                109L
-#define Ability_Kampf                146L
+#define Location_Chiswick_Out                127L
+//#define Ability_Kampf                179L
 #define Item_Tresen                9223L
-#define Location_Kenwood_Out                103L
-#define Location_National_Galery_Out                117L
+#define Car_Fiat_634_N_1943                27L
+#define Location_Kenwood_Out                121L
+#define Location_National_Galery_Out                135L
 #define Item_Holztuer                9201L
 #define Car_Pontiac_Streamliner_1944                11L
 #define Person_Jiri_Poulin                9833L
-#define Location_Aunt_Emmas_Shop                87L
+#define Location_Aunt_Emmas_Shop                105L
+#define Item_Beichtstuhl                9273L
 #define Person_Neil_Grey                9815L
-#define Location_British_Museum                112L
+#define Location_British_Museum                130L
+#define Item_Hottentotten_Figur                9293L
 #define Loot_Kronjuwelen                9633L
 #define Car_Pontiac_Streamliner_1946                12L
 #define Person_Ken_Addison                9803L
-#define Location_Lisson_Grove                137L
+#define Location_Lisson_Grove                155L
 #define Item_Tresorraum                9207L
+#define Item_Regal_mit_Chemikalien                9286L
+#define Item_Zuggelaender                9308L
 #define Car_Pontiac_Streamliner_1949                13L
 #define Person_John_O_Keef                9841L
-#define Location_Cars_Vans_Office                82L
-#define London_London_1                22L
-#define Location_Villa_Out                101L
-#define Location_Aunt_Emmas_Shop_Out                88L
-#define Location_British_Museum_Out                113L
+//#define Location_Cars_Vans_Office                100L
+//#define London_London_1                30L
+#define Location_Villa_Out                119L
+#define Location_Aunt_Emmas_Shop_Out                106L
+#define Location_British_Museum_Out                131L
+#define Item_Lokomotive_Tuer                295L
 #define Person_Frank_Meier                9804L
 #define Item_Sofa                9218L
 #define Tool_Bohrmaschine                9512L
 #define Tool_Maske                9508L
 #define Tool_Elektroset                9520L
 #define Item_Bett                9227L
-#define Location_Fat_Mans_Pub                81L
+#define Car_Fiat_634_N_1936                26L
+//#define Location_Fat_Mans_Pub                99L
 #define LSOLock_Kombinationsschloss                9102L
+#define Item_Kerzen                9279L
 #define Tool_Schutzanzug                9521L
-#define Player_Player_1                21L
+//#define Player_Player_1                29L
+#define Location_Westminster_Abbey                162L
 #define Tool_Chloroform                9509L
 #define Tool_Batterie                9518L
-#define Location_Osterly                106L
+#define Location_Osterly                124L
 #define Item_Hantel                9267L
 #define Item_Sockel                9261L
 #define Tool_Stechkarte                9528L
 #define Item_Mauer                9208L
+#define Loot_Koenig                9643L
 #define Person_Marc_Smith                9832L
+#define Location_Bulstrode_Chemestry_Ltd_Out                172L
+#define Location_Post_Train                166L
 #define Item_Treppe                9238L
+#define Item_Absperrung                9292L
+#define Item_Palette_mit_Kisten                9305L
 #define Tool_Brecheisen                9510L
-#define Ability_Sprengstoff                142L
+//#define Ability_Sprengstoff                175L
 #define Item_Beutesack                9270L
 #define Tool_Schneidbrenner                9515L
+#define Loot_Unterhose                9647L
 #define Person_Mark_Hart                9816L
-#define Location_Pink_Villa_Out                94L
+#define Person_Prof_Marcus_Green                9852L
+#define Location_Pink_Villa_Out                112L
 #define Item_Busch                9235L
 #define Tool_Handschuhe                9506L
 #define Loot_Hummer                9611L
@@ -281,52 +299,68 @@
 #define Loot_Saurierknochen                9628L
 #define Person_Richard_Doil                9845L
 #define Item_Saeule                9230L
-#define Location_Southhampton                138L
-#define Location_Tower_Out                123L
+#define Location_Southhampton                156L
+#define Item_Palette_mit_Schachteln                9291L
+#define Item_Batman_Figur                9294L
+#define Location_Tower_Out                141L
 #define Car_Jaguar_XK_1950                10L
 #define Tool_Dietrich                9502L
+#define Loot_Jack                9642L
 #define Person_Lucas_Grull                9831L
 #define Item_Nachtkaestchen                9260L
 #define Tool_Strickleiter                9526L
 #define Car_Morris_Minor_1948                17L
-#define Location_Ham                104L
+#define Location_Ham                122L
+#define Location_Bulstrode_Chemestry_Ltd                171L
 #define Tool_Hammer                9503L
 #define Loot_Cartier_Uhr                9612L
 #define Loot_Dokument                9636L
 #define Loot_eine_Statue                9605L
-#define Location_Highgate_Out                98L
-#define Location_Osterly_Out                107L
+#define Loot_Dicker                9640L
+//#define Location_Highgate_Out                116L
+#define Location_Osterly_Out                125L
+#define Person_Pere_Ubu                9858L
+#define Item_Schrein                9278L
 #define Loot_Sanskrit_Buch                9613L
 #define Item_Grabhuegel                9258L
 #define Item_Bild                9265L
-#define Location_Garage                126L
+#define Location_Garage                144L
+#define Loot_Wache_                9644L
+#define Location_Westminster_Abbey_Out                163L
+#define Item_Lokomotive_seitlich                293L
 #define Tool_Elektrohammer                9523L
 #define Loot_Autogramm                9614L
 #define Person_Albert_Liet                9811L
-#define Ability_Elektronik                144L
+#define Location_Downing_Street                164L
+//#define Ability_Elektronik                177L
+#define Loot_Opiumpfeife                9637L
 #define Person_Al_Mel                9835L
 #define Item_Alarmanlage_X3                9211L
+#define Item_Gelaender                9284L
+#define Item_Versuchstisch                9287L
 #define Loot_Bernstein                9630L
-#define Location_Holland_Street                77L
-#define Location_Watling_Street                79L
-#define Location_Parker                128L
+//#define Location_Holland_Street                95L
+#define Location_Watling_Street                97L
+//#define Location_Parker                146L
 #define Person_Frank_De_Silva                9839L
 #define Item_Flugzeugheck                9244L
 #define Loot_Muenzesammlung                9626L
+#define Person_Dean_Esters                9851L
 #define Car_Fiat_Topolino_1936                14L
 #define Item_Lichtschranke                9263L
 #define Loot_ein_historisches_Kunstobjekt                9607L
 #define Tool_Dynamit                9522L
 #define Person_Thomas_Groul                9819L
-#define Location_Villa                100L
-#define Location_Sotherbys                110L
-#define CompleteLoot_MattsLoot                26L
+#define Location_Villa                118L
+#define Location_Sotherbys                128L
+#define CompleteLoot_MattsLoot                34L
 #define Person_Herbert_Briggs                9805L
+#define Item_Fasz                9289L
 #define Tool_Schuhe                9507L
 #define Item_Hecke                9257L
 #define Item_Mikrophon                9264L
 #define Item_Vase                9268L
-#define Location_Pink_Villa                93L
+#define Location_Pink_Villa                111L
 #define Person_Red_Stanson                9847L
 #define Item_Kanone                9226L
 #define Car_Cadillac_Club_1952                5L
@@ -337,57 +371,67 @@
 #define Person_Serge_Fontane                9813L
 #define Tool_Sauerstofflanze                9516L
 #define Car_Fiat_Topolino_1942                16L
+#define Car_Rover_75_1949                20L
 #define Item_Statue                9233L
 #define Loot_Jadepferd                9631L
 #define Person_Mohammed_Abdula                9812L
 #define Loot_Magna_Charta                9625L
-#define Location_Police_Office                135L
+#define Location_Police_Office                153L
 #define Item_Stahltuer                9202L
 #define Item_Buecherregal                9241L
 #define Person_Paul_O_Conner                9802L
-#define Location_Jeweller_Out                90L
-#define Location_Antique_Shop_Out                92L
+#define Location_Jeweller_Out                108L
+#define Location_Antique_Shop_Out                110L
 #define Item_Kranz                9237L
 #define Item_Steinmauer                9253L
 #define Item_Grab                9259L
-#define London_Escape                24L
+//#define London_Escape                32L
 #define LSOLock_Zylinderschloss                9103L
+#define Item_leere_Palette                9290L
 #define Loot_Ring_des_Abtes                9634L
 #define Loot_Insektensammlung                9629L
+#define Item_Kirchenkreuz                9283L
 #define Person_Jim_Danner                9817L
-#define Location_Antique_Shop                91L
-#define Location_Walrus                125L
+#define Location_Antique_Shop                109L
+//#define Location_Walrus                143L
+#define Location_Baker_Street                158L
 #define Item_Wache                9272L
 #define Item_Alarmanlage_Top                9212L
 #define Item_Spiegel                9231L
 #define Item_Tanne                9255L
-#define Location_Natural_Museum                114L
+#define Location_Natural_Museum                132L
 #define Person_Dan_Stanford                9821L
-#define Location_Natural_Museum_Out                115L
+#define Location_Natural_Museum_Out                133L
 #define Item_Regal                9242L
 #define Loot_Gebrauchsartikel                9608L
 #define Item_Sessel                9216L
 #define Person_Thomas_Smith                9843L
-#define Location_Maloya                129L
+//#define Location_Maloya                147L
+#define Person_Rosi_Lambert                9854L
 #define Person_Peter_Brook                9829L
-#define Location_Kenwood_House                102L
-#define Location_Nirvana                133L
+#define Location_Kenwood_House                120L
+//#define Location_Nirvana                151L
 #define Item_Klavier                9221L
+#define Item_Wache_Figur                9299L
+#define Car_Rover_75_1950                21L
+#define Loot_Batman                9639L
 #define Loot_Geld                9602L
 #define Loot_Stein_von_Rosetta                9624L
+#define Car_Rover_75_1952                22L
 #define Item_Elch                9225L
 #define Loot_Kuriositaet                9606L
-#define Location_Jeweller                89L
+#define Location_Jeweller                107L
 #define Loot_Beauty_Case                9615L
 #define LSObject_Beutesack_1                9701L
-#define Location_Policestation                84L
-#define Ability_Aufpassen                145L
+//#define Location_Policestation                102L
+//#define Ability_Aufpassen                178L
+#define Item_Heiligenstatue                9281L
 #define Tool_Kernbohrer                9505L
 #define LSObject_Beutesack_2                9702L
 #define LSObject_Beutesack_3                9703L
-#define Location_Old_Peoples_Home_Out                96L
+#define Location_Old_Peoples_Home_Out                114L
 #define LSObject_Beutesack_4                9704L
-#define Location_Tower                122L
+#define Location_Tower                140L
 #define Item_Kasse                9262L
 #define LSObject_Beutesack_5                9705L
 #define Item_Kamin                9229L
@@ -396,61 +440,87 @@
 #define Tool_Axt                9504L
 #define Loot_Victorianische_Vase                9632L
 #define LSObject_Beutesack_6                9706L
-#define Location_Grave                99L
-#define Ability_Schloesser                141L
-#define Ability_Safes                143L
+#define Location_Grave                117L
+//#define Ability_Schloesser                174L
+//#define Ability_Safes                176L
 #define Item_Kuehlschrank                9224L
 #define LSObject_Beutesack_7                9707L
-#define Location_Fat_Man_Out                132L
+#define Location_Fat_Man_Out                150L
 #define Loot_ein_Bild                9600L
+#define Loot_Formel                9646L
 #define LSObject_Beutesack_8                9708L
 #define Item_Panzerschrank                9205L
+#define Item_verzierte_Saeule                9285L
 #define Person_Frank_Maloya                9814L
-#define Location_Tobacconist                85L
+#define Item_Miss_World_1952                9300L
+#define Location_Tobacconist                103L
+#define Loot_Unbekannter_                9641L
+#define Item_Opferkassa                9277L
 #define Loot_Goldring                9627L
+#define Item_Lokomotive_oben                292L
 #define Person_Miles_Chickenwing                9823L
+#define Person_Sid_Palmer                9850L
 #define Tool_Schloszstecher                9514L
 #define Person_Kevin_Smith                9837L
-#define Location_National_Galery                116L
+#define Location_Baker_Street_Out                159L
+#define Location_National_Galery                134L
+#define Location_Dowing_Street_Out                165L
 #define Item_Scheinwerfer                9269L
-#define Location_Sotherbys_Out                111L
+#define Item_Postsack                9306L
+#define Location_Sotherbys_Out                129L
 #define Item_Gemaelde                9206L
 #define Loot_Gold                9601L
+#define Location_Madame_Tussaud_Out                161L
 #define Person_Tony_Allen                9806L
+#define Location_Buckingham_Palace                169L
 #define Item_Gruft                9254L
-#define Location_Victoria_Out                119L
-#define Location_Kaserne                139L
+#define Location_Victoria_Out                137L
+#define Location_Kaserne                157L
+#define Item_Dicker_Man                9295L
 #define Loot_eine_Vase                9609L
 #define Person_Justin_White                9840L
-#define Location_Lambeth_Road                131L
+#define Location_Lambeth_Road                149L
 #define Loot_Zigarren                9610L
-#define CompleteLoot_LastLoot                27L
+//#define CompleteLoot_LastLoot                35L
 #define Item_Laubbaum                9252L
-#define London_Jail                23L
-#define Location_Victoria                118L
-#define Location_Hotel                124L
+//#define London_Jail                31L
+#define Location_Victoria                136L
+//#define Location_Hotel                142L
+#define Item_Kerzenstaender                9282L
 #define Item_Pult                9215L
-#define Person_Old_Matt                28L
+#define Item_Leiter                9307L
+//#define Person_Old_Matt                36L
+#define Person_Tina_Olavson                9856L
+#define Location_Tate_Gallery_Out                168L
 #define Item_Schreibtisch                9240L
 #define Item_Flugzeug_                9245L
+#define Item_Speisetisch                9303L
 #define Tool_Stromgenerator                9519L
+#define Item_Koenigs_Figur                9298L
+#define Item_Sitzbank                9302L
 #define Tool_Funkgeraet                9527L
-#define Location_Old_Peoples_Home                95L
+#define Location_Old_Peoples_Home                113L
 #define Tool_Bohrwinde                9513L
+#define Car_Ford_Model_T__1926                23L
 #define Item_Ausstellungskasten                9243L
 #define Item_Beefeater                9220L
 #define Person_Mike_Seeger                9810L
 #define Item_Wertschrank                9204L
-#define Location_Bank_Out                121L
+#define Location_Bank_Out                139L
 #define Person_Helen_Parker                9820L
-#define Location_Bank                120L
+#define Location_Bank                138L
 #define Item_Mauertor                9250L
 #define Item_Stechuhr                9266L
+#define Item_Lokomotive_Kabine                294L
 #define Tool_Winkelschleifer                9511L
 #define Car_Opel_Olympia_1953                6L
 #define Person_Miguel_Garcia                9809L
-#define Ability_Autos                140L
-#define Location_Cars_Vans_Out                78L
+//#define Ability_Autos                173L
+#define Item_Kroehnungsstuhl                9276L
+#define Item_Unbekannter                9296L
+#define Item_groszer_Koffer                9301L
+#define Item_Lokomotive_vorne_rechts                290L
+#define Location_Cars_Vans_Out                96L
 #define Person_Mary_Bolton                9824L
 #define LSOLock_Buntbartschloss                9101L
 #define Loot_Sparstrumpf                9616L
@@ -464,11 +534,14 @@
 #define Item_Fichte                9256L
 #define Loot_Juwelen                9603L
 #define Tool_Stethoskop                9517L
+#define Loot_Hottentotten                9638L
 #define Person_Margrete_Briggs                9828L
 #define Item_Stahlschrank                9228L
-#define Location_Chiswick                108L
+#define Location_Chiswick                126L
 #define Item_Badewanne                9222L
+#define Loot_Miss_World                9645L
 #define Person_Ben_Riggley                9844L
+#define Person_Phil_Ciggy                9857L
 #define Person_Luthmilla_Nervesaw                9842L
 #define Loot_Bronzestatue                9620L
 #define Item_Billardtisch                9217L
@@ -477,68 +550,313 @@
 #define Item_Mauerecke                9209L
 #define Car_Standard_Vanguard_1950                7L
 #define Car_Standard_Vanguard_1951                8L
+#define Item_Kirchenbank                9274L
 #define Tool_Fusz                9525L
 #define Car_Jeep_1940                1L
 #define Car_Standard_Vanguard_1953                9L
-#define Environment_TheClou                20L
+//#define Environment_TheClou                28L
+#define Item_Kiste                9288L
+#define Item_Lokomotive_vorne_links                291L
 #define Loot_Koffer                9635L
+#define Person_Melanie_Morgan                9853L
+#define Item_Holzkiste                9304L
 #define Car_Jeep_1945                2L
-#define Location_Highgate                97L
+#define Person_Rod_Masterson                9855L
+#define Location_Highgate                115L
+#define Car_Bentley_Continental_Typ_R_1952                24L
+#define Location_Tate_Gallery                167L
+#define Car_Bentley_Continental_Typ_R_1953                25L
 #define Item_Skelett                9247L
 #define Item_WC                9214L
-#define Evidence_Evidence_1                25L
+//#define Evidence_Evidence_1                33L
 #define Person_Eric_Pooly                9825L
+#define Item_Jack_the_Ripper_Figur                9297L
 #define Loot_Delikatessen                9604L
-#define Location_Hotel_Room                80L
+#define Location_Hotel_Room                98L
 #define Person_Sabien_Pardo                9846L
 #define Person_Elisabeth_Schmitt                9827L
-#define Location_Trainstation                134L
+#define Location_Trainstation                152L
+#define Person_Tom_Cooler                9849L
 #define Person_Robert_Bull                9818L
-#define Location_Tools_Shop                83L
+//#define Location_Tools_Shop                101L
 #define Item_Flugzeug__                9246L
 #define Loot_Toilettetasche                9617L
 #define Person_Margret_Allen                9807L
+#define Item_Weihwasserbecken                9280L
 #define Car_Morris_Minor_1950                18L
 #define Person_Mathew_Black                9808L
-#define Location_Tobacconist_Out                86L
-#define Location_Monastery                136L
+#define Location_Tobacconist_Out                104L
+#define Location_Monastery                154L
 #define Person_Pater_James                9848L
 #define Car_Morris_Minor_1953                19L
 #define Person_Garry_Stevenson                9834L
-#define Location_Parking                127L
-#define Location_Pooly                130L
+#define Location_Parking                145L
+//#define Location_Pooly                148L
 #define Item_Fenster                9234L
 #define Car_Triumph_Roadstar_1947                3L
+#define Location_Madame_Tussaud                160L
 #define Item_Tisch                9219L
+#define Item_Altar                9275L
 #define Loot_Chinavase                9623L
 #define Car_Triumph_Roadstar_1949                4L
 #define Person_Prof_Emil_Schmitt                9826L
-#define Location_Ham_Out                105L
+#define Location_Ham_Out                123L
+#define Location_Buckingham_Palace_Out                170L
+#define Loot_Stone_of_Cone                9648L
 
 
-enum LootNameE {Kein_Name, Eine_Zigarrenkiste, Ein_Tiefgekuehlter_Hummer, Eine_Cartier_Uhr, Ein_Sanskrit_Buch, Ein_Autogramm_von_Oscar_Wilde,
- Ein_Beauty_Case, Ein_Sparstrumpf, Eine_Toilettetasche, Die_Gebeine_von_Karl_Marx, Eine_Bibel, Eine_Bronzestatue, Ein_Silbergeschirr,
- Eine_Buddhastatue, Eine_Chinavase, Der_Stein_von_Rosetta, Die_Magna_Charta, Eine_Muenzsammlung, Ein_Goldring, Ein_Saurierknochen,
- Eine_Insektensammlung, Ein_Bernstein, Das_Jadepferd, Eine_Victorianische_Vase, Die_Kronjuwelen, Der_Ring_des_Abtes, Ein_Koffer,
- Ein_Dokument};
-enum SexE {Maennlich, Weiblich};
-enum ItemE {Holztuer, Stahltuer, Ausstellungskasten, Kasse, Kasten, Schreibtisch, Nachtkaestchen, Wertschrank, Stahlschrank, Panzerschrank,
- Tresorraum, Mauer, Mauerecke, Steinmauer, Mauertor, Zaun, Zauntor, Saeule, Fenster, Alarmanlage_Z3, Alarmanlage_X3, Alarmanlage_Top,
- Mikrophon, Stechuhr, Scheinwerfer, Lichtschranke, Steuerkasten, Grab, Grabhuegel, Kreuz, Kranz, Gruft, Treppe, Sockel, WC, Sessel, Pult,
- Statue, Beutesack, Bett, Billardtisch, Sofa, Spiegel, Tisch, Kamin, Badewanne, Tresen, Gemaelde, Klavier, Buecherregal, Skelett,
- Dinosaurier, Elch, Kanone, Beefeater, Busch, Strauch, Gebuesch, Laubbaum, Nadelbaum, Hecke, Hantel, Regal, Flugzeugheck,
- linker_Flugzeugfluegel, rechter_Flugzeugfluegel, Bild, Vase, Kuehlschrank, Wache};
-enum ColorE {Grau, Gruen, Tuerkis, Violett, Beige, Silber, Rot, Hellgruen, Blau, Gelb};
-enum AbilityE {Autos, Schloesser, Sprengstoff, Safes, Elektronik, Aufpassen, Kampf};
-enum LockE {Buntbartschloss, Kombinationsschloss, Zylinderschloss};
-enum LandE {GB, USA, Italien, Deutschland};
-enum JobE {Detektiv, Sprengmeister, Schlosser, Hehler, Haendler, Taxifahrer, Mechaniker, Elektriker, Sekretaerin, Anwalt, Unbekannt,
- Profiboxer, Angestellte, Soldat, Student, Literat, Professor, Hausfrau, Politiker, Abenteurer, Agent, Musiker, Pilot, Kellner,
- Rezeptionist, Polizeichef, Polizist, Moench, Inspektor, Pizzafahrer, Kellner_und_Student};
-enum LootE {Ein_Bild, Gold, Geld, Juwelen, Delikatessen, Eine_Statue, Eine_Kuriositaet, Ein_historisches_Kunstobjekt, Gebrauchsartikel,
- Eine_Vase};
+enum LootNameE 
+{
+	Kein_Name, 
+	Eine_Zigarrenkiste, 
+	Ein_Tiefgekuehlter_Hummer, 
+	Eine_Cartier_Uhr, 
+	Ein_Sanskrit_Buch, 
+	Ein_Autogramm_von_Oscar_Wilde,
+	Ein_Beauty_Case, 
+	Ein_Sparstrumpf, 
+	Eine_Toilettetasche, 
+	Die_Gebeine_von_Karl_Marx, 
+	Eine_Bibel, Eine_Bronzestatue, 
+	Ein_Silbergeschirr, 
+	Eine_Buddhastatue,
+	Eine_Chinavase, 
+	Der_Stein_von_Rosetta, 
+	Die_Magna_Charta, 
+	Eine_Muenzsammlung, 
+	Ein_Goldring, 
+	Ein_Saurierknochen, 
+	Eine_Insektensammlung, 
+	Ein_Bernstein,
+	Das_Jadepferd, 
+	Eine_Victorianische_Vase, 
+	Die_Kronjuwelen, 
+	Der_Ring_des_Abtes, 
+	Ein_Koffer, 
+	Ein_Dokument, 
 
+	//** Profidisk *************
+	Sherlock_Holmes_Opiumpfeife,
+	Eine_Hottentotten_Figur, 
+	Eine_Batman_Figur, 
+	Ein_Dicker_Man, 
+	Ein_Unbekannter, 
+	Eine_Jack_the_Ripper_Figur, 
+	Eine_Koenigs_Figur, 
+	Eine_Wache_Figur,
+	Eine_Miss_World_1952_Figur, 
+	Eine_Formel, 
+	Die_Unterhose_der_Queen, 
+	Der_Stone_of_Cone
+};
+enum SexE 
+{
+	Maennlich, 
+	Weiblich
+};
+enum ItemE 
+{
+	Holztuer, 
+	Stahltuer, 
+	Ausstellungskasten, 
+	Kasse, 
+	Kasten, 
+	Schreibtisch, 
+	Nachtkaestchen, 
+	Wertschrank, 
+	Stahlschrank, 
+	Panzerschrank, 
+	Tresorraum,
+	Mauer, 
+	Mauerecke, 
+	Steinmauer, 
+	Mauertor, 
+	Zaun, 
+	Zauntor, 
+	Saeule, 
+	Fenster, 
+	Alarmanlage_Z3, 
+	Alarmanlage_X3, 
+	Alarmanlage_Top, 
+	Mikrophon, 
+	Stechuhr, 
+	Scheinwerfer,
+	Lichtschranke, 
+	Steuerkasten, 
+	Grab, 
+	Grabhuegel, 
+	Kreuz, 
+	Kranz, 
+	Gruft, 
+	Treppe, 
+	Sockel, 
+	WC, 
+	Sessel, 
+	Pult, 
+	Statue, 
+	Beutesack, 
+	Bett, 
+	Billardtisch, 
+	Sofa, 
+	Spiegel,
+	Tisch, 
+	Kamin, 
+	Badewanne, 
+	Tresen, 
+	Gemaelde, 
+	Klavier, 
+	Buecherregal, 
+	Skelett, 
+	Dinosaurier, 
+	Elch, 
+	Kanone, 
+	Beefeater, 
+	Busch, 
+	Strauch, 
+	Gebuesch, 
+	Laubbaum,
+	Nadelbaum, 
+	Hecke, 
+	Hantel, 
+	Regal, 
+	Flugzeugheck, 
+	linker_Flugzeugfluegel, 
+	rechter_Flugzeugfluegel, 
+	Bild, 
+	Vase, 
+	Kuehlschrank, 
+	Wache, 
 
+	//** Profidisk *************
+	Beichtstuhl, 
+	Kirchenbank,
+	Altar, 
+	Kroehnungsstuhl, 
+	Opferkassa, 
+	Schrein, 
+	Kerzen, 
+	Weihwasserbecken, 
+	Heiligenstatue, 
+	Kerzenstaender, 
+	Kirchenkreuz, 
+	Gelaender, 
+	verzierte_Saeule,
+	Regal_mit_Chemikalien, 
+	Versuchstisch, 
+	Kiste, 
+	Fasz, 
+	leere_Palette, 
+	Palette_mit_Schachteln, 
+	Absperrung, 
+	Hottentotten_Figur, 
+	Batman_Figur, 
+	Dicker_Man,
+	Unbekannter, 
+	Jack_the_Ripper_Figur, 
+	Koenigs_Figur, 
+	Wache_Figur,
+	Miss_World_1952, 
+	groszer_Koffer, 
+	Sitzbank, 
+	Speisetisch, 
+	Holzkiste, 
+	Palette_mit_Kisten, 
+	Postsack, Leiter, 
+	Zuggelaender, 
+	Lokomotive_vorne_rechts,
+	Lokomotive_vorne_links, 
+	Lokomotive_oben, 
+	Lokomotive_seitlich, 
+	Lokomotive_Kabine, 
+	Lokomotive_Tuer
+};
+enum ColorE 
+{
+	Grau, 
+	Gruen, 
+	Tuerkis, 
+	Violett, 
+	Beige, 
+	Silber, 
+	Rot, 
+	Hellgruen, 
+	Blau, 
+	Gelb
+};
+enum AbilityE 
+{
+	Autos, 
+	Schloesser, 
+	Sprengstoff, 
+	Safes, 
+	Elektronik, 
+	Aufpassen, 
+	Kampf
+};
+enum LockE 
+{
+	Buntbartschloss, 
+	Kombinationsschloss, 
+	Zylinderschloss
+};
+enum LandE 
+{
+	GB, 
+	USA, 
+	Italien, 
+	Deutschland
+};
+enum JobE 
+{
+	Detektiv, 
+	Sprengmeister, 
+	Schlosser, 
+	Hehler, 
+	Haendler, 
+	Taxifahrer, 
+	Mechaniker, 
+	Elektriker, 
+	Sekretaerin, 
+	Anwalt, 
+	Unbekannt, 
+	Profiboxer,
+	Angestellte, 
+	Soldat, 
+	Student, 
+	Literat, 
+	Professor, 
+	Hausfrau, 
+	Politiker, 
+	Abenteurer, 
+	Agent, 
+	Musiker, 
+	Pilot, 
+	Kellner, 
+	Rezeptionist, 
+	Polizeichef, 
+	Polizist,
+	Moench, 
+	Inspektor, 
+	Pizzafahrer, 
+	Kellner_und_Student, 
+
+	//** Profidisk *************
+	Arbeiter, 
+	Butler, 
+	Krankenschwester
+};
+enum LootE 
+{
+	Ein_Bild, 
+	Gold, Geld, 
+	Juwelen, 
+	Delikatessen, 
+	Eine_Statue, 
+	Eine_Kuriositaet, 
+	Ein_historisches_Kunstobjekt, 
+	Gebrauchsartikel, 
+	Eine_Vase
+};
 
 
 #define Object_Item              9905L
@@ -618,11 +936,9 @@ struct _Person
    unsigned char Avarice;
    unsigned char Panic;
    unsigned char KnownToPolice;
-   //unsigned long TalkBits;
-   unsigned char TalkFileID;
    unsigned long TalkBits;
+   unsigned char TalkFileID;
    unsigned char OldHealth;
-
 };
 typedef struct _Person *Person;
 
@@ -635,9 +951,8 @@ struct _Car
    unsigned long Value;
    unsigned short YearOfConstruction;
    TCenum(ColorE) ColorIndex;
-   //unsigned char Strike;
-   unsigned long Capacity;
    unsigned char Strike;
+   unsigned long Capacity;
    unsigned char PS;
    unsigned char Speed;
    unsigned char State;
@@ -653,9 +968,8 @@ typedef struct _Car *Car;
 #define Object_Tool_Size         sizeof(struct _Tool)
 struct _Tool
 {
-   unsigned long Value;
    unsigned short PictID;
-   //unsigned long Value;
+   unsigned long Value;
    unsigned char Danger;
    unsigned char Volume;
    unsigned char Effect;
@@ -689,7 +1003,6 @@ struct _Ability
 {
    TCenum(AbilityE) Name;
    unsigned long Use;
-
 };
 typedef struct _Ability *Ability;
 
@@ -704,6 +1017,7 @@ struct _Environment
    unsigned char SouthhamptonHappened;
    unsigned char Present;
    unsigned char FirstTimeInSouth;
+   unsigned char PostzugDone;
 
 };
 typedef struct _Environment *Environment;
@@ -715,17 +1029,13 @@ struct _Player
    unsigned long Money;
    unsigned long StolenMoney;
    unsigned long MyStolenMoney;
-   //unsigned char NrOfBurglaries;
-   //unsigned char JobOfferCount;
-   //unsigned char MattsPart;
+   unsigned char NrOfBurglaries;
+   unsigned char JobOfferCount;
+   unsigned char MattsPart;
    unsigned long CurrScene;
    unsigned long CurrDay;
    unsigned long CurrMinute;
    unsigned long CurrLocation;
-   unsigned char NrOfBurglaries;
-   unsigned char JobOfferCount;
-   unsigned char MattsPart;
-
 };
 typedef struct _Player *Player;
 
@@ -751,11 +1061,9 @@ struct _LSObject
    unsigned char uch_ExactY1;
    unsigned char uch_Size;
    unsigned char uch_Visible;
-   //unsigned char uch_Chained;
+   unsigned char uch_Chained;
    unsigned long ul_Status;
    unsigned long Type;
-   unsigned char uch_Chained;
-
 };
 typedef struct _LSObject *LSObject;
 
@@ -816,11 +1124,15 @@ typedef struct _Loot *Loot;
 #define LSArea_TobaEta0                508001L
 #define LSArea_ToweEta0                508041L
 #define LSArea_ToweEta1                508042L
+#define LSArea_TateEta0                508111L
 #define Building_Tante_Emma_Laden                509001L
+#define Building_Westminster_Abbey                509103L
 #define LSArea_ToweEta2                508043L
 #define LSArea_SothEta0                508028L
 #define LSArea_VictEta0                508037L
 #define LSArea_ChisEta0                508025L
+#define Building_Bulstrode_Chemestry_Ltd                509108L
+#define LSArea_DownEta0                508107L
 #define Building_Bank_of_England                509017L
 #define Building_Grab_von_Karl_Marx                509006L
 #define Building_Villa                509007L
@@ -828,9 +1140,14 @@ typedef struct _Loot *Loot;
 #define Building_Pink_Villa                509004L
 #define LSArea_HamHEta0                508019L
 #define Building_Seniorenheim                509005L
+#define Building_Baker_Street                509101L
 #define LSArea_NatiEta0                508035L
 #define Building_Natural_Museum                509014L
+#define Building_Downing_Street_10                509104L
+#define LSArea_BuckEta0                508113L
+#define LSArea_BuckEta1                508114L
 #define Building_Kenwood_House                509008L
+#define LSArea_TussEta0                508103L
 #define LSArea_VillEta0                508014L
 #define LSArea_VillEta1                508015L
 #define Police_Waechter_1                508500L
@@ -842,11 +1159,18 @@ typedef struct _Loot *Loot;
 #define Building_Chiswick_House                509011L
 #define LSArea_BritEta0                508031L
 #define LSArea_BritEta1                508032L
+#define LSArea_BulCEta0                508115L
+#define LSArea_BulCEta1                508116L
 #define LSArea_JuweEta0                508005L
 #define LSArea_SeniEta0                508011L
 #define Building_Ham_House                509009L
 #define Building_National_Galery                509015L
 #define LSArea_NatuEta0                508033L
+#define LSArea_WestEta0                508105L
+#define Building_Buckingham_Palace                509107L
+#define Building_Postzug                509105L
+#define LSArea_BakeEta0                508101L
+#define LSArea_BakeEta1                508102L
 #define Building_Victoria_und_Albert_Museum                509016L
 #define Building_Starford_Kaserne                509019L
 #define Building_Tower_of_London                509018L
@@ -858,9 +1182,12 @@ typedef struct _Loot *Loot;
 #define LSArea_KaseEta2                508046L
 #define LSArea_TranEta0                508009L
 #define LSArea_TranEta1                508010L
+#define Building_Tate_Gallery                509106L
+#define LSArea_TraiEta0                508109L
 #define Building_Osterly_Park_House                509010L
 #define LSArea_OsteEta0                508022L
 #define Building_Kiosk                509000L
+#define Building_Madame_Tussaud                509102L
 #define LSArea_BankEta0                508039L
 
 
@@ -891,7 +1218,6 @@ struct _Building
    unsigned char Exactlyness;
    unsigned char GRate;
    unsigned char Strike;
-   unsigned char Padding;	// !!!
    unsigned long Values;
    TCenum(RouteE) EscapeRoute;
    unsigned char EscapeRouteLength;
@@ -900,6 +1226,7 @@ struct _Building
    unsigned char GuardStrength;
    unsigned short CarXPos;
    unsigned short CarYPos;
+   unsigned char DiskId;
 
 };
 typedef struct _Building *Building;
@@ -929,7 +1256,7 @@ struct _LSArea
    unsigned short us_Width;
    unsigned short us_Height;
    unsigned long ul_ObjectBaseNr;
-   //unsigned char uch_Darkness;
+   unsigned char uch_Darkness;
    unsigned short us_StartX0;
    unsigned short us_StartX1;
    unsigned short us_StartX2;
@@ -942,10 +1269,72 @@ struct _LSArea
    unsigned short us_StartY3;
    unsigned short us_StartY4;
    unsigned short us_StartY5;
-   unsigned char uch_Darkness;
-
 };
 typedef struct _LSArea *LSArea;
 
+
+/* Now follow the double-assigned constants.
+depending on the version they must be assigned different, this is done via macros */
+
+typedef enum {  //27 overlaps
+	_Ability_Kampf,
+	_Location_Cars_Vans_Office,
+	_London_London_1,
+	_Location_Fat_Mans_Pub,
+	_Player_Player_1,
+	_Ability_Sprengstoff,
+	_Location_Highgate_Out,
+	_Ability_Elektronik,
+	_Location_Holland_Street,
+	_Location_Parker,
+	_London_Escape,
+	_Location_Walrus,
+	_Location_Maloya,
+	_Location_Nirvana,
+	_Location_Policestation,
+	_Ability_Aufpassen,
+	_Ability_Schloesser,
+    _Ability_Safes,
+	_CompleteLoot_LastLoot,
+	_London_Jail,
+	_Location_Hotel,
+	_Person_Old_Matt,
+	_Ability_Autos,
+	_Environment_TheClou,
+    _Evidence_Evidence_1,
+    _Location_Tools_Shop,
+    _Location_Pooly   
+} DoubleAssignValueE;
+
+ulong getValue(DoubleAssignValueE val);
+
+#define Ability_Kampf        getValue(_Ability_Kampf)
+#define Location_Cars_Vans_Office        getValue(_Location_Cars_Vans_Office)
+#define London_London_1        getValue(_London_London_1)
+#define Location_Fat_Mans_Pub        getValue(_Location_Fat_Mans_Pub)
+#define Player_Player_1        getValue(_Player_Player_1)
+#define Ability_Sprengstoff        getValue(_Ability_Sprengstoff)
+#define Location_Highgate_Out        getValue(_Location_Highgate_Out)
+#define Ability_Elektronik        getValue(_Ability_Elektronik)
+#define Location_Holland_Street        getValue(_Location_Holland_Street)
+#define Location_Parker        getValue(_Location_Parker)
+#define London_Escape        getValue(_London_Escape)
+#define Location_Walrus        getValue(_Location_Walrus)
+#define Location_Maloya        getValue(_Location_Maloya)
+#define Location_Nirvana        getValue(_Location_Nirvana)
+#define Location_Policestation        getValue(_Location_Policestation)
+#define Ability_Aufpassen        getValue(_Ability_Aufpassen)
+#define Ability_Schloesser        getValue(_Ability_Schloesser)
+#define Ability_Safes        getValue(_Ability_Safes)
+#define CompleteLoot_LastLoot        getValue(_CompleteLoot_LastLoot)
+#define London_Jail        getValue(_London_Jail)
+#define Location_Hotel        getValue(_Location_Hotel)
+#define Person_Old_Matt        getValue(_Person_Old_Matt)
+#define Ability_Autos        getValue(_Ability_Autos)
+#define Environment_TheClou        getValue(_Environment_TheClou)
+#define Evidence_Evidence_1        getValue(_Evidence_Evidence_1)
+#define Location_Tools_Shop        getValue(_Location_Tools_Shop)
+#define Location_Pooly        getValue(_Location_Pooly)
+                
 
 #endif   /* MODULE_TCDATA */

@@ -26,5 +26,6 @@
 extern long Round(long v,long p);
 extern long CalcValue(long value, long min, long max, long fact, long perc);
 extern long ChangeAbs(long item, long value, long min, long max);
+extern long RoundF(float num);
 
 #endif

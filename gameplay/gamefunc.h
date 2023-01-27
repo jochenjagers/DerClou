@@ -66,9 +66,7 @@ struct NewScene
 	uword	Geschehen;		   /* wie oft sie SCHON geschehen ist */
 	ubyte	Possibility;		/* mit der sie eintritt 0-255	*/
 
-	#ifdef __COSP__
 	ubyte	Padding[3];		/* Alignment */
-	#endif
 
 	ulong Sample;           /* Nummer des Samples */
 	ulong Anim;             /* Nummer der Animation */

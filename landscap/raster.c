@@ -11,10 +11,11 @@ static uword lsGetRasterYSize(ulong areaID);
 
 void lsShowRaster(ulong areaID, ubyte perc)
 	{
-	LSArea area = dbGetObject(areaID);
+	LSArea area = (LSArea)dbGetObject(areaID);
 	struct ObjectNode *node;
 	long count, i;
 	LIST *objects;
+	LSObject lso;
 
 	gfxShow (154, GFX_NO_REFRESH|GFX_ONE_STEP, 0, -1, -1);
 
@@ -31,7 +32,7 @@ void lsShowRaster(ulong areaID, ubyte perc)
 		for(node=(struct ObjectNode*)LIST_HEAD(objects), i = 0 ; (NODE_SUCC((NODE*)node)) && (i < count);
 			node=(struct ObjectNode*)NODE_SUCC((NODE*)node), i++)
 			{
-			LSObject lso = OL_DATA(node);
+			lso = (LSObject)OL_DATA(node);
 
 			switch(lso->Type)
 				{
@@ -48,7 +49,7 @@ void lsShowRaster(ulong areaID, ubyte perc)
 		for (node=(struct ObjectNode*)LIST_HEAD(objects), i = 0 ; (NODE_SUCC((NODE*)node)) && (i < count);
 			  node=(struct ObjectNode*)NODE_SUCC((NODE*)node), i++)
 			{
-			LSObject lso = OL_DATA(node);
+			lso = (LSObject)OL_DATA(node);
 
 			switch(lso->Type)
 				{
@@ -148,7 +149,7 @@ void lsShowAllConnections(ulong areaID, NODE *node, ubyte perc)
 	ulong rasterXSize, rasterYSize, rasterSize;
 	static ubyte Alarm_Power;
 
-	lso1 = OL_DATA(node);
+	lso1 = (LSObject)OL_DATA(node);
 
 	rasterXSize = lsGetRasterXSize(areaID);
 	rasterYSize = lsGetRasterYSize(areaID);
@@ -189,7 +190,7 @@ void lsShowAllConnections(ulong areaID, NODE *node, ubyte perc)
 
 			gfxSetPens(l_wrp,col, GFX_SAME_PEN, GFX_SAME_PEN);
 
-			lso2 = OL_DATA(n);
+			lso2 = (LSObject)OL_DATA(n);
 
 			lsCalcExactSize(lso2, &x0, &y0, &x1, &y1);
 
@@ -211,14 +212,14 @@ void lsShowAllConnections(ulong areaID, NODE *node, ubyte perc)
 
 static uword lsGetRasterXSize(ulong areaID)
 	{
-	LSArea area = dbGetObject(areaID);
+	LSArea area = (LSArea)dbGetObject(areaID);
 
 	return (uword)(LS_RASTER_DISP_WIDTH / ((area->us_Width) / LS_RASTER_X_SIZE));
 	}
 
 static uword lsGetRasterYSize(ulong areaID)
 	{
-	LSArea area = dbGetObject(areaID);
+	LSArea area = (LSArea)dbGetObject(areaID);
 
 	return (uword)(LS_RASTER_DISP_HEIGHT / ((area->us_Height) / LS_RASTER_Y_SIZE));
 	}

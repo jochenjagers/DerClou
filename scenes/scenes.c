@@ -16,7 +16,8 @@ uword	CurrentBackground = BGD_LONDON;
 static ubyte tcDisplayInfoAboutPerson(ulong objID)
 	{
 	LIST *bubble;
-	ubyte name[TXT_KEY_LENGTH], ret = 0;
+	char name[TXT_KEY_LENGTH]; 
+	ubyte ret = 0;
 
 	if(has(Person_Matt_Stuvysunt, objID))   /* hat Matt Wissen ber ihn? */
 		ret = Present(objID,"Person",InitPersonPresent);
@@ -72,7 +73,7 @@ ulong Go(LIST *succ)
 	struct 	Scene *sc;
 	ulong	prob,succ_eventnr;
 	NODE 	*location;
-	ubyte 	line[255];
+	char 	line[255];
 
 	inpTurnFunctionKey(0);
 
@@ -90,7 +91,7 @@ ulong Go(LIST *succ)
 			{
 			sc=GetScene(node->EventNr);
 
-			location=GetNthNode(film->loc_names,(ulong)sc->LocationNr);
+			location=(NODE*)GetNthNode(film->loc_names,(ulong)sc->LocationNr);
 
 			NODE_NAME(node)=NODE_NAME(location);
 
@@ -124,7 +125,8 @@ ulong Go(LIST *succ)
 void Information(void)
 	{
 	LIST   *bubble,*list;
-	ubyte  choice=0,choice1=0, ret = 0, enough[TXT_KEY_LENGTH];
+	ubyte  choice=0,choice1=0, ret = 0;
+	char enough[TXT_KEY_LENGTH];
 	ulong  objID;
 
 	inpTurnESC(1);
@@ -256,7 +258,8 @@ void Information(void)
 void Look(ulong locNr)
 	{
 	LIST  *menu, *bubble;
-	ubyte choice=0 ,choice1=0, enough[TXT_KEY_LENGTH];
+	ubyte choice=0 ,choice1=0;
+	char enough[TXT_KEY_LENGTH];
 	ulong objID;
 
 	inpTurnESC(1);
@@ -320,9 +323,9 @@ void Look(ulong locNr)
 
 ulong tcTelefon(void)
 	{
-	ubyte connect[TXT_KEY_LENGTH];
+	char connect[TXT_KEY_LENGTH];
 	ulong eventNr = 0L;
-	Person ben = dbGetObject(Person_Ben_Riggley);
+	Person ben = (Person)dbGetObject(Person_Ben_Riggley);
 
 	gfxShow(175, GFX_NO_REFRESH|GFX_ONE_STEP, 0, -1, -1);
 
@@ -365,7 +368,7 @@ ulong tcTelefon(void)
 				}
 			}
 		else
-			choice = GET_OUT;
+			choice = GET_OUT;	// 2014-06-28 LucyG : ??? Compiler warning "choice is assigned a value that is never used"
 		}
 	else
 		Say(THECLOU_TXT,0,MATT_PICTID,"POOR_MATT");
@@ -377,7 +380,8 @@ ulong tcTelefon(void)
 
 void tcWait(void)
 	{
-	ubyte line[TXT_KEY_LENGTH], ende = 0;
+	char line[TXT_KEY_LENGTH];
+	ubyte ende = 0;
 	ulong action=0L, minutes=0L, locNr = GetObjNrOfLocation(GetLocation);
 	ulong newCount=0, oldCount=0;
 

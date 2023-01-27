@@ -14,8 +14,8 @@ struct Search Search;
 ubyte tcCarFound(Car car, ulong time)
 	{
 	long i = 0, hours;
-	Person john  = dbGetObject (Person_John_Gludo);
-	Person miles = dbGetObject (Person_Miles_Chickenwing);
+	Person john  = (Person)dbGetObject (Person_John_Gludo);
+	Person miles = (Person)dbGetObject (Person_Miles_Chickenwing);
 	ubyte found = 0;
 
 	/* Der Jaguar darf nicht gefunden werden - sonst k”nnte er ja */
@@ -54,10 +54,10 @@ ubyte tcCarFound(Car car, ulong time)
 
 ulong tcATraitor(ulong traitorId)
 	{
-	ubyte name[TXT_KEY_LENGTH], line[TXT_KEY_LENGTH];
+	char name[TXT_KEY_LENGTH], line[TXT_KEY_LENGTH];
 	LIST *bubble  = txtGoKey(BUSINESS_TXT, "A_TRAITOR");
-	LIST *newList = CreateList(0);
-	Person john   = dbGetObject(Person_John_Gludo);
+	LIST *newList = (LIST*)CreateList(0);
+	Person john   = (Person)dbGetObject(Person_John_Gludo);
 
 	dbGetObjectName (traitorId, name);
 	sprintf (line, NODE_NAME(LIST_HEAD(bubble)), name);
@@ -79,8 +79,8 @@ ulong tcATraitor(ulong traitorId)
 
 ulong tcIsThereATraitor(void)
 	{
-	Player player = dbGetObject(Player_Player_1);
-	Person matt   = dbGetObject(Person_Matt_Stuvysunt);
+	Player player = (Player)dbGetObject(Player_Player_1);
+	Person matt   = (Person)dbGetObject(Person_Matt_Stuvysunt);
 	ubyte symp = 255;
 	ulong traitorId = 0, caught = 0;
 	NODE *n;
@@ -93,7 +93,7 @@ ulong tcIsThereATraitor(void)
 
 			for (n = (NODE *) LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *) NODE_SUCC(n))
 				{
-				Person pers = OL_DATA(n);
+				Person pers = (Person)OL_DATA(n);
 
 				if (OL_NR(n) != Person_Matt_Stuvysunt)  /* Matt verr„t sich nicht selbst */
 					{
@@ -116,11 +116,16 @@ ulong tcStartEvidence(void)
 	{
 	long     MyEvidence[4][7], guarded, radio;
 	ulong    totalEvidence[7], i, j, shownEvidence[4], Recognition[4], caught = 0;
-	ubyte    guyReady, guyNr, evidenceNr, guyCount, line[TXT_KEY_LENGTH], shown = 0;
+	ubyte    guyReady, guyNr, evidenceNr, guyCount;
+	char     line[TXT_KEY_LENGTH];
+	ubyte	 shown = 0;
 	Person   p[4];
-	Evidence evidence = dbGetObject(Evidence_Evidence_1);    /* just for presentation */
+	Evidence evidence = (Evidence)dbGetObject(Evidence_Evidence_1);    /* just for presentation */
 	struct   ObjectNode *n;
 	LIST     *guys, *spuren;
+	long div;
+	long newStrike;
+    Car  car;
 
 	if ((!(Search.EscapeBits & FAHN_ALARM)) && (!(Search.EscapeBits & FAHN_QUIET_ALARM)))
 		Say(BUSINESS_TXT,0,((Person)dbGetObject(Person_John_Gludo))->PictID,"A_BURGLARY_SIR");
@@ -143,9 +148,9 @@ ulong tcStartEvidence(void)
 
 	for(n = (struct ObjectNode *) LIST_HEAD(guys), i = 0; NODE_SUCC(n); n = (struct ObjectNode*) NODE_SUCC(n), i++)
 		{
-		long div = 380;
+		div = 380;
 
-		p[i] = OL_DATA(n);
+		p[i] = (Person)OL_DATA(n);
 
 		/* alle folgenden Werte sind zwischen 0 und 255 */
 
@@ -280,7 +285,7 @@ ulong tcStartEvidence(void)
 			guyReady |= (1<<guyNr);
 		}
 
-	guyReady = 0;
+	guyReady = 0;	// 2014-06-28 LucyG : ??? Compiler warning "guyReady is assigned a value that is never used"
 
 	/* ein gewisses Restwissen bleibt der Polizei ! */
 	for (i = 0; i < guyCount; i++)
@@ -305,20 +310,20 @@ ulong tcStartEvidence(void)
 				if (p[i] == dbGetObject(Person_Marc_Smith))
      			   caught |= tcATraitor(Person_Marc_Smith);
 
-         #ifdef THECLOU_PROFIDISK
-         if (!caught)
-            if (p[i] == dbGetObject(Person_Phil_Ciggy))
-               caught |= tcATraitor(Person_Phil_Ciggy);
-         #endif
+			if (bProfidisk)
+			{
+				if (!caught)
+					if (p[i] == dbGetObject(Person_Phil_Ciggy))
+						caught |= tcATraitor(Person_Phil_Ciggy);
 			}
 		}
+	}
 
 	caught |= tcIsThereATraitor();
 
 	if(!(tcCarFound((Car) dbGetObject(Organisation.CarID), Search.TimeOfBurglary - Search.TimeOfAlarm)))
 		{
-		long newStrike;
-		Car  car = dbGetObject(Organisation.CarID);
+		car = (Car)dbGetObject(Organisation.CarID);
 
 		newStrike = CalcValue ((long)car->Strike, 0, 255, 255, 15);
 
@@ -349,7 +354,7 @@ void tcForgetGuys(void)
 		{
 		if (OL_NR(node) != Person_Matt_Stuvysunt)
 			{
-			Person pers = OL_DATA(node);
+			Person pers = (Person)OL_DATA(node);
 
 			pers->TalkBits |= (1<<Const_tcTALK_JOB_OFFER);     /* ber Jobs kann man wieder reden! */
 
@@ -365,11 +370,11 @@ void tcForgetGuys(void)
 ulong tcPersonWanted(ulong persId)
 	{
 	ulong hours, i = 0, caught = 0;
-	Person john  = dbGetObject(Person_John_Gludo);
-	Person miles = dbGetObject(Person_Miles_Chickenwing);
+	Person john  = (Person)dbGetObject(Person_John_Gludo);
+	Person miles = (Person)dbGetObject(Person_Miles_Chickenwing);
 	LIST *bubble;
 	LIST *jobs = txtGoKey(OBJECTS_ENUM_TXT, "enum_JobE");
-	ubyte line[TXT_KEY_LENGTH], name[TXT_KEY_LENGTH];
+	char line[TXT_KEY_LENGTH], name[TXT_KEY_LENGTH];
 
 	dbGetObjectName (persId, name);
 
@@ -393,7 +398,7 @@ ulong tcPersonWanted(ulong persId)
 	while((i++) < hours)
 		{AddVTime(60); inpDelay(35); ShowTime(2);}
 
-	if(tcGuyCanEscape(dbGetObject(persId)) > CalcRandomNr(100, 255)) /* Flucht gelingt */
+	if(tcGuyCanEscape((Person)dbGetObject(persId)) > CalcRandomNr(100, 255)) /* Flucht gelingt */
 		{
 		Say(BUSINESS_TXT,0,john->PictID,"ESCAPED");
 
@@ -405,7 +410,7 @@ ulong tcPersonWanted(ulong persId)
 
 		livesInSet(London_Jail, persId);
 
-		caught = tcPersonQuestioning(dbGetObject(persId));
+		caught = tcPersonQuestioning((Person)dbGetObject(persId));
 		}
 
 	RemoveList (jobs);
@@ -416,8 +421,8 @@ ulong tcPersonWanted(ulong persId)
 ulong tcPersonQuestioning(Person person)
 	{
 	ulong caught = 0;
-	Person john = dbGetObject(Person_John_Gludo);
-	Person miles = dbGetObject(Person_Miles_Chickenwing);
+	Person john = (Person)dbGetObject(Person_John_Gludo);
+	Person miles = (Person)dbGetObject(Person_Miles_Chickenwing);
 
 	if(person != dbGetObject(Person_Matt_Stuvysunt))
 		{
@@ -441,7 +446,7 @@ ulong tcPersonQuestioning(Person person)
 
 long tcEscapeFromBuilding(ulong escBits)
 	{
-	Person gludo      = dbGetObject(Person_John_Gludo);
+	Person gludo      = (Person)dbGetObject(Person_John_Gludo);
 	ubyte  escapeSucc = FAHN_NOT_ESCAPED;
 	long   timeLeft   = LONG_MAX;
 
@@ -467,7 +472,7 @@ long tcEscapeFromBuilding(ulong escBits)
 		{
 		if ((escBits & FAHN_ALARM) || (escBits & FAHN_QUIET_ALARM))
 			{
-			Building build = dbGetObject(Search.BuildingId);
+			Building build = (Building)dbGetObject(Search.BuildingId);
 
 			timeLeft = build->PoliceTime - (Search.TimeOfBurglary - Search.TimeOfAlarm);
 			timeLeft -= tcCalcEscapeTime();
@@ -495,8 +500,8 @@ long tcEscapeFromBuilding(ulong escBits)
 
 long tcEscapeByCar(ulong escBits, long timeLeft)
 	{
-	Person gludo = dbGetObject(Person_John_Gludo);
-	Person miles = dbGetObject(Person_Miles_Chickenwing);
+	Person gludo = (Person)dbGetObject(Person_John_Gludo);
+	Person miles = (Person)dbGetObject(Person_Miles_Chickenwing);
 	ubyte escapeSucc;
 
 	if (timeLeft > 0)
@@ -578,10 +583,11 @@ long tcCalcCarEscape(long timeLeft)
 	ubyte kmhWeight[4]    = {32, 44, 60,   67};
 	ubyte psWeight[4]     = {68, 56, 40,   33};
 	ubyte driverWeight[4] = {50, 40, 25,   20};
-	ubyte policeSpeed[4]  = {90, 95, 103, 107}, paint, line[TXT_KEY_LENGTH], colortable[GFX_COLORTABLE_SIZE];
+	ubyte policeSpeed[4]  = {90, 95, 103, 107}, paint, colortable[GFX_COLORTABLE_SIZE];
+	char line[TXT_KEY_LENGTH];
 	long kmh, ps, i, j, YardsInFront, length, wayType, unrealSpeed, x, xOldMatt = -1, xOldPoli = -1;
-	Car car        = dbGetObject (Organisation.CarID);
-	Building build = dbGetObject (Organisation.BuildingID);
+	Car car        = (Car)dbGetObject (Organisation.CarID);
+	Building build = (Building)dbGetObject (Organisation.BuildingID);
 	long result = FAHN_ESCAPED;
 
 	if ((Organisation.BuildingID != Building_Tower_of_London) &&
@@ -667,8 +673,7 @@ long tcCalcCarEscape(long timeLeft)
 		i = max(i, 60);
 		j = max(j, 5);
 
-		sndPrepareFX("flucht.voc");
-		sndPlayFX();
+		sndPlayFX("flucht.voc");
 
 		do
 			{

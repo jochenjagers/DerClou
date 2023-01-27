@@ -17,15 +17,18 @@
 #include "anim\sysanim.h"
 #endif
 
+#define INP_TICKS_PER_SECOND	60	// 2014-07-04
+#define INP_TICKS_TO_MS(t)		(((t) * 1000) / INP_TICKS_PER_SECOND)
+
 #define INP_AS_FAST_AS_POSSIBLE		1
 
 #define INP_UP                (1L<<0)
 #define INP_DOWN              (1L<<1)
 #define INP_LEFT              (1L<<2)
 #define INP_RIGHT             (1L<<3)
-#define INP_ESC               (1L<<4)  /* wird standardm„áig gesetzt */
+#define INP_ESC               (1L<<4)  /* wird standardmaessig gesetzt */
 
-// this two defines gave been exchanged by kaweh
+// these two defines have been exchanged by kaweh
 #define INP_LBUTTONP          (1L<<5)  /* left button pressed */
 #define INP_LBUTTONR          (1L<<6)  /* left button released */
 
@@ -37,7 +40,7 @@
 #define INP_FUNCTION_KEY      (1L<<13)
 #define INP_SPACE             (1L<<14)
 #define INP_MOUSE             (1L<<15)
-
+#define INP_MOUSEWHEEL        (1L<<16)
 #define INP_QUIT              (1L<<17)
 
 #define INP_BUTTON      (INP_LBUTTONP|INP_RBUTTONP)
@@ -63,6 +66,6 @@ extern void inpTurnMouse(uword us_NewStatus);		  // 0 means off, 1 means on
 extern void inpDelay(long l_Ticks);
 extern void inpSetKeyRepeat(unsigned char rate);
 
-extern void inpClearKbBuffer(void);
+extern void setMouseCursor(ubyte fact);
 
 #endif

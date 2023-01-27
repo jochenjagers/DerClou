@@ -50,11 +50,7 @@
 #endif
 
 #ifndef MODULE_TCDATA
-#ifndef THECLOU_PROFIDISK
-#include "data\objstd\tcdata.h"
-#else
-#include "data\objprofi\tcdata.h"
-#endif
+#include "data\tcdata.h"
 #endif
 
 #ifndef MODULE_LIVING
@@ -125,7 +121,7 @@ extern void  lsInitLandScape(ulong bID,ubyte mode);
 extern void  lsDoneLandScape(void);
 
 extern void  lsSetScrollSpeed(ubyte pixel);
-extern void  lsSetActivLiving(ubyte *Name,uword x,uword y);
+extern void  lsSetActivLiving(char *Name,uword x,uword y);
 
 extern void  lsRefreshObjectList(ulong areaID);
 
@@ -160,7 +156,7 @@ extern ubyte lsInitScrollLandScape(ubyte direction, ubyte mode);
 
 extern LIST *lsGetObjectsByList(uword x,uword y,uword width,uword height, ubyte showInvisible, ubyte addLootBags);
 
-extern void  lsInitActivArea(ulong areaID,uword x,uword y,ubyte *livingName);
+extern void  lsInitActivArea(ulong areaID,uword x,uword y,char *livingName);
 extern void  lsDoneActivArea(ulong newAreaID);
 extern void  lsTurnObject(LSObject lso,ubyte status, ubyte Collis);
 

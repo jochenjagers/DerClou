@@ -9,12 +9,11 @@
 ulong    CurrAreaId;
 LSObject CurrLSO;  /* for FadeObjectInside */
 
-void FadeInsideObject(void)
-	{
+static void FadeInsideObject(void)
+{
 	static ubyte status = 1;
-
 	lsFadeRasterObject(CurrAreaId, CurrLSO, (status++) % 2);
-	}
+}
 
 ulong tcGoInsideOfHouse(ulong buildingID)
 	{
@@ -56,15 +55,18 @@ ulong tcGoInsideOfHouse(ulong buildingID)
 	}
 
 void tcInsideOfHouse(ulong buildingID, ulong areaID, ubyte perc)
-	{
+{
 	LIST *objects;
 	NODE *node, *n;
-	ulong action = 0, count;
-	ubyte name[TXT_KEY_LENGTH];
-	ubyte alarm[TXT_KEY_LENGTH], power[TXT_KEY_LENGTH];
+	ulong action, count;
+	char name[TXT_KEY_LENGTH];
+	char alarm[TXT_KEY_LENGTH], power[TXT_KEY_LENGTH];
 	LSObject lso;
-	LSArea area = dbGetObject(areaID);
-	LIST  *menu = txtGoKey(MENU_TXT, "LookMenu");
+	LSArea area;
+	LIST *menu;
+
+	area = (LSArea)dbGetObject(areaID);
+	menu = txtGoKey(MENU_TXT, "LookMenu");
 
 	txtGetFirstLine (BUSINESS_TXT,"PROTECTED",alarm);
 	txtGetFirstLine (BUSINESS_TXT,"SUPPLIED",power);
@@ -84,48 +86,32 @@ void tcInsideOfHouse(ulong buildingID, ulong areaID, ubyte perc)
 
 	CurrAreaId = areaID;
 
-	if ((GetNodeNrByAddr (objects, node)) > count)
-		{
+	if ((GetNodeNrByAddr (objects, node)) > count) {
 		SetBubbleType (THINK_BUBBLE);
 		Say (BUSINESS_TXT, 0, MATT_PICTID, "CANT_LOOK");
-		}
-	else
-		{
-		while(action != 4)
-			{
+	} else {
+		action = 0;
+		while (action != 4) {
 			lso = (LSObject) OL_DATA(node);
 
 			dbGetObjectName(lso->Type, name);
 
-			if(lso->uch_Chained)
-				{
+			if (lso->uch_Chained) {
 				strcat(name,"(");
-				if (lso->uch_Chained & Const_tcCHAINED_TO_ALARM)
-					{
+				if (lso->uch_Chained & Const_tcCHAINED_TO_ALARM) {
 					strcat(name, alarm);
-					if (lso->uch_Chained & Const_tcCHAINED_TO_POWER)
-						{
+					if (lso->uch_Chained & Const_tcCHAINED_TO_POWER) {
 						strcat(name, ", ");
 						strcat(name, power);
-						}
 					}
-				else
-					{
-					if (lso->uch_Chained & Const_tcCHAINED_TO_POWER)
+				} else {
+					if (lso->uch_Chained & Const_tcCHAINED_TO_POWER) {
 						strcat(name, power);
 					}
+				}
 
 				strcat(name,")");
-				}
-
-				/*
-				{
-				ubyte debugtxt[TXT_KEY_LENGTH];
-
-				sprintf(debugtxt, " ObjNr=%ld", OL_NR(node));
-				strcat(name, debugtxt);
-				}
-				*/
+			}
 
 			ShowMenuBackground();
 			PrintStatus(name);
@@ -142,44 +128,50 @@ void tcInsideOfHouse(ulong buildingID, ulong areaID, ubyte perc)
 
 			lsFadeRasterObject(areaID, lso, 1);
 
-			switch(action)
-				{
-				case 0: if ((GetNodeNrByAddr (objects, n = lsGetSuccObject(node))) < (count-1))
-							node = n;
-						  break;
-				case 1: node = lsGetPredObject(node); break;
-				case 2: tcShowObjectData(areaID, node, perc); break;
-				case 3: isGuardedbyAll(buildingID, OLF_NORMAL, Object_Police);
-						  if (!(LIST_EMPTY(ObjectList)))
-								{
-								gfxSetPens(l_wrp, 4, GFX_SAME_PEN, GFX_SAME_PEN);
-								grdDraw(l_wrp, buildingID, areaID);
-								}
-						  else
-								Say (BUSINESS_TXT, 0, MATT_PICTID, "NO_GUARD");
-						  break;
-				case 4:
-						  break;
-				default:
-						  action = 0;
-						  break;
-				}
-
-			lso = (LSObject) OL_DATA(node);
-			lsFadeRasterObject(areaID, lso, 1);
+			switch (action) {
+				case 0: {	// nächster Gegenstand
+					n = lsGetSuccObject(node);
+					if (GetNodeNrByAddr (objects, n) < (count-1)) {
+						node = n;
+					}
+				} break;
+				case 1: {	// vorheriger Gegenstand
+					node = lsGetPredObject(node);
+				} break;
+				case 2: {	// genau ansehen
+					tcShowObjectData(areaID, node, perc);
+				} break;
+				case 3: {	// Wächter
+					isGuardedbyAll(buildingID, OLF_NORMAL, Object_Police);
+					if (!(LIST_EMPTY(ObjectList))) {
+						gfxSetPens(l_wrp, 4, GFX_SAME_PEN, GFX_SAME_PEN);
+						grdDraw(l_wrp, buildingID, areaID);
+					} else {
+						Say (BUSINESS_TXT, 0, MATT_PICTID, "NO_GUARD");
+					}
+				} break;
+				case 4: {	// Fertig
+				} break;
+				default: {
+					action = 0;
+				} break;
 			}
+
+			lso = (LSObject)OL_DATA(node);
+			lsFadeRasterObject(areaID, lso, 1);
 		}
+	}
 
 	RemoveList (menu);
 	RemoveList (objects);
 	inpSetWaitTicks (0);
-	}
+}
 
 void tcShowObjectData(ulong areaID, NODE *node, ubyte perc)
-	{
+{
 	NODE *n;
 
-	/* Objekt selbst pr„sentieren */
+	/* Objekt selbst präsentieren */
 	Present (OL_NR(node), "RasterObject", InitObjectPresent);
 
 	/* Inhalt zusammenstellen */
@@ -191,7 +183,7 @@ void tcShowObjectData(ulong areaID, NODE *node, ubyte perc)
 		/* alle Loots durchgehen und anzeigen! */
 		for(n = (NODE*) LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE*) NODE_SUCC(n))
 			{
-			/* zur Variablenbergabe... (DIRTY, DIRTY...) */
+			/* zur Variablenübergabe... (DIRTY, DIRTY...) */
 			SetP (OL_DATA(n), hasLootRelationID, OL_DATA(n),
 			GetP(OL_DATA(node), hasLootRelationID, OL_DATA(n)));
 
@@ -202,6 +194,6 @@ void tcShowObjectData(ulong areaID, NODE *node, ubyte perc)
 			}
 		}
 
-	/* Vebindungen zeigen! */
+	/* Verbindungen zeigen! */
 	lsShowAllConnections(areaID, node, perc);
 	}

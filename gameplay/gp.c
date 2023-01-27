@@ -14,7 +14,7 @@ void FreeLocations(void);
 void InitSceneInfo(void);
 void FreeSceneInfo(void);
 
-void PrepareStory(ubyte *filename);
+void PrepareStory(char *filename);
 void LoadSceneforStory(struct NewScene *dest,FILE *file);
 void LoadStory(ubyte *filename);
 
@@ -33,7 +33,7 @@ struct Film 	*film=0L;
 struct SceneArgs	SceneArgs;
 
 
-void InitStory(ubyte *story_filename)
+void InitStory(char *story_filename)
 {
 	if (film)
 		CloseStory();
@@ -81,7 +81,7 @@ void SetEnabledChoices(ulong ChoiceMask)
 
 void RefreshCurrScene(void)
 {
-	NODE *node = GetNthNode(film->loc_names, GetLocation);
+	NODE *node = (NODE*)GetNthNode(film->loc_names, GetLocation);
 
 	tcRefreshLocationInTitle(GetLocation);
 	PlayAnim(NODE_NAME(node), (word)30000, GFX_NO_REFRESH|GFX_ONE_STEP|GFX_BLEND_UP);
@@ -91,7 +91,7 @@ void RefreshCurrScene(void)
 
 void InitLocations(void)
 {
-	LIST *l = CreateList (0);
+	LIST *l = (LIST*)CreateList (0);
 	char pathname[TXT_KEY_LENGTH];
 
 	dskBuildPathName(TEXT_DIRECTORY, LOCATIONS_TXT, pathname);
@@ -122,18 +122,17 @@ void PatchStory(void)
 
 		GetScene(SCENE_STATION)->Moeglichkeiten |= WAIT;
 
-		#ifdef THECLOU_PROFIDISK
-		GetScene(SCENE_PROFI_26)->LocationNr = 75;
-		#endif
+		if (bProfidisk)
+			GetScene(SCENE_PROFI_26)->LocationNr = 75;
 
 		/* change possibilites in story_9 too! */
 
 		/* fr die Kaserne hier einen Successor eingetragen! */
-		GetLocScene(65)->std_succ = CreateList(0);
+		GetLocScene(65)->std_succ = (LIST*)CreateList(0);
 		node = (struct TCEventNode *) CreateNode(GetLocScene(65)->std_succ, sizeof(struct TCEventNode), 0L);
 		node->EventNr = SCENE_KASERNE_OUTSIDE; /* wurscht... */
 
-		GetLocScene(66)->std_succ = CreateList(0);
+		GetLocScene(66)->std_succ = (LIST*)CreateList(0);
 		node = (struct TCEventNode *) CreateNode(GetLocScene(66)->std_succ, sizeof(struct TCEventNode), 0L);
 		node->EventNr = SCENE_KASERNE_INSIDE;  /* wurscht... */
 
@@ -335,8 +334,8 @@ long CheckConditions(struct Scene *scene)
 	if (scene->LocationNr != -1L)
 		return(1L);
 
-	/* es handelt sich um keine Std Szene -> šberprfen ! */
-	/* berprfen, ob Szene nicht schon zu oft geschehen ist ! */
+	/* es handelt sich um keine Std Szene -> ueberpruefen ! */
+	/* ueberpruefen, ob Szene nicht schon zu oft geschehen ist ! */
 	if ((scene->Anzahl != ((uword)(CAN_ALWAYS_HAPPEN))) &&
 		    (scene->Geschehen) >= (scene->Anzahl))
 		return(0L);
@@ -380,10 +379,11 @@ long CheckConditions(struct Scene *scene)
 	return(1L);
 }
 
-void PrepareStory(ubyte *filename)
+void PrepareStory(char *filename)
 /*
 * completely revised 02-02-93
 * tested : 26-03-93
+* revised : 2014-07-01 - templer
 */
 {
 	long i,j;
@@ -396,18 +396,22 @@ void PrepareStory(ubyte *filename)
 
 	dskBuildPathName(DATA_DIRECTORY, filename, pathname);
 
-	#ifdef THECLOU_PROFIDISK
-	#ifdef THECLOU_CDROM_VERSION
-	sprintf(pathname, "%s\\%s", DATA_DIRECTORY, filename);
-	#endif
-	#endif
 
 	/* StoryHeader laden ! */
 
 	file = dskOpen(pathname, "rb", 0);
 
-	dskRead(file, &SH, sizeof(struct StoryHeader));
-	#ifdef __COSP__
+	dskRead(file, SH.StoryName, sizeof(SH.StoryName));
+	dskRead(file, &SH.EventCount,sizeof(ulong));
+	dskRead(file, &SH.SceneCount,sizeof(ulong));
+
+	dskRead(file, &SH.AmountOfScenes,sizeof(ulong));
+	dskRead(file, &SH.AmountOfEvents,sizeof(ulong));
+
+	dskRead(file, &SH.StartZeit,sizeof(ulong));
+	dskRead(file, &SH.StartOrt,sizeof(ulong));
+	dskRead(file, &SH.StartSzene,sizeof(ulong));
+
 	EndianL(&SH.EventCount);
 	EndianL(&SH.SceneCount);
 	EndianL(&SH.AmountOfScenes);
@@ -415,7 +419,6 @@ void PrepareStory(ubyte *filename)
 	EndianL(&SH.StartZeit);
 	EndianL(&SH.StartOrt);
 	EndianL(&SH.StartSzene);
-	#endif
 
 	film->AmountOfScenes=SH.AmountOfScenes;
 
@@ -428,7 +431,7 @@ void PrepareStory(ubyte *filename)
 
 	if (film->AmountOfScenes)
 	{
-		film->gameplay = MemAlloc(sizeof(struct Scene) * film->AmountOfScenes);
+		film->gameplay = (struct Scene*)MemAlloc(sizeof(struct Scene) * film->AmountOfScenes);
 		if (!film->gameplay) NewErrorMsg(No_Mem, __FILE__, __func__, 6);
 	}
 	else
@@ -464,7 +467,7 @@ void PrepareStory(ubyte *filename)
 
 		if (NS.AnzahlderNachfolger)
 		{
-			scene->std_succ=CreateList(0);
+			scene->std_succ=(LIST*)CreateList(0);
 
 			for (j = 0;j < NS.AnzahlderNachfolger;j++)
 			{
@@ -496,7 +499,7 @@ void InitConditions(struct Scene *scene, struct NewScene *ns)
 
 	if(ns->AnzahlderEvents)
 	{
-		bed->events=CreateList(0);
+		bed->events=(LIST*)CreateList(0);
 
 		for(i=0;i<ns->AnzahlderEvents;i++)
 		{
@@ -513,7 +516,7 @@ void InitConditions(struct Scene *scene, struct NewScene *ns)
 
 	if(ns->AnzahlderN_Events)
 	{
-		bed->n_events = CreateList(0);
+		bed->n_events = (LIST*)CreateList(0);
 
 		for(i=0;i<ns->AnzahlderN_Events;i++)
 		{
@@ -549,14 +552,31 @@ void FreeConditions(struct Scene *scene)
 void LoadSceneforStory(struct NewScene *dest,FILE *file)
 {
 	ulong *event_nrs = NULL;
-	ulong i;
+	ulong i, tmp;
 
-	#ifndef __COSP__
-	dskRead(file,dest,sizeof(struct NewScene));
-	#else
-	/* struct NewScene is byte-aligned
+		/* struct NewScene is byte-aligned
 	and needs some padding... */
-	dskRead(file, &dest->EventNr, 77);
+	dskRead(file, &dest->EventNr,sizeof(ulong));
+    dskRead(file, dest->SceneName, sizeof(dest->SceneName));
+    dskRead(file, &dest->Tag,sizeof(long));
+    dskRead(file, &dest->MinZeitPunkt,sizeof(long));
+    dskRead(file, &dest->MaxZeitPunkt,sizeof(long));
+    dskRead(file, &dest->Ort,sizeof(long));
+    dskRead(file, &dest->AnzahlderEvents,sizeof(ulong));
+    dskRead(file, &dest->AnzahlderN_Events,sizeof(ulong));
+    dskRead(file, &tmp,sizeof(ulong));
+    dskRead(file, &tmp,sizeof(ulong));
+    dskRead(file, &dest->AnzahlderNachfolger,sizeof(ulong));
+    dskRead(file, &tmp,sizeof(ulong));
+    dskRead(file, &dest->Moeglichkeiten,sizeof(ulong));
+    dskRead(file, &dest->Dauer,sizeof(ulong));
+    dskRead(file, &dest->Anzahl,sizeof(uword));
+    dskRead(file, &dest->Geschehen,sizeof(uword));
+    dskRead(file, &dest->Possibility,sizeof(ubyte));
+    dskRead(file, &dest->Sample,sizeof(ulong));
+    dskRead(file, &dest->Anim,sizeof(ulong));
+    dskRead(file, &dest->NewOrt,sizeof(long));
+
 	EndianL(&dest->EventNr);
 	EndianL((ulong *)&dest->Tag);
 	EndianL((ulong *)&dest->MinZeitPunkt);
@@ -569,11 +589,9 @@ void LoadSceneforStory(struct NewScene *dest,FILE *file)
 	EndianL(&dest->Dauer);
 	EndianW(&dest->Anzahl);
 	EndianW(&dest->Geschehen);
-	dskRead(file, &dest->Sample, 12);
 	EndianL(&dest->Sample);
 	EndianL(&dest->Anim);
 	EndianL((ulong *)&dest->NewOrt);
-	#endif
 
 	/* allocate mem for events and read them */
 	if (dest->AnzahlderEvents)
@@ -581,13 +599,11 @@ void LoadSceneforStory(struct NewScene *dest,FILE *file)
 		event_nrs = (ulong *)MemAlloc(sizeof(ulong) * dest->AnzahlderEvents);
 		if (!event_nrs) NewErrorMsg(No_Mem, __FILE__, __func__, 8);
 
-		dskRead(file, event_nrs, sizeof(ulong)*dest->AnzahlderEvents);
-		#ifdef __COSP__
 		for (i = 0; i < dest->AnzahlderEvents; i++)
 		{
+			dskRead(file, &event_nrs[i],sizeof(ulong));
 			EndianL(&event_nrs[i]);
 		}
-		#endif
 	}
 	else
 	    event_nrs=NULL;
@@ -600,13 +616,11 @@ void LoadSceneforStory(struct NewScene *dest,FILE *file)
 		event_nrs = (ulong *)MemAlloc(sizeof(ulong) * dest->AnzahlderN_Events);
 		if (!event_nrs) NewErrorMsg(No_Mem, __FILE__, __func__, 9);
 
-		dskRead(file,event_nrs, sizeof(ulong)*dest->AnzahlderN_Events);
-		#ifdef __COSP__
 		for (i = 0; i < dest->AnzahlderN_Events; i++)
 		{
+			dskRead(file, &event_nrs[i],sizeof(ulong));
 			EndianL(&event_nrs[i]);
 		}
-		#endif
 	}
 	else
 	    event_nrs = NULL;
@@ -619,13 +633,11 @@ void LoadSceneforStory(struct NewScene *dest,FILE *file)
 		event_nrs = (ulong *)MemAlloc(sizeof(ulong) * dest->AnzahlderNachfolger);
 		if (!event_nrs) NewErrorMsg(No_Mem, __FILE__, __func__, 10);
 
-		dskRead(file,event_nrs, sizeof(ulong)*dest->AnzahlderNachfolger);
-		#ifdef __COSP__
 		for (i = 0; i < dest->AnzahlderNachfolger; i++)
 		{
+			dskRead(file, &event_nrs[i],sizeof(ulong));
 			EndianL(&event_nrs[i]);
 		}
-		#endif
 	}
 	else
 	    event_nrs=NULL;
@@ -688,7 +700,7 @@ struct Scene *GetLocScene(ulong locNr)
 	return NULL;
 }
 
-void FormatDigit(ulong digit,ubyte *s)
+void FormatDigit(ulong digit,char *s)
 {
 	if (digit<10)
 		sprintf(s,"0%ld",digit);
@@ -696,10 +708,10 @@ void FormatDigit(ulong digit,ubyte *s)
 	    sprintf(s,"%ld",digit);
 }
 
-ubyte *BuildTime(ulong min,ubyte language,ubyte *time)
+char *BuildTime(ulong min,char language,char *time)
 {
 	ulong h = (min/60) % 24;
-	ubyte s[TXT_KEY_LENGTH];
+	char s[TXT_KEY_LENGTH];
 
 	min=min%60;
 
@@ -711,12 +723,12 @@ ubyte *BuildTime(ulong min,ubyte language,ubyte *time)
 	return(time);
 }
 
-ubyte *BuildDate(ulong days,ubyte language,ubyte *date)
+char *BuildDate(ulong days,char language,char *date)
 {
 	ubyte days_per_month[12]={
 		31,28,31,30,31,30,31,31,30,31,30,31	};
 	ulong i,p_year,year,month,day;
-	ubyte s[TXT_KEY_LENGTH];
+	char s[TXT_KEY_LENGTH];
 
 	for(i=0,p_year=0;i<12;i++)
 		p_year+=days_per_month[i];
@@ -759,7 +771,7 @@ ubyte *BuildDate(ulong days,ubyte language,ubyte *date)
 	return(date);
 }
 
-ubyte *GetCurrLocName(void)
+char *GetCurrLocName(void)
 {
 	long index;
 

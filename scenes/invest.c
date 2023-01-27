@@ -6,9 +6,9 @@
 */
 #include "scenes\scenes.h"
 
-ulong tcShowPatrol(LIST *bubble_l, ubyte *c_time, ubyte *patr, ubyte first, Building bui, ulong raise)
+ulong tcShowPatrol(LIST *bubble_l, char *c_time, char *patr, ubyte first, Building bui, ulong raise)
 	{
-	ubyte patrolie[TXT_KEY_LENGTH];
+	char patrolie[TXT_KEY_LENGTH];
 	ulong choice = 0;
 
 	sprintf(patrolie, "%s  %s", c_time, patr);
@@ -27,11 +27,12 @@ ulong tcShowPatrol(LIST *bubble_l, ubyte *c_time, ubyte *patr, ubyte first, Buil
 	return choice;
 	}
 
-void Investigate(ubyte *location)
+void Investigate(char *location)
 	{
 	NODE	*n, *nextMsg;
 	LIST 	*origin, *bubble_l;
-	ubyte	patr[TXT_KEY_LENGTH], line[TXT_KEY_LENGTH], c_time[10];
+	char	patr[TXT_KEY_LENGTH], line[TXT_KEY_LENGTH];
+	char    c_time[10];
 	ulong minutes=0, guarding=0, choice=0, count=0, buiID=0, first = 0, raise;
 	Building  bui;
 	ulong     patrolCount;
@@ -39,17 +40,18 @@ void Investigate(ubyte *location)
 	buiID = GetObjNrOfBuilding(GetLocation);
 	bui   = (Building)dbGetObject(buiID);
 
-   #ifdef THECLOU_PROFIDISK
-   if (buiID == Building_Buckingham_Palace)
-        {
-	     bubble_l = txtGoKey(INVESTIGATIONS_TXT,"BuckinghamBeobachtet");
-        SetBubbleType(THINK_BUBBLE);
-	     Bubble(bubble_l, 0 ,0L,0L);
-        RemoveList(bubble_l);
+	if (bProfidisk)
+	{
+		if (buiID == Building_Buckingham_Palace)
+		{
+			bubble_l = txtGoKey(INVESTIGATIONS_TXT,"BuckinghamBeobachtet");
+			SetBubbleType(THINK_BUBBLE);
+			Bubble(bubble_l, 0 ,0L,0L);
+			RemoveList(bubble_l);
 
-        return;
-        }
-   #endif
+			return;
+		}
+	}
 
 	if(!(GamePlayMode & GP_MUSIC_OFF))
 		sndPlaySound("invest.bk", 0);
@@ -70,7 +72,7 @@ void Investigate(ubyte *location)
 
 	/* Beobachtungstexte von Disk lesen */
 	origin   = txtGoKey(INVESTIGATIONS_TXT,location);
-	bubble_l = CreateList(0);
+	bubble_l = (LIST*)CreateList(0);
 	count    = GetNrOfNodes(origin);
 	guarding = (ulong) tcRGetGRate(bui);
 	patrolCount = (270 - guarding) / 4 + 1;
@@ -132,7 +134,7 @@ void Investigate(ubyte *location)
 				if((GetMinute % 60)!=0)
 					ShowTime(0);
 
-				n = CreateNode(bubble_l,0L,NODE_NAME(nextMsg));
+				n = (NODE*)CreateNode(bubble_l,0L,NODE_NAME(nextMsg));
 
 				SetBubbleType(THINK_BUBBLE);
 
@@ -192,7 +194,7 @@ void Investigate(ubyte *location)
 
 	if (GamePlayMode & GP_DEMO)
 		{
-		char colortable[768];
+		ubyte colortable[768];
 
 		SuspendAnim();
 		gfxPrepareRefresh();

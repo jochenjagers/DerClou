@@ -4,37 +4,30 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#ifndef MODULE_SOUND
-#define MODULE_SOUND
+/****************************************************************************
+  Portions copyright (c) 2005 Vasco Alexandre da Silva Costa
+
+  Please read the license terms which should be contained with this
+  distribution.
+ ****************************************************************************/
+#ifndef TC_NEWSOUND_H
+#define TC_NEWSOUND_H
 
 #include "theclou.h"
 
-#ifndef MODULE_ERROR
-#include "error\error.h"
-#endif
+extern int currMusicVolume;
+extern int targetMusicVolume;
 
-#ifndef MODULE_DISK
-#include "disk\disk.h"
-#endif
-
-#ifndef MODULE_MEMORY
-#include "memory\memory.h"
-#endif
-
-#ifndef MODULE_TEXT
-#include "text\text.h"
-#endif
-
+void sndDoFading(void);
 
 void sndInit(void);
 void sndDone(void);
 
 void sndPlaySound(char *name, ulong mode);
 void sndStopSound(ubyte dummy);
-
-void sndFadeOut(void);
 void sndFading(short int targetVol);
 
 char *sndGetCurrSoundName(void);
 
 #endif
+

@@ -39,3 +39,13 @@ long ChangeAbs(long item, long value, long min, long max)
 
      return(item);
      }
+
+long RoundF(float num)
+{
+    if (num < 0)
+		return (long) (num - 0.5f);
+	else
+		return (long) (num + 0.5f);
+}
+
+

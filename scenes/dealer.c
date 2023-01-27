@@ -12,13 +12,18 @@ void tcDealerDlg(void)
 	Person dealer = NULL;
 	ubyte dealerNr, choice = 0;
 
-	switch(locNr)
-		{
-		case Location_Parker: dealer = dbGetObject(Person_Helen_Parker); knowsSet(Person_Matt_Stuvysunt, Person_Helen_Parker); dealerNr = 2; break;
-		case Location_Maloya: dealer = dbGetObject(Person_Frank_Maloya); knowsSet(Person_Matt_Stuvysunt, Person_Frank_Maloya); dealerNr = 0; break;
-		case Location_Pooly:  dealer = dbGetObject(Person_Eric_Pooly); knowsSet(Person_Matt_Stuvysunt, Person_Eric_Pooly); dealerNr = 1; break;
-		default: break;
-		}
+	if (locNr == Location_Parker)
+	{
+		dealer = (Person)dbGetObject(Person_Helen_Parker); knowsSet(Person_Matt_Stuvysunt, Person_Helen_Parker); dealerNr = 2;
+	}
+	else if (locNr == Location_Maloya)
+	{
+		dealer = (Person)dbGetObject(Person_Frank_Maloya); knowsSet(Person_Matt_Stuvysunt, Person_Frank_Maloya); dealerNr = 0;
+	}
+	else if (locNr == Location_Pooly)
+	{
+		dealer = (Person)dbGetObject(Person_Eric_Pooly); knowsSet(Person_Matt_Stuvysunt, Person_Eric_Pooly); dealerNr = 1;
+	}
 
 	while((choice != 2) && (choice != GET_OUT))
 		{
@@ -27,13 +32,18 @@ void tcDealerDlg(void)
 		switch(choice)
 			{
 			case 0:             /* womit ? */
-				switch(locNr)
-					{
-					case Location_Parker: Say(BUSINESS_TXT, 0, dealer->PictID, "DEALER_PARKER"); break;
-					case Location_Maloya: Say(BUSINESS_TXT, 0, dealer->PictID, "DEALER_MALOYA"); break;
-					case Location_Pooly:  Say(BUSINESS_TXT, 0, dealer->PictID, "DEALER_POOLY"); break;
-					default: break;
-					}
+				if (locNr == Location_Parker)
+				{
+					Say(BUSINESS_TXT, 0, dealer->PictID, "DEALER_PARKER");
+				}
+				else if (locNr ==  Location_Maloya)
+				{
+					Say(BUSINESS_TXT, 0, dealer->PictID, "DEALER_MALOYA"); 
+				}
+				else if (locNr == Location_Pooly)
+				{
+					Say(BUSINESS_TXT, 0, dealer->PictID, "DEALER_POOLY"); 
+				}
 				break;
 			case 1:             /* offer */
 				hasAll(Person_Matt_Stuvysunt, OLF_NORMAL, Object_Loot);
@@ -56,25 +66,36 @@ void tcDealerDlg(void)
 	ShowTime(2);
 	}
 
+// 2014-06-29 LucyG : increase price variation for less predictable gameplay
+static long moreRandom(long v)
+{
+	long r;
+	r = CalcRandomNr(0, (v / 4) + 1);
+	r -= (v / 8);
+	v += r;
+	return(min(v, 250));
+}
+
 void tcDealerOffer(Person dealer, ubyte which)
 	{
-	ubyte Price[3][10] = {{  70, 150, 220,  90, 210, 110, 200,   0, 190,  80},   /* maloya */
-								 { 120, 200, 180, 220,  79, 110,   0,   0, 110, 200},   /* pooly */
-								 { 220,  66,   0, 110,   0, 220,   0, 212,  20, 130}};  /* parker */
-	CompleteLoot comp = dbGetObject (CompleteLoot_LastLoot);
+	// 2014-06-29 LucyG : possible compiler bug fixed
+	static const long Price[3*10] =    {  70, 150, 220,  90, 210, 110, 200,   0, 190,  80,   /* maloya */
+										 120, 200, 180, 220,  79, 110,   0,   0, 110, 200,   /* pooly */
+										 220,  66,   0, 110,   0, 220,   0, 212,  20, 130};  /* parker */
+	CompleteLoot comp = (CompleteLoot)dbGetObject (CompleteLoot_LastLoot);
 
 	RemoveList (tcMakeLootList(Person_Matt_Stuvysunt, Relation_has));
 
-	if(comp->Bild)           tcDealerSays(dealer, 0, (long) Price[which][0]);
-	if(comp->Gold)           tcDealerSays(dealer, 1, (long) Price[which][1]);
-	if(comp->Geld)           tcDealerSays(dealer, 2, (long) Price[which][2]);
-	if(comp->Juwelen)        tcDealerSays(dealer, 3, (long) Price[which][3]);
-	if(comp->Delikates)      tcDealerSays(dealer, 4, (long) Price[which][4]);
-	if(comp->Statue)         tcDealerSays(dealer, 5, (long) Price[which][5]);
-	if(comp->Kuriositaet)    tcDealerSays(dealer, 6, (long) Price[which][6]);
-	if(comp->HistKunst)      tcDealerSays(dealer, 7, (long) Price[which][7]);
-	if(comp->GebrauchsArt)   tcDealerSays(dealer, 8, (long) Price[which][8]);
-	if(comp->Vase)           tcDealerSays(dealer, 9, (long) Price[which][9]);
+	if(comp->Bild)           tcDealerSays(dealer, 0, moreRandom(Price[which*10+0]));
+	if(comp->Gold)           tcDealerSays(dealer, 1, moreRandom(Price[which*10+1]));
+	if(comp->Geld)           tcDealerSays(dealer, 2, moreRandom(Price[which*10+2]));
+	if(comp->Juwelen)        tcDealerSays(dealer, 3, moreRandom(Price[which*10+3]));
+	if(comp->Delikates)      tcDealerSays(dealer, 4, moreRandom(Price[which*10+4]));
+	if(comp->Statue)         tcDealerSays(dealer, 5, moreRandom(Price[which*10+5]));
+	if(comp->Kuriositaet)    tcDealerSays(dealer, 6, moreRandom(Price[which*10+6]));
+	if(comp->HistKunst)      tcDealerSays(dealer, 7, moreRandom(Price[which*10+7]));
+	if(comp->GebrauchsArt)   tcDealerSays(dealer, 8, moreRandom(Price[which*10+8]));
+	if(comp->Vase)           tcDealerSays(dealer, 9, moreRandom(Price[which*10+9]));
 	}
 
 void tcDealerSays(Person dealer, ubyte textNr, long perc)
@@ -82,15 +103,15 @@ void tcDealerSays(Person dealer, ubyte textNr, long perc)
 	LIST *lootNames   = txtGoKey(OBJECTS_ENUM_TXT, "enum_LootE");
 	LIST *specialLoot = txtGoKey(OBJECTS_ENUM_TXT, "enum_LootNameE");
 	LIST *dealerText  = txtGoKey(BUSINESS_TXT, "DEALER_OFFER");
-	LIST *dealerOffer = CreateList(0);
-	ubyte line[TXT_KEY_LENGTH], symp, i;
+	LIST *dealerOffer = (LIST*)CreateList(0);
+	char line[TXT_KEY_LENGTH], symp, i;
 	struct ObjectNode *n;
 	Person others[3];
-	Player player = dbGetObject(Player_Player_1);
+	Player player = (Player)dbGetObject(Player_Player_1);
 
-	others[0] = dbGetObject(Person_Frank_Maloya);
-	others[1] = dbGetObject(Person_Eric_Pooly);
-	others[2] = dbGetObject(Person_Helen_Parker);
+	others[0] = (Person)dbGetObject(Person_Frank_Maloya);
+	others[1] = (Person)dbGetObject(Person_Eric_Pooly);
+	others[2] = (Person)dbGetObject(Person_Helen_Parker);
 
 	if (perc == 0)
 		{
@@ -109,7 +130,7 @@ void tcDealerSays(Person dealer, ubyte textNr, long perc)
 
 		for (n = (struct ObjectNode *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (struct ObjectNode *) NODE_SUCC(n))
 			{
-			Loot loot = OL_DATA(n);
+			Loot loot = (Loot)OL_DATA(n);
 			ulong price = hasGet(Person_Matt_Stuvysunt, OL_NR(n)), offer;
 
 			offer = tcGetDealerOffer(price, perc);
@@ -149,6 +170,10 @@ void tcDealerSays(Person dealer, ubyte textNr, long perc)
 
 					hasUnSet(Person_Matt_Stuvysunt, OL_NR(n));
 
+					if (GamePlayMode & GP_MORE_MONEY) {	// Lucy 2017-11-08 new cheat
+						if (offer > 0) offer = (offer * 3) / 2;
+					}
+
 					mattsMoney = max(((offer * (player->MattsPart)) / 100), 1);
 
 					tcAddDealerSymp(dealer, symp);
@@ -174,10 +199,10 @@ LIST *tcMakeLootList(ulong containerID, ulong relID)
 	{
 	NODE *n;
 	Loot loot;
-	CompleteLoot comp = dbGetObject(CompleteLoot_LastLoot);
-	ubyte data[TXT_KEY_LENGTH];
+	CompleteLoot comp = (CompleteLoot)dbGetObject(CompleteLoot_LastLoot);
+	char data[TXT_KEY_LENGTH];
 	ulong value;
-	LIST *out = CreateList (0);
+	LIST *out = (LIST*)CreateList (0);
 	LIST *loots;
 	LIST *lootE     = txtGoKey(OBJECTS_ENUM_TXT,"enum_LootE");
 	LIST *lootNameE = txtGoKey(OBJECTS_ENUM_TXT,"enum_LootNameE");
@@ -202,7 +227,7 @@ LIST *tcMakeLootList(ulong containerID, ulong relID)
 			{
 			if (OL_TYPE(n) == Object_Loot)
 				{
-				loot = OL_DATA(n);
+				loot = (Loot)OL_DATA(n);
 
 				value = GetP (dbGetObject(containerID), relID, loot);
 

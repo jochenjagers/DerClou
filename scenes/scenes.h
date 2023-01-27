@@ -44,11 +44,7 @@
 #endif
 
 #ifndef MODULE_TCDATA
-#ifndef THECLOU_PROFIDISK
-#include "data\objstd\tcdata.h"
-#else
-#include "data\objprofi\tcdata.h"
-#endif
+#include "data\tcdata.h"
 #endif
 
 #ifndef MODULE_GAMEPLAY_APP
@@ -90,13 +86,13 @@ void tcDoneFahndung(void);
 
 /* Hilfsfunktionen */
 
-void Investigate(ubyte *location);
+void Investigate(char *location);
 
 void SetCarColors(ubyte index);
 
 void tcSellCar(ulong ObjectID);
 void tcColorCar(Car car);
-void tcRepairCar(Car car,ubyte *repairWhat);
+void tcRepairCar(Car car,char *repairWhat);
 void tcCarGeneralOverhoul(Car car);
 void tcToolsShop(void);
 
@@ -107,8 +103,8 @@ ulong tcChooseCar(ulong backgroundNr);
 
 LIST  *tcMakeLootList(ulong containerID, ulong relID);
 
-ubyte *tcShowPriceOfCar(ulong nr, ulong type, void *data);
-ubyte *tcShowPriceOfTool(ulong nr, ulong type, void *data);
+char *tcShowPriceOfCar(ulong nr, ulong type, void *data);
+char *tcShowPriceOfTool(ulong nr, ulong type, void *data);
 
 void tcDealerSays(Person dealer, ubyte textNr, long perc);
 void tcDealerOffer(Person dealer, ubyte which);

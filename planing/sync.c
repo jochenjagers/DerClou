@@ -156,16 +156,25 @@ uword plYMoveSync(ulong id, uword ypos, ubyte animate, ubyte direction, uword go
 
 void plSync(ubyte animate, ulong targetTime, ulong times, ubyte direction)
 {
+   struct Action *action;
+   struct Action  *a;
+   struct Handler *h;
+   uword  dir;
+   Police pol;
+   uword xpos, ypos;
    ubyte i;
    ulong seconds, lastAreaId = 0;
+   ulong state;
+   ulong weightLoot;
+   ulong volumeLoot;
+   ulong newValue, oldValue;
 
    for (seconds = 0; seconds < times; seconds ++)
    {
       for (i = 0; i < PersonsNr; i++)
       {
-         struct Action *action;
-         uword xpos = livGetXPos(Planing_Name[i]);
-         uword ypos = livGetYPos(Planing_Name[i]);
+         xpos = livGetXPos(Planing_Name[i]);
+         ypos = livGetYPos(Planing_Name[i]);
 
          SetActivHandler(plSys, OL_NR(GetNthNode(PersonsList, i)));
 
@@ -250,7 +259,7 @@ void plSync(ubyte animate, ulong targetTime, ulong times, ubyte direction)
                         }
                         else if (dbIsObject(ActionData(action, struct ActionUse *)->ItemId, Object_Police))
                         {
-                           Police pol = (Police)dbGetObject(ActionData(action, struct ActionUse *)->ItemId);
+                           pol = (Police)dbGetObject(ActionData(action, struct ActionUse *)->ItemId);
 
                            if (direction)
                               Planing_Guard[pol->LivingID - BurglarsNr] = 1;
@@ -280,7 +289,7 @@ void plSync(ubyte animate, ulong targetTime, ulong times, ubyte direction)
                         }
                         else if (dbIsObject(ActionData(action, struct ActionUse *)->ItemId, Object_Police))
                         {
-                           Police pol = (Police)dbGetObject(ActionData(action, struct ActionUse *)->ItemId);
+                           pol = (Police)dbGetObject(ActionData(action, struct ActionUse *)->ItemId);
 
                            if (direction)
                               Planing_Guard[pol->LivingID - BurglarsNr] = 2;
@@ -348,7 +357,7 @@ void plSync(ubyte animate, ulong targetTime, ulong times, ubyte direction)
 
                            if (plIgnoreLock(ActionData(action, struct ActionUse *)->ItemId))
                            {
-                              ulong state = lsGetObjectState(ActionData(action, struct ActionUse *)->ItemId);
+                              state = lsGetObjectState(ActionData(action, struct ActionUse *)->ItemId);
 
                               if (CHECK_STATE(state, Const_tcON_OFF))
                               {
@@ -390,8 +399,8 @@ void plSync(ubyte animate, ulong targetTime, ulong times, ubyte direction)
                      {
                         if (direction)
                         {
-                           ulong weightLoot = ((Loot)dbGetObject(ActionData(action, struct ActionTake *)->LootId))->Weight;
-                           ulong volumeLoot = ((Loot)dbGetObject(ActionData(action, struct ActionTake *)->LootId))->Volume;
+                           weightLoot = ((Loot)dbGetObject(ActionData(action, struct ActionTake *)->LootId))->Weight;
+                           volumeLoot = ((Loot)dbGetObject(ActionData(action, struct ActionTake *)->LootId))->Volume;
 
                            lsSetObjectState(ActionData(action, struct ActionTake *)->ItemId, Const_tcIN_PROGRESS_BIT, 0);
 
@@ -410,11 +419,11 @@ void plSync(ubyte animate, ulong targetTime, ulong times, ubyte direction)
                            }
 
                            {
-                              ulong newValue = GetP(dbGetObject(ActionData(action, struct ActionTake *)->ItemId), hasLoot(i), dbGetObject(ActionData(action, struct ActionTake *)->LootId));
+                              newValue = GetP(dbGetObject(ActionData(action, struct ActionTake *)->ItemId), hasLoot(i), dbGetObject(ActionData(action, struct ActionTake *)->LootId));
 
                               if (Ask(dbGetObject(OL_NR(GetNthNode(BurglarsList, i))), take_RelId, dbGetObject(ActionData(action, struct ActionTake *)->LootId)))
                               {
-                                 ulong oldValue = GetP(dbGetObject(OL_NR(GetNthNode(BurglarsList, i))), take_RelId, dbGetObject(ActionData(action, struct ActionTake *)->LootId));
+                                 oldValue = GetP(dbGetObject(OL_NR(GetNthNode(BurglarsList, i))), take_RelId, dbGetObject(ActionData(action, struct ActionTake *)->LootId));
 
                                  SetP(dbGetObject(OL_NR(GetNthNode(BurglarsList, i))), take_RelId, dbGetObject(ActionData(action, struct ActionTake *)->LootId), oldValue + newValue);
                               }
@@ -429,8 +438,8 @@ void plSync(ubyte animate, ulong targetTime, ulong times, ubyte direction)
                         }
                         else
                         {
-                           ulong weightLoot = ((Loot)dbGetObject(ActionData(action, struct ActionTake *)->LootId))->Weight;
-                           ulong volumeLoot = ((Loot)dbGetObject(ActionData(action, struct ActionTake *)->LootId))->Volume;
+                           weightLoot = ((Loot)dbGetObject(ActionData(action, struct ActionTake *)->LootId))->Weight;
+                           volumeLoot = ((Loot)dbGetObject(ActionData(action, struct ActionTake *)->LootId))->Volume;
 
                            lsSetObjectState(ActionData(action, struct ActionTake *)->ItemId, Const_tcIN_PROGRESS_BIT, 1);
 
@@ -473,8 +482,8 @@ void plSync(ubyte animate, ulong targetTime, ulong times, ubyte direction)
                      {
                         if (direction)
                         {
-                           ulong weightLoot = ((Loot)dbGetObject(ActionData(action, struct ActionDrop *)->LootId))->Weight;
-                           ulong volumeLoot = ((Loot)dbGetObject(ActionData(action, struct ActionDrop *)->LootId))->Volume;
+                           weightLoot = ((Loot)dbGetObject(ActionData(action, struct ActionDrop *)->LootId))->Weight;
+                           volumeLoot = ((Loot)dbGetObject(ActionData(action, struct ActionDrop *)->LootId))->Volume;
 
                            lsSetObjectState(ActionData(action, struct ActionDrop *)->ItemId, Const_tcIN_PROGRESS_BIT, 1);
 
@@ -501,8 +510,8 @@ void plSync(ubyte animate, ulong targetTime, ulong times, ubyte direction)
                         }
                         else
                         {
-                           ulong weightLoot = ((Loot)dbGetObject(ActionData(action, struct ActionDrop *)->LootId))->Weight;
-                           ulong volumeLoot = ((Loot)dbGetObject(ActionData(action, struct ActionDrop *)->LootId))->Volume;
+                           weightLoot = ((Loot)dbGetObject(ActionData(action, struct ActionDrop *)->LootId))->Weight;
+                           volumeLoot = ((Loot)dbGetObject(ActionData(action, struct ActionDrop *)->LootId))->Volume;
 
                            lsSetObjectState(ActionData(action, struct ActionDrop *)->ItemId, Const_tcIN_PROGRESS_BIT, 0);
 
@@ -521,11 +530,11 @@ void plSync(ubyte animate, ulong targetTime, ulong times, ubyte direction)
                            }
 
                            {
-                              ulong newValue = GetP(dbGetObject(ActionData(action, struct ActionDrop *)->ItemId), hasLoot(i), dbGetObject(ActionData(action, struct ActionDrop *)->LootId));
+                              newValue = GetP(dbGetObject(ActionData(action, struct ActionDrop *)->ItemId), hasLoot(i), dbGetObject(ActionData(action, struct ActionDrop *)->LootId));
 
                               if (Ask(dbGetObject(OL_NR(GetNthNode(BurglarsList, i))), take_RelId, dbGetObject(ActionData(action, struct ActionDrop *)->LootId)))
                               {
-                                 ulong oldValue = GetP(dbGetObject(OL_NR(GetNthNode(BurglarsList, i))), take_RelId, dbGetObject(ActionData(action, struct ActionDrop *)->LootId));
+                                 oldValue = GetP(dbGetObject(OL_NR(GetNthNode(BurglarsList, i))), take_RelId, dbGetObject(ActionData(action, struct ActionDrop *)->LootId));
 
                                  SetP(dbGetObject(OL_NR(GetNthNode(BurglarsList, i))), take_RelId, dbGetObject(ActionData(action, struct ActionDrop *)->LootId), oldValue + newValue);
                               }
@@ -620,14 +629,12 @@ void plSync(ubyte animate, ulong targetTime, ulong times, ubyte direction)
             }
 
 				if (!direction)
-               action = PrevAction(plSys);
+               action = PrevAction(plSys);	// 2014-06-28 LucyG : ??? Compiler warning "action is assigned a value that is never used"
          }
 
          if (animate & PLANING_ANIMATE_NO)
          {
-            struct Action  *a;
-            struct Handler *h = (struct Handler *)plSys->ActivHandler;
-				uword  dir;
+            h = (struct Handler *)plSys->ActivHandler;
 
             if (i < BurglarsNr)
 					dir = ANM_STAND;

@@ -4,45 +4,33 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#ifndef MODULE_FX
-#define MODULE_FX
+/****************************************************************************
+  Portions copyright (c) 2005 Vasco Alexandre da Silva Costa
+
+  Please read the license terms which should be contained with this
+  distribution.
+ ****************************************************************************/
+#ifndef TC_FX_H
+#define TC_FX_H
 
 #include "theclou.h"
+#include "sound/mxr.h"
 
-#ifndef MODULE_MEMORY
-#include "memory\memory.h"
-#endif
+#define	SND_FREQUENCY				44100
+#define SND_MAX_VOLUME              255
 
-#ifndef MODULE_DISK
-#include "disk\disk.h"
-#endif
+//#define SND_BUFFER_SIZE				247226	// 65536
+#define SND_MUSIC_BUFFER_SIZE		65536
+#define SND_SAMPLES                 1024
 
-#ifndef MODULE_BASE
-#include "base\base.h"
-#endif
-
-#ifndef MODULE_TEXT
-#include "text\text.h"
-#endif
-
-struct FXBase
-{
-	void *	p_SoundBuffer;
-	ubyte *	p_Data;
-	ulong	ul_DataSize;
-	ulong	ul_DataPlayed;
-	ulong	ul_MaxSize;
-	uword	us_SoundBlasterOk;
-};
-
-extern struct FXBase FXBase;
+extern MXR_Mixer *pAudioMixer;
 
 extern void sndInitFX(void);
 extern void sndDoneFX(void);
-extern void sndPrepareFX(ubyte *puch_Name);
-extern void sndPlayFX(void);
+extern void sndPlayFX(const char *Name);
 
-extern int InitSBlaster(void);
-extern void RemoveSBlast(void);
+extern void InitAudio(void);
+extern void RemoveAudio(void);
 
 #endif
+

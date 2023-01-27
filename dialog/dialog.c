@@ -6,12 +6,11 @@
 */
 #include "dialog\dialog.h"
 #include "dialog\talkappl.h"
+#include "sound\mxr.h"
 
-#ifdef THECLOU_CDROM_VERSION
 #define DLG_NO_SPEECH	((ulong) -1)
 ulong	StartFrame = DLG_NO_SPEECH;
 ulong EndFrame = DLG_NO_SPEECH;
-#endif
 
 struct DynDlgNode
 {
@@ -28,18 +27,18 @@ LIST *PrepareQuestions(LIST *keyWords, ulong talkBits, ubyte textID)
 {
 	LIST *stdQuestionList, *questionList, *preparedList;
 	NODE *n, *n2;
-	ubyte question[TXT_KEY_LENGTH] = {0};
+	char question[TXT_KEY_LENGTH] = {0};
 	ulong r, i;
 	char *name;
 
-	preparedList = CreateList(0);
+	preparedList = (LIST*)CreateList(0);
 	stdQuestionList = txtGoKey(BUSINESS_TXT, "STD_QUEST");
 	questionList = txtGoKey((ulong)textID, "QUESTIONS");
 
 	for (n = (NODE*)LIST_HEAD(keyWords); NODE_SUCC((NODE*)n); n=(NODE*)NODE_SUCC(n))
 	{
 		r = CalcRandomNr(0L,6L);
-		if (n2 = GetNthNode(questionList, r))
+		if (n2 = (NODE*)GetNthNode(questionList, r))
 		{
 			name = NODE_NAME(n2);
 			sprintf(question, name, NODE_NAME((NODE*)n));
@@ -57,7 +56,7 @@ LIST *PrepareQuestions(LIST *keyWords, ulong talkBits, ubyte textID)
 	{
 		if (talkBits & (1 << i))
 		{
-			if (n2 = GetNthNode(stdQuestionList, i))
+			if (n2 = (NODE*)GetNthNode(stdQuestionList, i))
 			{
 				name = NODE_NAME(n2);
 				strcpy(question, name);
@@ -85,16 +84,16 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 {
 	LIST *keyWords;
 	NODE *n, *keyNode;
-	ubyte line[TXT_KEY_LENGTH] = {0};
-	ubyte key[TXT_KEY_LENGTH] = {0};
-	ubyte keyWord[TXT_KEY_LENGTH] = {0};
-	ubyte line_pos,*mem,mem_pos,key_pos;
+	char line[TXT_KEY_LENGTH] = {0};
+	char key[TXT_KEY_LENGTH] = {0};
+	char keyWord[TXT_KEY_LENGTH] = {0};
+	ubyte line_pos,mem_pos,key_pos;
+	char *mem;
 	ubyte snr[10],snr1[10],nr,nr1;
 	ulong i;
+	ulong sl;
 
-	ulong si, sl;
-
-	keyWords = CreateList(0);
+	keyWords = (LIST*)CreateList(0);
 
 	for (n = (NODE*)LIST_HEAD(origin); NODE_SUCC(n); n = (NODE*)NODE_SUCC(n))
 	{
@@ -112,7 +111,7 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 			}
 			else
 			{
-				mem_pos++;    /* Klammer Åberspringen ! */
+				mem_pos++;    /* Klammer Åueberspringen ! */
 				key_pos=0;
 
 				while (mem[mem_pos] != ']')
@@ -140,8 +139,8 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 				snr1[3] = EOS;
 				keyWord[strlen(key) - 6] = EOS;
 
-				nr  = (ubyte)atol(snr);
-				nr1 = (ubyte)atol(snr1);
+				nr  = (ubyte)atol((char*)snr);
+				nr1 = (ubyte)atol((char*)snr1);
 
 				/* keyword einfÅgen */
 				for (i = 0; i < strlen(keyWord); i++)
@@ -151,7 +150,7 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 
 				if (known >= nr)
 				{
-					keyNode = CreateNode(keyWords, sizeof(struct DynDlgNode), keyWord);
+					keyNode = (NODE*)CreateNode(keyWords, sizeof(struct DynDlgNode), keyWord);
 					((struct DynDlgNode*)keyNode)->KnownBefore = nr;
 					((struct DynDlgNode*)keyNode)->KnownAfter = nr1;
 				}
@@ -166,12 +165,12 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 
 void DynamicTalk(ulong Person1ID, ulong Person2ID, ubyte TalkMode)
 {
-	ubyte *Extension[4] = { "_UNKNOWN","_KNOWN","_FRIENDLY","_BUSINESS" };
-	ubyte *Standard = "STANDARD";
+	char *Extension[4] = { "_UNKNOWN","_KNOWN","_FRIENDLY","_BUSINESS" };
+	char *Standard = "STANDARD";
 	ubyte known = 0;
 	Person p1, p2;
-	ubyte key[TXT_KEY_LENGTH] = {0};
-	ubyte name[TXT_KEY_LENGTH] = {0};
+	char key[TXT_KEY_LENGTH] = {0};
+	char name[TXT_KEY_LENGTH] = {0};
 	ubyte choice = 0, uch_Max = 1, i, uch_Quit, stdcount = 0, j, gencount = 0, textID;
 	LIST *origin = NULL, *questions = NULL, *bubble, *keyWords;
 	struct DynDlgNode *n;
@@ -179,7 +178,7 @@ void DynamicTalk(ulong Person1ID, ulong Person2ID, ubyte TalkMode)
 	p1 = (Person)dbGetObject(Person1ID);
 	p2 = (Person)dbGetObject(Person2ID);
 
-	bubble = CreateList(0);
+	bubble = (LIST*)CreateList(0);
 
 	tcChgPersPopularity(p1, 5);   /* Bekanntheit steigt sehr gering */
 
@@ -277,7 +276,7 @@ void DynamicTalk(ulong Person1ID, ulong Person2ID, ubyte TalkMode)
 
 		if (choice >= gencount && choice < uch_Quit)
 		{
-			for (i = 0; i < 32; i++)   /* beim 1. gesetzten Bit anfangen ! */
+			for (i = 0; i < 32; i++)   /*  start at the first set bit! */
 			{
 				if ((1<<i) & p2->TalkBits)
 				{
@@ -320,7 +319,6 @@ void DynamicTalk(ulong Person1ID, ulong Person2ID, ubyte TalkMode)
 	RemoveList(bubble);
 }
 
-#ifdef THECLOU_CDROM_VERSION
 void PlayFromCDROM(void)
 {
 	if ((StartFrame != DLG_NO_SPEECH) && (EndFrame != DLG_NO_SPEECH))
@@ -329,63 +327,69 @@ void PlayFromCDROM(void)
 		CDROM_PlayAudioSequence(2, StartFrame, EndFrame);
 	}
 }
-#endif
 
-ubyte Say(ulong TextID,ubyte activ,uword person,ubyte *text)
+ubyte Say(ulong TextID,ubyte activ,uword person,char *text)
 {
 	LIST *bubble;
 	ubyte choice;
+	char keys[TXT_KEY_LENGTH] = {0};
+	char wavName[256];
 
-	#ifndef THECLOU_CDROM_VERSION
+	if (!bCDRom) {
+		bubble = txtGoKey(TextID,(char*)text);
 
-	bubble = txtGoKey(TextID,text);
+		if (person != (uword)-1) {
+			SetPictID(person);
+		}
 
-	if(person != (uword) -1)
-		SetPictID(person);
+		choice = Bubble(bubble, activ, NULL, 0L);
+		RemoveList(bubble);
+	} else {
+		bubble = txtGoKey(TextID,text);
 
-	choice = Bubble(bubble,activ,NULL,0L);
-	RemoveList(bubble);
+		if (person != (uword) -1) {
+			SetPictID(person);
+		}
 
-	#else
+        //the voice output must be started from the procedure "Bubble"
+        //because after the start of the voice output no access to the CDROM
+        //may occur (The voice output would be otherwise interrupted)
 
-	bubble = txtGoKey(TextID,text);
+		if (CDRomInstalled) {
+			if (txtKeyExists(CDROM_TXT, text)) {
+				txtGetFirstLine(CDROM_TXT, text, keys);
 
-	if(person != (uword) -1)
-		SetPictID(person);
+				StartFrame = (txtGetKeyAsULONG(1,keys) * 60L + txtGetKeyAsULONG(2, keys)) * 75L + txtGetKeyAsULONG(3, keys);
+				EndFrame = (txtGetKeyAsULONG(4,keys) * 60L + txtGetKeyAsULONG(5, keys)) * 75L + txtGetKeyAsULONG(6, keys);
 
-	// die Sprachausgabe mu· aus der Bubble heraus gestartet werden,
-	// da nach Start der Sprachausgabe kein Zugriff auf CDROM
-	// (egal ob Bilder oder Text oder sonst irgendein Verzeichnis)
-	// erfolgen darf (Sprachausgabe wÅrde unterbrochen werden)
+				choice = Bubble(bubble,activ,NULL,0L);
+			} else {
+				StartFrame = DLG_NO_SPEECH;
+				EndFrame = DLG_NO_SPEECH;
 
-	if (txtKeyExists(CDROM_TXT, text))
-	{
-		ubyte keys[TXT_KEY_LENGTH] = {0};
+				choice = Bubble(bubble,activ,NULL,0L);
+			}
 
-		txtGetFirstLine(CDROM_TXT, text, keys);
+			CDROM_StopAudioTrack();
+		} else {
+			dskBuildPathName(AUDIO_DIRECTORY, text, wavName);
+			strcat(wavName, ".wav");
 
-		StartFrame = (txtGetKeyAsULONG(1,keys) * 60L + txtGetKeyAsULONG(2, keys)) * 75L + txtGetKeyAsULONG(3, keys);
-		EndFrame = (txtGetKeyAsULONG(4,keys) * 60L + txtGetKeyAsULONG(5, keys)) * 75L + txtGetKeyAsULONG(6, keys);
+			sndFading(16);
 
-		choice = Bubble(bubble,activ,NULL,0L);
-	}
-	else
-	{
+			MXR_SetInput(pAudioMixer, MXR_INPUT_VOICE, MXR_CreateInputWAV(wavName));
+			
+			choice = Bubble(bubble,activ,NULL,0L);
+			
+			MXR_SetInput(pAudioMixer, MXR_INPUT_VOICE, NULL);
+		}
+		sndFading(0);
+
 		StartFrame = DLG_NO_SPEECH;
 		EndFrame = DLG_NO_SPEECH;
 
-		choice = Bubble(bubble,activ,NULL,0L);
+		RemoveList(bubble);
 	}
-
-	CDROM_StopAudioTrack();
-	sndFading(0);
-
-	StartFrame = DLG_NO_SPEECH;
-	EndFrame = DLG_NO_SPEECH;
-
-	RemoveList(bubble);
-
-	#endif
 
 	return(choice);
 }
@@ -395,7 +399,7 @@ ulong Talk(void)
 	ulong succ_event_nr=0L,locNr,personID;
 	LIST  *bubble;
 	ubyte choice;
-	ubyte helloFriends[TXT_KEY_LENGTH] = {0};
+	char helloFriends[TXT_KEY_LENGTH] = {0};
 
 	inpTurnESC (0);
 

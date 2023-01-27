@@ -36,6 +36,8 @@
 
 struct Organisation
 	  {
+	  struct RastPort *rp;
+
 	  ulong     CarID;
 	  ulong     DriverID;
 	  ulong     BuildingID;
@@ -43,7 +45,7 @@ struct Organisation
 	  ubyte     GuyCount;
 	  ubyte     PlacesInCar;
 
-	  struct    RastPort *rp;
+	  char		pad[2];
 	  };
 
 extern struct Organisation Organisation;

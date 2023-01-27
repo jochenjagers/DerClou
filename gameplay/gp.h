@@ -84,6 +84,7 @@
 #define GP_NO_SAMPLES				  (1L<<11)
 #define GP_COLLISION_CHECKING_OFF  (1L<<12)
 #define GP_SHOW_ROOMS				  (1L<<13)
+#define GP_MORE_MONEY				  (1L<<14)	// LucyG 2017-11-05
 
 /* Zugriffsdefines */
 
@@ -176,7 +177,7 @@ struct TCEventNode
 	};
 
 /* global functions */
-extern void	InitStory(ubyte *story_filename);
+extern void	InitStory(char *story_filename);
 extern void	CloseStory(void);
 
 extern ulong PlayStory(void);
@@ -190,12 +191,12 @@ extern void	StdInit(void);
 extern void RefreshCurrScene(void);
 extern void	SetCurrentScene(struct Scene *scene);
 
-extern ubyte *GetCurrLocName(void);
+extern char *GetCurrLocName(void);
 
-extern ubyte *BuildDate(ulong days,ubyte language,ubyte *date);
-extern ubyte *BuildTime(ulong min,ubyte language,ubyte *time);
+extern char *BuildDate(ulong days,char language,char *date);
+extern char *BuildTime(ulong min,char language,char *time);
 
-extern void FormatDigit(ulong digit,ubyte *s);
+extern void FormatDigit(ulong digit,char *s);
 
 extern struct Scene *GetCurrentScene(void);
 extern struct Scene *GetLocScene(ulong locNr);

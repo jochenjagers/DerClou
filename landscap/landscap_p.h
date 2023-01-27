@@ -34,11 +34,11 @@
 #define  LS_REFRESH_SHADOW_COLOR0	46
 #define  LS_REFRESH_SHADOW_COLOR1  110
 
-#define  FLOOR_DATA_EXTENSION     	((ubyte*)".lfd")
-#define  OBJ_DATA_EXTENSION       	((ubyte*)".dat")
-#define  OBJ_REL_EXTENSION        	((ubyte*)".rel")
-#define  OBJ_GLOBAL_REL_EXTENSION 	((ubyte*)".gre")
-#define  SPOT_DATA_EXTENSION      	((ubyte*)".spo")
+#define  FLOOR_DATA_EXTENSION     	((char*)".lfd")
+#define  OBJ_DATA_EXTENSION       	((char*)".dat")
+#define  OBJ_REL_EXTENSION        	((char*)".rel")
+#define  OBJ_GLOBAL_REL_EXTENSION 	((char*)".gre")
+#define  SPOT_DATA_EXTENSION      	((char*)".spo")
 
 /* some functions */
 #define  LS_STD_COORDS            -30000    /* tritt nie auf! */
@@ -90,8 +90,6 @@ struct LandScape
 	ulong   ul_BuildingID;
 	ulong   ul_AreaID;
 
-	ubyte	  uch_ScrollSpeed;
-
 	uword   us_WindowXSize;          /* total Size of Window    */
 	uword	  us_WindowYSize;
 
@@ -100,6 +98,8 @@ struct LandScape
 
 	uword   us_PersonXPos;           /* Offset zur linken, oberen Ecke */
 	uword   us_PersonYPos;           /* des sichtbaren Windows ! */
+
+	ubyte  uch_ScrollSpeed;
 
 	ubyte   uch_FloorsPerWindowColumn;   /* total window */
 	ubyte   uch_FloorsPerWindowLine;     /* total window */

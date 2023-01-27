@@ -49,10 +49,10 @@ void *AddNode(void *list, void *node, void *predNode)
 		predNode = list;
 
 	NODE_SUCC(node) = NODE_SUCC(predNode);
-	NODE_PRED(node) = predNode;
+	NODE_PRED(node) =(NODE*) predNode;
 
-	NODE_PRED(NODE_SUCC(predNode))= node;
-	NODE_SUCC(predNode)           = node;
+	NODE_PRED(NODE_SUCC(predNode))=(NODE*) node;
+	NODE_SUCC(predNode)           =(NODE*) node;
 
 	return node;
 }
@@ -143,7 +143,7 @@ void RemoveNode(void *list, char *name)
 
 	if (name)
 	{
-		if (node = GetNode(list, name))
+		if (node = (NODE*)GetNode(list, name))
 		{
 			RemNode(node);
 			FreeNode(node);
@@ -153,7 +153,7 @@ void RemoveNode(void *list, char *name)
 	{
 		if(!LIST_EMPTY(list))
 		{
-			while (node = RemTailNode(list))
+			while (node = (NODE*)RemTailNode(list))
 				FreeNode(node);
 		}
 	}
@@ -270,7 +270,7 @@ void ReplaceNode(void *list, char *name, void *newNode)
 ulong ReadList(void *list, uword size, char *fileName, uword diskId)
 {
 	FILE *fh;
-	ulong i = 0, l;
+	ulong i = 0;
 	char buffer[256];
 
 	if (fh = dskOpen(fileName, "r", diskId))

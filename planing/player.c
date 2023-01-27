@@ -53,30 +53,29 @@ static struct
 	ubyte currLoudness[PLANING_NR_PERSONS];
 	ubyte unableToWork[PLANING_NR_PERSONS];
 
-	ubyte ende;
-
 	ulong maxTimer;
 	ulong timer;
 	ulong realTime;
 
+	ubyte ende;
 	ubyte badPlaning;
 	ubyte mood;
+	ubyte patrolCount;
 
 	ulong bldId;
 	Building bldObj;
 
 	uword changeCount;
 	uword totalCount;
-	ubyte patrolCount;
 
 	ulong alarmTimer;
 
-	ubyte isItDark;
-
-	ubyte sndState;		// Achtung! Verhalten von sndState hat sich gegenber Amiga gewandelt
-
 	ulong actionTime;
 	ubyte (*actionFunc)(ulong, ulong);
+
+	ubyte isItDark;
+	ubyte sndState;		// Achtung! Verhalten von sndState hat sich gegenber Amiga gewandelt
+	ubyte pad[2];
 } PD;
 
 
@@ -329,15 +328,13 @@ static void plPlayerAction(void)
 
 			if (Search.EscapeBits & FAHN_ALARM)
 			{
-				sndPrepareFX("sirene.voc");
-				sndPlayFX();
+				sndPlayFX("sirene.voc");
 			}
 		}
 
 		if ((Search.EscapeBits & FAHN_ALARM) && (((PD.realTime - Search.TimeOfAlarm) % 120) == 119))
 		{
-			sndPrepareFX("sirene.voc");
-			sndPlayFX();
+			sndPlayFX("sirene.voc");
 		}
 
 		if (PD.realTime >= (Search.TimeOfAlarm + PD.bldObj->PoliceTime))
@@ -347,8 +344,7 @@ static void plPlayerAction(void)
 			for (i = 0; i < PLANING_NR_PERSONS; i++)
 				PD.handlerEnded[i] = 1;
 
-			sndPrepareFX("marthorn.voc");
-			sndPlayFX();
+			sndPlayFX("marthorn.voc");
 		}
 	}
 	#endif
@@ -966,8 +962,7 @@ static void plPlayerAction(void)
 
 									if ((((LSObject)dbGetObject(ActionData(PD.action, struct ActionOpen *)->ItemId))->Type == Item_WC) && (CalcRandomNr(0, 3) == 1))
 									{
-										sndPrepareFX("wc.voc");
-										sndPlayFX();
+										sndPlayFX("wc.voc");
 									}
 
 									lsSetObjectState(ActionData(PD.action, struct ActionOpen *)->ItemId, Const_tcOPEN_CLOSE_BIT, 1);
@@ -1225,14 +1220,16 @@ long plPlayer(ulong objId , ulong actionTime, ubyte (*actionFunc)(ulong, ulong))
 				else
 					sndPlaySound (PLANING_MUSIC_PLAYER_BEGIN_STD, 0L);
 
-            #ifdef THECLOU_PROFIDISK
-            if (objId == Building_Postzug)
-            {
-               Environment env = (Environment)dbGetObject(Environment_TheClou);
+ 
+				if (bProfidisk)
+				{
+					if (objId == Building_Postzug)
+					{
+						Environment env = (Environment)dbGetObject(Environment_TheClou);
 
-               env->PostzugDone = 1;
-            }
-            #endif
+						env->PostzugDone = 1;
+					}
+				}
 
 				/* start main loop */
             SetMenuTimeOutFunc(plPlayerAction);
@@ -1323,7 +1320,7 @@ long plPlayer(ulong objId , ulong actionTime, ubyte (*actionFunc)(ulong, ulong))
 
                         plMessage("RADIO_1", PLANING_MSG_REFRESH);
 								SetPictID(((Person)dbGetObject(OL_NR(GetNthNode(BurglarsList, 0))))->PictID);
-								node = UnLink(BurglarsList, OL_NAME(GetNthNode(BurglarsList, 0)), (void **)&help);
+								node = (NODE*)UnLink(BurglarsList, OL_NAME(GetNthNode(BurglarsList, 0)), (void **)&help);
 
                         txtGetFirstLine(PLAN_TXT, "EXPAND_RADIO", exp);
                         ExpandObjectList(BurglarsList, exp);

@@ -60,17 +60,17 @@ struct AnimHandler
 };
 
 struct AnimHandler Handler = {NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-ubyte  RunningAnimLine[TXT_KEY_LENGTH];
+char  RunningAnimLine[TXT_KEY_LENGTH];
 
 #define ANIM_FRAME_XMS_RP	AnimRPInXMS
 #define ANIM_FRAME_RP		PrepareRP
 
 #define ANIM_STATE_SUSPENDED	1<<0
 
-void	LoadAnim(ubyte *AnimID);
+void	LoadAnim(char *AnimID);
 
-static void GetAnim(ubyte *AnimID,ubyte *Dest);
-static void PrepareAnim (ubyte *AnimID);
+static void GetAnim(char *AnimID,char *Dest);
+static void PrepareAnim (char *AnimID);
 
 /*
 * init & dones
@@ -78,8 +78,8 @@ static void PrepareAnim (ubyte *AnimID);
 
 void InitAnimHandler (void)
 {
-	Handler.RunningAnimID = RunningAnimLine;
-	strcpy(Handler.RunningAnimID, "");
+	Handler.RunningAnimID =(ubyte*) RunningAnimLine;
+	strcpy((char*)Handler.RunningAnimID, "");
 }
 
 void CloseAnimHandler (void)
@@ -103,10 +103,9 @@ void ContinueAnim(void)
 
 // initialisert diverse Werte und kopiert anschlieáend die Animphasen
 // in den XMS Speicher
-static void PrepareAnim (ubyte *AnimID)
+static void PrepareAnim (char *AnimID)
 {
-	ubyte pict_list[TXT_KEY_LENGTH] = {0};
-	struct	Picture	  *pict;
+	char pict_list[TXT_KEY_LENGTH] = {0};
 	struct	Collection *coll;
 
 	GetAnim(AnimID, pict_list);
@@ -143,9 +142,9 @@ static void PrepareAnim (ubyte *AnimID)
 * StopAnim
 */
 
-void PlayAnim (ubyte *AnimID, word how_often, ulong mode)
+void PlayAnim (char *AnimID, word how_often, ulong mode)
 {
-	ubyte pict_list[TXT_KEY_LENGTH] = {0};
+	char pict_list[TXT_KEY_LENGTH] = {0};
 	uword	pict_id=0, rate;
 
 	GetAnim(AnimID, pict_list);
@@ -164,9 +163,9 @@ void PlayAnim (ubyte *AnimID, word how_often, ulong mode)
 		{
 			if (!mode)
 			{
-				mode = (ulong)txtGetKeyAsULONG((uword)PIC_MODE_POS,pict_list);
+				mode = (ulong)txtGetKeyAsULONG((uword)PIC_MODE_POS,(char*)pict_list);
 			}
-			pict_id = (uword)txtGetKeyAsULONG((uword)PIC_1_ID_POS,pict_list);
+			pict_id = (uword)txtGetKeyAsULONG((uword)PIC_1_ID_POS,(char*)pict_list);
 		}
 
 		if (pict_id)
@@ -174,11 +173,11 @@ void PlayAnim (ubyte *AnimID, word how_often, ulong mode)
 			gfxShow(pict_id, mode, 2, -1L, -1L);
 		}
 
-		if ((ulong)(txtCountKey(pict_list)) > PIC_1_ID_POS)
+		if ((ulong)(txtCountKey((char*)pict_list)) > PIC_1_ID_POS)
 		{
-			rate = (uword)txtGetKeyAsULONG((uword)PIC_P_SEC_POS, pict_list);
+			rate = (uword)txtGetKeyAsULONG((uword)PIC_P_SEC_POS, (char*)pict_list);
 
-			Handler.PlayMode    = (ubyte)txtGetKeyAsULONG((uword)PLAY_MODE_POS, pict_list);
+			Handler.PlayMode    = (ubyte)txtGetKeyAsULONG((uword)PLAY_MODE_POS, (char*)pict_list);
 			Handler.PictureRate = rate;
 			Handler.Repeatation = how_often;
 
@@ -189,37 +188,43 @@ void PlayAnim (ubyte *AnimID, word how_often, ulong mode)
 			Handler.WaitCounter      = 1;
 
 			/* DoAnim ist ready to play and our anim is decrunched */
-			strcpy(Handler.RunningAnimID, AnimID);
+			strcpy((char*)Handler.RunningAnimID, (char*)AnimID);
 
 			ContinueAnim();	// falls Anim zuvor "suspended" wurde
 		}
 		else
 		{
-			strcpy(Handler.RunningAnimID, "");
+			strcpy((char*)Handler.RunningAnimID, "");
 		}
 	}
 }
 
 void StopAnim(void)
 {
-	ubyte pict_list[TXT_KEY_LENGTH] = {0};
+	char pict_list[TXT_KEY_LENGTH] = {0};
 	struct Picture *pict;
 
-	if (Handler.RunningAnimID)   /* es l„uft eine Anim */
+	if (Handler.RunningAnimID)   /* es laeuft eine Anim */
 	{
-		if(strcmp(Handler.RunningAnimID,"") != 0)
+		if(strcmp((char*)Handler.RunningAnimID,"") != 0)
 		{
-			GetAnim(Handler.RunningAnimID, pict_list);
+			GetAnim((char*)Handler.RunningAnimID, pict_list);
 
-			/* der Vollst„ndigkeit wegen die Bilder "unpreparen" */
-			pict = gfxGetPicture((uword)txtGetKeyAsULONG((uword)PIC_1_ID_POS,pict_list));
-			gfxUnPrepareColl ((uword)pict->us_CollId);
+			/* der Vollstaendigkeit wegen die Bilder "unpreparen" */
+			pict = gfxGetPicture((uword)txtGetKeyAsULONG((uword)PIC_1_ID_POS,(char*)pict_list));
+			/* 2015-01-07 LucyG: Baris reported NULL pointer access in exploding Jaguar scene */
+			if (pict) {
+				gfxUnPrepareColl ((uword)pict->us_CollId);
+			} else {
+				Log("%s|%s: gfxGetPicture(PIC_1_ID_POS, %s) = NULL", __FILE__, __func__, pict_list ? pict_list : "NULL");
+			}
 
-			/* der Vollst„ndigkeit wegen die Bilder "unpreparen" */
-			if(txtCountKey(pict_list) > PIC_1_ID_POS)
-				gfxUnPrepareColl ((uword)txtGetKeyAsULONG((uword)ANIM_COLL_ID_POS,pict_list));
+			/* der Vollstaendigkeit wegen die Bilder "unpreparen" */
+			if(txtCountKey((char*)pict_list) > PIC_1_ID_POS) {
+				gfxUnPrepareColl ((uword)txtGetKeyAsULONG((uword)ANIM_COLL_ID_POS,(char*)pict_list));
+			}
 
-			strcpy(Handler.RunningAnimID,"");
+			strcpy((char*)Handler.RunningAnimID,"");
 		}
 	}
 }
@@ -229,12 +234,12 @@ void StopAnim(void)
 * GetAnim
 */
 
-static void GetAnim(ubyte *AnimID,ubyte *Dest)
+static void GetAnim(char *AnimID,char *Dest)
 {
 	long i;
-	ubyte ID[TXT_KEY_LENGTH] = {0};
+	char ID[TXT_KEY_LENGTH] = {0};
 
-	strcpy(ID, AnimID);
+	strcpy(ID, (char*)AnimID);
 
 	for(i = 0;i < strlen(ID); i++)
 		if(ID[i] == ',')   ID[i] = '_';
@@ -253,7 +258,7 @@ void animator(void)
 
 	if (!(Handler.AnimatorState & ANIM_STATE_SUSPENDED))
 	{
-		if ((Handler.RunningAnimID) && (strcmp(Handler.RunningAnimID,"") != 0))
+		if ((Handler.RunningAnimID) && (strcmp((char*)Handler.RunningAnimID,"") != 0))
 		{
 			if (Handler.RepeatationCount <= Handler.Repeatation)
 			{

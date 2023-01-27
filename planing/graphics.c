@@ -41,7 +41,7 @@ void plMessage(char *msg, ubyte flags)
 void plDisplayTimer(ulong time, ubyte doSpotsImmediatly)
 {
 	char info[80];
-	ulong oldTimer = -1;
+	static ulong oldTimer = -1;	/* 2014-06-28 LucyG : static */
 
 	if (!time)
 		time = CurrentTimer(plSys) / PLANING_CORRECT_TIME;

@@ -43,7 +43,7 @@
 
 #define TXT_MENU_TIMEOUT        (-2)
 
-extern ubyte ChoiceOk (ubyte choice, ubyte exit, LIST *l);
+extern ubyte ChoiceOk (ubyte choice, ubyte xit, LIST *l);
 
 extern ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), ulong waitTime);
 extern ubyte Menu (LIST *menu, ulong possibility, ubyte activ, void (*func)(ubyte), ulong waitTime);

@@ -4,378 +4,172 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include <dos.h>
-#include <mem.h>
+
+/*CDRom handling , 2014-07-01 by templer */
+
+#include "SDL.h"
 
 #include "cdrom\cdrom.h"
 
-#ifdef THECLOU_CDROM_VERSION
-#define TRUE -1
-#define FALSE 0
+SDL_CD *CDROM_Struct = NULL;
 
-
-struct CDROM_Struct_ReqHeader
-{
-	unsigned char	Len;
-	unsigned char	SubUnit;
-	unsigned char	CommandCode;
-	unsigned int	Status;
-	char		DevName[8];
-};
-
-
-struct	CDROM_Struct_OpenClose
-{
-	struct CDROM_Struct_ReqHeader	ReqHeader;
-} CDROM_OpenClose;
-
-
-struct	CDROM_Struct_IOCTLO
-{
-	struct CDROM_Struct_ReqHeader	ReqHeader;
-	unsigned char			MediaDesc;
-	void				far *Buffer;
-	unsigned int			BufferSize;
-	unsigned long			StartSector;
-	unsigned long			VolumePtr;
-} CDROM_IO;
-
-
-struct	CDROM_Struct_PlayAudio
-{
-	struct CDROM_Struct_ReqHeader	ReqHeader;
-	unsigned char			AdrMode;
-	unsigned long			StartSector;
-	unsigned long			NumOfSectors;
-} CDROM_PlayAudio;
-
-
-struct	CDROM_Struct_StopAudio
-{
-	struct CDROM_Struct_ReqHeader	ReqHeader;
-} CDROM_StopAudio;
-
-
-struct	CDROM_Struct_DeviceStatus
-{
-	unsigned int	Command;
-	unsigned long	Status;
-} CDROM_DeviceStatus;
-
-
-struct	CDROM_Struct_AudioDiskInfo
-{
-	unsigned char	Command;
-	unsigned char   FirstTrack;
-	unsigned char	LastTrack;
-	unsigned long	LeadOutTrack;
-} CDROM_AudioDiskInfo;
-
-
-struct	CDROM_Struct_AudioTrackInfo
-{
-	unsigned char	Command;
-	unsigned char	TrackNum;
-	unsigned long	StartSector;
-	unsigned char	TrackInfo;
-} CDROM_AudioTrackInfo;
-
-
-struct	CDROM_Struct_MediaChanged
-{
-	unsigned char	Command;
-	unsigned char	Status;
-} CDROM_MediaChanged;
-
-
-struct REGPACK 	r;
 unsigned int	CDROM_DriveNr;
-unsigned long	CDROM_TrackBegin;
-unsigned long	CDROM_TrackEnd;
-unsigned long	CDROM_TrackFrames;
-unsigned char	CDROM_CurrentTrack;
-
-unsigned int  CDRomInstalled = 0;
+unsigned int    CDRomInstalled = 0;
+char CDDrive[256]="X:\\";
 
 //*********************************************************
-//*** CDROM_Install					***
+//*** CDROM_Install										***
 //*********************************************************
+// return code:	 0 there was no "The Clou!" CDRom found in drive
+//				-1 no CD drive found / could not init CD drive
+//               1 CD drive installed and "The Clou!" CDRom found
+//
+// CDRomInstalled is only set if CD drive and "The Clou!" CDRom was found
 
-int	CDROM_Install(void)
+int CDROM_Install(void)
 {
-	int retval;
+	CDRomInstalled = 0;
 
-
-	r.r_ax = 0x1500;
-	r.r_bx = 0x0;
-	intr( 0x2F,&r);
-	CDROM_DriveNr = r.r_cx;
-
-//	asm mov ax,0x1500
-//	asm mov bx,0
-//	asm int 0x2f
-//	asm mov CDROM_DriveNr,cx
-
-	if ( r.r_bx == 0 )     	retval = FALSE;
-	else			retval = TRUE;
-
-	CDROM_OpenClose.ReqHeader.Len = sizeof(CDROM_OpenClose);
-	CDROM_OpenClose.ReqHeader.CommandCode = 13;
-	CDROM_OpenClose.ReqHeader.Status = 0;
-
-	r.r_ax = 0x1510;
-	r.r_cx = CDROM_DriveNr;
-	r.r_bx = FP_OFF(&CDROM_OpenClose);
-	r.r_es = FP_SEG(&CDROM_OpenClose);
-	intr(0x2F,&r);
-
-	return (retval);
-
+	if (SDL_InitSubSystem (SDL_INIT_CDROM) == 0)	// 2015-01-10 LucyG : changed from SDL_Init to SDL_InitSubSystem
+	{
+		if (SDL_CDNumDrives() > 0)
+		{
+			if (CDROM_SetGameCDDrive() == -1)
+			{
+				return 0;
+			}
+			else
+			{
+				CDROM_Struct = SDL_CDOpen(CDROM_DriveNr);
+				if (CDROM_Struct)
+				{
+					if (SDL_CDStatus(CDROM_Struct) != CD_ERROR) {	// 2014-07-12 LucyG : use SDL_CDStatus instead of CDROM_Struct->status
+						CDRomInstalled = 1;
+						return 1;
+					}
+					SDL_CDClose(CDROM_Struct);	// 2014-07-13 LucyG : cleanup on error
+					CDROM_Struct = NULL;
+				}
+			}
+		}
+		return -1;
+	}
+	return -1;
 }
 
 
 //**********************************************************
-//*** CDROM_UnInstall					***
+//*** CDROM_UnInstall									***
 //**********************************************************
 
-void	CDROM_UnInstall(void)
+void CDROM_UnInstall(void)
 {
-
-	CDROM_OpenClose.ReqHeader.Len = sizeof(CDROM_OpenClose);
-	CDROM_OpenClose.ReqHeader.CommandCode = 14;
-	CDROM_OpenClose.ReqHeader.Status = 0;
-
-	r.r_ax = 0x1510;
-	r.r_cx = CDROM_DriveNr;
-	intr(0x2F,&r);
-
-}
-
-
-//**********************************************************
-//*** CDROM_BinToFrames					***
-//**********************************************************
-unsigned long	CDROM_BinToFrames(unsigned long sectors)
-{
-	unsigned long Min,Sec,Frames;
-
-	Frames = sectors & 0xFF;
-	Sec    = (sectors >> 8) & 0xFF;
-	Min    = (sectors >> 16) & 0xFF;
-
-	return ((((Min*60)+Sec)*75)+Frames);
-
-}
-
-//**********************************************************
-//*** CDROM_FramesToBin				***
-//**********************************************************
-unsigned long	CDROM_FramesToBin(unsigned long FramesToConvert)
-{
-	unsigned long Min,Sec,Frames;
-
-	Frames = FramesToConvert % 75;
-	FramesToConvert = FramesToConvert / 75;
-	Sec = FramesToConvert % 60;
-	Min = FramesToConvert / 60;
-
-
-	return ((Min << 16) | (Sec << 8) | Frames);
-
+	if (CDROM_Struct && CDRomInstalled)
+	{
+		SDL_CDClose(CDROM_Struct);
+		CDRomInstalled = 0;
+	}
 }
 
 
 
 //**********************************************************
-//*** CDROM_FramesToMin					***
+//*** CDROM_GetDeviceStatus								***
 //**********************************************************
-unsigned char	CDROM_FramesToMin(unsigned long FramesToConvert)
+/* Get the current CD-Rom status and update the SDL_CD Structure */
+int	CDROM_GetDeviceStatus(void)
 {
-	return ((unsigned char )(FramesToConvert / (60*75)));
-}
-
-
-
-//**********************************************************
-//*** CDROM_FramesToSec					***
-//**********************************************************
-unsigned char 	CDROM_FramesToSec(unsigned long FramesToConvert)
-{
-	return ( (FramesToConvert / 75) % 60);
-}
-
-
-
-//**********************************************************
-//*** CDROM_FramesToFrames				***
-//**********************************************************
-unsigned char	CDROM_FramesToFrames(unsigned long FramesToConvert)
-{
-	return ( FramesToConvert % 75);
-}
-
-
-
-
-
-
-//**********************************************************
-//*** CDROM_GetDeviceStatus				***
-//**********************************************************
-
-void	CDROM_GetDeviceStatus(void)
-{
-	memset ( &CDROM_IO, 0, sizeof( CDROM_IO));
-
-	CDROM_IO.ReqHeader.Len= sizeof( CDROM_IO);
-	CDROM_IO.ReqHeader.CommandCode= 3;
-	CDROM_IO.Buffer = &CDROM_DeviceStatus;
-	CDROM_IO.BufferSize = sizeof(CDROM_DeviceStatus);
-
-	CDROM_DeviceStatus.Command = 6;
-	CDROM_DeviceStatus.Status = 0;
-
-	r.r_ax = 0x1510;
-	r.r_cx = CDROM_DriveNr;
-	r.r_bx = FP_OFF(&CDROM_IO);
-	r.r_es = FP_SEG(&CDROM_IO);
-	intr (0x2F,&r);
+	if (CDROM_Struct)
+		return SDL_CDStatus(CDROM_Struct);
+	
+	return -1;
 }
 
 
 
 
 //**********************************************************
-//*** CDROM_CheckMediaChanged				***
+//*** CDROM_CheckMediaChanged							***
 //**********************************************************
 
 int	CDROM_CheckMediaChanged(void)
 {
-	memset ( &CDROM_IO, 0, sizeof( CDROM_IO));
-
-	CDROM_IO.ReqHeader.Len= sizeof( CDROM_IO);
-	CDROM_IO.ReqHeader.CommandCode= 3;
-	CDROM_IO.Buffer = &CDROM_MediaChanged;
-	CDROM_IO.BufferSize = sizeof(CDROM_MediaChanged);
-
-	CDROM_MediaChanged.Command = 9;
-	CDROM_MediaChanged.Status = 0;
-
-	r.r_ax = 0x1510;
-	r.r_cx = CDROM_DriveNr;
-	r.r_bx = FP_OFF(&CDROM_IO);
-	r.r_es = FP_SEG(&CDROM_IO);
-	intr(0x2F,&r);
-
-	if (CDROM_MediaChanged.Status == 0xFF)
-		return (TRUE);
+	if (CDROM_GetDeviceStatus() != CD_TRAYEMPTY)
+	{
+		return 0;
+	}
 	else
-		return (FALSE);
+	{
+		return 1;
+	}
 }
 
 
 //**********************************************************
-//*** CDROM_CheckMediaChanged				***
+//*** CDROM_WaitForMedia								***
 //**********************************************************
-
-void	CDROM_WaitForMedia(void)
+// returns	-1 if user wants to continue without CD
+//			0 if the CD/DVD was found
+//          
+int	CDROM_WaitForMedia(void)
 {
-	while (CDROM_CheckMediaChanged());
+	int count = 0;
+
+	// BAD: Windows specific code... sorry templer
+	/*
+	wchar_t message[256];
+	swprintf(message,255,(LPCWSTR)"could not find or read CD/DVD in drive: %s\n press 'Cancel' to continue without CD",CDDrive);
+	*/
+
+		while (CDROM_CheckMediaChanged() != 0)
+		{
+			count += 1;
+			SDL_Delay(10);
+			if (count == 10000)
+			{
+				Log("%s|%s: CD/DVD Error", __FILE__, __func__);
+				/*
+				mID = MessageBox(NULL,message,(LPCWSTR)"CD/DVD Error!", MB_ICONWARNING | MB_RETRYCANCEL | MB_DEFBUTTON2);
+				if (mID == IDRETRY)
+				{
+					count = 0;
+				}
+				else
+				*/
+				{
+					return -1;
+				}
+				
+			}
+		}
+		return 0;
 }
 
-
-
-//**********************************************************
-//*** CDROM_GetAudioDiskInfo				***
-//**********************************************************
-
-void	CDROM_GetAudioDiskInfo(void)
-{
-	memset( &CDROM_IO, 0, sizeof( CDROM_IO));
-
-	CDROM_IO.ReqHeader.Len= sizeof( CDROM_IO);
-	CDROM_IO.ReqHeader.CommandCode= 3;
-	CDROM_IO.Buffer = &CDROM_AudioDiskInfo;
-	CDROM_IO.BufferSize = sizeof(CDROM_AudioDiskInfo);
-
-	CDROM_AudioDiskInfo.Command = 10;
-	CDROM_AudioDiskInfo.FirstTrack = 0;
-	CDROM_AudioDiskInfo.LastTrack = 0;
-	CDROM_AudioDiskInfo.LeadOutTrack = 0;
-
-	r.r_ax = 0x1510;
-	r.r_cx = CDROM_DriveNr;
-	r.r_bx = FP_OFF(&CDROM_IO);
-	r.r_es = FP_SEG(&CDROM_IO);
-	intr(0x2F,&r);
-
-}
-
-
-//**********************************************************
-//*** CDROM_GetAudioTrackInfo				***
-//**********************************************************
-
-void	CDROM_GetAudioTrackInfo(unsigned char TrackNum)
-{
-	memset( &CDROM_IO, 0,sizeof( CDROM_IO));
-
-	CDROM_IO.ReqHeader.Len= sizeof( CDROM_IO);
-	CDROM_IO.ReqHeader.CommandCode= 3;
-	CDROM_IO.Buffer = &CDROM_AudioTrackInfo;
-	CDROM_IO.BufferSize = sizeof(CDROM_AudioTrackInfo);
-
-	CDROM_AudioTrackInfo.Command = 11;
-	CDROM_AudioTrackInfo.TrackNum = TrackNum;
-	CDROM_AudioTrackInfo.StartSector = 0;
-	CDROM_AudioTrackInfo.TrackInfo = 0;
-
-	r.r_ax = 0x1510;
-	r.r_cx = CDROM_DriveNr;
-	r.r_bx = FP_OFF(&CDROM_IO);
-	r.r_es = FP_SEG(&CDROM_IO);
-	intr(0x2F,&r);
-
-}
 
 //**********************************************************
 //*** CDROM_PlayAudioTrack				***
 //**********************************************************
 
-void	CDROM_PlayAudioTrack(unsigned char TrackNum)
+void CDROM_PlayAudioTrack(unsigned char TrackNum)
 {
-
-	CDROM_GetAudioDiskInfo();
-
-	CDROM_GetAudioTrackInfo(TrackNum);
-	CDROM_TrackBegin = CDROM_BinToFrames(CDROM_AudioTrackInfo.StartSector);
-
-
-	if (TrackNum == CDROM_AudioDiskInfo.LastTrack)
-		CDROM_TrackEnd = CDROM_BinToFrames(CDROM_AudioDiskInfo.LeadOutTrack);
-	else
+	if (CDRomInstalled && (CDROM_CheckMediaChanged() == 0))	// 2014-07-13 LucyG : check CDRomInstalled
 	{
-		CDROM_GetAudioTrackInfo(TrackNum+1);
-		CDROM_TrackEnd = CDROM_BinToFrames(CDROM_AudioTrackInfo.StartSector);
+		if (TrackNum > 0 && CDROM_Struct->numtracks >= TrackNum)
+		{
+			SDL_CDPlayTracks(CDROM_Struct, TrackNum - 1, 0, 1, 0);
+			CDROM_GetDeviceStatus(); //Update CDROM_Struct
+		}
+		else
+		{
+			Log("Error: %s|%s|Track number <%d> not found!", __FILE__, __func__,TrackNum);
+		}
+
 	}
-
-	CDROM_TrackFrames = CDROM_TrackEnd - CDROM_TrackBegin;
-
-
-	memset(&CDROM_PlayAudio,0,sizeof(CDROM_PlayAudio));
-
-	CDROM_PlayAudio.ReqHeader.Len = sizeof(CDROM_PlayAudio);
-	CDROM_PlayAudio.ReqHeader.CommandCode = 132;
-	CDROM_PlayAudio.AdrMode = 1;
-	CDROM_PlayAudio.StartSector = CDROM_FramesToBin(CDROM_TrackBegin);
-	CDROM_PlayAudio.NumOfSectors = CDROM_TrackFrames;
-
-	r.r_ax = 0x1510;
-	r.r_cx = CDROM_DriveNr;
-	r.r_bx = FP_OFF(&CDROM_PlayAudio);
-	r.r_es = FP_SEG(&CDROM_PlayAudio);
-	intr(0x2F,&r);
+	
 }
+
+
+/*
 
 
 
@@ -383,23 +177,16 @@ void	CDROM_PlayAudioTrack(unsigned char TrackNum)
 //*** CDROM_PlayAudioFrames				***
 //**********************************************************
 
-void	CDROM_PlayAudioFrames(unsigned long StartFrame, unsigned long NumOfFrames)
+void CDROM_PlayAudioFrames(unsigned long StartFrame, unsigned long NumOfFrames)
 {
-	memset(&CDROM_PlayAudio,0,sizeof(CDROM_PlayAudio));
-
-	CDROM_PlayAudio.ReqHeader.Len = sizeof(CDROM_PlayAudio);
-	CDROM_PlayAudio.ReqHeader.CommandCode = 132;
-	CDROM_PlayAudio.AdrMode = 1;
-	CDROM_PlayAudio.StartSector = CDROM_FramesToBin(StartFrame);
-	CDROM_PlayAudio.NumOfSectors = NumOfFrames;
-
-	r.r_ax = 0x1510;
-	r.r_cx = CDROM_DriveNr;
-	r.r_bx = FP_OFF(&CDROM_PlayAudio);
-	r.r_es = FP_SEG(&CDROM_PlayAudio);
-	intr(0x2F,&r);
+	if (CDRomInstalled && (CDROM_CheckMediaChanged() == 0))	// 2014-07-13 LucyG : check CDRomInstalled
+	{
+			SDL_CDPlay(CDROM_Struct, StartFrame, NumOfFrames);
+			CDROM_GetDeviceStatus(); //Update CDROM_Struct
+	}
 
 }
+*/
 
 
 
@@ -408,56 +195,66 @@ void	CDROM_PlayAudioFrames(unsigned long StartFrame, unsigned long NumOfFrames)
 //*** CDROM_PlayAudioSequence				***
 //**********************************************************
 
-void	CDROM_PlayAudioSequence(unsigned char TrackNum,unsigned long StartOffset,unsigned long EndOffset)
+void CDROM_PlayAudioSequence(unsigned char TrackNum,unsigned long StartOffset,unsigned long EndOffset)
 {
+	Log("%s|%s: TrackNum=%d, StartOffset=%d, EndOffset=%d", __FILE__, __func__, TrackNum, StartOffset, EndOffset);
 
-	CDROM_GetAudioTrackInfo(TrackNum);
-	CDROM_TrackBegin = StartOffset + CDROM_BinToFrames(CDROM_AudioTrackInfo.StartSector);
-	CDROM_TrackEnd = EndOffset + CDROM_BinToFrames(CDROM_AudioTrackInfo.StartSector);
-	CDROM_TrackFrames = CDROM_TrackEnd - CDROM_TrackBegin;
-
-
-	memset(&CDROM_PlayAudio,0,sizeof(CDROM_PlayAudio));
-
-	CDROM_PlayAudio.ReqHeader.Len = sizeof(CDROM_PlayAudio);
-	CDROM_PlayAudio.ReqHeader.CommandCode = 132;
-	CDROM_PlayAudio.AdrMode = 1;
-	CDROM_PlayAudio.StartSector = CDROM_FramesToBin(CDROM_TrackBegin);
-	CDROM_PlayAudio.NumOfSectors = CDROM_TrackFrames;
-
-	r.r_ax = 0x1510;
-	r.r_cx = CDROM_DriveNr;
-	r.r_bx = FP_OFF(&CDROM_PlayAudio);
-	r.r_es = FP_SEG(&CDROM_PlayAudio);
-	intr(0x2F,&r);
+	if (CDRomInstalled && (CDROM_CheckMediaChanged() == 0))	// 2014-07-13 LucyG : check CDRomInstalled
+	{
+		if (TrackNum > 0 && CDROM_Struct->numtracks >= TrackNum)
+		{
+			SDL_CDPlayTracks(CDROM_Struct, TrackNum - 1, StartOffset, 0, EndOffset - StartOffset);
+			CDROM_GetDeviceStatus(); //Update CDROM_Struct
+		}
+	}
+	
 }
-
-
 
 
 //**********************************************************
 //*** CDROM_StopAudioTrack				***
 //**********************************************************
 
-void	CDROM_StopAudioTrack(void)
+void CDROM_StopAudioTrack(void)
 {
-	CDROM_GetDeviceStatus();
-	if ((CDROM_IO.ReqHeader.Status & 0x0200) != 0)
-		{
-		CDROM_StopAudio.ReqHeader.Len = sizeof(CDROM_PlayAudio);
-		CDROM_StopAudio.ReqHeader.CommandCode = 133;
-
-		r.r_ax = 0x1510;
-		r.r_cx = CDROM_DriveNr;
-		r.r_bx = FP_OFF(&CDROM_StopAudio);
-		r.r_es = FP_SEG(&CDROM_StopAudio);
-		intr(0x2F,&r);
-      }
+	if (CDROM_Struct && CDROM_Struct->status != CD_STOPPED)
+	{
+		SDL_CDStop(CDROM_Struct);
+		CDROM_GetDeviceStatus(); //Update CDROM_Struct
+	}
 }
-#else
 
-#ifndef __COSP__
-unsigned int  CDRomInstalled = 1;
-#endif
+/* Get the drive number which contains "The Clou!" CD
+  * returns -1 if no CD found */
 
-#endif
+int CDROM_SetGameCDDrive(void)
+{
+	int num = SDL_CDNumDrives();
+	int i;
+	SDL_CD *cdrom;
+
+	CDROM_DriveNr=-1;
+
+	if (num > 0)
+	{
+		for (i=0; i < num; i++)
+		{
+			cdrom = SDL_CDOpen(i);
+			//if (cdrom->status > 0)
+			if (CD_INDRIVE(SDL_CDStatus(cdrom)))	// 2014-07-12 LucyG : now it works :)
+			{
+				if ((cdrom->numtracks == 24) && \
+					(cdrom->track[0].type == SDL_DATA_TRACK) && \
+					((cdrom->track[1].length > 146000) &&	// templer : 146374  LucyG : 146222
+					 (cdrom->track[1].length < 147000))) {
+						strcpy(CDDrive,SDL_CDName(i));
+						CDROM_DriveNr = i;
+						SDL_CDClose(cdrom);		// 2014-07-12 LucyG : close, otherwise re-opening fails
+						return i;
+				}
+			}
+			SDL_CDClose(cdrom);
+		}
+	}
+	return -1;
+}

@@ -11,7 +11,7 @@ void tcJobOffer(Person p)
 	LIST  *bubble;
 	ubyte  choice;
 	long   part;
-	Player player = dbGetObject(Player_Player_1);
+	Player player = (Player)dbGetObject(Player_Player_1);
 
 	if(!(join(Person_Matt_Stuvysunt, dbGetObjectNr(p))))
 		player->JobOfferCount++;
@@ -43,14 +43,14 @@ void tcJobOffer(Person p)
 
 void tcMyJobAnswer(Person p)
 {
-	ubyte line[TXT_KEY_LENGTH], job[TXT_KEY_LENGTH], temp[TXT_KEY_LENGTH];
+	char line[TXT_KEY_LENGTH], job[TXT_KEY_LENGTH], temp[TXT_KEY_LENGTH];
 	NODE *n;
-	LIST *bubble = CreateList(0);
+	LIST *bubble = (LIST*)CreateList(0);
 	LIST *jobs = txtGoKey (OBJECTS_ENUM_TXT, "enum_JobE");
 
-	n = GetNthNode(jobs, p->Job);
+	n = (NODE*)GetNthNode(jobs, p->Job);
 	strcpy(job, NODE_NAME(n));
-	n = GetNthNode(jobs, 10);	// "Unbekannt"
+	n = (NODE*)GetNthNode(jobs, 10);	// "Unbekannt"
 	if (strcmp(job, NODE_NAME(n)))
 	{
 		txtGetFirstLine(BUSINESS_TXT, "MY_JOB_IS", temp);
@@ -71,9 +71,9 @@ void tcMyJobAnswer(Person p)
 
 void tcPrisonAnswer(Person p)
 {
-	LIST *bubble = CreateList (0);
+	LIST *bubble = (LIST*)CreateList (0);
 	LIST *source = txtGoKey(BUSINESS_TXT,"IN_PRISON_ANSWER");
-	ubyte line[TXT_KEY_LENGTH];
+	char line[TXT_KEY_LENGTH];
 
 	strcpy (line, NODE_NAME(GetNthNode (source, p->KnownToPolice / 52)));
 
@@ -87,9 +87,9 @@ void tcPrisonAnswer(Person p)
 
 void tcAbilityAnswer(ulong personID)
 {
-	ubyte name[TXT_KEY_LENGTH];
+	char name[TXT_KEY_LENGTH];
 	LIST *bubble;
-	Person p = dbGetObject(personID);
+	Person p = (Person)dbGetObject(personID);
 
 	dbGetObjectName(personID, name);
 

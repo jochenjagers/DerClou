@@ -13,8 +13,14 @@
 #include "list\list.h"
 #endif
 
-extern char bFullscreen;
-extern char bScale2x;
+extern int gfxScalingOffsetX;
+extern int gfxScalingOffsetY;
+extern int gfxScalingFactor;
+
+extern void gfxScreenshot(void);
+extern ubyte *gfxGetGfxBoardBase(void);
+extern void gfxInvalidate(void);
+extern void gfxSetDarkness(ubyte value);
 
 #define GFX_NO_MEM_HANDLE	((uword) -1)
 
@@ -45,9 +51,6 @@ extern char bScale2x;
 
 #define GFX_COLORTABLE_SIZE			768	/* 256 Farben * 3 Bytes */
 #define GFX_SIZE_OF_COLLECTION(c) 	(gfxGetILBMSize(c) + GFX_COLORTABLE_SIZE)
-
-#define	gfxWaitTOF						wfr
-#define  gfxWaitBOF						wfd
 
 #define GFX_VIDEO_MCGA					1
 #define GFX_VIDEO_NCH4					2
@@ -98,11 +101,7 @@ struct Collection
 	uword	us_TotalWidth;
 	uword	us_TotalHeight;
 
-	#ifdef THECLOU_PROFIDISK
-	#ifdef THECLOU_CDROM_VERSION
 	ubyte fromDisk;
-	#endif
-	#endif
 };
 
 struct Picture
@@ -135,6 +134,8 @@ struct Font
 	ubyte uch_FirstChar;
 	ubyte uch_LastChar;
 };
+
+extern ubyte gfxPaletteGlobal[256*4];
 
 extern struct RastPort *l_wrp;
 extern struct RastPort *u_wrp;
@@ -170,7 +171,8 @@ extern long gfxGetILBMSize(struct Collection *coll);
 extern void gfxCorrectUpperRPBitmap(void);
 
 extern void gfxSetRGB(struct RastPort *rp, ubyte uch_ColNr,ubyte uch_Red,ubyte uch_Green,ubyte uch_Blue);
-extern void gfxSetPalette(struct RastPort *rp, ubyte uch_ColStart, ubyte uch_ColEnd, ubyte *p_ColorTable);
+extern void gfxSetPalette24(struct RastPort *rp, ubyte uch_ColStart, ubyte uch_ColEnd, ubyte *p_ColorTable24);
+extern void gfxSetPalette32(struct RastPort *rp, ubyte uch_ColStart, ubyte uch_ColEnd, ubyte *p_ColorTable32);
 
 extern void gfxBlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY,
 				 struct RastPort *drp, uword us_DestX, uword us_DestY,
@@ -189,15 +191,15 @@ extern void gfxRefresh(void);
 extern void gfxClearArea(struct RastPort *rp);
 extern void gfxSetRect(uword us_X, uword us_Width);
 
-extern long gfxTextLength(struct RastPort *rp, ubyte *puch_Text, uword us_CharCount);
+extern long gfxTextLength(struct RastPort *rp, char *puch_Text, uword us_CharCount);
 extern ubyte gfxReadPixel(struct RastPort *rp, uword us_X, uword us_Y);
 
-extern void gfxPrint(struct RastPort *rp, ubyte *puch_Text, uword us_Y, ulong ul_Mode);
-extern void gfxPrintExact(struct RastPort *rp, ubyte *puch_Text, uword us_X, uword us_Y);
+extern void gfxPrint(struct RastPort *rp, char *puch_Text, uword us_Y, ulong ul_Mode);
+extern void gfxPrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword us_Y);
 
 extern void gfxSetColorRange(ubyte uch_ColorStart, ubyte uch_ColorEnd);
 
-extern void gfxChangeColors(struct RastPort *rp, long l_Delay, ulong ul_Mode, char *colorTable);
+extern void gfxChangeColors(struct RastPort *rp, long l_Delay, ulong ul_Mode, ubyte *colorTable);
 extern void gfxShow(uword us_PictId, ulong ul_Mode, long l_Delay, long l_XPos, long l_YPos);
 
 extern void gfxSetDestRPForShow(struct RastPort *rp);
@@ -205,7 +207,7 @@ extern void gfxSetDestRPForShow(struct RastPort *rp);
 extern void gfxCopyCollToXMS(uword us_CollId, struct XMSRastPort *rp);
 extern void gfxCopyCollFromXMS(uword us_CollId, void *p_Buffer);
 
-extern void gfxGetColorTableFromReg(char *puch_Colortable);
+extern void gfxGetColorTableFromReg(ubyte *puch_Colortable);
 extern void gfxGetColorTable(uword us_CollId, ubyte *puch_ColorTable);
 
 extern struct RastPort *gfxPrepareColl(uword us_CollId);
@@ -224,7 +226,7 @@ extern void gfxILBMToRAW(ubyte *p_Source, ubyte *p_Dest);
 #include "inphdl\inphdl.h"
 #endif
 
-extern void gfxMCGAPrintExact(struct RastPort *rp, ubyte *puch_Text, uword us_X, uword us_Y);
+extern void gfxMCGAPrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword us_Y);
 extern void gfxMCGARectFill(struct RastPort *rp, uword us_SX, uword us_SY, uword us_EX, uword us_EY);
 extern ubyte gfxMCGAReadPixel(struct RastPort *rp, uword us_X, uword us_Y);
 
@@ -246,7 +248,7 @@ extern void  gfxNCH4Scroll(int x,int y);
 extern void  gfxNCH4SetSplit(uword line);
 extern void  gfxNCH4Init(void);
 extern void  gfxNCH4RectFill(struct RastPort *rp, uword x1, uword y1, uword x2, uword y2);
-extern void  gfxNCH4PrintExact(struct RastPort *rp, ubyte *puch_Text, uword us_X, uword us_Y);
+extern void  gfxNCH4PrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword us_Y);
 extern ubyte gfxNCH4ReadPixel(struct RastPort *rp, uword x, uword y);
 
 extern void gfxNCH4OLMCGAToNCH4Mask(void *sp, void *dp, uword x1, uword y1, uword x2, uword y2, uword w, uword h, uword sw, uword dw);

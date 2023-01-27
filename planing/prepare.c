@@ -188,7 +188,7 @@ void plPrepareRel(void)
 
    for (n = (NODE *)LIST_HEAD(areas); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
    {
-      area = OL_DATA(n);
+      area = (LSArea)OL_DATA(n);
 
       if (!CloneRelation(area->ul_ObjectBaseNr + REL_HAS_LOOT_OFFSET, hasLoot_Clone_RelId))
 			NewErrorMsg(No_Mem, __FILE__, __func__, 0);

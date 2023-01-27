@@ -6,10 +6,10 @@
 */
 #include "scenes\scenes.h"
 
-ubyte *tcShowPriceOfTool(ulong nr, ulong type, void *data)
+char *tcShowPriceOfTool(ulong nr, ulong type, void *data)
 	{
-	static ubyte line[TXT_KEY_LENGTH];
-	ubyte  line1[TXT_KEY_LENGTH];
+	static char line[TXT_KEY_LENGTH];
+	char  line1[TXT_KEY_LENGTH];
 	Tool   tool = (Tool) data;
 
 	txtGetFirstLine (BUSINESS_TXT,"PRICE_AND_MONEY",line1);
@@ -23,9 +23,10 @@ ubyte tcBuyTool(ubyte choice)
 	LIST      *tools;
 	NODE      *node;
 	ulong     toolID, price, count;
-	Person    mary = dbGetObject(Person_Mary_Bolton);
+	Person    mary = (Person)dbGetObject(Person_Mary_Bolton);
 	Tool      tool;
-	ubyte     oldChoice, exp[TXT_KEY_LENGTH];
+	ubyte     oldChoice;
+	char exp[TXT_KEY_LENGTH];
 
 	ObjectListSuccString = tcShowPriceOfTool;
 	ObjectListWidth = 48;
@@ -53,7 +54,7 @@ ubyte tcBuyTool(ubyte choice)
 
 		if (ChoiceOk(choice = Bubble(tools, choice, 0L, 0L), GET_OUT, tools))
 			{
-			node   = GetNthNode(tools, (ulong) choice);
+			node   = (NODE*)GetNthNode(tools, (ulong) choice);
 			toolID = OL_NR(node);
 			tool   = (Tool)dbGetObject(toolID);
 			price  = tcGetToolPrice(tool);
@@ -81,7 +82,9 @@ ubyte tcBuyTool(ubyte choice)
 ubyte tcDescTool(ubyte choice)
 	{
 	LIST  *tools, *desc;
-	ubyte line[TXT_KEY_LENGTH], oldChoice, exp[TXT_KEY_LENGTH];
+	char line[TXT_KEY_LENGTH];
+	ubyte oldChoice;
+	char exp[TXT_KEY_LENGTH];
 	Person mary = (Person) dbGetObject(Person_Mary_Bolton);
 
 	ObjectListSuccString = tcShowPriceOfTool;
@@ -129,7 +132,8 @@ ubyte tcShowTool(ubyte choice)
 	LIST *tools;
 	NODE *node;
 	ulong toolID;
-	ubyte oldChoice, exp[TXT_KEY_LENGTH];
+	ubyte oldChoice;
+	char exp[TXT_KEY_LENGTH];
 
 	ObjectListSuccString = tcShowPriceOfTool;
 	ObjectListWidth = 48;
@@ -153,7 +157,7 @@ ubyte tcShowTool(ubyte choice)
 
 		if (ChoiceOk (choice = Bubble(tools,choice,0L,0L), GET_OUT, tools))
 			{
-			node   = GetNthNode(tools, (ulong) choice);
+			node   = (NODE*)GetNthNode(tools, (ulong) choice);
 			toolID = OL_NR(node);
 
 			Present(toolID,"Tool",InitToolPresent);
@@ -189,7 +193,7 @@ void tcSellTool()
 
 	while ((choice != GET_OUT) && (!LIST_EMPTY(tools)))
 		{
-		ubyte exp[TXT_KEY_LENGTH];
+		char exp[TXT_KEY_LENGTH];
 
 		txtGetFirstLine(BUSINESS_TXT, "NO_CHOICE", exp);
 		ExpandObjectList(tools, exp);
@@ -199,7 +203,7 @@ void tcSellTool()
 			{
 			ubyte choice2 = 0;
 
-			node   =  GetNthNode(tools, (ulong) choice);
+			node   =  (NODE*)GetNthNode(tools, (ulong) choice);
 			toolID =  OL_NR(node);
 
 			tool   =  (Tool)dbGetObject(toolID);
@@ -217,6 +221,9 @@ void tcSellTool()
 				{
 				if(choice2 == 0)
 					{
+					if (GamePlayMode & GP_MORE_MONEY) {	// Lucy 2017-11-08 new cheat
+						if (price > 0) price = (price * 3) / 2;
+					}
 					tcAddPlayerMoney(price);
 					hasSet(Person_Mary_Bolton,toolID);
 					hasUnSet(Person_Matt_Stuvysunt,toolID);

@@ -37,11 +37,11 @@
 #include "living\bob.h"
 #endif
 
-/* defines fÅr AnimPlayMode */
+/* defines fÅ¸r AnimPlayMode */
 #define LIV_PM_NORMAL    	1
 #define LIV_PM_REVERSE   	2
 
-/* defines fÅr Action */
+/* defines fÅ¸r Action */
 #define ANM_MOVE_UP 	   	((ubyte)0)
 #define ANM_MOVE_DOWN	   ((ubyte)1)
 #define ANM_MOVE_RIGHT	   ((ubyte)2)
@@ -69,33 +69,33 @@ extern void  livDone(void);
 
 extern void  livSetAllInvisible(void);
 
-extern void  livSetPos(ubyte *uch_Name,uword XPos,uword YPos);
+extern void  livSetPos(char *uch_Name,uword XPos,uword YPos);
 extern void  livSetPlayMode(ulong playMode);
 extern void  livSetActivAreaId(ulong areaId);
 extern void  livRefreshAll(void);
 
-extern void  livLivesInArea(ubyte *uch_Name, ulong areaId);
-extern ulong livWhereIs(ubyte *uch_Name);
+extern void  livLivesInArea(char *uch_Name, ulong areaId);
+extern ulong livWhereIs(char *uch_Name);
 
-extern uword livGetXPos(ubyte *uch_Name);
-extern uword livGetYPos(ubyte *uch_Name);
+extern uword livGetXPos(char *uch_Name);
+extern uword livGetYPos(char *uch_Name);
 
-extern ubyte livCanWalk(ubyte *puch_Name);
-extern ubyte livGetViewDirection(ubyte *uch_Name);
+extern ubyte livCanWalk(char *puch_Name);
+extern ubyte livGetViewDirection(char *uch_Name);
 extern ubyte livIsPositionInViewDirection(uword us_GXPos, uword us_GYPos, uword us_XPos, uword us_YPos, ubyte uch_ViewDirection);
 
-extern void  livTurn(ubyte *puch_Name, ubyte uch_Status);  /* enabled or disabled */
+extern void  livTurn(char *puch_Name, ubyte uch_Status);  /* enabled or disabled */
 
 extern void  livSetVisLScape(uword us_VisLScapeX, uword us_VisLScapeY);
 
-extern void	 livSetSpeed(ubyte *uch_Name,word s_Speed);
+extern void	 livSetSpeed(char *uch_Name,word s_Speed);
 
-extern void	 livAnimate(ubyte *uch_Name,ubyte uch_Action,word s_XSpeed,word s_YSpeed);
+extern void	 livAnimate(char *uch_Name,ubyte uch_Action,word s_XSpeed,word s_YSpeed);
 extern void  livPrepareAnims(void);
 extern void	 livDoAnims(ubyte uch_Play, ubyte uch_Move);
 extern void  livStopAll(void);
 
-extern ubyte livGetOldAction(ubyte *uch_Name);
+extern ubyte livGetOldAction(char *uch_Name);
 
 // uword spotInit(bitmap, uword 1 = 48, 2 = 32, 3 = 16 );
 // uword spotDone

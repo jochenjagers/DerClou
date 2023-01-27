@@ -5,7 +5,7 @@
    Based on the original by neo Software GmbH
 */
 #include "living\living.h"
-#include "living\living.ph"
+#include "living\living_p.h"
 
 #include "port\port.h"
 
@@ -13,10 +13,10 @@ void livInit(uword us_VisLScapeX,uword us_VisLScapeY,
 				 uword us_VisLScapeWidth,uword us_VisLScapeHeight,
 				 uword us_TotalLScapeWidth,uword us_TotalLScapeHeight,ubyte uch_FrameCount, ulong ul_StartArea)
 	{
-	sc = MemAlloc(sizeof(struct SpriteControl));
+	sc = (struct SpriteControl*)MemAlloc(sizeof(struct SpriteControl));
 
-	sc->p_Livings  = CreateList(0);
-	sc->p_Template = CreateList(0);
+	sc->p_Livings  = (LIST*)CreateList(0);
+	sc->p_Template = (LIST*)CreateList(0);
 
 	sc->us_VisLScapeX = us_VisLScapeX;
 	sc->us_VisLScapeY = us_VisLScapeY;
@@ -81,7 +81,7 @@ void livSetActivAreaId(ulong areaId)
 		sc->ul_ActivAreaId = areaId;
 	}
 
-void livLivesInArea(ubyte *uch_Name, ulong areaId)
+void livLivesInArea(char *uch_Name, ulong areaId)
 	{
 	struct Living *liv = livGet(uch_Name);
 
@@ -121,11 +121,11 @@ void livSetPlayMode(ulong playMode)
 		{
 		sc->uch_FirstFrame   = sc->uch_FrameCount - 1;
 		sc->uch_LastFrame    = (ubyte) -1;
-		sc->ch_PlayDirection = (ubyte) -1;
+		sc->ch_PlayDirection = -1;
 		}
 	}
 
-ulong livWhereIs(ubyte *uch_Name)
+ulong livWhereIs(char *uch_Name)
 	{
 	struct Living *liv = livGet(uch_Name);
 	ulong loc = 0;
@@ -136,7 +136,7 @@ ulong livWhereIs(ubyte *uch_Name)
 	return loc;
 	}
 
-void livSetPos(ubyte *uch_Name,uword XPos,uword YPos)
+void livSetPos(char *uch_Name,uword XPos,uword YPos)
 	{
 	struct Living *liv = livGet(uch_Name);
 
@@ -147,7 +147,7 @@ void livSetPos(ubyte *uch_Name,uword XPos,uword YPos)
 		}
 	}
 
-void livAnimate(ubyte *uch_Name,ubyte uch_Action,word s_XSpeed,word s_YSpeed)
+void livAnimate(char *uch_Name,ubyte uch_Action,word s_XSpeed,word s_YSpeed)
 	{
 	struct Living *liv = livGet(uch_Name);
 
@@ -166,7 +166,7 @@ void livAnimate(ubyte *uch_Name,ubyte uch_Action,word s_XSpeed,word s_YSpeed)
 		}
 	}
 
-void livTurn(ubyte *puch_Name,ubyte uch_Status)
+void livTurn(char *puch_Name,ubyte uch_Status)
 	{
 	struct Living *liv = livGet(puch_Name);
 
@@ -201,7 +201,8 @@ void livCorrectViewDirection(struct Living *liv)
 
 void livPrepareAnims(void)
 	{
-	xmsCopyDown(sc->p_MemHandle, 0, LIV_DECR_BUFFER, STD_BUFFER1_SIZE);
+	//xmsCopyDown(sc->p_MemHandle, 0, LIV_DECR_BUFFER, STD_BUFFER1_SIZE);
+    memcpy(LIV_DECR_BUFFER, sc->p_MemHandle, STD_BUFFER1_SIZE);
 	}
 
 void livDoAnims(ubyte uch_Play, ubyte uch_Move)
@@ -258,28 +259,28 @@ void livSetVisLScape(uword us_VisLScapeX, uword us_VisLScapeY)
 	sc->us_VisLScapeY = us_VisLScapeY;
 	}
 
-uword livGetXPos(ubyte *Name)
+uword livGetXPos(char *Name)
 	{
 	struct Living *liv = livGet(Name);
 
 	return(liv->us_XPos);
 	}
 
-uword livGetYPos(ubyte *Name)
+uword livGetYPos(char *Name)
 	{
 	struct Living *liv = livGet(Name);
 
 	return(liv->us_YPos);
 	}
 
-ubyte livGetViewDirection(ubyte *uch_Name)
+ubyte livGetViewDirection(char *uch_Name)
 	{
 	struct Living *liv = livGet(uch_Name);
 
 	return(liv->uch_ViewDirection);
 	}
 
-ubyte livGetOldAction(ubyte *uch_Name)
+ubyte livGetOldAction(char *uch_Name)
 	{
 	struct Living *liv = livGet(uch_Name);
 
@@ -310,7 +311,7 @@ ubyte livIsPositionInViewDirection(uword us_GXPos, uword us_GYPos, uword us_XPos
 	return InDirection;
 	}
 
-ubyte livCanWalk(ubyte *puch_Name)
+ubyte livCanWalk(char *puch_Name)
 	{
 	struct Living *liv = livGet(puch_Name);
 
@@ -333,7 +334,7 @@ ubyte livCanWalk(ubyte *puch_Name)
 	return 0;
 	}
 
-static struct Living *livGet(ubyte *uch_Name)
+static struct Living *livGet(char *uch_Name)
 	{
 	struct Living *liv=NULL;
 
@@ -345,13 +346,12 @@ static struct Living *livGet(ubyte *uch_Name)
 	return(liv);
 	}
 
-static void livAdd(ubyte *uch_Name,ubyte *uch_TemplateName, ubyte uch_XSize,
+static void livAdd(char *uch_Name,char *uch_TemplateName, ubyte uch_XSize,
 						 ubyte uch_YSize,word s_XSpeed,word s_YSpeed)
 
 	{
 	struct Living *liv;
 	struct AnimTemplate *tlt;
-	void *buffer;
 
 	liv = (struct Living*)
 		 CreateNode(sc->p_Livings, (long)sizeof(struct Living), uch_Name);
@@ -389,8 +389,8 @@ static void livRem(struct Living *liv)
 static void livLoadTemplates(void)
 	{
 	uword cnt,i;
-	ubyte *line;
-	LIST  *l = CreateList(0);
+	char *line;
+	LIST  *l = (LIST*)CreateList(0);
 	struct AnimTemplate *tlt;
 	char pathname[TXT_KEY_LENGTH];
 
@@ -425,8 +425,8 @@ static void livRemTemplate(struct AnimTemplate *tlt)
 static void livLoadLivings(void)
 	{
 	uword cnt,i;
-	ubyte *line;
-	LIST  *l = CreateList(0);
+	char *line;
+	LIST  *l = (LIST*)CreateList(0);
 	char pathname[TXT_KEY_LENGTH];
 
 	dskBuildPathName(TEXT_DIRECTORY, LIV_LIVINGS_LIST, pathname);
@@ -436,19 +436,19 @@ static void livLoadLivings(void)
 
 	for(i=0;i<cnt;i++)
 		{
-		ubyte name[TXT_KEY_LENGTH], template[TXT_KEY_LENGTH];
+		char name[TXT_KEY_LENGTH], templateName[TXT_KEY_LENGTH];
 
 		line = NODE_NAME(GetNthNode(l,i));
 
 		strcpy(name    , txtGetKey(1,line));
-		strcpy(template, txtGetKey(2,line));
+		strcpy(templateName, txtGetKey(2,line));
 
-		livAdd((ubyte*) name,
-				 (ubyte*) template,
-				 (ubyte)  txtGetKeyAsULONG(3, line),
-				 (ubyte)  txtGetKeyAsULONG(4, line),
-				 (word)   txtGetKeyAsULONG(5, line),
-				 (word)   txtGetKeyAsULONG(6, line));
+		livAdd( name,
+				templateName,
+				(ubyte)  txtGetKeyAsULONG(3, line),
+				(ubyte)  txtGetKeyAsULONG(4, line),
+				(word)   txtGetKeyAsULONG(5, line),
+				(word)   txtGetKeyAsULONG(6, line));
 		}
 
 	RemoveList(l);
@@ -490,7 +490,7 @@ static void livShow(struct Living *liv)
 
 static void livLoadData(void)
 {
-	ubyte filename[TXT_KEY_LENGTH];
+	char filename[TXT_KEY_LENGTH];
 
 	dskBuildPathName(PICTURE_DIRECTORY,LIV_COLL_NAME,filename);
 
@@ -498,9 +498,10 @@ static void livLoadData(void)
 
 	tcClearStdBuffer(LIV_DECR_BUFFER);
 
-	gfxILBMToRAW(LIV_LOAD_BUFFER, LIV_DECR_BUFFER);
+	gfxILBMToRAW((ubyte*)LIV_LOAD_BUFFER, (ubyte*)LIV_DECR_BUFFER);
 
-	xmsCopyUp(sc->p_MemHandle, 0, LIV_DECR_BUFFER, STD_BUFFER1_SIZE);
+	//xmsCopyUp(sc->p_MemHandle, 0, LIV_DECR_BUFFER, STD_BUFFER1_SIZE);
+    memcpy(sc->p_MemHandle, LIV_DECR_BUFFER, STD_BUFFER1_SIZE);
 }
 
 static ubyte livIsVisible(struct Living *liv)

@@ -14,7 +14,7 @@ static void SetFullAbilities(void)
 	hasSetP(Person_Matt_Stuvysunt,  Ability_Elektronik, 251);
 	hasSetP(Person_Matt_Stuvysunt,  Ability_Schloesser, 210);
 	hasSetP(Person_Matt_Stuvysunt,  Ability_Aufpassen,  180);
-	hasSetP(Person_Matt_Stuvysunt,  Ability_Schloesser, 180);
+	hasSetP(Person_Matt_Stuvysunt,  Ability_Safes, 180);	// 2015-01-04 LucyG: was Ability_Schloesser
 
 	hasSetP(Person_Marc_Smith,      Ability_Autos,      255);
 	hasSetP(Person_Mohammed_Abdula, Ability_Kampf,      255);
@@ -39,16 +39,17 @@ static void SetFullCars(void)
 	hasSet(Person_Matt_Stuvysunt, Car_Morris_Minor_1948);
 	hasSet(Person_Matt_Stuvysunt, Car_Morris_Minor_1950);
 	hasSet(Person_Matt_Stuvysunt, Car_Morris_Minor_1953);
-	#ifdef THECLOU_PROFIDISK
-	hasSet(Person_Matt_Stuvysunt, Car_Rover_75_1949);
-	hasSet(Person_Matt_Stuvysunt, Car_Rover_75_1950);
-	hasSet(Person_Matt_Stuvysunt, Car_Rover_75_1952);
-	hasSet(Person_Matt_Stuvysunt, Car_Ford_Model_T__1926);
-	hasSet(Person_Matt_Stuvysunt, Car_Bentley_Continental_Typ_R_1952);
-	hasSet(Person_Matt_Stuvysunt, Car_Bentley_Continental_Typ_R_1953);
-	hasSet(Person_Matt_Stuvysunt, Car_Fiat_634_N_1936);
-	hasSet(Person_Matt_Stuvysunt, Car_Fiat_634_N_1943);
-	#endif
+	if (bProfidisk)
+	{
+		hasSet(Person_Matt_Stuvysunt, Car_Rover_75_1949);
+		hasSet(Person_Matt_Stuvysunt, Car_Rover_75_1950);
+		hasSet(Person_Matt_Stuvysunt, Car_Rover_75_1952);
+		hasSet(Person_Matt_Stuvysunt, Car_Ford_Model_T__1926);
+		hasSet(Person_Matt_Stuvysunt, Car_Bentley_Continental_Typ_R_1952);
+		hasSet(Person_Matt_Stuvysunt, Car_Bentley_Continental_Typ_R_1953);
+		hasSet(Person_Matt_Stuvysunt, Car_Fiat_634_N_1936);
+		hasSet(Person_Matt_Stuvysunt, Car_Fiat_634_N_1943);
+	}
 }
 
 static void SetFullTools(void)
@@ -125,18 +126,19 @@ static void SetFullJobOffers(void)
 	joinSet(Person_Matt_Stuvysunt, Person_Ben_Riggley);
 	joinSet(Person_Matt_Stuvysunt, Person_Richard_Doil);
 	joinSet(Person_Matt_Stuvysunt, Person_Pater_James);
-	#ifdef THECLOU_PROFIDISK
-	joinSet(Person_Matt_Stuvysunt, Person_Tom_Cooler);
-	joinSet(Person_Matt_Stuvysunt, Person_Sid_Palmer);
-	joinSet(Person_Matt_Stuvysunt, Person_Dean_Esters);
-	joinSet(Person_Matt_Stuvysunt, Person_Prof_Marcus_Green);
-	joinSet(Person_Matt_Stuvysunt, Person_Melanie_Morgan);
-	joinSet(Person_Matt_Stuvysunt, Person_Rosi_Lambert);
-	joinSet(Person_Matt_Stuvysunt, Person_Rod_Masterson);
-	joinSet(Person_Matt_Stuvysunt, Person_Tina_Olavson);
-	joinSet(Person_Matt_Stuvysunt, Person_Phil_Ciggy);
-	joinSet(Person_Matt_Stuvysunt, Person_Pere_Ubu);
-	#endif
+	if (bProfidisk)
+	{
+		joinSet(Person_Matt_Stuvysunt, Person_Tom_Cooler);
+		joinSet(Person_Matt_Stuvysunt, Person_Sid_Palmer);
+		joinSet(Person_Matt_Stuvysunt, Person_Dean_Esters);
+		joinSet(Person_Matt_Stuvysunt, Person_Prof_Marcus_Green);
+		joinSet(Person_Matt_Stuvysunt, Person_Melanie_Morgan);
+		joinSet(Person_Matt_Stuvysunt, Person_Rosi_Lambert);
+		joinSet(Person_Matt_Stuvysunt, Person_Rod_Masterson);
+		joinSet(Person_Matt_Stuvysunt, Person_Tina_Olavson);
+		joinSet(Person_Matt_Stuvysunt, Person_Phil_Ciggy);
+		joinSet(Person_Matt_Stuvysunt, Person_Pere_Ubu);
+	}
 }
 
 static void SetFullInvestigations(void)
@@ -181,24 +183,25 @@ static void SetFullInvestigations(void)
 	((Building)dbGetObject (Building_Tower_of_London))->Exactlyness = 255;
 	hasSet(Person_Matt_Stuvysunt, Building_Starford_Kaserne);
 	((Building)dbGetObject (Building_Starford_Kaserne))->Exactlyness = 255;
-	#ifdef THECLOU_PROFIDISK
-	hasSet(Person_Matt_Stuvysunt, Building_Baker_Street);
-	((Building)dbGetObject (Building_Baker_Street))->Exactlyness = 255;
-	hasSet(Person_Matt_Stuvysunt, Building_Madame_Tussaud);
-	((Building)dbGetObject (Building_Madame_Tussaud))->Exactlyness = 255;
-	hasSet(Person_Matt_Stuvysunt, Building_Westminster_Abbey);
-	((Building)dbGetObject (Building_Westminster_Abbey))->Exactlyness = 255;
-	hasSet(Person_Matt_Stuvysunt, Building_Downing_Street_10);
-	((Building)dbGetObject (Building_Downing_Street_10))->Exactlyness = 255;
-	hasSet(Person_Matt_Stuvysunt, Building_Postzug);
-	((Building)dbGetObject (Building_Postzug))->Exactlyness = 255;
-	hasSet(Person_Matt_Stuvysunt, Building_Tate_Gallery);
-	((Building)dbGetObject (Building_Tate_Gallery))->Exactlyness = 255;
-	hasSet(Person_Matt_Stuvysunt, Building_Buckingham_Palace);
-	((Building)dbGetObject (Building_Buckingham_Palace))->Exactlyness = 255;
-	hasSet(Person_Matt_Stuvysunt, Building_Bulstrode_Chemestry_Ltd);
-	((Building)dbGetObject (Building_Bulstrode_Chemestry_Ltd))->Exactlyness = 255;
-	#endif
+	if (bProfidisk)
+	{
+		hasSet(Person_Matt_Stuvysunt, Building_Baker_Street);
+		((Building)dbGetObject (Building_Baker_Street))->Exactlyness = 255;
+		hasSet(Person_Matt_Stuvysunt, Building_Madame_Tussaud);
+		((Building)dbGetObject (Building_Madame_Tussaud))->Exactlyness = 255;
+		hasSet(Person_Matt_Stuvysunt, Building_Westminster_Abbey);
+		((Building)dbGetObject (Building_Westminster_Abbey))->Exactlyness = 255;
+		hasSet(Person_Matt_Stuvysunt, Building_Downing_Street_10);
+		((Building)dbGetObject (Building_Downing_Street_10))->Exactlyness = 255;
+		hasSet(Person_Matt_Stuvysunt, Building_Postzug);
+		((Building)dbGetObject (Building_Postzug))->Exactlyness = 255;
+		hasSet(Person_Matt_Stuvysunt, Building_Tate_Gallery);
+		((Building)dbGetObject (Building_Tate_Gallery))->Exactlyness = 255;
+		hasSet(Person_Matt_Stuvysunt, Building_Buckingham_Palace);
+		((Building)dbGetObject (Building_Buckingham_Palace))->Exactlyness = 255;
+		hasSet(Person_Matt_Stuvysunt, Building_Bulstrode_Chemestry_Ltd);
+		((Building)dbGetObject (Building_Bulstrode_Chemestry_Ltd))->Exactlyness = 255;
+	}
 }
 
 static void SetFullEnvironment(void)

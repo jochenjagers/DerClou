@@ -32,11 +32,7 @@
 #endif
 
 #ifndef MODULE_TCDATA
-#ifndef THECLOU_PROFIDISK
-#include "data\objstd\tcdata.h"
-#else
-#include "data\objprofi\tcdata.h"
-#endif
+#include "data\tcdata.h"
 #endif
 
 #ifndef MODULE_DATAAPPL
@@ -55,7 +51,7 @@
 #define PRESENT_AS_BAR        2
 #define PRESENT_AS_NUMBER     3
 
-extern ubyte Present (ulong nr, ubyte *presentationText,void (*initPresentation)(ulong,LIST *,LIST*));
+extern ubyte Present (ulong nr, const char *presentationText,void (*initPresentation)(ulong,LIST *,LIST*));
 
 extern void InitPersonPresent(ulong nr,LIST *presentationData,LIST *texts);
 extern void InitCarPresent(ulong nr,LIST *presentationData,LIST *texts);
@@ -68,7 +64,7 @@ extern void InitLootPresent(ulong nr, LIST *presentationData, LIST *texts);
 extern void InitOneLootPresent(ulong nr, LIST *presentationData, LIST *texts);
 
 extern void prSetBarPrefs(struct RastPort *p_RP,uword us_BarWidth,uword us_BarHeight,ubyte uch_FCol,ubyte uch_BCol, ubyte uch_TCol);
-extern void prDrawTextBar(ubyte *puch_Text,ulong ul_Value,ulong ul_Max,uword us_XPos,uword us_YPos);
+extern void prDrawTextBar(char *puch_Text,ulong ul_Value,ulong ul_Max,uword us_XPos,uword us_YPos);
 
 extern void DrawPresent (LIST *present, ubyte firstLine, struct RastPort *rp, ubyte max);
 extern void AddPresentLine(LIST *l,ubyte presentHow,ulong data,ulong max,LIST *texts,uword textNr);

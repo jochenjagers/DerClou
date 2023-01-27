@@ -7,18 +7,21 @@
 #ifndef MODULE_CDROM
 #define MODULE_CDROM
 
-#ifdef THECLOU_CDROM_VERSION
-
 #include "theclou.h"
+
+#ifndef MODULE_ERROR
+#include "error\error.h"
+#endif
 
 extern unsigned int  CDRomInstalled;
 
-int CDROM_Install(void);
-void CDROM_UnInstall(void);
-void CDROM_WaitForMedia(void);
-void CDROM_PlayAudioSequence(unsigned char TrackNum,unsigned long StartOffset,unsigned long EndOffset);
-void CDROM_StopAudioTrack(void);
-
-#endif
+extern int CDROM_Install(void);
+extern void CDROM_UnInstall(void);
+extern int CDROM_WaitForMedia(void);
+extern void CDROM_PlayAudioTrack(unsigned char TrackNum);
+//extern void CDROM_PlayAudioFrames(unsigned long StartFrame, unsigned long NumOfFrames);
+extern void CDROM_PlayAudioSequence(unsigned char TrackNum,unsigned long StartOffset,unsigned long EndOffset);
+extern void CDROM_StopAudioTrack(void);
+extern int CDROM_SetGameCDDrive(void);
 
 #endif

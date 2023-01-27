@@ -9,9 +9,10 @@
 void DoneTaxi(void)
 {
 	static ubyte i = 0;
-	ubyte j, name[TXT_KEY_LENGTH], exp[TXT_KEY_LENGTH];
-	LIST *locs = CreateList(0L);
-	struct ObjectNode *n, *new;
+	ubyte j; 
+	char name[TXT_KEY_LENGTH], exp[TXT_KEY_LENGTH];
+	LIST *locs = (LIST*)CreateList(0L);
+	struct ObjectNode *n, *newNode;
 	ulong locNr;
 	Location loc;
 
@@ -20,13 +21,13 @@ void DoneTaxi(void)
 
 	for (n = (struct ObjectNode *) LIST_HEAD(ObjectList); NODE_SUCC(n); n = (struct ObjectNode *) NODE_SUCC(n))
 	{
-		loc = OL_DATA(n);
+		loc = (Location)OL_DATA(n);
 		locNr = ((Location) loc)->LocationNr;
 
 		sprintf(name ,"*%s", NODE_NAME(GetNthNode(film->loc_names, locNr)));
 
-		new = (struct ObjectNode *) CreateNode (locs,(ulong) (sizeof (struct ObjectNode)), name);
-		new->nr = locNr + 1;     /* because of ChoiceOk */
+		newNode = (struct ObjectNode *) CreateNode (locs,(ulong) (sizeof (struct ObjectNode)), name);
+		newNode->nr = locNr + 1;     /* because of ChoiceOk */
 	}
 
 	i = min(i, GetNrOfNodes(locs) - 1);
@@ -83,7 +84,7 @@ void DoneInsideHouse(void)
 
 	areaID = OL_NR(LIST_HEAD(ObjectList));
 	lsLoadGlobalData(buildingID, areaID);  /* Stechuhren und so... */
-	/* mu· nur einmal geladen werden.. */
+	/* muss nur einmal geladen werden.. */
 
 	lsSetRelations(areaID);
 
@@ -233,7 +234,7 @@ void DoneParking(void)
 	LIST *menu   = txtGoKey (MENU_TXT, "Mainmenu");
 	ubyte activ=0, choice=0;
 	ulong carID;
-	Person marc = dbGetObject(Person_Marc_Smith);
+	Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
 	SceneArgs.Ueberschrieben=1;
 	SceneArgs.ReturnValue=0;
@@ -301,7 +302,7 @@ void DoneGarage(void)
 	LIST *menu = txtGoKey (MENU_TXT, "Mainmenu");
 	ubyte activ=0;
 	ulong choice, carID;
-	Person marc = dbGetObject(Person_Marc_Smith);
+	Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
 	SceneArgs.Ueberschrieben=1;
 	SceneArgs.ReturnValue=0;
@@ -349,7 +350,7 @@ void DoneGarage(void)
 
 void tcInitFahndung(void)
 {
-	Player player = dbGetObject(Player_Player_1);
+	Player player = (Player)dbGetObject(Player_Player_1);
 
 	tcMattGoesTo(59);   /* BÅro */
 
@@ -390,9 +391,8 @@ void tcDoneFahndung(void)
 void DoneHotelRoom(void)
 {
 	tcCheckForBones();
-	#ifdef THECLOU_PROFIDISK
-	tcCheckForDowning();
-	#endif
+	if (bProfidisk)
+		tcCheckForDowning();
 
 	StdDone();
 }

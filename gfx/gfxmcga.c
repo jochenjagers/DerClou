@@ -11,11 +11,11 @@ void gfxMCGABlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY,
 				 uword us_Width, uword us_Height, ulong ul_BlitMode)
 {
 	unsigned int x;
-	ubyte *sbm = srp->p_BitMap;
-	ubyte *dbm = drp->p_BitMap;
+	ubyte *sbm = (ubyte*)srp->p_BitMap;
+	ubyte *dbm = (ubyte*)drp->p_BitMap;
 
-	sbm += (ulong)us_SourceX + (ulong)us_SourceY * 320;
-	dbm += (ulong)us_DestX + (ulong)us_DestY * 320;
+	sbm += (ulong)us_SourceX + (ulong)us_SourceY * srp->us_Width;
+	dbm += (ulong)us_DestX + (ulong)us_DestY * drp->us_Width;
 
 	switch (ul_BlitMode)
 	{
@@ -26,8 +26,8 @@ void gfxMCGABlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY,
 				{
 					dbm[x] = sbm[x];
 				}
-				dbm += 320;
-				sbm += 320;
+				dbm += drp->us_Width;
+				sbm += srp->us_Width;
 			}
 		break;
 		case GFX_OVERLAY:	/* Farbe 0 transparent */
@@ -37,18 +37,18 @@ void gfxMCGABlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY,
 				{
 					if (sbm[x]) dbm[x] = sbm[x];
 				}
-				dbm += 320;
-				sbm += 320;
+				dbm += drp->us_Width;
+				sbm += srp->us_Width;
 			}
 		break;
 	}
 }
 
-void gfxMCGAPrintExact(struct RastPort *rp, ubyte *puch_Text, uword us_X, uword us_Y)
+void gfxMCGAPrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword us_Y)
 {
-	ubyte *DestPtr = &((ubyte*)rp->p_BitMap)[us_X + us_Y * 320];
+	ubyte *DestPtr = &((ubyte*)rp->p_BitMap)[us_X + us_Y * rp->us_Width];
 	ubyte *FontPtr = (ubyte*)rp->p_Font->p_BitMap;
-	uword CharsPerLine = 320 / rp->p_Font->us_Width;
+	uword CharsPerLine = rp->us_Width / rp->p_Font->us_Width;
 	uword Length = strlen(puch_Text);
 
 	ubyte *DestPtr1;
@@ -73,7 +73,7 @@ void gfxMCGAPrintExact(struct RastPort *rp, ubyte *puch_Text, uword us_X, uword 
 				else if (rp->us_DrawMode == GFX_JAM_2)
 					DestPtr1[i] = rp->uch_BackPenAbs;
 			}
-			DestPtr1 += 320;
+			DestPtr1 += rp->us_Width;
 			FontPtr1 += 320;
 		}
 	}
@@ -86,7 +86,7 @@ void gfxMCGARectFill(struct RastPort *rp, uword us_X, uword us_Y, uword us_X1, u
 
 	//us_X += rp->us_LeftEdge;
 	//us_Y += rp->us_TopEdge;
-	ubyte *bm = &((ubyte*)rp->p_BitMap)[us_X + us_Y * 320];
+	ubyte *bm = &((ubyte*)rp->p_BitMap)[us_X + us_Y * rp->us_Width];
 	uword i, j;
 	for (j = 0; j < us_H; j++)
 	{
@@ -95,7 +95,7 @@ void gfxMCGARectFill(struct RastPort *rp, uword us_X, uword us_Y, uword us_X1, u
 			if (!i || !j || i==us_W-1 || j==us_W-1) bm[i] = rp->uch_OutlinePenAbs;
 			else bm[i] = rp->uch_FrontPenAbs;
 		}
-		bm += 320;
+		bm += rp->us_Width;
 	}
 }
 
@@ -105,7 +105,7 @@ ubyte gfxMCGAReadPixel(struct RastPort *rp, uword us_X, uword us_Y)
 	{
 		//us_X += rp->us_LeftEdge;
 		//us_Y += rp->us_TopEdge;
-		return(((ubyte*)rp->p_BitMap)[us_X + us_Y * 320]);
+		return(((ubyte*)rp->p_BitMap)[us_X + us_Y * rp->us_Width]);
 	}
 	return(0);
 }

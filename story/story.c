@@ -15,12 +15,10 @@ static void tcSomebodyIsComing(void)
 {
 	ubyte i;
 
-	sndPrepareFX("klopfen.voc");
-
 	for (i = 0; i < 3; i++)
 	{
 		inpDelay(50);
-		sndPlayFX();
+		sndPlayFX("klopfen.voc");
 	}
 }
 
@@ -28,12 +26,10 @@ static void tcSomebodyIsCalling(void)
 {
 	ubyte i;
 
-	sndPrepareFX("ring.voc");
-
 	for (i = 0; i < CalcRandomNr(1, 4); i++)
 	{
 		inpDelay(180);
-		sndPlayFX();
+		sndPlayFX("ring.voc");
 	}
 }
 
@@ -49,13 +45,17 @@ ubyte tcKarateOpa(ulong ul_ActionTime, ulong ul_BuildingId)
 
 void tcDoneCredits(void)
 {
-	Person ben = dbGetObject(Person_Ben_Riggley);
+	Person ben = (Person)dbGetObject(Person_Ben_Riggley);
 
 	tcSomebodyIsComing();
 
 	Say(THECLOU_TXT, 0, ben->PictID, "A_LETTER_FOR_YOU");
 	Say(THECLOU_TXT, 0, LETTER_PICTID, "SOME_CREDITS");
 	Say(THECLOU_TXT, 0, MATT_PICTID, "SO_EIN_SCH");
+
+	if (GamePlayMode & GP_MORE_MONEY) {	// Lucy 2017-11-08 new cheat
+		tcAddPlayerMoney(100);
+	}
 
 	SceneArgs.ReturnValue = SCENE_HOTEL_ROOM;
 }
@@ -196,8 +196,9 @@ void tcDoneMamiCalls(void)
 void tcDoneGludoMoney(void)
 {
 	Person Gludo = (Person) dbGetObject(Person_John_Gludo);
-	Environment env = dbGetObject(Environment_TheClou);
+	Environment env = (Environment)dbGetObject(Environment_TheClou);
 	ubyte  choice;
+	long money;
 
 	knowsSet(Person_Matt_Stuvysunt,Person_John_Gludo);
 
@@ -211,7 +212,11 @@ void tcDoneGludoMoney(void)
 		Say(STORY_0_TXT, 0, Gludo->PictID, "POLI_ANT_21");
 		Say(STORY_0_TXT, 0, MATT_PICTID,   "POLI_MATT_5");
 		Say(STORY_0_TXT, 0, Gludo->PictID, "POLI_ANT_51");
-		tcSetPlayerMoney(tcGetPlayerMoney + tcCOSTS_FOR_HOTEL);
+		money = tcCOSTS_FOR_HOTEL;
+		if (GamePlayMode & GP_MORE_MONEY) {	// Lucy 2017-11-08 new cheat
+			money *= 2;
+		}
+		tcAddPlayerMoney(money);
 		break;
 	case 1:
 		Say(STORY_0_TXT, 0, Gludo->PictID, "POLI_ANT_12");
@@ -265,7 +270,11 @@ void tcDoneDanner(void)
 		}
 
 		Say(STORY_0_TXT,0,MATT_PICTID,"DANNER_3");
-		tcAddPlayerMoney(20);
+		if (GamePlayMode & GP_MORE_MONEY) {	// Lucy 2017-11-08 new cheat
+			tcAddPlayerMoney(40);
+		} else {
+			tcAddPlayerMoney(20);
+		}
 
 		livesInUnSet(London_London_1, Person_Jim_Danner);
 		tcMoveAPerson(Person_Jim_Danner, Location_Nirvana);
@@ -300,7 +309,11 @@ void tcDoneMeetBriggs(void)
 
 		hasSet(Person_Matt_Stuvysunt,Building_Kiosk);
 
-		tcAddPlayerMoney(15);
+		if (GamePlayMode & GP_MORE_MONEY) {	// Lucy 2017-11-08 new cheat
+			tcAddPlayerMoney(30);
+		} else {
+			tcAddPlayerMoney(15);
+		}
 
 		tcAddBuildExactlyness(bui,255L);
 		tcAddBuildStrike(bui,5L);
@@ -318,7 +331,7 @@ void tcDoneMeetBriggs(void)
 	}
 	else           /* nicht angenommen ! */
 	{
-		Person james = dbGetObject(Person_Pater_James);
+		Person james = (Person)dbGetObject(Person_Pater_James);
 
 		Say(STORY_0_TXT,0,Briggs->PictID,"BRIGGS_BRIGGS_5");
 
@@ -371,9 +384,8 @@ void tcDoneMeetBriggs(void)
 	AddTaxiLocation(20);     /* senioren */
 	AddTaxiLocation(12);     /* aunt */
 
-#ifdef THECLOU_PROFIDISK
-	AddTaxiLocation(68); /* baker street */
-#endif
+	if (bProfidisk)
+		AddTaxiLocation(68); /* baker street */
 }
 
 void tcDoneFreeTicket(void)
@@ -424,11 +436,11 @@ void tcDoneCallFromPooly(void)
 
 void tcInitPrison(void)
 {
-	/* es ist wichtig, da· die Location hier gesetzt wird */
-	/* da sonst diverse Szenen in die GefÑngnisszene      */
-	/* hineinplatzen kînnen */
+	/* es ist wichtig, dass die Location hier gesetzt wird */
+	/* da sonst diverse Szenen in die Gefaengnisszene      */
+	/* hineinplatzen koennen */
 
-	SetLocation(64);    /* auf ins GefÑngnis */
+	SetLocation(64);    /* auf ins Gefaengnis */
 }
 
 void tcDonePrison(void)
@@ -460,7 +472,7 @@ void tcDonePrison(void)
 long tcIsDeadlock(void)
 {
 	long deadlock = 0, total = 0;
-	CompleteLoot comp =dbGetObject(CompleteLoot_LastLoot);
+	CompleteLoot comp =(CompleteLoot)dbGetObject(CompleteLoot_LastLoot);
 
 	hasAll(Person_Matt_Stuvysunt, OLF_NORMAL, Object_Car);
 
@@ -477,14 +489,14 @@ long tcIsDeadlock(void)
 		    comp->GebrauchsArt + comp->Vase + comp->Delikates;
 
 		money += total / 15; /* im schlimmsten Fall bleibt Matt in */
-		/* etwa nur ein FÅnfzehnten           */
+		/* etwa nur ein FÅuenfzehnten           */
 
 		hasAll(Person_Marc_Smith, OLF_NORMAL, Object_Car);
 
 		/* get cheapest car! */
 		for (n = (NODE*) LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *) NODE_SUCC(n))
 		{
-			Car car = OL_DATA(n);
+			Car car = (Car)OL_DATA(n);
 
 			if (tcGetCarPrice(car) < money)
 				enough = 1;
@@ -522,18 +534,16 @@ void tcDone1stBurglary(void)
 	AddTaxiLocation(22); /* highgate */
 	AddTaxiLocation(16); /* anti */
 
-#ifdef THECLOU_PROFIDISK
-	AddTaxiLocation(75);     /* train */
-#endif
+	if (bProfidisk)
+		AddTaxiLocation(75);     /* train */
 
 	hasSet(Person_Marc_Smith, Car_Morris_Minor_1950);
 	hasSet(Person_Marc_Smith, Car_Fiat_Topolino_1942);
 	hasSet(Person_Marc_Smith, Car_Jeep_1945);
 	hasSet(Person_Marc_Smith, Car_Pontiac_Streamliner_1946);
 
-#ifdef THECLOU_PROFIDISK
-	hasSet(Person_Marc_Smith, Car_Ford_Model_T__1926);
-#endif
+	if (bProfidisk)
+		hasSet(Person_Marc_Smith, Car_Ford_Model_T__1926);
 
 	hasSet(Person_Mary_Bolton, Tool_Dietrich);
 	hasSet(Person_Mary_Bolton, Tool_Bohrmaschine);
@@ -549,10 +559,11 @@ void tcDone1stBurglary(void)
 	livesInSet(London_London_1, Person_Peter_Brook);
 	livesInSet(London_London_1, Person_Luthmilla_Nervesaw);
 
-#ifdef THECLOU_PROFIDISK
-	livesInSet(London_London_1, Person_Tom_Cooler);
-	livesInSet(London_London_1, Person_Tina_Olavson);
-#endif
+	if (bProfidisk)
+	{
+		livesInSet(London_London_1, Person_Tom_Cooler);
+		livesInSet(London_London_1, Person_Tina_Olavson);
+	}
 
 	Say(STORY_0_TXT,0,OLD_MATT_PICTID,"LOBHUDEL");
 
@@ -611,19 +622,19 @@ void tcDone2ndBurglary(void)
 {
 	AddTaxiLocation(14);     /* jewels */
 
-#ifdef THECLOU_PROFIDISK
-	AddTaxiLocation(72);     /* abbey */
-#endif
+	if (bProfidisk)
+		AddTaxiLocation(72);     /* abbey */
 
 	Say(STORY_0_TXT,0,OLD_MATT_PICTID,"FAHNDUNG");
 
 	hasSet(Person_Marc_Smith, Car_Pontiac_Streamliner_1944);
 	hasSet(Person_Marc_Smith, Car_Standard_Vanguard_1953);
 
-#ifdef THECLOU_PROFIDISK
-	hasSet(Person_Marc_Smith, Car_Rover_75_1950);
-	hasSet(Person_Marc_Smith, Car_Bentley_Continental_Typ_R_1952);
-#endif
+	if (bProfidisk)
+	{
+		hasSet(Person_Marc_Smith, Car_Rover_75_1950);
+		hasSet(Person_Marc_Smith, Car_Bentley_Continental_Typ_R_1952);
+	}
 
 	hasSet(Person_Mary_Bolton, Tool_Funkgeraet);
 	hasSet(Person_Mary_Bolton, Tool_Glasschneider);
@@ -643,22 +654,27 @@ void tcDone2ndBurglary(void)
 /* wird von DoneHotel aufgerufen */
 void tcCheckForBones(void)
 {
-	Person luthm = dbGetObject(Person_Luthmilla_Nervesaw);
+	Person luthm = (Person)dbGetObject(Person_Luthmilla_Nervesaw);
+	long money;
 
 	if (has(Person_Matt_Stuvysunt, Loot_Gebeine))
 	{
 		if (knows(Person_Matt_Stuvysunt, Person_Luthmilla_Nervesaw))
 		{
-			Player player =dbGetObject(Player_Player_1);
+			Player player =(Player)dbGetObject(Player_Player_1);
 
 			tcSomebodyIsComing();
 
 			Say(STORY_0_TXT, 0, luthm->PictID, "KARL_MARX");
 
-			tcAddPlayerMoney(20 * player->MattsPart);
+			money = 20 * player->MattsPart;
+			if (GamePlayMode & GP_MORE_MONEY) {	// Lucy 2017-11-08 new cheat
+				if (money > 0) money = (money * 3) / 2;
+			}
+			tcAddPlayerMoney(money);
 
 			player->StolenMoney   += 2000;
-			player->MyStolenMoney += (20 * player->MattsPart);
+			player->MyStolenMoney += money;
 
 			livesInUnSet(London_London_1, Person_Luthmilla_Nervesaw);
 			tcMoveAPerson(Person_Luthmilla_Nervesaw, Location_Nirvana);
@@ -679,9 +695,8 @@ void tcDone3rdBurglary(void)
 	AddTaxiLocation(35);     /* sotherbys */
 	AddTaxiLocation(33); /* chiswick */
 
-#ifdef THECLOU_PROFIDISK
-	AddTaxiLocation(74);  /* downing */
-#endif
+	if (bProfidisk)
+		AddTaxiLocation(74);  /* downing */
 
 	knowsSet(Person_Matt_Stuvysunt,Person_John_Gludo);
 
@@ -712,7 +727,6 @@ void tcDone3rdBurglary(void)
 	SceneArgs.ReturnValue = GetLocScene(GetLocation)->EventNr;
 }
 
-#ifdef THECLOU_PROFIDISK
 void tcCheckForDowning(void)
 {
 	if (has(Person_Matt_Stuvysunt, Loot_Dokument))
@@ -731,7 +745,6 @@ void tcCheckForDowning(void)
 		hasUnSet(Person_Matt_Stuvysunt, Loot_Dokument);
 	}
 }
-#endif
 
 
 /***********************************************************************
@@ -747,9 +760,8 @@ void tcDone4thBurglary(void)
 	AddTaxiLocation(31); /* osterly */
 	AddTaxiLocation(29); /* ham */
 
-#ifdef THECLOU_PROFIDISK
-	AddTaxiLocation(70);  /* madame */
-#endif
+	if (bProfidisk)
+		AddTaxiLocation(70);  /* madame */
 
 	tcSomebodyIsComing();
 
@@ -763,9 +775,8 @@ void tcDone4thBurglary(void)
 	hasSet(Person_Marc_Smith, Car_Standard_Vanguard_1950);
 	hasSet(Person_Marc_Smith, Car_Cadillac_Club_1952);
 
-#ifdef THECLOU_PROFIDISK
-	hasSet(Person_Marc_Smith, Car_Fiat_634_N_1943);
-#endif
+	if (bProfidisk)
+		hasSet(Person_Marc_Smith, Car_Fiat_634_N_1943);
 
 	hasSet(Person_Mary_Bolton, Tool_Dynamit);
 	hasSet(Person_Mary_Bolton, Tool_Kernbohrer);
@@ -776,10 +787,11 @@ void tcDone4thBurglary(void)
 	livesInSet(London_London_1, Person_Jiri_Poulin);
 	livesInSet(London_London_1, Person_Prof_Emil_Schmitt);
 
-#ifdef THECLOU_PROFIDISK
-	livesInSet(London_London_1, Person_Melanie_Morgan);
-	livesInSet(London_London_1, Person_Sid_Palmer);
-#endif
+	if (bProfidisk)
+	{
+		livesInSet(London_London_1, Person_Melanie_Morgan);
+		livesInSet(London_London_1, Person_Sid_Palmer);
+	}
 
 	gfxChangeColors(l_wrp, 0, GFX_FADE_OUT, 0);
 
@@ -812,18 +824,18 @@ void tcDone5thBurglary(void)
 	AddTaxiLocation(27); /* kenw */
 	AddTaxiLocation(39); /* natural museum */
 
-#ifdef THECLOU_PROFIDISK
-	AddTaxiLocation(77);  /* tate */
-#endif
+	if (bProfidisk)
+		AddTaxiLocation(77);  /* tate */
 
 	Say(STORY_0_TXT,0,OLD_MATT_PICTID,"5TH_OLD_0");
 
 	hasSet(Person_Marc_Smith, Car_Standard_Vanguard_1951);
 
-#ifdef THECLOU_PROFIDISK
-	hasSet(Person_Marc_Smith, Car_Rover_75_1952);
-	hasSet(Person_Marc_Smith, Car_Bentley_Continental_Typ_R_1953);
-#endif
+	if (bProfidisk)
+	{
+		hasSet(Person_Marc_Smith, Car_Rover_75_1952);
+		hasSet(Person_Marc_Smith, Car_Bentley_Continental_Typ_R_1953);
+	}
 
 	hasSet(Person_Mary_Bolton, Tool_Schuhe);
 	hasSet(Person_Mary_Bolton, Tool_Elektrohammer);
@@ -839,10 +851,11 @@ void tcDone5thBurglary(void)
 	livesInSet(London_London_1, Person_Mike_Seeger);
 	livesInSet(London_London_1, Person_Mathew_Black);
 
-#ifdef THECLOU_PROFIDISK
-	livesInSet(London_London_1, Person_Prof_Marcus_Green);
-	livesInSet(London_London_1, Person_Pere_Ubu);
-#endif
+	if (bProfidisk)
+	{
+		livesInSet(London_London_1, Person_Prof_Marcus_Green);
+		livesInSet(London_London_1, Person_Pere_Ubu);
+	}
 
 	GetScene(SCENE_FAHNDUNG)->Geschehen = 0;     /* damit nicht gleich Burglary 2 geschieht */
 	SceneArgs.ReturnValue = GetLocScene(GetLocation)->EventNr;
@@ -931,16 +944,14 @@ void tcDoneDartJager(void)
 		{
 			Say(STORY_0_TXT,0,Grull->PictID,"DART_GRULL_1");
 
-			sndPrepareFX("darth.voc");
-			sndPlayFX();
+			sndPlayFX("darth.voc");
 
 			Say(STORY_0_TXT,0,OLD_MATT_PICTID,"DART_JAEGER_0");
 
 			gfxChangeColors(l_wrp, 0, GFX_FADE_OUT, 0);
 			gfxShow(221, GFX_NO_REFRESH|GFX_ONE_STEP|GFX_BLEND_UP, 0, -1, -1);
 
-			sndPrepareFX("darth.voc");
-			sndPlayFX();
+			sndPlayFX("darth.voc");
 
 			Say(STORY_0_TXT,0,OLD_MATT_PICTID,"DART_JAEGER_1");
 
@@ -983,9 +994,8 @@ void tcDoneGludoBurnsOffice(void)
 
 	Say(STORY_0_TXT,0,Gludo->PictID,"5TH_GLUDO_2");
 
-	sndPrepareFX("brille.voc");
 	gfxShow (162, GFX_NO_REFRESH|GFX_OVERLAY, 0, -1, -1);
-	sndPlayFX();
+	sndPlayFX("brille.voc");
 
 	Say(STORY_0_TXT,0,OLD_MATT_PICTID,"5TH_OLD_4");
 	Say(STORY_0_TXT,0,Gludo->PictID,"5TH_GLUDO_3");
@@ -995,8 +1005,7 @@ void tcDoneGludoBurnsOffice(void)
 	Say(STORY_0_TXT,0,Gludo->PictID,"5TH_GLUDO_4");
 	Say(STORY_0_TXT,0,OLD_MATT_PICTID,"5TH_OLD_6");
 
-	sndPrepareFX("streich.voc");
-	sndPlayFX();
+	sndPlayFX("streich.voc");
 
 	gfxShow (153, GFX_NO_REFRESH|GFX_ONE_STEP, 0, -1, -1);
 
@@ -1029,7 +1038,7 @@ void tcDoneBeautifullMorning(void)
 
 void tcDoneVisitingSabien(void)
 {
-	Person Sabien = dbGetObject(Person_Sabien_Pardo);
+	Person Sabien = (Person)dbGetObject(Person_Sabien_Pardo);
 
 	knowsSet(Person_Matt_Stuvysunt, Person_Sabien_Pardo);
 
@@ -1090,7 +1099,7 @@ void tcBriggsAngry(void)
 
 void tcSabienInWalrus(void)
 {
-	Person Sabien = dbGetObject(Person_Sabien_Pardo);
+	Person Sabien = (Person)dbGetObject(Person_Sabien_Pardo);
 
 	sndPlaySound("sabien.bk", 0);
 	StopAnim();
@@ -1110,7 +1119,7 @@ void tcSabienInWalrus(void)
 
 void tcWalrusTombola(void)
 {
-	Environment Env = dbGetObject(Environment_TheClou);
+	Environment Env = (Environment)dbGetObject(Environment_TheClou);
 
 	Env->Present = 1;
 	sndPlaySound("sabien.bk", 0);
@@ -1122,7 +1131,7 @@ void tcWalrusTombola(void)
 
 void tcRainyEvening(void)
 {
-	Person Briggs = dbGetObject(Person_Herbert_Briggs);
+	Person Briggs = (Person)dbGetObject(Person_Herbert_Briggs);
 
 	tcAsTimeGoesBy(1220);
 
@@ -1162,9 +1171,8 @@ void tcDone6thBurglary(void)
 	AddTaxiLocation(43); /* vict & alb */
 	AddTaxiLocation(37); /* brit */
 
-#ifdef THECLOU_PROFIDISK
-	AddTaxiLocation(79);  /* buckingham */
-#endif
+	if (bProfidisk)
+		AddTaxiLocation(79);  /* buckingham */
 
 	hasSet(Person_Marc_Smith, Car_Pontiac_Streamliner_1949);
 	hasSet(Person_Marc_Smith, Car_Triumph_Roadstar_1949);
@@ -1172,10 +1180,11 @@ void tcDone6thBurglary(void)
 	livesInSet(London_London_1, Person_Kevin_Smith);
 	livesInSet(London_London_1, Person_Al_Mel);
 
-#ifdef THECLOU_PROFIDISK
-	livesInSet(London_London_1, Person_Phil_Ciggy);
-	livesInSet(London_London_1, Person_Rod_Masterson);
-#endif
+	if (bProfidisk)
+	{
+		livesInSet(London_London_1, Person_Phil_Ciggy);
+		livesInSet(London_London_1, Person_Rod_Masterson);
+	}
 
 	GetScene(SCENE_FAHNDUNG)->Geschehen = 0;     /* damit nicht gleich Burglary 2 geschieht */
 	SceneArgs.ReturnValue = GetLocScene(GetLocation)->EventNr;
@@ -1183,8 +1192,8 @@ void tcDone6thBurglary(void)
 
 void tcPoliceInfoTower(void)
 {
-	Building tower = dbGetObject(Building_Tower_of_London);
-	Environment Env = dbGetObject(Environment_TheClou);
+	Building tower = (Building)dbGetObject(Building_Tower_of_London);
+	Environment Env = (Environment)dbGetObject(Environment_TheClou);
 
 	if (Env->Present)
 	{
@@ -1204,8 +1213,8 @@ void tcPoliceInfoTower(void)
 
 void tcPresentInHotel(void)
 {
-	Person Ben = dbGetObject(Person_Ben_Riggley);
-	Environment Env = dbGetObject(Environment_TheClou);
+	Person Ben = (Person)dbGetObject(Person_Ben_Riggley);
+	Environment Env = (Environment)dbGetObject(Environment_TheClou);
 
 	Env->Present = 1;
 
@@ -1245,9 +1254,8 @@ void tcDone7thBurglary(void)
 	AddTaxiLocation(41);     /* national */
 	AddTaxiLocation(45);     /* bank */
 
-#ifdef THECLOU_PROFIDISK
-	AddTaxiLocation(81);     /* bulstrode  */
-#endif
+	if (bProfidisk)
+		AddTaxiLocation(81);     /* bulstrode  */
 
 	/* Jaguar kommt hier, da: 1. man barucht ihn fÅr Villa, */
 	/* 2. Jaguar wird in Fahndung nie erwischt (sonst kînnte er nicht explodieren) */
@@ -1269,15 +1277,14 @@ void tcDoneBirthday(void)
 	StopAnim ();
 	gfxShow (172, GFX_NO_REFRESH|GFX_OVERLAY, 0, -1, -1);
 
-	sndPrepareFX("birthd2.voc"); // Klatschen
-	sndPlayFX();
+	sndPlayFX("birthd2.voc");	// Klatschen
 
 	knowsAll(Person_Matt_Stuvysunt, OLF_PRIVATE_LIST, Object_Person);
 	persons = ObjectListPrivate;
 
 	for (n = (struct ObjectNode *)LIST_HEAD(persons); NODE_SUCC(n); n = (struct ObjectNode *)NODE_SUCC(n))
 	{
-		Person p = dbGetObject(OL_NR(n));
+		Person p = (Person)dbGetObject(OL_NR(n));
 
 		switch(OL_NR(n))
 		{
@@ -1299,8 +1306,7 @@ void tcDoneBirthday(void)
 		}
 	}
 
-	sndPrepareFX("birthd1.voc"); // Sektkorken
-	sndPlayFX();
+	sndPlayFX("birthd1.voc"); // Sektkorken
 
 	RemoveList(persons);
 
@@ -1312,7 +1318,7 @@ void tcDoneBirthday(void)
 
 void tcWalkWithSabien(void)
 {
-	Environment Env = dbGetObject(Environment_TheClou);
+	Environment Env = (Environment)dbGetObject(Environment_TheClou);
 
 	sndPlaySound("sabien.bk", 0);
 
@@ -1369,7 +1375,11 @@ void tcDoneAgent(void)
 	Say(STORY_1_TXT,0,PHONE_PICTID,"ST_14_AGENT_0");
 	Say(STORY_1_TXT,0,OLD_MATT_PICTID,"ST_14_OLD_1");
 
-	tcAddPlayerMoney(15000);
+	if (GamePlayMode & GP_MORE_MONEY) {	// Lucy 2017-11-08 new cheat
+		tcAddPlayerMoney(22500);
+	} else {
+		tcAddPlayerMoney(15000);
+	}
 
 	SceneArgs.ReturnValue = SCENE_HOTEL_ROOM;
 }
@@ -1382,7 +1392,7 @@ void tcDoneAgent(void)
 
 void tcDone9thBurglary(void)
 {
-	Environment Env = dbGetObject(Environment_TheClou);
+	Environment Env = (Environment)dbGetObject(Environment_TheClou);
 
 	SetMinute(540);
 
@@ -1460,8 +1470,7 @@ void tcDoneTerror(void)
 	gfxShow (176, GFX_NO_REFRESH|GFX_ONE_STEP, 0, -1, -1);
 	inpDelay (150);
 
-	sndPrepareFX("explosio.voc");
-	sndPlayFX();
+	sndPlayFX("explosio.voc");
 
 	PlayAnim("Explo1", 1, GFX_DONT_SHOW_FIRST_PIC);
 	inpDelay (200);
@@ -1480,8 +1489,8 @@ void tcDoneTerror(void)
 
 void tcDoneConfessingSabien(void)
 {
-	Person Sabien = dbGetObject(Person_Sabien_Pardo);
-	Environment Env = dbGetObject(Environment_TheClou);
+	Person Sabien = (Person)dbGetObject(Person_Sabien_Pardo);
+	Environment Env = (Environment)dbGetObject(Environment_TheClou);
 
 	Say(STORY_1_TXT,0,OLD_MATT_PICTID,"ST_18_OLD_0");
 	Say(STORY_1_TXT,0,Sabien->PictID,"ST_18_SABIEN_0");
@@ -1546,8 +1555,8 @@ static void tcDoneFirstTimeLonelyInSouth(void)
 	LIST *menu = txtGoKey (MENU_TXT, "SouthhamptonMenu");
 	ulong startTime = 0, actionTime;
 	ubyte ende = 0, activ = 1;
-	Environment Env = dbGetObject(Environment_TheClou);
-	Person    Herb = dbGetObject(Person_Herbert_Briggs);
+	Environment Env = (Environment)dbGetObject(Environment_TheClou);
+	Person    Herb = (Person)dbGetObject(Person_Herbert_Briggs);
 
 	tcAsDaysGoBy(713518L,30);
 	startTime = GetDay * 1440 + GetMinute;
@@ -1652,7 +1661,7 @@ void tcDoneSouthhampton(void)
 	LIST *menu = txtGoKey (MENU_TXT, "SouthhamptonMenu");
 	ubyte activ = 1;    /* !! */
 	ulong actionTime;
-	Environment Env = dbGetObject(Environment_TheClou);
+	Environment Env = (Environment)dbGetObject(Environment_TheClou);
 
 	SceneArgs.Ueberschrieben = 1;
 	SceneArgs.ReturnValue    = 0; /* MU· SEIN! */
@@ -1744,8 +1753,8 @@ void tcDoneSouthhampton(void)
 static void tcInitTowerBurglary(void)
 {
 	NODE *node;
-	Car car = dbGetObject(Car_Cadillac_Club_1952);
-	Player player = dbGetObject(Player_Player_1);
+	Car car = (Car)dbGetObject(Car_Cadillac_Club_1952);
+	Player player = (Player)dbGetObject(Player_Player_1);
 
 	/* alle Personen entfernen! */
 	player->MattsPart = 25;
@@ -1824,8 +1833,8 @@ static void tcInitTowerBurglary(void)
 
 static void tcDoneMafia(void)
 {
-	Person Ken      = dbGetObject(Person_Ken_Addison);
-	Person Briggs   = dbGetObject(Person_Herbert_Briggs);
+	Person Ken      = (Person)dbGetObject(Person_Ken_Addison);
+	Person Briggs   = (Person)dbGetObject(Person_Herbert_Briggs);
 
 	CurrentBackground = BGD_LONDON;
 	ShowMenuBackground();
@@ -1881,8 +1890,8 @@ static long tcDoTowerBurglary(void)
 
 void tcDoneKaserne(void)
 {
-	Environment Env = dbGetObject(Environment_TheClou);
-	Car car         = dbGetObject(Car_Cadillac_Club_1952);
+	Environment Env = (Environment)dbGetObject(Environment_TheClou);
+	Car car         = (Car)dbGetObject(Car_Cadillac_Club_1952);
 	LIST *menu      = txtGoKey(MENU_TXT, "KaserneMenu");
 	ubyte activ     = 0, burglary = 0;
 	ulong successor = 0;
@@ -1996,14 +2005,14 @@ void tcDoneKaserne(void)
 
 long tcIsLastBurglaryOk(void)
 {
-	Building kaserne = dbGetObject(Building_Starford_Kaserne);
+	Building kaserne = (Building)dbGetObject(Building_Starford_Kaserne);
 	word carXPos0 = kaserne->CarXPos - 40;
 	word carYPos0 = kaserne->CarYPos - 40;
 	word carXPos1 = kaserne->CarXPos + 40;
 	word carYPos1 = kaserne->CarYPos + 40;
 	long madeIt = 1, i;
-	LSObject left  = dbGetObject(tcLAST_BURGLARY_LEFT_CTRL_OBJ);
-	LSObject right = dbGetObject(tcLAST_BURGLARY_RIGHT_CTRL_OBJ);
+	LSObject left  = (LSObject)dbGetObject(tcLAST_BURGLARY_LEFT_CTRL_OBJ);
+	LSObject right = (LSObject)dbGetObject(tcLAST_BURGLARY_RIGHT_CTRL_OBJ);
 
 	/* Links mu· ein, Rechts mu· ausgeschalten sein */
 	/* 1.. OFF!    */

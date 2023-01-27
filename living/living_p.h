@@ -13,9 +13,9 @@
 
 #define LIV_COLL_WIDTH			308  // ein Frame ist 14 * 14
 
-#define LIV_COLL_NAME			((ubyte *)"allmaxi")
+#define LIV_COLL_NAME			((char *)"allmaxi")
 
-#define LIV_TEMPL_BULLE_NAME	((ubyte *)"bullemax")
+#define LIV_TEMPL_BULLE_NAME	((char *)"bullemax")
 
 
 struct SpriteControl
@@ -84,7 +84,7 @@ struct Living                        /* komplette Daten einer Instanz   */
 
 static struct SpriteControl	*sc = NULL;
 
-static struct Living *livGet(ubyte *uch_Name);
+static struct Living *livGet(char *uch_Name);
 
 static void livLoadTemplates(void);
 static void livLoadLivings(void);
@@ -93,7 +93,7 @@ static void livRem(struct Living *liv);
 static void livHide(struct Living *liv);
 static void livShow(struct Living *liv);
 
-static void livAdd(ubyte *uch_Name,ubyte *uch_TemplateName, ubyte uch_XSize,
+static void livAdd(char *uch_Name,char *uch_TemplateName, ubyte uch_XSize,
 						 ubyte uch_YSize,word s_XSpeed,word s_YSpeed);
 
 static ubyte livIsVisible(struct Living *liv);

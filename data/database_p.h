@@ -33,4 +33,10 @@ KEY dbEncode(char *key);
 
 // private prototypes - OBJECT
 struct dbObject *dbFindRealObject(ulong realNr, ulong offset, ulong size);
+
+//
+void  dbcheckSize(ulong objSize, ulong structSize);
+ulong dbGetObjLoadSize(ulong structType);
+ulong dbGetObjSaveSize(struct dbObjectHeader *objHd);
+
 #endif

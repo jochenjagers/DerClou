@@ -4,128 +4,71 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
+/****************************************************************************
+  Portions copyright (c) 2005 Vasco Alexandre da Silva Costa
+  Portions copyright (c) 2005 Jens Granseuer
+
+  Please read the license terms which should be contained with this
+  distribution.
+ ****************************************************************************/
 #include "SDL.h"
-#include "sound\fx.h"
 
-struct FXBase FXBase = { NULL, NULL, 0, 0, 0, 0 };
+#include "base/base.h"
 
-static SDL_AudioSpec audioSpec;
+#include "sound/mxr.h"
+#include "sound/fx.h"
 
-int InitSBlaster(void)
+#define clamp(x, lower, upper)  ((x) < (lower) ? (lower) : (x) > (upper) ? (upper) : (x))
+
+MXR_Mixer *pAudioMixer = NULL;
+
+static int SfxChannelOn = FALSE;
+
+void InitAudio(void)
 {
-	return(SDL_InitSubSystem(SDL_INIT_AUDIO));
+	MXR_Format fmt;
+	fmt.nSamplesPerSec = SND_FREQUENCY;
+	fmt.nBitsPerChannel = 16;
+	fmt.nNumChannels = 2;
+	fmt.nSampleSize = 4;
+	pAudioMixer = MXR_CreateMixer(&fmt);
+
+	currMusicVolume = Config.MusicVolume;
 }
 
-void RemoveSBlast(void)
+void RemoveAudio(void)
 {
-	SDL_QuitSubSystem(SDL_INIT_AUDIO);
+	MXR_DestroyMixer(pAudioMixer);
+	pAudioMixer = NULL;
 }
 
 void sndInitFX(void)
 {
-	int RetVal;
-	ubyte fileName[TXT_KEY_LENGTH];
+    SDL_LockAudio();
 
-	FXBase.ul_MaxSize = 64<<10;
-	FXBase.p_SoundBuffer = MemAlloc(FXBase.ul_MaxSize);
+    SfxChannelOn = FALSE;
+
+    SDL_UnlockAudio();
 }
 
 void sndDoneFX(void)
 {
-	RemoveSBlast();
+    SDL_LockAudio();
 
-	if (FXBase.p_SoundBuffer)
-		MemFree(FXBase.p_SoundBuffer, FXBase.ul_MaxSize);
+    SfxChannelOn = FALSE;
 
-	FXBase.p_SoundBuffer 	 = NULL;
-	FXBase.us_SoundBlasterOk = 0;
+    SDL_UnlockAudio();
 }
 
-#define VOC_FREQ(SR)	(1000000L/(256L-(ulong)(SR)))
-
-static ubyte *GetVocData(ubyte *buffer, ulong *datasize)
+void sndPlayFX(const char *name)
 {
-	ubyte *ptr = buffer;
+    char fileName[256];
 
-	if (!strncmp(ptr, "Creative Voice File", 19) &&
-		(ptr[0x13] == 0x1A) &&
-		(ptr[0x16] == 0x0A) &&
-		(ptr[0x17] == 0x01) )
-	{
-		uword temp = (uword)ptr[0x14] | ((uword)ptr[0x15] << 8);
-		ptr += temp;
-		ulong size;
-		ubyte type;
+	sndDoneFX();
 
-		while (type = ptr[0])
-		{
-			size = (ulong)ptr[1] | ((ulong)ptr[2] << 8) | ((ulong)ptr[3] << 16);
-			ptr += 4;
-			switch (type)
-			{
-				case 0x01:
-					audioSpec.freq = VOC_FREQ(ptr[0]);
-					audioSpec.format = AUDIO_U8;
-					audioSpec.channels = 1;
-					*datasize = size - 2;
-					ptr += 2;
-					return(ptr);
-				break;
-				default:
-					ptr += size;
-				break;
-			}
-		}
-	}
-
-	return(NULL);
-}
-
-/**
- * The AudioCallback runs in a seperate thread and is
- * called by the SDL audio system when it needs more data.
- */
-static void AudioCallback(void *userdata, Uint8 *stream, int len)
-{
-	if (FXBase.ul_DataPlayed >= FXBase.ul_DataSize) return;
-
-	ulong ul_StillToPlay = FXBase.ul_DataSize - FXBase.ul_DataPlayed;
-	len = (len > ul_StillToPlay ? ul_StillToPlay : len);
-
-	memcpy(stream, &FXBase.p_Data[FXBase.ul_DataPlayed], len);
-
-	FXBase.ul_DataPlayed += len;
-}
-
-void sndPrepareFX(ubyte *puch_Name)
-{
-	ubyte fileName[TXT_KEY_LENGTH];
-	long i;
-
-	if (FXBase.p_SoundBuffer && FXBase.us_SoundBlasterOk)
-	{
-		dskBuildPathName(SAMPLES_DIRECTORY, puch_Name, fileName);
-		dskLoad(fileName, FXBase.p_SoundBuffer, 0);
-		FXBase.p_Data = GetVocData((ubyte*)FXBase.p_SoundBuffer, &FXBase.ul_DataSize);
-	}
-}
-
-void sndPlayFX(void)
-{
-	if (FXBase.p_SoundBuffer && FXBase.p_Data && FXBase.us_SoundBlasterOk)
-	{
-		audioSpec.samples = 4096;	// recommended (SDL Docs)
-		audioSpec.callback = AudioCallback;
-		audioSpec.userdata = NULL;
-		if (!SDL_OpenAudio(&audioSpec, NULL))
-		{
-			FXBase.ul_DataPlayed = 0;
-			SDL_PauseAudio(0);
-			while (FXBase.ul_DataPlayed < FXBase.ul_DataSize)
-			{
-				SDL_Delay(100);
-			}
-			SDL_CloseAudio();
-		}
-	}
+    if (pAudioMixer) {
+        dskBuildPathName(SAMPLES_DIRECTORY, name, fileName);
+		MXR_SetInput(pAudioMixer, MXR_INPUT_FX, MXR_CreateInputVOC(fileName));
+		SfxChannelOn = TRUE;
+    }
 }

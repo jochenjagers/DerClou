@@ -22,11 +22,7 @@
 #endif
 
 #ifndef MODULE_TCDATA
-#ifndef THECLOU_PROFIDISK
-#include "data\objstd\tcdata.h"
-#else
-#include "data\objprofi\tcdata.h"
-#endif
+#include "data\tcdata.h"
 #endif
 
 #ifndef MODULE_RELATION
@@ -45,18 +41,16 @@
 #include "sound\newsound.h"
 #endif
 
-#ifdef THECLOU_CDROM_VERSION
 #ifndef MODULE_CDROM
 #include "cdrom\cdrom.h"
 #endif
 void PlayFromCDROM(void);
-#endif
 
 #define   DLG_TALKMODE_BUSINESS    1
 #define   DLG_TALKMODE_STANDARD    2
 
 extern void DynamicTalk(ulong Person1ID, ulong Person2ID, ubyte TalkMode);
-extern ubyte Say(ulong TextID, ubyte activ, uword person, ubyte *text);
+extern ubyte Say(ulong TextID, ubyte activ, uword person, char *text);
 extern ulong Talk(void);
 
 #endif

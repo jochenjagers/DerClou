@@ -35,11 +35,7 @@
 #endif
 
 #ifndef MODULE_TCDATA
-#ifndef THECLOU_PROFIDISK
-#include "data\objstd\tcdata.h"
-#else
-#include "data\objprofi\tcdata.h"
-#endif
+#include "data\tcdata.h"
 #endif
 
 #ifndef MODULE_TEXT
@@ -73,7 +69,7 @@ ubyte grdAddToList(ulong bldId, LIST *l);
 ubyte grdDraw(struct RastPort *rp, ulong bldId, ulong areaId);
 
 // con- & destructor
-ubyte grdInit(FILE **fh, ubyte *mode, ulong bldId, ulong areaId);
+ubyte grdInit(FILE **fh, char *mode, ulong bldId, ulong areaId);
 void  grdDone(FILE *fh);
 
 #endif

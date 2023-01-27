@@ -35,11 +35,7 @@
 #endif
 
 #ifndef MODULE_TCDATA
-#ifndef THECLOU_PROFIDISK
-#include "data\objstd\tcdata.h"
-#else
-#include "data\objprofi\tcdata.h"
-#endif
+#include "data\tcdata.h"
 #endif
 
 #ifndef MODULE_TEXT
@@ -125,6 +121,7 @@ struct Action
 
 	uword TimeNeeded;          /* times in seconds/3 */
 	uword Timer;
+	short pad;
 };
 
 /* Type : ACTION_GO
@@ -132,6 +129,7 @@ struct Action
 struct ActionGo
 {
 	uword Direction;
+	short pad;
 };
 
 #define DIRECTION_NO    0
@@ -198,7 +196,7 @@ struct ActionControl
    ulong ItemId;
 };
 
-
+/* LucyG 2017-10-29 : this macro looks suspicious */
 #define ActionData(ac,type)      ((type)(ac+1))
 
 struct Action *InitAction(struct System *sys, uword type, ulong data1, ulong data2, ulong time);

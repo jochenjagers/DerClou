@@ -5,7 +5,7 @@
    Based on the original by neo Software GmbH
 */
 #include "landscap\landscap.h"
-#include "landscap\landscap.ph"
+#include "landscap\landscap_p.h"
 
 uword DX,DY,PX,PY;
 
@@ -130,8 +130,8 @@ ubyte lsInitScrollLandScape(ubyte direction, ubyte mode)
 			}
 		}
 
-	tx = livGetXPos(l->uch_ActivLiving) + (px + dx) * speed;
-	ty = livGetYPos(l->uch_ActivLiving) + (py + dy) * speed;
+	tx = livGetXPos((char*)l->uch_ActivLiving) + (px + dx) * speed;
+	ty = livGetYPos((char*)l->uch_ActivLiving) + (py + dy) * speed;
 
 	collis = lsIsCollision((uword)tx,(uword)ty, direction);
 
@@ -316,24 +316,33 @@ ubyte lsIsCollision(uword x, uword y, ubyte direction)
 				break;
 		}
 
-	// ab jetzt enthÑlt color[i] einen Wert ungleich 0, wenn Kollision vorliegt
-	for (i = 0; i < 14; i++)
+	// ab jetzt enthaelt color[i] einen Wert ungleich 0, wenn Kollision vorliegt
+	for (i = 0; i < 14; i++) {
 		if ((color[i] != LS_COLLIS_COLOR_0) && (color[i] != LS_COLLIS_COLOR_1) &&
-			 (color[i] != LS_COLLIS_COLOR_2) && (color[i] != LS_COLLIS_COLOR_3))
+		    (color[i] != LS_COLLIS_COLOR_2) && (color[i] != LS_COLLIS_COLOR_3)) {
 			color[i] = 0;
-
-	for (i = 0; i < 14; i++)
-		if (color[i])
+		} else {
+			/* 2014-06-27 templer
+			there is no collision on background color
+			This is because that in the query a value of 0 means no collision
+			To fix this, color[i] must be set on color "0" to a value greater than zero
+			*/
+			color[i] = 2;
+		}
+	}
+	for (i = 0; i < 14; i++) {
+		if (color[i]) {
 			collis = collisDir;
-
-	// wenn die Ñu·eren kollidieren, die inneren aber nicht -> keine Kollision (TÅr!)
+		}
+	}
+	// wenn die aeusseren kollidieren, die inneren aber nicht -> keine Kollision (TÅr!)
 	if ((color[0] || color[1]) && (color[6] || color[5]) && !color[3])
 		collis = 0;
 
 	if ((color[7] || color[8]) && (color[13] || color[12]) && !color[10])
 		collis = 0;
 
-	// RÑnder ÅberprÅfen!
+	// Raender ueÅberprueÅfen!
 	if (x <= 2)
 		collis |= LS_COLLIS_LEFT;
 	if (x >= (LS_MAX_AREA_WIDTH - LS_PERSON_X_SIZE - 3))

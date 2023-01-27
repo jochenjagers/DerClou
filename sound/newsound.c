@@ -4,104 +4,84 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "sound\newsound.h"
+/****************************************************************************
+  Portions copyright (c) 2005 Vasco Alexandre da Silva Costa
 
+  Please read the license terms which should be contained with this
+  distribution.
+ ****************************************************************************/
+#include "SDL.h"
 
-#define  SND_BUFFER_SIZE		14259
+#include "disk/disk.h"
 
-#ifndef __COSP__
-// extern sound system, found in playcode.obj
-extern far short int NEOSOUNDSYSTEM(short int Command, short int SoundOff, short int SoundSeg);
-#else
-short NEOSOUNDSYSTEM(short Command, short SoundOff, short SoundSeg)
-{
-	switch (Command)
-	{
-		case -1:	// fade out
-		case 0:		// play(SoundOff,SoundSeg)
-		case 1:		// quit
-		case 2:		// init
-		case 3:		// volume = SoundOff
-		break;
-	}
-	return(0);
-}
-#endif
+#include "sound/fx.h"
+#include "sound/newsound.h"
 
-void *sndBuffer = NULL;
-char  currSoundName[TXT_KEY_LENGTH];
+#include "sound/mxr.h"
 
+char currSoundName[256];
+
+int currMusicVolume = 0;
+int targetMusicVolume = 0;
 
 void sndInit(void)
 {
-	currSoundName[0] = '\0';
+    currSoundName[0] = '\0';
 
-	if (NEOSOUNDSYSTEM(2, 0, 0) != -1)
-		sndBuffer = (void *)MemAlloc(SND_BUFFER_SIZE);
+	currMusicVolume = Config.MusicVolume;
+	targetMusicVolume = Config.MusicVolume;
 }
 
 void sndDone(void)
 {
-	if (sndBuffer)
-	{
-		NEOSOUNDSYSTEM(1, 0, 0);
-		MemFree(sndBuffer, SND_BUFFER_SIZE);
-	}
 }
 
 void sndPlaySound(char *name, ulong mode)
 {
-	char path[TXT_KEY_LENGTH];
+	char path[256];
 
-	if (sndBuffer)
-	{
-		if (strcmp(currSoundName, name) != 0)
-		{
+	if (pAudioMixer) {
+		if (stricmp(currSoundName, name)) {
 			strcpy(currSoundName, name);
 
 			dskBuildPathName(SOUND_DIRECTORY, name, path);
 
-			// geschissen:
-			// fr die CDROM Version der Profidisk muá man Sounds entweder
-			// von Festplatte oder von CDROM laden. Einziges Entscheidungs-
-			// kriterium: der Name sndXX.XXX ist auf der Festplatte zu suchen
-			#ifdef THECLOU_PROFIDISK
-				#ifdef THECLOU_CDROM_VERSION
-					if (strncmp(name, "snd", 3) == 0)
-						sprintf(path, "%s\\%s", SOUND_DIRECTORY, name);
-				#endif
-			#endif
+			MXR_SetInput(pAudioMixer, MXR_INPUT_MUSIC, MXR_CreateInputHSC(path));
 
-			dskLoad(path, sndBuffer, 0);
-
-			NEOSOUNDSYSTEM(0, (short int)(((long)sndBuffer) & 0xffff), (short int)(((long)sndBuffer) >> 16));
+			targetMusicVolume = Config.MusicVolume;
 		}
 	}
 }
 
-
-void sndStopSound(ubyte dummy)
-{
-	if (sndBuffer)
-		NEOSOUNDSYSTEM(1, 0, 0);
-}
-
-
-void sndFadeOut(void)
-{
-	if (sndBuffer)
-		NEOSOUNDSYSTEM(-1, 0, 0);
-}
-
-
 char *sndGetCurrSoundName(void)
 {
-	return currSoundName;
+    return currSoundName;
 }
 
+// 2014-07-17 LucyG : called from inpDoPseudoMultiTasking
+void sndDoFading(void)
+{
+	if (currMusicVolume < targetMusicVolume) {
+		currMusicVolume++;
+	} else if (currMusicVolume > targetMusicVolume) {
+		currMusicVolume--;
+	}
+}
 
 void sndFading(short int targetVol)
 {
-	if (sndBuffer)
-		NEOSOUNDSYSTEM(3, targetVol, 0);
+    if (pAudioMixer) {
+		/* 2014-07-17 LucyG : this is called from dialog.c (and intro.c)
+		   with targetVol = 16 before and 0 after voice playback */
+		if (!targetVol) {
+			targetMusicVolume = Config.MusicVolume;
+		} else {
+			targetMusicVolume = Config.MusicVolume / 4;
+		}
+    }
+}
+
+void sndStopSound(ubyte dummy)
+{
+	MXR_SetInput(pAudioMixer, MXR_INPUT_MUSIC, NULL);
 }

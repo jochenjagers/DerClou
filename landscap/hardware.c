@@ -5,7 +5,7 @@
    Based on the original by neo Software GmbH
 */
 #include "landscap\landscap.h"
-#include "landscap\landscap.ph"
+#include "landscap\landscap_p.h"
 
 static void lsPrepareFromXMSBySize(ubyte uch_Size);
 static void lsPrepareFromXMS(LSObject lso);
@@ -13,7 +13,7 @@ static void lsBlitOneObject(uword offsetFact, word destx, word desty, uword size
 
 void lsShowEscapeCar(void)
 {
-	Building b = dbGetObject(ls->ul_BuildingID);
+	Building b = (Building)dbGetObject(ls->ul_BuildingID);
 
 	livPrepareAnims();
 
@@ -38,17 +38,16 @@ static void lsSetAlarmPict(LSObject lso)
 		}
 	}
 
-// zeichnet alle sichtbaren Tren in einem bestimmten Bereich neu
+// zeichnet alle sichtbaren Türen in einem bestimmten Bereich neu
 static void lsRefreshClosedDoors(uword us_X0, uword us_Y0, uword us_X1, uword us_Y1)
 	{
 	NODE *node;
-	LSObject lso;
 
 	ls->uch_ShowObjectMask = 0x40;
 
 	for (node = (NODE*)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE*) NODE_SUCC(node))
 		{
-		LSObject lso = OL_DATA(node);
+		LSObject lso = (LSObject)OL_DATA(node);
 
 		if (lsIsInside(lso, us_X0, us_Y0, us_X1, us_Y1))
 			if (lsIsObjectADoor(lso))
@@ -67,9 +66,9 @@ static void lsRefreshClosedDoors(uword us_X0, uword us_Y0, uword us_X1, uword us
 // direkt aus der Grafik; Um die richtige Src-Grafik zu erhalten, wird mittels
 // eines dummy Objektes die Funktion lsPrepareFromXMS aufgerufen
 void lsRefreshStatue(LSObject lso)
-	{
+{
 	uword srcX, srcY, destX, destY, size;
-	struct _LSObject dummy;	// nur zur šbergabe an lsPrepareFromXMS
+	struct _LSObject dummy;	// nur zur Übergabe an lsPrepareFromXMS
 
 	ls->uch_ShowObjectMask = 0x40;
 
@@ -79,7 +78,7 @@ void lsRefreshStatue(LSObject lso)
 
 	lsPrepareFromXMS(&dummy);
 
-	srcX = 16;		// aus der Grafik entnehmen und hier einttragen!
+	srcX = 16;		// aus der Grafik entnehmen und hier eintragen!
 	srcY = 0;
 
 	destX = lso->us_DestX + 7;
@@ -94,108 +93,127 @@ void lsRefreshStatue(LSObject lso)
 void lsFastRefresh(LSObject lso)
 	{
 	uword x0, x1, y0, y1;
-	Item item;
 
 	ls->uch_ShowObjectMask = 0x40;	// Bit 6 ignorieren
 
 	switch(lso->Type)
+	{
+	case Item_Holztuer:
+	case Item_Stahltuer:
+	case Item_Tresorraum:
+	case Item_Mauertor:
+		if (lso->ul_Status & (1<<Const_tcOPEN_CLOSE_BIT))
 		{
-		case Item_Holztuer:
-		case Item_Stahltuer:
-		case Item_Tresorraum:
-		case Item_Mauertor:
-				if (lso->ul_Status & (1<<Const_tcOPEN_CLOSE_BIT))
-					{
-					word x0, y0;
+			word x0, y0;
 
-					lsDoDoorRefresh(lso);
+			lsDoDoorRefresh(lso);
 
-					x0 = max((word) lso->us_DestX - 32, 0);
-					y0 = max((word) lso->us_DestY - 32, 0);
+			x0 = max((word) lso->us_DestX - 32, 0);
+			y0 = max((word) lso->us_DestY - 32, 0);
 
-					lsRefreshClosedDoors(x0, y0, lso->us_DestX + 32, lso->us_DestY + 32);
-					}
-				else
-					lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_ALL|LS_SHOW_PREPARE_FROM_XMS);
-				break;
+			lsRefreshClosedDoors(x0, y0, lso->us_DestX + 32, lso->us_DestY + 32);
+		}
+		else
+			lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_ALL|LS_SHOW_PREPARE_FROM_XMS);
+		break;
 
-		case Item_Gemaelde:
-		case Item_Bild:
-				// Gemaelde und Bilder werden, wenn sie genommen werden einfach
-				// durch ein graues RectFill bermalt (Schattenfarbe)
+	case Item_Gemaelde:
+	case Item_Bild:
+		// Gemaelde und Bilder werden, wenn sie genommen werden einfach
+		// durch ein graues RectFill übermalt (Schattenfarbe)
 
-				if (lso->uch_Visible == LS_OBJECT_VISIBLE)
-					lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_ALL|LS_SHOW_PREPARE_FROM_XMS);
-				else
-					{
-					LSArea area = dbGetObject(lsGetActivAreaID());
-					ubyte color = LS_REFRESH_SHADOW_COLOR1;
+		if (lso->uch_Visible == LS_OBJECT_VISIBLE)
+			lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_ALL|LS_SHOW_PREPARE_FROM_XMS);
+		else
+		{
+			LSArea area = (LSArea)dbGetObject(lsGetActivAreaID());
+			ubyte color = LS_REFRESH_SHADOW_COLOR1;
 
-					lsCalcExactSize(lso, &x0, &y0, &x1, &y1);
+			lsCalcExactSize(lso, &x0, &y0, &x1, &y1);
 
-					if (area->uch_Darkness == LS_DARKNESS)
-						color = LS_REFRESH_SHADOW_COLOR0;
+			if (area->uch_Darkness == LS_DARKNESS)
+				color = LS_REFRESH_SHADOW_COLOR0;
 
-					gfxSetPens(l_wrp, color, color, color);
+			gfxSetPens(l_wrp, color, color, color);
 
-					gfxNCH4RectFill(l_wrp, x0, y0, x1, y1);
+			gfxNCH4RectFill(l_wrp, x0, y0, x1, y1);
 
-					lsSetAlarmPict(lso);
-					}
-				break;
-		case Item_Statue:
-				if (lso->uch_Visible == LS_OBJECT_VISIBLE)
-					lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_ALL|LS_SHOW_PREPARE_FROM_XMS);
-				else
-					lsRefreshStatue(lso);
-				break;
-		#ifdef THECLOU_PROFIDISK
-		case Item_Heiligenstatue:
-		case Item_Hottentotten_Figur:
-		case Item_Batman_Figur:
-		case Item_Dicker_Man:
-		case Item_Unbekannter:
-		case Item_Jack_the_Ripper_Figur:
-		case Item_Koenigs_Figur:
-		case Item_Wache_Figur:
-		case Item_Miss_World_1952:
+			lsSetAlarmPict(lso);
+		}
+		break;
+	case Item_Statue:
+		if (lso->uch_Visible == LS_OBJECT_VISIBLE)
+			lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_ALL|LS_SHOW_PREPARE_FROM_XMS);
+		else
+			lsRefreshStatue(lso);
+		break;
+	default:
+		if (bProfidisk) 
+		{
+			switch (lso->Type)
+			{
+			case Item_Heiligenstatue:
+			case Item_Hottentotten_Figur:
+			case Item_Batman_Figur:
+			case Item_Dicker_Man:
+			case Item_Unbekannter:
+			case Item_Jack_the_Ripper_Figur:
+			case Item_Koenigs_Figur:
+			case Item_Wache_Figur:
+			case Item_Miss_World_1952:
 				if (lso->uch_Visible == LS_OBJECT_VISIBLE)
 					lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_ALL|LS_SHOW_PREPARE_FROM_XMS);
 				else
 					lsDoDoorRefresh(lso);
 				break;
-		case Item_Postsack:
+			case Item_Postsack:
 				break;
-		#endif
-		default:
+			default:
 				lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_ALL|LS_SHOW_PREPARE_FROM_XMS);
 				break;
+			}
 		}
 
-	switch(lso->Type)
+		else
 		{
-		case Item_Fenster: lsSetAlarmPict(lso); break;
-
-		default: break;
+			lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_ALL|LS_SHOW_PREPARE_FROM_XMS);
 		}
 
-	ls->uch_ShowObjectMask = 0;	// alle Bits kopieren
+		break;
 	}
 
-static void lsPrepareFromXMSBySize(ubyte uch_Size)
+	switch(lso->Type)
 	{
+	case Item_Fenster: lsSetAlarmPict(lso); break;
+
+	default: break;
+	}
+
+	ls->uch_ShowObjectMask = 0;	// alle Bits kopieren
+}
+
+static void lsPrepareFromXMSBySize(ubyte uch_Size)
+{
 	struct XMSRastPort *rp = NULL;
 
 	switch(uch_Size)
-		{
+	{
 		case 16: rp = &LS_COLL16_XMS_RP; break;
 		case 32: rp = &LS_COLL32_XMS_RP; break;
 		case 48: rp = &LS_COLL48_XMS_RP; break;
-		}
-
-	if (rp)
-		xmsCopyDown(rp->p_MemHandle, 0, LS_PREPARE_BUFFER, LS_PREPARE_BUFFER_SIZE);
 	}
+
+	if (rp) {
+		/* 2014-07-06 LucyG */
+		ulong buffer_size = LS_PREPARE_BUFFER_SIZE;
+		if (buffer_size > (rp->us_Width * rp->us_Height)) {
+			buffer_size = (rp->us_Width * rp->us_Height);
+			//Log("Warning: %s|%s: buffer size changed from %d to %d", __FILE__, __func__, LS_PREPARE_BUFFER_SIZE, buffer_size);
+			memset(LS_PREPARE_BUFFER, 0, LS_PREPARE_BUFFER_SIZE);
+		}
+        memcpy(LS_PREPARE_BUFFER, rp->p_MemHandle, buffer_size);
+	}
+}
 
 // bringt die Collection, in der sich ein Bild eines lso befindet in den
 // LS_PREPARE_BUFFER
@@ -206,7 +224,7 @@ static void lsPrepareFromXMS(LSObject lso)
 
 static void lsBlitOneObject(uword offsetFact, word destx, word desty, uword size)
 	{
-	uword srcWidth = 288;	// Quellbildschirm ist fr gew”hnlich 288 breit
+	uword srcWidth = 288;	// Quellbildschirm ist für gewöhnlich 288 breit
 	uword srcX, srcY, perRow;
 
 	// die 32er Objekte befinden sich auf einem Bildschirm, der
@@ -229,13 +247,13 @@ static void lsBlitOneObject(uword offsetFact, word destx, word desty, uword size
 
 long lsShowOneObject(LSObject lso, word destx, word desty, ulong ul_Mode)
 	{
-	Item item = dbGetObject(lso->Type);
+	Item item = (Item)dbGetObject(lso->Type);
 	long show = 0;
 	uword offsetFact;
 
 	switch (lso->Type)
 		{
-		case Item_Sockel:	// Sockel soll nicht dardestellt werden
+		case Item_Sockel:	// Sockel soll nicht dargestellt werden
 		break;
 
 		default:
@@ -246,7 +264,7 @@ long lsShowOneObject(LSObject lso, word destx, word desty, ulong ul_Mode)
 				if (lsIsObjectAWall(lso))
 					show = 1;
 
-			// Tren nur darstellen, wen Sie sichtbar sind
+			// Türen nur darstellen, wenn sie sichtbar sind
 
 			if ((!show) && (ul_Mode & LS_SHOW_DOOR))
 				if (lsIsObjectADoor(lso) && lso->uch_Visible == LS_OBJECT_VISIBLE)
@@ -293,7 +311,14 @@ void lsBlitFloor(uword floorIndex, uword destx, uword desty)
 	struct XMSRastPort *rp = &LS_FLOOR_XMS_RP;
 	uword srcX;
 
-	xmsCopyDown(rp->p_MemHandle, 0, LS_PREPARE_BUFFER, LS_PREPARE_BUFFER_SIZE);
+	/* 2014-07-06 LucyG : got random crashes here! */
+	ulong buffer_size = LS_PREPARE_BUFFER_SIZE;
+	if (buffer_size > (rp->us_Width * rp->us_Height)) {
+		buffer_size = (rp->us_Width * rp->us_Height);
+		//Log("Warning: %s|%s: buffer size changed from %d to %d", __FILE__, __func__, LS_PREPARE_BUFFER_SIZE, buffer_size);
+		memset(LS_PREPARE_BUFFER, 0, LS_PREPARE_BUFFER_SIZE);
+	}
+    memcpy(LS_PREPARE_BUFFER, rp->p_MemHandle, buffer_size);
 
 	srcX = ((ls->p_CurrFloor[floorIndex].uch_FloorType) & 0xf) * LS_FLOOR_X_SIZE;
 
