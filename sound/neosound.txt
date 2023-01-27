@@ -1,0 +1,1519 @@
+:01CA 
+:01CA ; ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ S U B R O U T I N E ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
+:01CA 
+:01CA ; Attributes: bp-based frame
+:01CA 
+:01CA                 public _NEOSOUNDSYSTEM
+:01CA _NEOSOUNDSYSTEM proc far
+:01CA 
+:01CA arg_0           = word ptr  6
+:01CA arg_2           = word ptr  8
+:01CA arg_4           = word ptr  0Ah
+:01CA 
+:01CA                 push    bp
+:01CB                 mov     bp, sp
+:01CD                 push    ds
+:01CE                 push    ax
+:01CF                 mov     ax, seg 
+:01D2                 mov     ds, ax
+:01D4                 assume es:nothing, ds:
+:01D4                 pop     ax
+:01D5                 mov     ax, [bp+arg_0]
+:01D8                 mov     bx, [bp+arg_2]
+:01DB                 mov     cx, [bp+arg_4]
+:01DE                 cmp     ax, 0
+:01E1                 jnz     loc_101FD
+:01E3                 cmp     cs:byte_101C9, 0
+:01E9                 jz      loc_101EE
+:01EB                 call    sub_104F6
+:01EE 
+:01EE loc_101EE:                              ; CODE XREF: _NEOSOUNDSYSTEM+1F
+:01EE                 mov     ax, 0
+:01F1                 call    sub_10517
+:01F4                 mov     cs:byte_101C9, 0FFh
+:01FA                 jmp     short loc_1023D
+:01FA ; ---------------------------------------------------------------------------
+:01FC                 db 90h
+:01FD ; ---------------------------------------------------------------------------
+:01FD 
+:01FD loc_101FD:                              ; CODE XREF: _NEOSOUNDSYSTEM+17
+:01FD                 cmp     ax, 1
+:0200                 jnz     loc_10216
+:0202                 cmp     cs:byte_101C9, 0
+:0208                 jz      loc_1023D
+:020A                 call    sub_104F6
+:020D                 mov     cs:byte_101C9, 0
+:0213                 jmp     short loc_1023D
+:0213 ; ---------------------------------------------------------------------------
+:0215                 align 2
+:0216 
+:0216 loc_10216:                              ; CODE XREF: _NEOSOUNDSYSTEM+36
+:0216                 cmp     ax, 2
+:0219                 jnz     loc_10229
+:021B                 cmp     cs:byte_101C9, 0
+:0221                 jnz     loc_1023D
+:0223                 call    sub_10BA0
+:0226                 jmp     short loc_1023D
+:0226 ; ---------------------------------------------------------------------------
+:0228                 db 90h
+:0229 ; ---------------------------------------------------------------------------
+:0229 
+:0229 loc_10229:                              ; CODE XREF: _NEOSOUNDSYSTEM+4F
+:0229                 cmp     ax, 0FFFFh
+:022C                 jnz     loc_10234
+:022E                 call    sub_10517
+:0231                 jmp     short loc_1023D
+:0231 ; ---------------------------------------------------------------------------
+:0233                 align 2
+:0234 
+:0234 loc_10234:                              ; CODE XREF: _NEOSOUNDSYSTEM+62
+:0234                 cmp     ax, 3
+:0237                 jnz     loc_1023D
+:0239                 mov     byte_101B0, bl
+:023D 
+:023D loc_1023D:                              ; CODE XREF: _NEOSOUNDSYSTEM+30
+:023D                                         ; _NEOSOUNDSYSTEM+3E ...
+:023D                 pop     ds
+:023E                 assume ds:nothing
+:023E                 pop     bp
+:023F                 retf
+:023F _NEOSOUNDSYSTEM endp
+:023F 
+:023F ; ---------------------------------------------------------------------------
+:0240 byte_10240      db 60h, 1Eh, 0B8h       ; DATA XREF: sub_10517+ACo
+:0243                 dw seg 
+:0245                 db 8Eh, 0D8h, 0BFh
+:0248                 dw offset byte_1016A
+:024A                 db 0B0h, 1, 28h, 5, 8Ah, 25h, 80h, 0FCh, 0, 75h, 8, 0A0h
+:0256                 dw offset byte_1016C
+:0258                 db 88h, 5, 0E8h, 44h, 0, 0E8h, 0F3h, 7, 0E8h, 3, 0, 1Fh
+:0258                 db 61h, 0CFh, 80h, 3Eh
+:0268                 dw offset byte_1016F
+:026A ; ---------------------------------------------------------------------------
+:026A                 add     [si+0Bh], dh
+:026D                 cmp     ds:byte_10171, 3Fh ; '?'
+:0272                 jz      loc_10278
+:0274                 inc     ds:byte_10171
+:0278 
+:0278 loc_10278:                              ; CODE XREF: :0272
+:0278                 cmp     ds:byte_10170, 0
+:027D                 jz      loc_1028A
+:027F                 cmp     ds:byte_10171, 0
+:0284                 jz      loc_1028A
+:0286                 dec     ds:byte_10171
+:028A 
+:028A loc_1028A:                              ; CODE XREF: :027D
+:028A                                         ; :0284
+:028A                 mov     al, ds:byte_10171
+:028D                 cmp     ds:byte_101B0, al
+:0291                 jz      locret_102A0
+:0293                 ja      loc_1029C
+:0295                 dec     ds:byte_10171
+:0299                 jmp     short locret_102A0
+:0299 ; ---------------------------------------------------------------------------
+:029B                 align 2
+:029C 
+:029C loc_1029C:                              ; CODE XREF: :0293
+:029C                 inc     ds:byte_10171
+:02A0 
+:02A0 locret_102A0:                           ; CODE XREF: :0291
+:02A0                                         ; :0299
+:02A0                 retn
+:02A1 ; ---------------------------------------------------------------------------
+:02A1                 mov     si, ds:word_101AA
+:02A5                 add     si, 633h
+:02A9                 mov     bx, ds:word_101AA
+:02AD                 add     bx, 600h
+:02B1                 xor     ax, ax
+:02B3                 mov     al, ds:byte_1016D
+:02B6                 add     bx, ax
+:02B8                 xor     ax, ax
+:02BA                 push    ds
+:02BB                 mov     ds, ds:word_101AC
+:02BF                 mov     al, [bx]
+:02C1                 pop     ds
+:02C2                 mov     bx, 480h
+:02C5                 mul     bx
+:02C7                 add     si, ax
+:02C9                 xor     ax, ax
+:02CB                 mov     al, ds:byte_1016E
+:02CE                 mov     bl, 12h
+:02D0                 mul     bl
+:02D2                 add     si, ax
+:02D4                 mov     cx, 9
+:02D7 
+:02D7 loc_102D7:                              ; CODE XREF: :02DA
+:02D7                 call    sub_10312
+:02DA                 loop    loc_102D7
+:02DC                 mov     di, offset byte_1016E
+:02DF                 mov     al, 1
+:02E1                 add     [di], al
+:02E3                 mov     bl, [di]
+:02E5                 cmp     bl, 40h ; '@'
+:02E8                 jnz     locret_10311
+:02EA                 xor     al, al
+:02EC                 mov     [di], al
+:02EE                 mov     di, offset byte_1016D
+:02F1                 mov     al, 1
+:02F3                 add     [di], al
+:02F5                 mov     si, ds:word_101AA
+:02F9                 add     si, 600h
+:02FD                 xor     bx, bx
+:02FF                 mov     bl, [di]
+:0301                 push    ds
+:0302                 mov     ds, ds:word_101AC
+:0306                 mov     al, [bx+si]
+:0308                 pop     ds
+:0309                 cmp     al, 0FFh
+:030B                 jnz     locret_10311
+:030D                 xor     al, al
+:030F                 mov     [di], al
+:0311 
+:0311 locret_10311:                           ; CODE XREF: :02E8
+:0311                                         ; :030B
+:0311                 retn
+:0312 
+:0312 ; ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ S U B R O U T I N E ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
+:0312 
+:0312 
+:0312 sub_10312       proc near               ; CODE XREF: :02D7
+:0312                 xor     ax, ax
+:0314                 push    ds
+:0315                 mov     ds, ds:word_101AC
+:0319                 mov     al, [si]
+:031B                 pop     ds
+:031C                 inc     si
+:031D                 cmp     al, 80h ; 'Ç'
+:031F                 jz      loc_10324
+:0321                 jmp     short loc_10327
+:0321 ; ---------------------------------------------------------------------------
+:0323                 align 2
+:0324 
+:0324 loc_10324:                              ; CODE XREF: sub_10312+D
+:0324                 jmp     loc_104E2
+:0327 ; ---------------------------------------------------------------------------
+:0327 
+:0327 loc_10327:                              ; CODE XREF: sub_10312+F
+:0327                 cmp     al, 0
+:0329                 jz      loc_10332
+:032B                 mov     ah, 9
+:032D                 sub     ah, cl
+:032F                 call    sub_109EC
+:0332 
+:0332 loc_10332:                              ; CODE XREF: sub_10312+17
+:0332                 push    ds
+:0333                 mov     ds, ds:word_101AC
+:0337                 mov     al, [si]
+:0339                 pop     ds
+:033A                 inc     si
+:033B                 cmp     al, 0
+:033D                 jnz     loc_10342
+:033F                 jmp     loc_104C0
+:0342 ; ---------------------------------------------------------------------------
+:0342 
+:0342 loc_10342:                              ; CODE XREF: sub_10312+2B
+:0342                 cmp     al, 1
+:0344                 jnz     loc_1034F
+:0346                 mov     ah, 3Fh ; '?'
+:0348                 mov     ds:byte_1016E, ah
+:034C                 jmp     loc_104C0
+:034F ; ---------------------------------------------------------------------------
+:034F 
+:034F loc_1034F:                              ; CODE XREF: sub_10312+32
+:034F                 cmp     al, 2
+:0351                 jnz     loc_10360
+:0353                 mov     ds:byte_1016F, 0FFh
+:0358                 mov     ds:byte_10170, 0
+:035D                 jmp     loc_104C0
+:0360 ; ---------------------------------------------------------------------------
+:0360 
+:0360 loc_10360:                              ; CODE XREF: sub_10312+3F
+:0360                 cmp     al, 3
+:0362                 jnz     loc_10376
+:0364                 mov     ds:byte_10170, 0FFh
+:0369                 mov     ds:byte_1016F, 0
+:036E                 mov     ds:byte_10171, 3Fh ; '?'
+:0373                 jmp     loc_104C0
+:0376 ; ---------------------------------------------------------------------------
+:0376 
+:0376 loc_10376:                              ; CODE XREF: sub_10312+50
+:0376                 cmp     al, 4
+:0378                 jnz     loc_10382
+:037A                 mov     ds:byte_10171, 0
+:037F                 jmp     loc_104C0
+:0382 ; ---------------------------------------------------------------------------
+:0382 
+:0382 loc_10382:                              ; CODE XREF: sub_10312+66
+:0382                 cmp     al, 5
+:0384                 jnz     loc_1038E
+:0386                 or      ds:byte_101AE, 20h
+:038B                 jmp     loc_104C0
+:038E ; ---------------------------------------------------------------------------
+:038E 
+:038E loc_1038E:                              ; CODE XREF: sub_10312+72
+:038E                 cmp     al, 6
+:0390                 jnz     loc_1039A
+:0392                 and     ds:byte_101AE, 0DFh
+:0397                 jmp     loc_104C0
+:039A ; ---------------------------------------------------------------------------
+:039A 
+:039A loc_1039A:                              ; CODE XREF: sub_10312+7E
+:039A                 mov     ah, al
+:039C                 and     ax, 0FF0h
+:039F                 shr     al, 4
+:03A2                 cmp     al, 1
+:03A4                 jnz     loc_103B7
+:03A6                 mov     di, offset byte_1011E
+:03A9                 mov     bx, 9
+:03AC                 sub     bx, cx
+:03AE                 shl     bx, 1
+:03B0                 inc     ah
+:03B2                 add     [bx+di], ah
+:03B4                 jmp     loc_104C0
+:03B7 ; ---------------------------------------------------------------------------
+:03B7 
+:03B7 loc_103B7:                              ; CODE XREF: sub_10312+92
+:03B7                 cmp     al, 2
+:03B9                 jnz     loc_103CC
+:03BB                 mov     di, offset byte_1011E
+:03BE                 mov     bx, 9
+:03C1                 sub     bx, cx
+:03C3                 shl     bx, 1
+:03C5                 inc     ah
+:03C7                 sub     [bx+di], ah
+:03C9                 jmp     loc_104C0
+:03CC ; ---------------------------------------------------------------------------
+:03CC 
+:03CC loc_103CC:                              ; CODE XREF: sub_10312+A7
+:03CC                 cmp     al, 5
+:03CE                 jnz     loc_103E9
+:03D0                 push    bx
+:03D1                 push    cx
+:03D2                 mov     bl, 1
+:03D4                 mov     cl, ah
+:03D6                 shl     bl, cl
+:03D8                 and     ds:byte_101AE, 0E0h
+:03DD                 and     bl, 1Fh
+:03E0                 or      ds:byte_101AE, bl
+:03E4                 pop     cx
+:03E5                 pop     bx
+:03E6                 jmp     loc_104C0
+:03E9 ; ---------------------------------------------------------------------------
+:03E9 
+:03E9 loc_103E9:                              ; CODE XREF: sub_10312+BC
+:03E9                 cmp     al, 6
+:03EB                 jnz     loc_10440
+:03ED                 push    bx
+:03EE                 push    di
+:03EF                 push    si
+:03F0                 and     ah, 7
+:03F3                 shl     ah, 1
+:03F5                 mov     bx, 9
+:03F8                 sub     bx, cx
+:03FA                 push    ax
+:03FB                 push    bx
+:03FC                 mov     si, offset byte_10173
+:03FF                 mov     al, [bx+si]
+:0401                 xor     ah, ah
+:0403                 mov     bx, 0Ch
+:0406                 mul     bx
+:0408                 mov     si, ds:word_101AA
+:040C                 add     si, ax
+:040E                 pop     bx
+:040F                 pop     ax
+:0410                 push    ds
+:0411                 mov     ds, ds:word_101AC
+:0415                 mov     al, [si+8]
+:0418                 and     al, 1
+:041A                 or      al, ah
+:041C                 push    dx
+:041D                 push    ax
+:041E                 mov     dx, ds:word_10118
+:0422                 mov     al, 0C0h ; '+'
+:0424                 mov     bx, 9
+:0427                 sub     bx, cx
+:0429                 add     al, bl
+:042B                 out     dx, al
+:042C                 call    sub_10CAC
+:042F                 mov     dx, ds:word_1011A
+:0433                 pop     ax
+:0434                 out     dx, al
+:0435                 call    sub_10CBF
+:0438                 pop     dx
+:0439                 pop     ds
+:043A                 pop     si
+:043B                 pop     di
+:043C                 pop     bx
+:043D                 jmp     loc_104C0
+:0440 ; ---------------------------------------------------------------------------
+:0440 
+:0440 loc_10440:                              ; CODE XREF: sub_10312+D9
+:0440                 cmp     al, 0Ah
+:0442                 jnz     loc_10454
+:0444                 shl     ah, 2
+:0447                 mov     di, offset byte_10142
+:044A                 mov     bx, 9
+:044D                 sub     bx, cx
+:044F                 mov     [bx+di], ah
+:0451                 jmp     short loc_104C0
+:0451 ; ---------------------------------------------------------------------------
+:0453                 align 2
+:0454 
+:0454 loc_10454:                              ; CODE XREF: sub_10312+130
+:0454                 cmp     al, 0Bh
+:0456                 jnz     loc_10469
+:0458                 shl     ah, 2
+:045B                 mov     di, offset byte_10142
+:045E                 mov     bx, 9
+:0461                 sub     bx, cx
+:0463                 mov     [bx+di+9], ah
+:0466                 jmp     short loc_104C0
+:0466 ; ---------------------------------------------------------------------------
+:0468                 db 90h
+:0469 ; ---------------------------------------------------------------------------
+:0469 
+:0469 loc_10469:                              ; CODE XREF: sub_10312+144
+:0469                 cmp     al, 0Ch
+:046B                 jnz     loc_104A4
+:046D                 shl     ah, 2
+:0470                 mov     di, offset byte_10142
+:0473                 mov     bx, 9
+:0476                 sub     bx, cx
+:0478                 mov     [bx+di], ah
+:047A                 push    si
+:047B                 push    ax
+:047C                 push    bx
+:047D                 mov     si, offset byte_10173
+:0480                 mov     al, [bx+si]
+:0482                 xor     ah, ah
+:0484                 mov     bx, 0Ch
+:0487                 mul     bx
+:0489                 mov     si, ds:word_101AA
+:048D                 add     si, ax
+:048F                 pop     bx
+:0490                 pop     ax
+:0491                 push    ds
+:0492                 mov     ds, ds:word_101AC
+:0496                 test    byte ptr [si+8], 1
+:049A                 pop     ds
+:049B                 pop     si
+:049C                 jz      loc_104A1
+:049E                 mov     [bx+di+9], ah
+:04A1 
+:04A1 loc_104A1:                              ; CODE XREF: sub_10312+18A
+:04A1                 jmp     short loc_104C0
+:04A1 ; ---------------------------------------------------------------------------
+:04A3                 align 2
+:04A4 
+:04A4 loc_104A4:                              ; CODE XREF: sub_10312+159
+:04A4                 cmp     al, 0Dh
+:04A6                 jnz     loc_104B4
+:04A8                 mov     ds:byte_1016D, ah
+:04AC                 mov     ds:byte_1016E, 3Fh ; '?'
+:04B1                 jmp     short loc_104C0
+:04B1 ; ---------------------------------------------------------------------------
+:04B3                 align 2
+:04B4 
+:04B4 loc_104B4:                              ; CODE XREF: sub_10312+194
+:04B4                 cmp     al, 0Fh
+:04B6                 inc     ah
+:04B8                 mov     ds:byte_1016C, ah
+:04BC                 mov     ds:byte_1016A, ah
+:04C0 
+:04C0 loc_104C0:                              ; CODE XREF: sub_10312+2D
+:04C0                                         ; sub_10312+3A ...
+:04C0                 mov     al, ds:byte_101AE
+:04C3                 cmp     ds:byte_101AF, al
+:04C7                 jz      locret_104E1
+:04C9                 mov     ds:byte_101AF, al
+:04CC                 mov     dx, ds:word_10118
+:04D0                 mov     al, 0BDh ; '¢'
+:04D2                 out     dx, al
+:04D3                 call    sub_10CAC
+:04D6                 mov     dx, ds:word_1011A
+:04DA                 mov     al, ds:byte_101AE
+:04DD                 out     dx, al
+:04DE                 call    sub_10CBF
+:04E1 
+:04E1 locret_104E1:                           ; CODE XREF: sub_10312+1B5
+:04E1                 retn
+:04E2 ; ---------------------------------------------------------------------------
+:04E2 
+:04E2 loc_104E2:                              ; CODE XREF: sub_10312+12
+:04E2                 push    ds
+:04E3                 mov     ds, ds:word_101AC
+:04E7                 mov     al, [si]
+:04E9                 pop     ds
+:04EA                 and     al, 7Fh
+:04EC                 inc     si
+:04ED                 mov     ah, 9
+:04EF                 sub     ah, cl
+:04F1                 call    sub_1083C
+:04F4                 jmp     short loc_104C0
+:04F4 sub_10312       endp
+:04F4 
+:04F6 
+:04F6 ; ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ S U B R O U T I N E ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
+:04F6 
+:04F6 
+:04F6 sub_104F6       proc near               ; CODE XREF: _NEOSOUNDSYSTEM+21
+:04F6                                         ; _NEOSOUNDSYSTEM+40
+:04F6                 pusha
+:04F7                 push    ds
+:04F8                 mov     ax, seg 
+:04FB                 mov     ds, ax
+:04FD                 assume ds:
+:04FD                 mov     ax, 251Ch
+:0500                 mov     dx, word_10166
+:0504                 mov     cx, word_10168
+:0508                 mov     ds, cx
+:050A                 assume ds:nothing
+:050A                 int     21h             ; DOS - SET INTERRUPT VECTOR
+:050A                                         ; AL = interrupt number
+:050A                                         ; DS:DX = new vector to be used for specified interrupt
+:050C                 mov     ax, seg 
+:050F                 mov     ds, ax
+:0511                 assume ds:
+:0511                 call    sub_105EC
+:0514                 pop     ds
+:0515                 assume ds:nothing
+:0515                 popa
+:0516                 retn
+:0516 sub_104F6       endp
+:0516 
+:0517 
+:0517 ; ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ S U B R O U T I N E ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
+:0517 
+:0517 
+:0517 sub_10517       proc near               ; CODE XREF: _NEOSOUNDSYSTEM+27
+:0517                                         ; _NEOSOUNDSYSTEM+64
+:0517                 pusha
+:0518                 push    es
+:0519                 push    ds
+:051A                 mov     dx, seg 
+:051D                 mov     ds, dx
+:051F                 assume ds:
+:051F                 cmp     al, 0FFh
+:0521                 jnz     loc_1052E
+:0523                 mov     byte_1016F, al
+:0526                 mov     byte_10170, 0
+:052B                 jmp     loc_105E8
+:052E ; ---------------------------------------------------------------------------
+:052E 
+:052E loc_1052E:                              ; CODE XREF: sub_10517+A
+:052E                 mov     word_101AA, bx
+:0532                 mov     word_101AC, cx
+:0536                 call    sub_105EC
+:0539                 mov     dx, word_10118
+:053D                 mov     al, 1
+:053F                 out     dx, al
+:0540                 call    sub_10CAC
+:0543                 mov     dx, word_1011A
+:0547                 mov     al, 20h ; ' '
+:0549                 out     dx, al
+:054A                 call    sub_10CBF
+:054D                 mov     dx, word_10118
+:0551                 mov     al, 8
+:0553                 out     dx, al
+:0554                 call    sub_10CAC
+:0557                 mov     dx, word_1011A
+:055B                 mov     al, 40h ; '@'
+:055D                 out     dx, al
+:055E                 call    sub_10CBF
+:0561                 mov     byte_101AE, 0
+:0566                 mov     dx, word_10118
+:056A                 mov     al, 0BDh ; '¢'
+:056C                 out     dx, al
+:056D                 call    sub_10CAC
+:0570                 mov     dx, word_1011A
+:0574                 mov     al, byte_101AE
+:0577                 out     dx, al
+:0578                 call    sub_10CBF
+:057B                 xor     ax, ax
+:057D                 mov     cx, 9
+:0580 
+:0580 loc_10580:                              ; CODE XREF: sub_10517+6F
+:0580                 call    sub_1083C
+:0583                 add     ax, 101h
+:0586                 loop    loc_10580
+:0588                 mov     byte_1016F, 0
+:058D                 mov     byte_10170, 0
+:0592                 mov     byte_10171, 0
+:0597                 mov     byte_101B0, 0
+:059C                 mov     byte_1016A, 1
+:05A1                 xor     al, al
+:05A3                 mov     byte_1016D, al
+:05A6                 mov     byte_1016E, al
+:05A9                 mov     al, 2
+:05AB                 mov     byte_1016C, al
+:05AE                 mov     ax, 351Ch
+:05B1                 int     21h             ; DOS - 2+ - GET INTERRUPT VECTOR
+:05B1                                         ; AL = interrupt number
+:05B1                                         ; Return: ES:BX = value of interrupt vector
+:05B3                 mov     word_10168, es
+:05B7                 mov     word_10166, bx
+:05BB                 mov     ax, seg 
+:05BE                 mov     ds, ax
+:05C0                 mov     ax, 251Ch
+:05C3                 mov     dx, offset byte_10240
+:05C6                 int     21h             ; DOS - SET INTERRUPT VECTOR
+:05C6                                         ; AL = interrupt number
+:05C6                                         ; DS:DX = new vector to be used for specified interrupt
+:05C8                 mov     ax, seg 
+:05CB                 mov     ds, ax
+:05CD                 mov     di, offset byte_10130
+:05D0                 mov     cx, 12h
+:05D3 
+:05D3 loc_105D3:                              ; CODE XREF: sub_10517+BF
+:05D3                 mov     byte ptr [di], 0FFh
+:05D6                 loop    loc_105D3
+:05D8                 mov     di, offset byte_10154
+:05DB                 mov     cx, 12h
+:05DE 
+:05DE loc_105DE:                              ; CODE XREF: sub_10517+CA
+:05DE                 mov     byte ptr [di], 0FFh
+:05E1                 loop    loc_105DE
+:05E3                 mov     byte_10172, 0FFh
+:05E8 
+:05E8 loc_105E8:                              ; CODE XREF: sub_10517+14
+:05E8                 pop     ds
+:05E9                 assume ds:nothing
+:05E9                 pop     es
+:05EA                 assume es:nothing
+:05EA                 popa
+:05EB                 retn
+:05EB sub_10517       endp
+:05EB 
+:05EC 
+:05EC ; ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ S U B R O U T I N E ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
+:05EC 
+:05EC 
+:05EC sub_105EC       proc near               ; CODE XREF: sub_104F6+1B
+:05EC                                         ; sub_10517+1F
+:05EC                 mov     dx, ds:word_10118
+:05F0                 mov     al, 1
+:05F2                 out     dx, al
+:05F3                 call    sub_10CAC
+:05F6                 mov     dx, ds:word_1011A
+:05FA                 mov     al, 0
+:05FC                 out     dx, al
+:05FD                 call    sub_10CBF
+:0600                 mov     dx, ds:word_10118
+:0604                 mov     al, 0B0h ; '¦'
+:0606                 out     dx, al
+:0607                 call    sub_10CAC
+:060A                 mov     dx, ds:word_1011A
+:060E                 mov     al, 0
+:0610                 out     dx, al
+:0611                 call    sub_10CBF
+:0614                 mov     dx, ds:word_10118
+:0618                 mov     al, 0B1h ; '¦'
+:061A                 out     dx, al
+:061B                 call    sub_10CAC
+:061E                 mov     dx, ds:word_1011A
+:0622                 mov     al, 0
+:0624                 out     dx, al
+:0625                 call    sub_10CBF
+:0628                 mov     dx, ds:word_10118
+:062C                 mov     al, 0B2h ; '¦'
+:062E                 out     dx, al
+:062F                 call    sub_10CAC
+:0632                 mov     dx, ds:word_1011A
+:0636                 mov     al, 0
+:0638                 out     dx, al
+:0639                 call    sub_10CBF
+:063C                 mov     dx, ds:word_10118
+:0640                 mov     al, 0B3h ; '¦'
+:0642                 out     dx, al
+:0643                 call    sub_10CAC
+:0646                 mov     dx, ds:word_1011A
+:064A                 mov     al, 0
+:064C                 out     dx, al
+:064D                 call    sub_10CBF
+:0650                 mov     dx, ds:word_10118
+:0654                 mov     al, 0B4h ; '¦'
+:0656                 out     dx, al
+:0657                 call    sub_10CAC
+:065A                 mov     dx, ds:word_1011A
+:065E                 mov     al, 0
+:0660                 out     dx, al
+:0661                 call    sub_10CBF
+:0664                 mov     dx, ds:word_10118
+:0668                 mov     al, 0B5h ; 'Á'
+:066A                 out     dx, al
+:066B                 call    sub_10CAC
+:066E                 mov     dx, ds:word_1011A
+:0672                 mov     al, 0
+:0674                 out     dx, al
+:0675                 call    sub_10CBF
+:0678                 mov     dx, ds:word_10118
+:067C                 mov     al, 0B6h ; 'Â'
+:067E                 out     dx, al
+:067F                 call    sub_10CAC
+:0682                 mov     dx, ds:word_1011A
+:0686                 mov     al, 0
+:0688                 out     dx, al
+:0689                 call    sub_10CBF
+:068C                 mov     dx, ds:word_10118
+:0690                 mov     al, 0B7h ; 'À'
+:0692                 out     dx, al
+:0693                 call    sub_10CAC
+:0696                 mov     dx, ds:word_1011A
+:069A                 mov     al, 0
+:069C                 out     dx, al
+:069D                 call    sub_10CBF
+:06A0                 mov     dx, ds:word_10118
+:06A4                 mov     al, 0B8h ; '©'
+:06A6                 out     dx, al
+:06A7                 call    sub_10CAC
+:06AA                 mov     dx, ds:word_1011A
+:06AE                 mov     al, 0
+:06B0                 out     dx, al
+:06B1                 call    sub_10CBF
+:06B4                 mov     dx, ds:word_10118
+:06B8                 mov     al, 80h ; 'Ç'
+:06BA                 out     dx, al
+:06BB                 call    sub_10CAC
+:06BE                 mov     dx, ds:word_1011A
+:06C2                 mov     al, 0FFh
+:06C4                 out     dx, al
+:06C5                 call    sub_10CBF
+:06C8                 mov     dx, ds:word_10118
+:06CC                 mov     al, 81h ; 'ü'
+:06CE                 out     dx, al
+:06CF                 call    sub_10CAC
+:06D2                 mov     dx, ds:word_1011A
+:06D6                 mov     al, 0FFh
+:06D8                 out     dx, al
+:06D9                 call    sub_10CBF
+:06DC                 mov     dx, ds:word_10118
+:06E0                 mov     al, 82h ; 'é'
+:06E2                 out     dx, al
+:06E3                 call    sub_10CAC
+:06E6                 mov     dx, ds:word_1011A
+:06EA                 mov     al, 0FFh
+:06EC                 out     dx, al
+:06ED                 call    sub_10CBF
+:06F0                 mov     dx, ds:word_10118
+:06F4                 mov     al, 83h ; 'â'
+:06F6                 out     dx, al
+:06F7                 call    sub_10CAC
+:06FA                 mov     dx, ds:word_1011A
+:06FE                 mov     al, 0FFh
+:0700                 out     dx, al
+:0701                 call    sub_10CBF
+:0704                 mov     dx, ds:word_10118
+:0708                 mov     al, 84h ; 'ä'
+:070A                 out     dx, al
+:070B                 call    sub_10CAC
+:070E                 mov     dx, ds:word_1011A
+:0712                 mov     al, 0FFh
+:0714                 out     dx, al
+:0715                 call    sub_10CBF
+:0718                 mov     dx, ds:word_10118
+:071C                 mov     al, 85h ; 'à'
+:071E                 out     dx, al
+:071F                 call    sub_10CAC
+:0722                 mov     dx, ds:word_1011A
+:0726                 mov     al, 0FFh
+:0728                 out     dx, al
+:0729                 call    sub_10CBF
+:072C                 mov     dx, ds:word_10118
+:0730                 mov     al, 88h ; 'ê'
+:0732                 out     dx, al
+:0733                 call    sub_10CAC
+:0736                 mov     dx, ds:word_1011A
+:073A                 mov     al, 0FFh
+:073C                 out     dx, al
+:073D                 call    sub_10CBF
+:0740                 mov     dx, ds:word_10118
+:0744                 mov     al, 89h ; 'ë'
+:0746                 out     dx, al
+:0747                 call    sub_10CAC
+:074A                 mov     dx, ds:word_1011A
+:074E                 mov     al, 0FFh
+:0750                 out     dx, al
+:0751                 call    sub_10CBF
+:0754                 mov     dx, ds:word_10118
+:0758                 mov     al, 8Ah ; 'è'
+:075A                 out     dx, al
+:075B                 call    sub_10CAC
+:075E                 mov     dx, ds:word_1011A
+:0762                 mov     al, 0FFh
+:0764                 out     dx, al
+:0765                 call    sub_10CBF
+:0768                 mov     dx, ds:word_10118
+:076C                 mov     al, 8Bh ; 'ï'
+:076E                 out     dx, al
+:076F                 call    sub_10CAC
+:0772                 mov     dx, ds:word_1011A
+:0776                 mov     al, 0FFh
+:0778                 out     dx, al
+:0779                 call    sub_10CBF
+:077C                 mov     dx, ds:word_10118
+:0780                 mov     al, 8Ch ; 'î'
+:0782                 out     dx, al
+:0783                 call    sub_10CAC
+:0786                 mov     dx, ds:word_1011A
+:078A                 mov     al, 0FFh
+:078C                 out     dx, al
+:078D                 call    sub_10CBF
+:0790                 mov     dx, ds:word_10118
+:0794                 mov     al, 8Dh ; 'ì'
+:0796                 out     dx, al
+:0797                 call    sub_10CAC
+:079A                 mov     dx, ds:word_1011A
+:079E                 mov     al, 0FFh
+:07A0                 out     dx, al
+:07A1                 call    sub_10CBF
+:07A4                 mov     dx, ds:word_10118
+:07A8                 mov     al, 90h ; 'É'
+:07AA                 out     dx, al
+:07AB                 call    sub_10CAC
+:07AE                 mov     dx, ds:word_1011A
+:07B2                 mov     al, 0FFh
+:07B4                 out     dx, al
+:07B5                 call    sub_10CBF
+:07B8                 mov     dx, ds:word_10118
+:07BC                 mov     al, 91h ; 'æ'
+:07BE                 out     dx, al
+:07BF                 call    sub_10CAC
+:07C2                 mov     dx, ds:word_1011A
+:07C6                 mov     al, 0FFh
+:07C8                 out     dx, al
+:07C9                 call    sub_10CBF
+:07CC                 mov     dx, ds:word_10118
+:07D0                 mov     al, 92h ; 'Æ'
+:07D2                 out     dx, al
+:07D3                 call    sub_10CAC
+:07D6                 mov     dx, ds:word_1011A
+:07DA                 mov     al, 0FFh
+:07DC                 out     dx, al
+:07DD                 call    sub_10CBF
+:07E0                 mov     dx, ds:word_10118
+:07E4                 mov     al, 93h ; 'ô'
+:07E6                 out     dx, al
+:07E7                 call    sub_10CAC
+:07EA                 mov     dx, ds:word_1011A
+:07EE                 mov     al, 0FFh
+:07F0                 out     dx, al
+:07F1                 call    sub_10CBF
+:07F4                 mov     dx, ds:word_10118
+:07F8                 mov     al, 94h ; 'ö'
+:07FA                 out     dx, al
+:07FB                 call    sub_10CAC
+:07FE                 mov     dx, ds:word_1011A
+:0802                 mov     al, 0FFh
+:0804                 out     dx, al
+:0805                 call    sub_10CBF
+:0808                 mov     dx, ds:word_10118
+:080C                 mov     al, 95h ; 'ò'
+:080E                 out     dx, al
+:080F                 call    sub_10CAC
+:0812                 mov     dx, ds:word_1011A
+:0816                 mov     al, 0FFh
+:0818                 out     dx, al
+:0819                 call    sub_10CBF
+:081C                 mov     di, offset byte_1011E
+:081F                 xor     ax, ax
+:0821                 mov     [di], ax
+:0823                 mov     [di+2], ax
+:0826                 mov     [di+4], ax
+:0829                 mov     [di+6], ax
+:082C                 mov     [di+8], ax
+:082F                 mov     [di+0Ah], ax
+:0832                 mov     [di+0Ch], ax
+:0835                 mov     [di+0Eh], ax
+:0838                 mov     [di+10h], ax
+:083B                 retn
+:083B sub_105EC       endp
+:083B 
+:083C 
+:083C ; ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ S U B R O U T I N E ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
+:083C 
+:083C 
+:083C sub_1083C       proc near               ; CODE XREF: sub_10312+1DF
+:083C                                         ; sub_10517+69
+:083C                 pusha
+:083D                 xor     cx, cx
+:083F                 mov     di, offset byte_10173
+:0842                 xor     bx, bx
+:0844                 mov     bl, ah
+:0846                 mov     [bx+di], al
+:0848                 mov     cl, ah
+:084A                 xor     ah, ah
+:084C                 mov     bx, 0Ch
+:084F                 mul     bx
+:0851                 mov     si, ds:word_101AA
+:0855                 add     si, ax
+:0857                 mov     dx, ds:word_10118
+:085B                 mov     al, 0B0h ; '¦'
+:085D                 add     al, cl
+:085F                 out     dx, al
+:0860                 call    sub_10CAC
+:0863                 mov     dx, ds:word_1011A
+:0867                 xor     al, al
+:0869                 out     dx, al
+:086A                 call    sub_10CBF
+:086D                 mov     dx, ds:word_10118
+:0871                 mov     al, 0C0h ; '+'
+:0873                 add     al, cl
+:0875                 out     dx, al
+:0876                 call    sub_10CAC
+:0879                 mov     dx, ds:word_1011A
+:087D                 push    ds
+:087E                 mov     ds, ds:word_101AC
+:0882                 mov     al, [si+8]
+:0885                 pop     ds
+:0886                 out     dx, al
+:0887                 call    sub_10CBF
+:088A                 mov     di, offset byte_100E2
+:088D                 rol     cx, 1
+:088F                 add     di, cx
+:0891                 ror     cx, 1
+:0893                 mov     dx, ds:word_10118
+:0897                 mov     al, 20h ; ' '
+:0899                 add     al, [di]
+:089B                 out     dx, al
+:089C                 call    sub_10CAC
+:089F                 mov     dx, ds:word_1011A
+:08A3                 push    ds
+:08A4                 mov     ds, ds:word_101AC
+:08A8                 mov     al, [si]
+:08AA                 pop     ds
+:08AB                 out     dx, al
+:08AC                 call    sub_10CBF
+:08AF                 mov     dx, ds:word_10118
+:08B3                 mov     al, 20h ; ' '
+:08B5                 add     al, [di+1]
+:08B8                 out     dx, al
+:08B9                 call    sub_10CAC
+:08BC                 mov     dx, ds:word_1011A
+:08C0                 push    ds
+:08C1                 mov     ds, ds:word_101AC
+:08C5                 mov     al, [si+1]
+:08C8                 pop     ds
+:08C9                 out     dx, al
+:08CA                 call    sub_10CBF
+:08CD                 mov     dx, ds:word_10118
+:08D1                 mov     al, 60h ; '`'
+:08D3                 add     al, [di]
+:08D5                 out     dx, al
+:08D6                 call    sub_10CAC
+:08D9                 mov     dx, ds:word_1011A
+:08DD                 push    ds
+:08DE                 mov     ds, ds:word_101AC
+:08E2                 mov     al, [si+4]
+:08E5                 pop     ds
+:08E6                 out     dx, al
+:08E7                 call    sub_10CBF
+:08EA                 mov     dx, ds:word_10118
+:08EE                 mov     al, 60h ; '`'
+:08F0                 add     al, [di+1]
+:08F3                 out     dx, al
+:08F4                 call    sub_10CAC
+:08F7                 mov     dx, ds:word_1011A
+:08FB                 push    ds
+:08FC                 mov     ds, ds:word_101AC
+:0900                 mov     al, [si+5]
+:0903                 pop     ds
+:0904                 out     dx, al
+:0905                 call    sub_10CBF
+:0908                 mov     dx, ds:word_10118
+:090C                 mov     al, 80h ; 'Ç'
+:090E                 add     al, [di]
+:0910                 out     dx, al
+:0911                 call    sub_10CAC
+:0914                 mov     dx, ds:word_1011A
+:0918                 push    ds
+:0919                 mov     ds, ds:word_101AC
+:091D                 mov     al, [si+6]
+:0920                 pop     ds
+:0921                 out     dx, al
+:0922                 call    sub_10CBF
+:0925                 mov     dx, ds:word_10118
+:0929                 mov     al, 80h ; 'Ç'
+:092B                 add     al, [di+1]
+:092E                 out     dx, al
+:092F                 call    sub_10CAC
+:0932                 mov     dx, ds:word_1011A
+:0936                 push    ds
+:0937                 mov     ds, ds:word_101AC
+:093B                 mov     al, [si+7]
+:093E                 pop     ds
+:093F                 out     dx, al
+:0940                 call    sub_10CBF
+:0943                 mov     dx, ds:word_10118
+:0947                 mov     al, 0E0h ; 'Ó'
+:0949                 add     al, [di]
+:094B                 out     dx, al
+:094C                 call    sub_10CAC
+:094F                 mov     dx, ds:word_1011A
+:0953                 push    ds
+:0954                 mov     ds, ds:word_101AC
+:0958                 mov     al, [si+9]
+:095B                 pop     ds
+:095C                 out     dx, al
+:095D                 call    sub_10CBF
+:0960                 mov     dx, ds:word_10118
+:0964                 mov     al, 0E0h ; 'Ó'
+:0966                 add     al, [di+1]
+:0969                 out     dx, al
+:096A                 call    sub_10CAC
+:096D                 mov     dx, ds:word_1011A
+:0971                 push    ds
+:0972                 mov     ds, ds:word_101AC
+:0976                 mov     al, [si+0Ah]
+:0979                 pop     ds
+:097A                 out     dx, al
+:097B                 call    sub_10CBF
+:097E                 mov     dx, ds:word_10118
+:0982                 mov     al, 40h ; '@'
+:0984                 add     al, [di]
+:0986                 out     dx, al
+:0987                 call    sub_10CAC
+:098A                 mov     dx, ds:word_1011A
+:098E                 push    ds
+:098F                 mov     ds, ds:word_101AC
+:0993                 mov     al, [si+2]
+:0996                 pop     ds
+:0997                 out     dx, al
+:0998                 call    sub_10CBF
+:099B                 mov     dx, ds:word_10118
+:099F                 mov     al, 40h ; '@'
+:09A1                 add     al, [di+1]
+:09A4                 out     dx, al
+:09A5                 call    sub_10CAC
+:09A8                 mov     dx, ds:word_1011A
+:09AC                 push    ds
+:09AD                 mov     ds, ds:word_101AC
+:09B1                 mov     al, [si+3]
+:09B4                 pop     ds
+:09B5                 out     dx, al
+:09B6                 call    sub_10CBF
+:09B9                 mov     di, offset byte_10142
+:09BC                 add     di, cx
+:09BE                 push    ds
+:09BF                 mov     ds, ds:word_101AC
+:09C3                 mov     al, [si+2]
+:09C6                 pop     ds
+:09C7                 mov     [di], al
+:09C9                 push    ds
+:09CA                 mov     ds, ds:word_101AC
+:09CE                 mov     al, [si+3]
+:09D1                 pop     ds
+:09D2                 mov     [di+9], al
+:09D5                 push    ds
+:09D6                 mov     ds, ds:word_101AC
+:09DA                 mov     al, [si+0Bh]
+:09DD                 pop     ds
+:09DE                 and     al, 0F0h
+:09E0                 shr     al, 4
+:09E3                 mov     di, offset byte_1017C
+:09E6                 add     di, cx
+:09E8                 mov     [di], al
+:09EA                 popa
+:09EB                 retn
+:09EB sub_1083C       endp
+:09EB 
+:09EC 
+:09EC ; ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ S U B R O U T I N E ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
+:09EC 
+:09EC 
+:09EC sub_109EC       proc near               ; CODE XREF: sub_10312+1D
+:09EC                 pusha
+:09ED                 cmp     al, 7Fh ; ''
+:09EF                 jnz     loc_109F4
+:09F1                 jmp     short loc_10A3D
+:09F1 ; ---------------------------------------------------------------------------
+:09F3                 align 2
+:09F4 
+:09F4 loc_109F4:                              ; CODE XREF: sub_109EC+3
+:09F4                 dec     al
+:09F6                 mov     ds:byte_1016B, al
+:09F9                 xor     cx, cx
+:09FB                 mov     cl, ah
+:09FD                 mov     di, offset byte_100E2
+:0A00                 rol     cx, 1
+:0A02                 add     di, cx
+:0A04                 ror     cx, 1
+:0A06                 mov     dx, ds:word_10118
+:0A0A                 mov     al, 0B0h ; '¦'
+:0A0C                 add     al, cl
+:0A0E                 out     dx, al
+:0A0F                 call    sub_10CAC
+:0A12                 mov     dx, ds:word_1011A
+:0A16                 xor     al, al
+:0A18                 out     dx, al
+:0A19                 call    sub_10CBF
+:0A1C                 mov     bx, offset byte_1011E
+:0A1F                 rol     cx, 1
+:0A21                 mov     di, cx
+:0A23                 ror     cx, 1
+:0A25                 add     di, bx
+:0A27                 mov     si, (offset byte_10000+0Ah)
+:0A2A                 xor     bx, bx
+:0A2C                 mov     bl, ds:byte_1016B
+:0A30                 rol     bx, 1
+:0A32                 mov     ax, [bx+si]
+:0A34                 mov     [di], ax
+:0A36                 mov     word ptr [di+12h], 0FFFFh
+:0A3B 
+:0A3B loc_10A3B:                              ; CODE XREF: sub_109EC+65
+:0A3B                 popa
+:0A3C                 retn
+:0A3D ; ---------------------------------------------------------------------------
+:0A3D 
+:0A3D loc_10A3D:                              ; CODE XREF: sub_109EC+5
+:0A3D                 mov     al, ah
+:0A3F                 xor     ah, ah
+:0A41                 mov     bx, offset byte_1011E
+:0A44                 rol     ax, 1
+:0A46                 mov     di, ax
+:0A48                 add     di, bx
+:0A4A                 mov     ax, [di]
+:0A4C                 and     ah, 0DFh
+:0A4F                 mov     [di], ax
+:0A51                 jmp     short loc_10A3B
+:0A51 sub_109EC       endp
+:0A51 
+:0A53 ; ---------------------------------------------------------------------------
+:0A53                 pusha
+:0A54                 mov     cx, 9
+:0A57                 mov     si, (offset byte_1011E+10h)
+:0A5A                 mov     di, (offset byte_10142+8)
+:0A5D 
+:0A5D loc_10A5D:                              ; CODE XREF: :0A9B
+:0A5D                 dec     cx
+:0A5E                 mov     ax, [si]
+:0A60                 cmp     ax, [si+12h]
+:0A63                 jz      loc_10A6F
+:0A65                 mov     [si+12h], ax
+:0A68                 push    si
+:0A69                 push    di
+:0A6A                 call    sub_10AA5
+:0A6D                 pop     di
+:0A6E                 pop     si
+:0A6F 
+:0A6F loc_10A6F:                              ; CODE XREF: :0A63
+:0A6F                 mov     al, ds:byte_10171
+:0A72                 cmp     al, ds:byte_10172
+:0A76                 jnz     loc_10A90
+:0A78                 mov     al, [di]
+:0A7A                 cmp     al, [di+12h]
+:0A7D                 jnz     loc_10A8D
+:0A7F                 mov     al, [di+9]
+:0A82                 cmp     al, [di+1Bh]
+:0A85                 jz      loc_10A97
+:0A87                 mov     [di+1Bh], al
+:0A8A                 jmp     short loc_10A90
+:0A8A ; ---------------------------------------------------------------------------
+:0A8C                 db 90h
+:0A8D ; ---------------------------------------------------------------------------
+:0A8D 
+:0A8D loc_10A8D:                              ; CODE XREF: :0A7D
+:0A8D                 mov     [di+12h], al
+:0A90 
+:0A90 loc_10A90:                              ; CODE XREF: :0A76
+:0A90                                         ; :0A8A
+:0A90                 push    si
+:0A91                 push    di
+:0A92                 call    sub_10AE3
+:0A95                 pop     di
+:0A96                 pop     si
+:0A97 
+:0A97 loc_10A97:                              ; CODE XREF: :0A85
+:0A97                 dec     di
+:0A98                 dec     si
+:0A99                 dec     si
+:0A9A                 inc     cx
+:0A9B                 loop    loc_10A5D
+:0A9D                 mov     al, ds:byte_10171
+:0AA0                 mov     ds:byte_10172, al
+:0AA3                 popa
+:0AA4                 retn
+:0AA5 
+:0AA5 ; ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ S U B R O U T I N E ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
+:0AA5 
+:0AA5 
+:0AA5 sub_10AA5       proc near               ; CODE XREF: :0A6A
+:0AA5                 mov     dx, ds:word_10118
+:0AA9                 mov     al, 0A0h ; 'á'
+:0AAB                 add     al, cl
+:0AAD                 out     dx, al
+:0AAE                 call    sub_10CAC
+:0AB1                 mov     dx, ds:word_1011A
+:0AB5                 mov     bx, offset byte_1011E
+:0AB8                 rol     cx, 1
+:0ABA                 mov     si, cx
+:0ABC                 ror     cx, 1
+:0ABE                 mov     al, [bx+si]
+:0AC0                 mov     di, offset byte_1017C
+:0AC3                 add     di, cx
+:0AC5                 add     al, [di]
+:0AC7                 out     dx, al
+:0AC8                 call    sub_10CBF
+:0ACB                 mov     dx, ds:word_10118
+:0ACF                 mov     al, 0B0h ; '¦'
+:0AD1                 add     al, cl
+:0AD3                 out     dx, al
+:0AD4                 call    sub_10CAC
+:0AD7                 mov     dx, ds:word_1011A
+:0ADB                 mov     al, [bx+si+1]
+:0ADE                 out     dx, al
+:0ADF                 call    sub_10CBF
+:0AE2                 retn
+:0AE2 sub_10AA5       endp
+:0AE2 
+:0AE3 
+:0AE3 ; ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ S U B R O U T I N E ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
+:0AE3 
+:0AE3 
+:0AE3 sub_10AE3       proc near               ; CODE XREF: :0A92
+:0AE3                 mov     si, offset byte_10142
+:0AE6                 add     si, cx
+:0AE8                 mov     di, offset byte_100E2
+:0AEB                 rol     cx, 1
+:0AED                 add     di, cx
+:0AEF                 ror     cx, 1
+:0AF1                 mov     dx, ds:word_10118
+:0AF5                 mov     al, 40h ; '@'
+:0AF7                 add     al, [di]
+:0AF9                 out     dx, al
+:0AFA                 call    sub_10CAC
+:0AFD                 mov     dx, ds:word_1011A
+:0B01                 mov     al, 3Fh ; '?'
+:0B03                 sub     al, [si]
+:0B05                 push    dx
+:0B06                 mov     dh, al
+:0B08                 and     dh, 0C0h
+:0B0B                 and     ax, 3Fh
+:0B0E                 push    dx
+:0B0F                 mov     bl, 3Fh ; '?'
+:0B11                 sub     bl, ds:byte_10171
+:0B15                 xor     bh, bh
+:0B17                 mul     bx
+:0B19                 mov     bx, 3Fh ; '?'
+:0B1C                 div     bx
+:0B1E                 pop     dx
+:0B1F                 mov     dl, al
+:0B21                 mov     al, 3Fh ; '?'
+:0B23                 sub     al, dl
+:0B25                 and     al, 3Fh
+:0B27                 or      al, dh
+:0B29                 pop     dx
+:0B2A                 out     dx, al
+:0B2B                 call    sub_10CBF
+:0B2E                 mov     dx, ds:word_10118
+:0B32                 mov     al, 40h ; '@'
+:0B34                 add     al, [di+1]
+:0B37                 out     dx, al
+:0B38                 call    sub_10CAC
+:0B3B                 mov     dx, ds:word_1011A
+:0B3F                 mov     al, [si+9]
+:0B42                 push    di
+:0B43                 push    ax
+:0B44                 push    dx
+:0B45                 push    bx
+:0B46                 mov     di, offset byte_10173
+:0B49                 mov     bx, cx
+:0B4B                 mov     al, [bx+di]
+:0B4D                 xor     ah, ah
+:0B4F                 mov     bx, 0Ch
+:0B52                 mul     bx
+:0B54                 mov     di, ds:word_101AA
+:0B58                 add     di, ax
+:0B5A                 push    ds
+:0B5B                 mov     ds, ds:word_101AC
+:0B5F                 test    byte ptr [di+8], 1
+:0B63                 pop     ds
+:0B64                 jnz     loc_10B6D
+:0B66                 pop     bx
+:0B67                 pop     dx
+:0B68                 pop     ax
+:0B69                 pop     di
+:0B6A                 jmp     short loc_10B9B
+:0B6A ; ---------------------------------------------------------------------------
+:0B6C                 db 90h
+:0B6D ; ---------------------------------------------------------------------------
+:0B6D 
+:0B6D loc_10B6D:                              ; CODE XREF: sub_10AE3+81
+:0B6D                 pop     bx
+:0B6E                 pop     dx
+:0B6F                 pop     ax
+:0B70                 pop     di
+:0B71                 mov     al, 3Fh ; '?'
+:0B73                 sub     al, [si+9]
+:0B76                 push    dx
+:0B77                 mov     dh, al
+:0B79                 and     dh, 0C0h
+:0B7C                 and     ax, 3Fh
+:0B7F                 push    dx
+:0B80                 mov     bl, 3Fh ; '?'
+:0B82                 sub     bl, ds:byte_10171
+:0B86                 xor     bh, bh
+:0B88                 mul     bx
+:0B8A                 mov     bx, 3Fh ; '?'
+:0B8D                 div     bx
+:0B8F                 pop     dx
+:0B90                 mov     dl, al
+:0B92                 mov     al, 3Fh ; '?'
+:0B94                 sub     al, dl
+:0B96                 and     al, 3Fh
+:0B98                 or      al, dh
+:0B9A                 pop     dx
+:0B9B 
+:0B9B loc_10B9B:                              ; CODE XREF: sub_10AE3+87
+:0B9B                 out     dx, al
+:0B9C                 call    sub_10CBF
+:0B9F                 retn
+:0B9F sub_10AE3       endp
+:0B9F 
+:0BA0 
+:0BA0 ; ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ S U B R O U T I N E ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
+:0BA0 
+:0BA0 
+:0BA0 sub_10BA0       proc near               ; CODE XREF: _NEOSOUNDSYSTEM+59
+:0BA0                 pusha
+:0BA1                 push    ds
+:0BA2                 mov     ax, seg 
+:0BA5                 mov     ds, ax
+:0BA7                 assume ds:
+:0BA7                 mov     bx, offset byte_10000
+:0BAA 
+:0BAA loc_10BAA:                              ; CODE XREF: sub_10BA0+104
+:0BAA                 mov     dx, [bx]
+:0BAC                 mov     word_10118, dx
+:0BB0                 inc     dx
+:0BB1                 mov     word_1011A, dx
+:0BB5                 mov     dx, 3DAh
+:0BB8 
+:0BB8 loc_10BB8:                              ; CODE XREF: sub_10BA0+1B
+:0BB8                 in      al, dx          ; Video status bits:
+:0BB8                                         ; 0: retrace.  1=display is in vert or horiz retrace.
+:0BB8                                         ; 1: 1=light pen is triggered; 0=armed
+:0BB8                                         ; 2: 1=light pen switch is open; 0=closed
+:0BB8                                         ; 3: 1=vertical sync pulse is occurring.
+:0BB9                 test    al, 8
+:0BBB                 jnz     loc_10BB8
+:0BBD                 mov     dx, 3DAh
+:0BC0 
+:0BC0 loc_10BC0:                              ; CODE XREF: sub_10BA0+23
+:0BC0                 in      al, dx          ; Video status bits:
+:0BC0                                         ; 0: retrace.  1=display is in vert or horiz retrace.
+:0BC0                                         ; 1: 1=light pen is triggered; 0=armed
+:0BC0                                         ; 2: 1=light pen switch is open; 0=closed
+:0BC0                                         ; 3: 1=vertical sync pulse is occurring.
+:0BC1                 test    al, 8
+:0BC3                 jz      loc_10BC0
+:0BC5                 mov     dx, 3DAh
+:0BC8 
+:0BC8 loc_10BC8:                              ; CODE XREF: sub_10BA0+2B
+:0BC8                 in      al, dx          ; Video status bits:
+:0BC8                                         ; 0: retrace.  1=display is in vert or horiz retrace.
+:0BC8                                         ; 1: 1=light pen is triggered; 0=armed
+:0BC8                                         ; 2: 1=light pen switch is open; 0=closed
+:0BC8                                         ; 3: 1=vertical sync pulse is occurring.
+:0BC9                 test    al, 8
+:0BCB                 jz      loc_10BC8
+:0BCD                 mov     dx, 3DAh
+:0BD0 
+:0BD0 loc_10BD0:                              ; CODE XREF: sub_10BA0+33
+:0BD0                 in      al, dx          ; Video status bits:
+:0BD0                                         ; 0: retrace.  1=display is in vert or horiz retrace.
+:0BD0                                         ; 1: 1=light pen is triggered; 0=armed
+:0BD0                                         ; 2: 1=light pen switch is open; 0=closed
+:0BD0                                         ; 3: 1=vertical sync pulse is occurring.
+:0BD1                 test    al, 8
+:0BD3                 jnz     loc_10BD0
+:0BD5                 mov     dx, word_10118
+:0BD9                 mov     al, 4
+:0BDB                 out     dx, al
+:0BDC                 call    sub_10CAC
+:0BDF                 mov     dx, word_1011A
+:0BE3                 mov     al, 60h ; '`'
+:0BE5                 out     dx, al
+:0BE6                 call    sub_10CBF
+:0BE9                 mov     dx, word_10118
+:0BED                 mov     al, 4
+:0BEF                 out     dx, al
+:0BF0                 call    sub_10CAC
+:0BF3                 mov     dx, word_1011A
+:0BF7                 mov     al, 80h ; 'Ç'
+:0BF9                 out     dx, al
+:0BFA                 call    sub_10CBF
+:0BFD                 mov     dx, word_10118
+:0C01                 in      al, dx
+:0C02                 and     al, 0E0h
+:0C04                 mov     byte_1011C, al
+:0C07                 mov     dx, word_10118
+:0C0B                 mov     al, 2
+:0C0D                 out     dx, al
+:0C0E                 call    sub_10CAC
+:0C11                 mov     dx, word_1011A
+:0C15                 mov     al, 0FFh
+:0C17                 out     dx, al
+:0C18                 call    sub_10CBF
+:0C1B                 mov     dx, word_10118
+:0C1F                 mov     al, 4
+:0C21                 out     dx, al
+:0C22                 call    sub_10CAC
+:0C25                 mov     dx, word_1011A
+:0C29                 mov     al, 21h ; '!'
+:0C2B                 out     dx, al
+:0C2C                 call    sub_10CBF
+:0C2F                 mov     dx, 3DAh
+:0C32 
+:0C32 loc_10C32:                              ; CODE XREF: sub_10BA0+95
+:0C32                 in      al, dx          ; Video status bits:
+:0C32                                         ; 0: retrace.  1=display is in vert or horiz retrace.
+:0C32                                         ; 1: 1=light pen is triggered; 0=armed
+:0C32                                         ; 2: 1=light pen switch is open; 0=closed
+:0C32                                         ; 3: 1=vertical sync pulse is occurring.
+:0C33                 test    al, 8
+:0C35                 jnz     loc_10C32
+:0C37                 mov     dx, 3DAh
+:0C3A 
+:0C3A loc_10C3A:                              ; CODE XREF: sub_10BA0+9D
+:0C3A                 in      al, dx          ; Video status bits:
+:0C3A                                         ; 0: retrace.  1=display is in vert or horiz retrace.
+:0C3A                                         ; 1: 1=light pen is triggered; 0=armed
+:0C3A                                         ; 2: 1=light pen switch is open; 0=closed
+:0C3A                                         ; 3: 1=vertical sync pulse is occurring.
+:0C3B                 test    al, 8
+:0C3D                 jz      loc_10C3A
+:0C3F                 mov     dx, 3DAh
+:0C42 
+:0C42 loc_10C42:                              ; CODE XREF: sub_10BA0+A5
+:0C42                 in      al, dx          ; Video status bits:
+:0C42                                         ; 0: retrace.  1=display is in vert or horiz retrace.
+:0C42                                         ; 1: 1=light pen is triggered; 0=armed
+:0C42                                         ; 2: 1=light pen switch is open; 0=closed
+:0C42                                         ; 3: 1=vertical sync pulse is occurring.
+:0C43                 test    al, 8
+:0C45                 jz      loc_10C42
+:0C47                 mov     dx, 3DAh
+:0C4A 
+:0C4A loc_10C4A:                              ; CODE XREF: sub_10BA0+AD
+:0C4A                 in      al, dx          ; Video status bits:
+:0C4A                                         ; 0: retrace.  1=display is in vert or horiz retrace.
+:0C4A                                         ; 1: 1=light pen is triggered; 0=armed
+:0C4A                                         ; 2: 1=light pen switch is open; 0=closed
+:0C4A                                         ; 3: 1=vertical sync pulse is occurring.
+:0C4B                 test    al, 8
+:0C4D                 jnz     loc_10C4A
+:0C4F                 mov     dx, word_10118
+:0C53                 in      al, dx
+:0C54                 and     al, 0E0h
+:0C56                 mov     byte_1011D, al
+:0C59                 mov     dx, word_10118
+:0C5D                 mov     al, 4
+:0C5F                 out     dx, al
+:0C60                 call    sub_10CAC
+:0C63                 mov     dx, word_1011A
+:0C67                 mov     al, 60h ; '`'
+:0C69                 out     dx, al
+:0C6A                 call    sub_10CBF
+:0C6D                 mov     dx, word_10118
+:0C71                 mov     al, 4
+:0C73                 out     dx, al
+:0C74                 call    sub_10CAC
+:0C77                 mov     dx, word_1011A
+:0C7B                 mov     al, 80h ; 'Ç'
+:0C7D                 out     dx, al
+:0C7E                 call    sub_10CBF
+:0C81                 cmp     byte_1011C, 0
+:0C86                 jnz     loc_10C9A
+:0C88                 cmp     byte_1011D, 0C0h ; '+'
+:0C8D                 jnz     loc_10C9A
+:0C8F                 xor     ax, ax
+:0C91 
+:0C91 loc_10C91:                              ; CODE XREF: sub_10BA0+10A
+:0C91                 pop     ds
+:0C92                 assume ds:nothing
+:0C92                 mov     ds:word_101A8, ax
+:0C95                 popa
+:0C96                 mov     ax, ds:word_101A8
+:0C99                 retn
+:0C9A ; ---------------------------------------------------------------------------
+:0C9A 
+:0C9A loc_10C9A:                              ; CODE XREF: sub_10BA0+E6
+:0C9A                                         ; sub_10BA0+ED
+:0C9A                 add     bx, 2
+:0C9D                 mov     dx, [bx]
+:0C9F                 cmp     dx, 0FFFFh
+:0CA2                 jz      loc_10CA7
+:0CA4                 jmp     loc_10BAA
+:0CA7 ; ---------------------------------------------------------------------------
+:0CA7 
+:0CA7 loc_10CA7:                              ; CODE XREF: sub_10BA0+102
+:0CA7                 mov     ax, 0FFFFh
+:0CAA                 jmp     short loc_10C91
+:0CAA sub_10BA0       endp
+:0CAA 
+:0CAC 
+:0CAC ; ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ S U B R O U T I N E ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
+:0CAC 
+:0CAC 
+:0CAC sub_10CAC       proc near               ; CODE XREF: sub_10312+11A
+:0CAC                                         ; sub_10312+1C1 ...
+:0CAC                 pusha
+:0CAD                 mov     dx, 3DAh
+:0CB0 
+:0CB0 loc_10CB0:                              ; CODE XREF: sub_10CAC+7
+:0CB0                 in      al, dx          ; Video status bits:
+:0CB0                                         ; 0: retrace.  1=display is in vert or horiz retrace.
+:0CB0                                         ; 1: 1=light pen is triggered; 0=armed
+:0CB0                                         ; 2: 1=light pen switch is open; 0=closed
+:0CB0                                         ; 3: 1=vertical sync pulse is occurring.
+:0CB1                 test    al, 1
+:0CB3                 jnz     loc_10CB0
+:0CB5                 mov     dx, 3DAh
+:0CB8 
+:0CB8 loc_10CB8:                              ; CODE XREF: sub_10CAC+F
+:0CB8                 in      al, dx          ; Video status bits:
+:0CB8                                         ; 0: retrace.  1=display is in vert or horiz retrace.
+:0CB8                                         ; 1: 1=light pen is triggered; 0=armed
+:0CB8                                         ; 2: 1=light pen switch is open; 0=closed
+:0CB8                                         ; 3: 1=vertical sync pulse is occurring.
+:0CB9                 test    al, 1
+:0CBB                 jz      loc_10CB8
+:0CBD                 popa
+:0CBE                 retn
+:0CBE sub_10CAC       endp
+:0CBE 
+:0CBF 
+:0CBF ; ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ S U B R O U T I N E ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
+:0CBF 
+:0CBF 
+:0CBF sub_10CBF       proc near               ; CODE XREF: sub_10312+123
+:0CBF                                         ; sub_10312+1CC ...
+:0CBF                 pusha
+:0CC0                 mov     dx, 3DAh
+:0CC3 
+:0CC3 loc_10CC3:                              ; CODE XREF: sub_10CBF+7
+:0CC3                 in      al, dx          ; Video status bits:
+:0CC3                                         ; 0: retrace.  1=display is in vert or horiz retrace.
+:0CC3                                         ; 1: 1=light pen is triggered; 0=armed
+:0CC3                                         ; 2: 1=light pen switch is open; 0=closed
+:0CC3                                         ; 3: 1=vertical sync pulse is occurring.
+:0CC4                 test    al, 1
+:0CC6                 jnz     loc_10CC3
+:0CC8                 mov     dx, 3DAh
+:0CCB 
+:0CCB loc_10CCB:                              ; CODE XREF: sub_10CBF+F
+:0CCB                 in      al, dx          ; Video status bits:
+:0CCB                                         ; 0: retrace.  1=display is in vert or horiz retrace.
+:0CCB                                         ; 1: 1=light pen is triggered; 0=armed
+:0CCB                                         ; 2: 1=light pen switch is open; 0=closed
+:0CCB                                         ; 3: 1=vertical sync pulse is occurring.
+:0CCC                 test    al, 1
+:0CCE                 jz      loc_10CCB
+:0CD0                 popa
+:0CD1                 retn
+:0CD1 sub_10CBF       endp
+:0CD1 
+:0CD1     ends
+:0CD1 
+:0CD1 
+:0CD1                 end
