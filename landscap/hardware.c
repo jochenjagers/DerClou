@@ -37,7 +37,7 @@ static void lsSetAlarmPict(LSObject lso)
 		}
 	}
 
-// zeichnet alle sichtbaren Türen in einem bestimmten Bereich neu
+// zeichnet alle sichtbaren TÃ¼ren in einem bestimmten Bereich neu
 static void lsRefreshClosedDoors(uword us_X0, uword us_Y0, uword us_X1, uword us_Y1)
 	{
 	NODE *node;
@@ -70,7 +70,7 @@ void lsRefreshStatue(LSObject lso)
 
 	ls->uch_ShowObjectMask = 0x40;
 
-	size = 16;		// stimmt die Gr”áe ??
+	size = 16;		// stimmt die GrÃ¶ÃŸe ??
 
 	lsPrepareFromXMSBySize(size);
 
@@ -116,7 +116,7 @@ void lsFastRefresh(LSObject lso)
 	case Item_Gemaelde:
 	case Item_Bild:
 		// Gemaelde und Bilder werden, wenn sie genommen werden einfach
-		// durch ein graues RectFill übermalt (Schattenfarbe)
+		// durch ein graues RectFill Ã¼bermalt (Schattenfarbe)
 
 		if (lso->uch_Visible == LS_OBJECT_VISIBLE)
 			lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_ALL|LS_SHOW_PREPARE_FROM_XMS);
@@ -236,7 +236,7 @@ static void lsPrepareFromXMSBySize(ubyte uch_Size)
 
 static void lsBlitOneObject(uword offsetFact, word destx, word desty, uword size)
 	{
-	uword srcWidth = 288;	// Quellbildschirm ist für gewöhnlich 288 breit
+	uword srcWidth = 288;	// Quellbildschirm ist fÃ¼r gewÃ¶hnlich 288 breit
 	uword srcX, srcY, perRow;
 
 	// die 32er Objekte befinden sich auf einem Bildschirm, der
@@ -276,7 +276,7 @@ long lsShowOneObject(LSObject lso, word destx, word desty, ulong ul_Mode)
 				if (lsIsObjectAWall(lso))
 					show = 1;
 
-			// Türen nur darstellen, wenn sie sichtbar sind
+			// TÃ¼ren nur darstellen, wenn sie sichtbar sind
 
 			if ((!show) && (ul_Mode & LS_SHOW_DOOR))
 				if (lsIsObjectADoor(lso) && lso->uch_Visible == LS_OBJECT_VISIBLE)

@@ -144,7 +144,7 @@ extern char bCDRom;
 #define STORY_DATA_NAME 	"tcstory"
 
 /*
- * defines fueÅr Error Modul
+ * defines f√ºr Error Modul
  *
  */
 

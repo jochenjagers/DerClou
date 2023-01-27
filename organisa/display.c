@@ -53,7 +53,7 @@ void tcDisplayCommon(void)
 	gfxSetDestRPForShow(&RefreshRP);
 	gfxShow(ORG_PICT_ID, GFX_ONE_STEP|GFX_NO_REFRESH, 0, -1, -1);
 
-	/* Geb‰ude anzeigen  */
+	/* Geb√§ude anzeigen  */
 
 	gfxSetFont  (&RefreshRP, menuFont);
 	gfxSetDrMd  (&RefreshRP, GFX_JAM_1);
@@ -147,7 +147,7 @@ void tcDisplayCommon(void)
 	gfxPrint (&RefreshRP, line, 35, GFX_PRINT_LEFT);
 
 	/*************************************************************
-	 *  Fluchtweg-lÑnge
+	 *  Fluchtweg-l√§nge
 	*/
 
 	gfxSetRect (106,106);

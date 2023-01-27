@@ -352,7 +352,7 @@ void tcInitFahndung(void)
 {
 	Player player = (Player)dbGetObject(Player_Player_1);
 
-	tcMattGoesTo(59);   /* Bro */
+	tcMattGoesTo(59);   /* BÃ¼ro */
 
 	player->NrOfBurglaries++;
 }

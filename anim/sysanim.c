@@ -18,12 +18,12 @@
 #define	Y_DEST_OFFSET_POS	10
 #define	PLAY_MODE_POS		11
 
-/* Defines fueÅr Playmode */
+/* Defines f√ºr Playmode */
 #define	PM_NORMAL			     1
 #define	PM_PING_PONG		     2
 #define  PM_SYNCHRON            4
 
-/* Defines fueÅr AnimPic Aufbau */
+/* Defines f√ºr AnimPic Aufbau */
 #define 	Y_OFFSET		           0	/* 1 Pixel zwischen 2 Reihen */
 
 struct AnimHandler

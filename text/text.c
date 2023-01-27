@@ -260,7 +260,7 @@ ulong txtGetKeyAsULONG(uword keyNr, char *key)
 
 /* 2015-01-10 LucyG: the Czech localization crashed when asking Dan Stanford about */
 /* Marc Smith and selecting the second option (... k?). There is a problem with */
-/* "Dan Stanford_kšiv]mi obchody" getting truncated to "Dan Stanford_k". */
+/* "Dan Stanford_kÃœiv]mi obchody" getting truncated to "Dan Stanford_k". */
 
 /* This is really just a workaround at the rear end of the problem. If something */
 /* like that should happen again with other strings, we should trace to the source */
@@ -331,7 +331,7 @@ LIST *txtGoKey(ulong textId, char *key)
 	if (txt)
 	{
 		// MOD: 08-04-94 hg
-		// wenn kein key angegeben wurde, soll der nächste genommen werden
+		// wenn kein key angegeben wurde, soll der nÃ¤chste genommen werden
 		// -> in LastMark wird die letzte Position zwischengespeichert, da
 		// txt->LastMark in txtPrepare neu gesetzt wird!
 
@@ -344,8 +344,8 @@ LIST *txtGoKey(ulong textId, char *key)
 
 		txtPrepare(textId);
 
-		// Erklärung zu +1: LastMark zeigt auf den letzten Schlüssel
-		// -> ohne "+1" würde wieder der selbe Schlüssel zurückgegeben werden
+		// ErklÃ¤rung zu +1: LastMark zeigt auf den letzten SchlÃ¼ssel
+		// -> ohne "+1" wÃ¼rde wieder der selbe SchlÃ¼ssel zurÃ¼ckgegeben werden
 		if (!key && LastMark)
 		{
 			txt->txt_LastMark = LastMark + 1;

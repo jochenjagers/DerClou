@@ -9,7 +9,7 @@
 void rndInit(void)
 {
 	#ifndef __COSP__
-	randomize();	/* Zufallszahl ueÅber Timer initialisieren */
+	randomize();	/* Zufallszahl √ºber Timer initialisieren */
 	#else
 	srand((unsigned int)time(NULL));
 	#endif

@@ -125,7 +125,7 @@ void InitToolPresent(ulong nr,LIST *presentationData,LIST *texts)
 
 	if (!LIST_EMPTY(ObjectList))
 	{
-		AddPresentLine(presentationData,PRESENT_AS_TEXT,0L,0L,texts,8L); /* "benîtigt Wissen Åber..." */
+		AddPresentLine(presentationData,PRESENT_AS_TEXT,0L,0L,texts,8L); /* "ben√∂tigt Wissen √ºber..." */
 
 		for(n = (NODE*) LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE*)NODE_SUCC(n))
 		{

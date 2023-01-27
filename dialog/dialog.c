@@ -16,7 +16,7 @@ struct DynDlgNode
 {
 	NODE	Link;
 
-	ubyte	KnownBefore;   /* wie gut Sie bekannt sein m《sen */
+	ubyte	KnownBefore;   /* wie gut Sie bekannt sein mﾃｼssen */
 	ubyte	KnownAfter;    /* wie gut Sie danach bekannt sind ! */
 
 	uword	Padding;
@@ -107,7 +107,7 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 			}
 			else
 			{
-				mem_pos++;    /* Klammer 「eberspringen ! */
+				mem_pos++;    /* Klammer ﾃｼberspringen ! */
 				key_pos=0;
 
 				while (mem[mem_pos] != ']')
@@ -117,7 +117,7 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 
 				key[key_pos++] = EOS;
 
-				mem_pos++;    /* Klammer ue｜erspringen ! */
+				mem_pos++;    /* Klammer ﾃｼberspringen ! */
 
 				for (i = 0; i < 3; i++)    /* Zahlen entfernen */
 				{
@@ -138,7 +138,7 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 				nr  = (ubyte)atol((char*)snr);
 				nr1 = (ubyte)atol((char*)snr1);
 
-				/* keyword einf「egen */
+				/* keyword einfﾃｼgen */
 				for (i = 0; i < strlen(keyWord); i++)
 				{
 					line[line_pos++] = keyWord[i];
@@ -178,7 +178,7 @@ void DynamicTalk(ulong Person1ID, ulong Person2ID, ubyte TalkMode)
 
 	tcChgPersPopularity(p1, 5);   /* Bekanntheit steigt sehr gering */
 
-	/* je nach Bekanntheitsgrad wird Matt begr「esst ! */
+	/* je nach Bekanntheitsgrad wird Matt begrﾃｼsst ! */
 	dbGetObjectName(Person2ID, name);
 	strcpy(key, name);
 

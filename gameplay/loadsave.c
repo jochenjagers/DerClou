@@ -137,7 +137,7 @@ ubyte tcLoadIt(char activ)
 	txtGetFirstLine (THECLOU_TXT,"LOADING",line);
 	PrintStatus (line);
 
-	/* alte Daten l”schen */
+	/* alte Daten lÃ¶schen */
 
 	tcResetOrganisation();
 
@@ -288,7 +288,7 @@ ubyte tcLoadTheClou(void)
 
 void tcRefreshAfterLoad(ubyte loaded)
 {
-	Player player = (Player)dbGetObject(Player_Player_1);  /* muá hier geholt werden -> sonst alte Adresse */
+	Player player = (Player)dbGetObject(Player_Player_1);  /* muÃŸ hier geholt werden -> sonst alte Adresse */
 
 	if (!loaded)
 		{
@@ -302,7 +302,7 @@ void tcRefreshAfterLoad(ubyte loaded)
 			{
 			SetDay(player->CurrDay);
 			SetMinute(player->CurrMinute);
-			SetLocation(-1);    /* auf alle F„lle ein Refresh! */
+			SetLocation(-1);    /* auf alle FÃ¤lle ein Refresh! */
 
 			SceneArgs.ReturnValue = GetLocScene(player->CurrLocation)->EventNr;
 			}

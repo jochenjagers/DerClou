@@ -52,37 +52,37 @@ struct RastPort NCH4ScrollRP;
 struct RastPort NCH4UpperRP;
 
 struct RastPort RefreshRP;
-/* wird verwendet fÅr Double Buffering wÑhrend der Vorbereitung */
+/* wird verwendet f√ºr Double Buffering w√§hrend der Vorbereitung */
 struct RastPort PrepareRP;
-/* Da man von XMS nur ganze Blîcke kopieren kann (ohne Modulo)    */
-/* mÅssen einige Grafiken, bevor sie ins Video RAM kopiert werden */
+/* Da man von XMS nur ganze Bl√∂cke kopieren kann (ohne Modulo)    */
+/* m√ºssen einige Grafiken, bevor sie ins Video RAM kopiert werden */
 /* hier an dieser Stelle gepuffert werden. */
-/* ist als extern definfiert, da Animmodul darauf zugreifen mu· */
+/* ist als extern definfiert, da Animmodul darauf zugreifen mu√ü */
 
 
 struct XMSRastPort StdRP0InXMS;
-/* wird benutzt fÅr Objekte, die immer im Speicher sind */
+/* wird benutzt f√ºr Objekte, die immer im Speicher sind */
 struct XMSRastPort StdRP1InXMS;
-/* wird benutzt fÅr Objekte, die immer im Speicher sind */
+/* wird benutzt f√ºr Objekte, die immer im Speicher sind */
 struct XMSRastPort RefreshRPInXMS;
-/* Bild, das im Moment gerade gezeigt wird (fÅr Refresh) */
+/* Bild, das im Moment gerade gezeigt wird (f√ºr Refresh) */
 struct XMSRastPort AnimRPInXMS;
 /* beinhaltet die Animphasen des gerade aktuellen Bildes */
 /* um Inkonsistenzen zu vermeiden, wird jedesmal, bevor eine */
 /* Animphase gezeigt wird, das gesamte Bild in den PrepareRp */
-/* kopiert, der benîtigte Ausschnitt wird dann von dort */
+/* kopiert, der ben√∂tigte Ausschnitt wird dann von dort */
 /* ins Video-RAM kopiert */
-/* ist als extern definfiert, da Animmodul darauf zugreifen mu· */
+/* ist als extern definfiert, da Animmodul darauf zugreifen mu√ü */
 struct XMSRastPort AddRPInXMS;
-/* in diesem Rastport befinden sich diverse zusÑtzliche Grafiken */
-/* die in das Bild hinzugefÅgt werden (Gesichter, Werkzeuge)     */
+/* in diesem Rastport befinden sich diverse zus√§tzliche Grafiken */
+/* die in das Bild hinzugef√ºgt werden (Gesichter, Werkzeuge)     */
 /* je nach Situation... 													  */
 /* dieser RP wird je nach Situation ausgewechselt					  */
 struct XMSRastPort LSFloorRPInXMS;
-/* in diesem RastPort befindet sich wÑhrend der Planungs-Einbruchs */
-/* phasen das Bild der Bîden */
+/* in diesem RastPort befindet sich w√§hrend der Planungs-Einbruchs */
+/* phasen das Bild der B√∂den */
 struct XMSRastPort LSObjectRPInXMS;
-/* in diesem RastPort befinden sich einige Objekte wÑhrend der Planung */
+/* in diesem RastPort befinden sich einige Objekte w√§hrend der Planung */
 
 static SDL_Surface *pShadowSurface = NULL;		// 640x328 pixels
 static SDL_Surface *pRefreshSurface = NULL;		// 320x140 pixels
@@ -376,7 +376,7 @@ void gfxInit(void)
 
 	gfxSetDestRPForShow(NULL);
 
-	/* diese RP mueÅssen nur ein Bild maximaler Groesse aufnehmen koennen */
+	/* diese RP m√ºssen nur ein Bild maximaler Groesse aufnehmen koennen */
 	/* in anderen Modulen wird vorausgesetzt, dass alle RastPorts gleich */
 	/* gross sind und auch gleich gross wie die StdBuffer sind */
 	/* StdBuffer = 61 * 1024 = 62464, XMS: 62400 */
@@ -1197,7 +1197,7 @@ struct RastPort *gfxGetDestRP(long l_DestX, long l_DestY)
 }
 
 void wfr()
-// fueÅr Bildschirmsync verwenden!!!
+// f√ºr Bildschirmsync verwenden!!!
 {
 	if (bGfxInvalidate || bGfxPaletteChanged) {
 		gfxUpdateSDL(NULL);
@@ -1210,7 +1210,7 @@ void wfd(void)
 // sperrt im Gegensatz zu wfr die Interrupts nicht
 // wenn die Musik laeuft kann es daher vorkommen, dass
 // dieses wfd einmal aussetzt
-// !!! NICHT fueÅr Bildschirmsync verwenden!!
+// !!! NICHT f√ºr Bildschirmsync verwenden!!
 {
 	wfr();
 }

@@ -1,86 +1,86 @@
-Allgemeine öffentliche Lizenzbestimmungen
+Allgemeine Ã¶ffentliche Lizenzbestimmungen
 
 
 Lizenznehmer:
-Zum Lizenznehmer wird jeder, der die vom Lizenzgeber zur Verfügung gestellten
-Unterlagen (Sourcecodes, Grafiken, Musik etc.) des Produktes verbreitet und/oder verändert.	
+Zum Lizenznehmer wird jeder, der die vom Lizenzgeber zur VerfÃ¼gung gestellten
+Unterlagen (Sourcecodes, Grafiken, Musik etc.) des Produktes verbreitet und/oder verÃ¤ndert.	
 
 Lizenzgeber: 
 neo Software Produktions GmbH
-Wienerbergstraße 9/1
+WienerbergstraÃŸe 9/1
 A-1100 Wien
-Österreich
+Ã–sterreich
 
 I.
 Allgemeines
 
-Produkt: Ein Computer- Onlinespiel mit dem (Arbeits-)Titel "Xxxxxx" für Windows 95/98/NT, 
-Windows 2000 und kompatible Computer Systeme, basierend auf anhängigem Konzept.
+Produkt: Ein Computer- Onlinespiel mit dem (Arbeits-)Titel "Xxxxxx" fÃ¼r Windows 95/98/NT, 
+Windows 2000 und kompatible Computer Systeme, basierend auf anhÃ¤ngigem Konzept.
 
-Gegenstand der Lizenz ist die öffentliche Weiterentwicklung und Veränderung des Produktes 
+Gegenstand der Lizenz ist die Ã¶ffentliche Weiterentwicklung und VerÃ¤nderung des Produktes 
 durch Lizenznehmer.
 
 
 II.
-Vergütung
+VergÃ¼tung
 
-Der Lizenzgeber erhält für die zur Verfügungstellung des Produktes keinerlei Vergütung.
+Der Lizenzgeber erhÃ¤lt fÃ¼r die zur VerfÃ¼gungstellung des Produktes keinerlei VergÃ¼tung.
 
-Der Lizenzgeber erhält bei Fertigstellung durch Lizenznehmer innerhalb von 14 Kalendertagen 
-nach Fertigstellung eine Kopie aller veränderten oder für das Produkt neu erstellten Unterlagen 
-(Sourcecodes, Grafiken, Grafik Rohdaten) sowie ein lauffähiges Master der neuen Version für 
+Der Lizenzgeber erhÃ¤lt bei Fertigstellung durch Lizenznehmer innerhalb von 14 Kalendertagen 
+nach Fertigstellung eine Kopie aller verÃ¤nderten oder fÃ¼r das Produkt neu erstellten Unterlagen 
+(Sourcecodes, Grafiken, Grafik Rohdaten) sowie ein lauffÃ¤higes Master der neuen Version fÃ¼r 
 seinen eigenen Bedarf an seine offizielle Email Adresse "office@neo.at" mit dem Betreff 
 "Open Source" und dem Produktnamen.
 
-Jede durch Lizenznehmer erstellte Version muss in zwei Versionen kostenlos und öffentlich 
-zugängig gemacht werden:
+Jede durch Lizenznehmer erstellte Version muss in zwei Versionen kostenlos und Ã¶ffentlich 
+zugÃ¤ngig gemacht werden:
 
-· Binary Distribution:
-Enthält ein installierbares Master UND diese Lizenzbestimmungen in Form dieser DOC Datei.
+Â· Binary Distribution:
+EnthÃ¤lt ein installierbares Master UND diese Lizenzbestimmungen in Form dieser DOC Datei.
 
-· Developer's Distribution:
-Enthält alle Sourcecodes, alles Bild und Ton Material das zur Weiterentwicklung verwendet 
+Â· Developer's Distribution:
+EnthÃ¤lt alle Sourcecodes, alles Bild und Ton Material das zur Weiterentwicklung verwendet 
 wurde UND diese Lizenzbestimmungen in Form dieser DOC Datei.
 
  III.
 Rechte und Pflichten
 
-Der Lizenzgeber überträgt den Lizenznehmern räumlich und zeitlich unbeschränkt das nicht 
-exklusive Recht, die unter diese Bestimmungen fallenden Versionen des Produktes zur Gänze 
-auf Datenträgern jeder heute (insbes., jedoch nicht nur, CD-ROM, DVD, CD-V, Laserdisc usw.) 
-und zukünftig technisch realisierbaren Konfiguration (insbes., jedoch nicht nur PC-Chip, 
-Diskette, magnetooptische Speicher, Band, Online usw.) umfassend und ausschließlich nichtkommerziell 
-zu vervielfältigen und/oder zu verbreiten, und zwar in jeder heute und zukünftig technisch möglichen 
-Form sowie das nicht exklusive Recht, die Versionen der Produktion zur Gänze ausschließlich 
-unentgeltlich in jeder heute und künftig technisch möglichen Art (insbes., jedoch nicht nur 
-Online, über das Internet oder sonstige Netzwerke, Online-Dienste, CD-ROM oder ähnliche 
-Multimedia-Träger usw.) zu verbreiten.
+Der Lizenzgeber Ã¼bertrÃ¤gt den Lizenznehmern rÃ¤umlich und zeitlich unbeschrÃ¤nkt das nicht 
+exklusive Recht, die unter diese Bestimmungen fallenden Versionen des Produktes zur GÃ¤nze 
+auf DatentrÃ¤gern jeder heute (insbes., jedoch nicht nur, CD-ROM, DVD, CD-V, Laserdisc usw.) 
+und zukÃ¼nftig technisch realisierbaren Konfiguration (insbes., jedoch nicht nur PC-Chip, 
+Diskette, magnetooptische Speicher, Band, Online usw.) umfassend und ausschlieÃŸlich nichtkommerziell 
+zu vervielfÃ¤ltigen und/oder zu verbreiten, und zwar in jeder heute und zukÃ¼nftig technisch mÃ¶glichen 
+Form sowie das nicht exklusive Recht, die Versionen der Produktion zur GÃ¤nze ausschlieÃŸlich 
+unentgeltlich in jeder heute und kÃ¼nftig technisch mÃ¶glichen Art (insbes., jedoch nicht nur 
+Online, Ã¼ber das Internet oder sonstige Netzwerke, Online-Dienste, CD-ROM oder Ã¤hnliche 
+Multimedia-TrÃ¤ger usw.) zu verbreiten.
 
-Lizenznehmer dürfen den ursprünglichen Namen des Produktes nicht verändern und die neuen Versionen
-ausschließlich durch Zusätze kenntlich machen.
+Lizenznehmer dÃ¼rfen den ursprÃ¼nglichen Namen des Produktes nicht verÃ¤ndern und die neuen Versionen
+ausschlieÃŸlich durch ZusÃ¤tze kenntlich machen.
 
 Beispiel Original Name:
 Der Clou!
 
 Beispiele Versions Name:
 Der Clou! - Windows Version V1.0
-Der Clou! - Beute für Alle...
+Der Clou! - Beute fÃ¼r Alle...
 
-Lizenznehmer müssen in jeder Version in der branchenüblichen Form auf den Lizenzgeber hinweisen. 
-Ausschließlich hierfür ist den Lizenznehmern die Benutzung der Wortbildmarke "neo" des Lizenzgebers 
+Lizenznehmer mÃ¼ssen in jeder Version in der branchenÃ¼blichen Form auf den Lizenzgeber hinweisen. 
+AusschlieÃŸlich hierfÃ¼r ist den Lizenznehmern die Benutzung der Wortbildmarke "neo" des Lizenzgebers 
 bis auf Widerruf gestattet. 
 
 Die Vermerke "basierend auf der Originalversion von neo Software" und 
-"Details darüber finden Sie unter www.neo.at" müssen deutlich lesbar im Installationsteil und nach 
-dem Start des Produktes am Bildschirm dargestellt werden. Eine inhaltlich unveränderte Übersetzung dieser 
-Phrasen in andere Sprachen ist zulässig.
+"Details darÃ¼ber finden Sie unter www.neo.at" mÃ¼ssen deutlich lesbar im Installationsteil und nach 
+dem Start des Produktes am Bildschirm dargestellt werden. Eine inhaltlich unverÃ¤nderte Ãœbersetzung dieser 
+Phrasen in andere Sprachen ist zulÃ¤ssig.
 
 
 IV.
-Gewährleistung und Haftung
+GewÃ¤hrleistung und Haftung
 
-In keinem Fall kann der Lizenzgeber für irgendwelche Schäden, Folgeschäden, Forderungen etc. haftbar 
-gemacht werden, die durch die von Lizenzgeber erstmals veröffentlichte Version oder eine durch Lizenznehmer 
+In keinem Fall kann der Lizenzgeber fÃ¼r irgendwelche SchÃ¤den, FolgeschÃ¤den, Forderungen etc. haftbar 
+gemacht werden, die durch die von Lizenzgeber erstmals verÃ¶ffentlichte Version oder eine durch Lizenznehmer 
 erstellte Version des Produktes entstanden sind. Im zweiten Falle sind die Lizenznehmer verpflichtet, den 
 Lizenzgeber vollkommen schadlos zu halten.
 
@@ -88,7 +88,7 @@ Lizenzgeber vollkommen schadlos zu halten.
  V.
 Schlussbestimmungen
 
-Diese Bedingungen unterliegen dem Recht der Republik Österreich.
+Diese Bedingungen unterliegen dem Recht der Republik Ã–sterreich.
 
 Gerichtsstand ist Wien.
 

@@ -107,7 +107,7 @@ ulong tcOrganisation(void)
 	char line[TXT_KEY_LENGTH];
 
 	/***********************************************
-	 * erstes oder gemerktes Geb„ude aktivieren !
+	 * erstes oder gemerktes GebÃ¤ude aktivieren !
 	 */
 	Organisation.BuildingID = 0;
 	Organisation.CarID      = 0;
@@ -126,7 +126,7 @@ ulong tcOrganisation(void)
 	else
 		tcOrganisationSetBuilding();
 
-	// auf alle F„lle erinnern an aktuellen Stand
+	// auf alle FÃ¤lle erinnern an aktuellen Stand
 	rememberSet(Person_Matt_Stuvysunt, Organisation.BuildingID);
 
 	/************************************************
@@ -153,7 +153,7 @@ ulong tcOrganisation(void)
 	else
 		tcOrganisationSetCar();
 
-	// auf alle F„lle erinnern an aktuellen Stand
+	// auf alle FÃ¤lle erinnern an aktuellen Stand
 	rememberSet(Person_Matt_Stuvysunt, Organisation.CarID);
 
 	/************************************************

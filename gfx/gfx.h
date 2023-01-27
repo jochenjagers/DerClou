@@ -27,18 +27,18 @@ extern void gfxSetDarkness(ubyte value);
 
 #define GFX_NO_MEM_HANDLE	((uword) -1)
 
-/* defines f걊 gfxPrint */
+/* defines f체r gfxPrint */
 #define GFX_PRINT_CENTER		1<<0
 #define GFX_PRINT_RIGHT       1<<1
 #define GFX_PRINT_LEFT        1<<2
 
 #define GFX_PRINT_SHADOW		1<<3
 
-/* defines f걊 SetDrMd */
+/* defines f체r SetDrMd */
 #define GFX_JAM_1				0	/* Hintergrund wird gleichbelassen */
-#define GFX_JAM_2				1	/* Hintergrund wird mit BackPen 갶ermalt */
+#define GFX_JAM_2				1	/* Hintergrund wird mit BackPen 체bermalt */
 
-/* defines f걊 Show */
+/* defines f체r Show */
 #define GFX_NO_REFRESH				   1
 #define GFX_BLEND_UP					   2
 #define GFX_FADE_OUT					   4
@@ -47,7 +47,7 @@ extern void gfxSetDarkness(ubyte value);
 #define GFX_ONE_STEP		  		     32	/* "plain" blit */
 #define GFX_DONT_SHOW_FIRST_PIC    64
 
-/* defines f걊 gfxSetPens */
+/* defines f체r gfxSetPens */
 #define GFX_SAME_PEN						((ubyte)255)
 
 #define GFX_NO_COLL_IN_XMS				((uword) -1)
@@ -111,8 +111,8 @@ struct Collection
 
 	struct XMSRastPort *p_Prepared;	/* falls Collection im Speicher -> != 0*/
 
-	void	*p_ColorTable;		// stimmt nur eingeschr꼗kt!!!! (nur solange der Buffer
-									// durch nichts anderes ver꼗dert wurde!
+	void	*p_ColorTable;		// stimmt nur eingeschr채nkt!!!! (nur solange der Buffer
+									// durch nichts anderes ver채ndert wurde!
 
 	uword	us_TotalWidth;
 	uword	us_TotalHeight;

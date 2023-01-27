@@ -100,7 +100,7 @@ void lsBuildScrollWindow(void)
 		{
 		for(j = 0; j < LS_FLOORS_PER_LINE; j++)
 			{
-			//falls kein Boden vorhanden ist, mit Kollisionsfarbe fÅllen!
+			//falls kein Boden vorhanden ist, mit Kollisionsfarbe f√ºllen!
 
 			if (LS_NO_FLOOR((ls->p_CurrFloor[i * LS_FLOORS_PER_LINE + j].uch_FloorType)))
 				{
@@ -112,7 +112,7 @@ void lsBuildScrollWindow(void)
 			}
 		}
 
-	/* Objekte setzen - zuerst WÑnde*/
+	/* Objekte setzen - zuerst W√§nde*/
 	for (node = (NODE*)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE*) NODE_SUCC(node))
 		{
 		lso = (LSObject)OL_DATA(node);
@@ -131,7 +131,7 @@ void lsBuildScrollWindow(void)
 			lsTurnObject(lso, lso->uch_Visible, LS_COLLISION);
 		}
 
-	/* jetzt noch ein paar SondefÑlle (Kassa, Vase, ...) */
+	/* jetzt noch ein paar Sondef√§lle (Kassa, Vase, ...) */
 	for (node = (NODE*)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE*)NODE_SUCC(node))
 		{
 		lso = (LSObject)OL_DATA(node);
@@ -139,14 +139,14 @@ void lsBuildScrollWindow(void)
 		if (lsShowOneObject(lso, LS_STD_COORDS, LS_STD_COORDS, LS_SHOW_OTHER_1|LS_SHOW_PREPARE_FROM_XMS))
 			lsTurnObject(lso, lso->uch_Visible, LS_COLLISION);
 
-		// Statue mÅssen wegen der unsauberen Schei·e, speziell refresht werden
-		// wÅrg!!!
+		// Statue m√ºssen wegen der unsauberen Schei√üe, speziell refresht werden
+		// w√ºrg!!!
 		if (lso->Type == Item_Statue)
 			if (lso->uch_Visible != LS_OBJECT_VISIBLE)
 				lsRefreshStatue(lso);
 		}
 
-	// jetzt alle fÅr alle TÅren & Special objects Refresh erzeugen
+	// jetzt alle f√ºr alle T√ºren & Special objects Refresh erzeugen
 	for (node = (NODE*)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE*) NODE_SUCC(node))
 		{
 		lso = (LSObject)OL_DATA(node);
@@ -157,7 +157,7 @@ void lsBuildScrollWindow(void)
 			lsInitDoorRefresh(OL_NR(node));
 		}
 
-	// zuletzt mÅssen am PC die TÅren & Specials aufgebaut werden
+	// zuletzt m√ºssen am PC die T√ºren & Specials aufgebaut werden
 	for (node = (NODE*)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE*)NODE_SUCC(node))
 		{
 		lso = (LSObject)OL_DATA(node);
@@ -185,7 +185,7 @@ void lsBuildScrollWindow(void)
 
 	lsShowAllSpots(0, LS_ALL_VISIBLE_SPOTS);
 
-	/* auf gehts Burschn, schpÅ ma wos flottes */
+	/* auf gehts Burschn, schp√º ma wos flottes */
 	/* 32er Collection einblenden */
 	gfxPrepareColl(area->us_Coll32ID);
 	gfxGetColorTable(area->us_Coll32ID, colortable);
@@ -271,7 +271,7 @@ void lsSetObjectState(ulong objID, ubyte bitNr, ubyte value)
 	{
 	LSObject object = (LSObject) dbGetObject(objID);
 
-	// bei einer Stechuhr darf sich der Status nicht Ñndern!
+	// bei einer Stechuhr darf sich der Status nicht √§ndern!
 	if (object->Type != Item_Stechuhr)
 		{
 		if (value == 0)
@@ -334,7 +334,7 @@ static void lsSortObjectList(LIST **l)
 
 			/* wenn Abbruch wegen NODE_SUCC(NODE_SUCC(.. erflogte, darf
 			 * nicht der NODE_PRED(node1) genomen werden!
-			 * nach dem Sortieren ist au·erdem Schlu·!
+			 * nach dem Sortieren ist au√üerdem Schlu√ü!
 			 */
 
 			if ((lso1->us_DestY != lso2->us_DestY))
@@ -482,7 +482,7 @@ void lsPatchObjects(void)
 
 		item = (Item)dbGetObject(lso->Type);
 
-		lso->uch_Size = item->Size;	// Grˆﬂen stimmen nicht ¸Åberall ¸Åberein!
+		lso->uch_Size = item->Size;	// Gr√∂‚ñÄen stimmen nicht √ºberall √ºberein!
 
 		switch(lso->Type)
 		{
@@ -524,7 +524,7 @@ void lsPatchObjects(void)
 		if (OL_NR(n) == tcLAST_BURGLARY_LEFT_CTRL_OBJ)
 			lso->ul_Status |= (1 << Const_tcON_OFF);
 
-		lsSetOldState(lso);   /* mu· sein! */
+		lsSetOldState(lso);   /* mu√ü sein! */
 
 		/* change for correcting amiga plans (corrects walls) before using pc level desinger
 		lso->us_DestX -= 9;
@@ -541,7 +541,7 @@ void lsCalcExactSize(LSObject lso, uword *x0, uword *y0, uword *x1, uword *y1)
 	(*x0) = lso->us_DestX;
 	(*y0) = lso->us_DestY;
 
-	// keine Ahnung warum bei Bild & GemÑlde, OPEN_CLOSE_BIT & HORIZ_VERT_BIT
+	// keine Ahnung warum bei Bild & Gem√§lde, OPEN_CLOSE_BIT & HORIZ_VERT_BIT
 	// vertauscht sind, aber es ist so (O.T. Helmut)
 	if ((lso->Type == Item_Bild) || (lso->Type == Item_Gemaelde))
 		vertical = lso->ul_Status & 3;
@@ -566,7 +566,7 @@ void lsCalcExactSize(LSObject lso, uword *x0, uword *y0, uword *x1, uword *y1)
 		}
 	}
 
-// kopiert den Hintergrund, der durch eine TÅ¸r verdeckt wird
+// kopiert den Hintergrund, der durch eine T√ºr verdeckt wird
 // in einen XMS Buffer
 static void lsInitDoorRefresh(ulong ObjId)
 	{
@@ -616,7 +616,7 @@ static void lsInitDoorRefresh(ulong ObjId)
 	}
 
 void lsDoDoorRefresh(LSObject lso)
-	// restauriert aus einem XMS Buffer den Hintergrund einer TÅ¸r
+	// restauriert aus einem XMS Buffer den Hintergrund einer T√ºr
 	{
 	struct   LSDoorRefreshNode *drn;
 	uword width, height;

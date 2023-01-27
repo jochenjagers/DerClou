@@ -234,7 +234,7 @@ void livDoAnims(ubyte uch_Play, ubyte uch_Move)
 			 * in AnimateLiving, da die Aktion in AnimateLiving nicht
 			 * stattfinden muss, die ViewDirection zwischenzeitlich
 			 * aber eine falschen Wert annimmt, was z.B. im Planing
-			 * zu Fehler fueÅhrt!
+			 * zu Fehler f√ºhrt!
 			 * muss in jedem Fall geschehen, auch wenn Maxi unsichtbar ist
 			 */
 

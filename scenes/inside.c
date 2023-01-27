@@ -129,7 +129,7 @@ void tcInsideOfHouse(ulong buildingID, ulong areaID, ubyte perc)
 			lsFadeRasterObject(areaID, lso, 1);
 
 			switch (action) {
-				case 0: {	// n‰chster Gegenstand
+				case 0: {	// n√§chster Gegenstand
 					n = lsGetSuccObject(node);
 					if (GetNodeNrByAddr (objects, n) < (count-1)) {
 						node = n;
@@ -141,7 +141,7 @@ void tcInsideOfHouse(ulong buildingID, ulong areaID, ubyte perc)
 				case 2: {	// genau ansehen
 					tcShowObjectData(areaID, node, perc);
 				} break;
-				case 3: {	// W‰chter
+				case 3: {	// W√§chter
 					isGuardedbyAll(buildingID, OLF_NORMAL, Object_Police);
 					if (!(LIST_EMPTY(ObjectList))) {
 						gfxSetPens(l_wrp, 4, GFX_SAME_PEN, GFX_SAME_PEN);
@@ -171,7 +171,7 @@ void tcShowObjectData(ulong areaID, NODE *node, ubyte perc)
 {
 	NODE *n;
 
-	/* Objekt selbst pr‰sentieren */
+	/* Objekt selbst pr√§sentieren */
 	Present (OL_NR(node), "RasterObject", InitObjectPresent);
 
 	/* Inhalt zusammenstellen */
@@ -183,7 +183,7 @@ void tcShowObjectData(ulong areaID, NODE *node, ubyte perc)
 		/* alle Loots durchgehen und anzeigen! */
 		for(n = (NODE*) LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE*) NODE_SUCC(n))
 			{
-			/* zur VariablenÅ¸bergabe... (DIRTY, DIRTY...) */
+			/* zur Variablen√ºbergabe... (DIRTY, DIRTY...) */
 			SetP (OL_DATA(n), hasLootRelationID, OL_DATA(n),
 			GetP(OL_DATA(node), hasLootRelationID, OL_DATA(n)));
 

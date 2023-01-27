@@ -127,7 +127,7 @@ void PatchStory(void)
 
 		/* change possibilites in story_9 too! */
 
-		/* fÅr die Kaserne hier einen Successor eingetragen! */
+		/* f√ºr die Kaserne hier einen Successor eingetragen! */
 		GetLocScene(65)->std_succ = (LIST*)CreateList(0);
 		node = (struct TCEventNode *) CreateNode(GetLocScene(65)->std_succ, sizeof(struct TCEventNode), 0L);
 		node->EventNr = SCENE_KASERNE_OUTSIDE; /* wurscht... */
@@ -174,14 +174,14 @@ ulong PlayStory(void)
 			NewErrorMsg(Internal_Error, __FILE__, __func__, 2);
 		}
 
-		/* Entscheidung fÅr eine Szene getroffen ! */
+		/* Entscheidung f√ºr eine Szene getroffen ! */
 
 		SceneArgs.ReturnValue=0L;
 		SceneArgs.Ueberschrieben=0;
 
 		/* wenn Szene Storyszene ist, dann Musik beibehalten */
-		/* (Storyszenen Ñndern sie selbst in Done */
-		/* ansonsten wird die Musi hier verÑndert */
+		/* (Storyszenen √§ndern sie selbst in Done */
+		/* ansonsten wird die Musi hier ver√§ndert */
 
 		if (!story_scene)
 		{
@@ -198,7 +198,7 @@ ulong PlayStory(void)
 			first = 0;
 		}
 
-		/* die neue Szene initialisieren ! ( BÅhnenbild aufbauen )*/
+		/* die neue Szene initialisieren ! ( B√ºhnenbild aufbauen )*/
 		if (curr->Init)
 		{
 			curr->Init();
@@ -231,7 +231,7 @@ ulong PlayStory(void)
 			if (curr->Done)
 			{
 				SceneArgs.Moeglichkeiten = curr->Moeglichkeiten & film->EnabledChoices;
-				curr->Done();	/* FunktionalitÑt */
+				curr->Done();	/* Funktionalit√§t */
 			}
 			else
 			{
@@ -334,22 +334,22 @@ long CheckConditions(struct Scene *scene)
 	if (scene->LocationNr != -1L)
 		return(1L);
 
-	/* es handelt sich um keine Std Szene -> ueberprueÅfen ! */
-	/* ueÅberprÅuefen, ob Szene nicht schon zu oft geschehen ist ! */
+	/* es handelt sich um keine Std Szene -> ueberpr√ºfen ! */
+	/* √ºberpr√ºfen, ob Szene nicht schon zu oft geschehen ist ! */
 	if ((scene->Anzahl != ((uword)(CAN_ALWAYS_HAPPEN))) &&
 		    (scene->Geschehen) >= (scene->Anzahl))
 		return(0L);
 
-	/* Jetzt die einzelnen Bedingungen ÅberprÅfen */
+	/* Jetzt die einzelnen Bedingungen √ºberpr√ºfen */
 	if (!(bed=(scene->bed)))
 		return(1L);
 
 	if (bed->Ort!=-1L)	/* spielt der Ort eine Rolle ? */
 		if (GetLocation!=(bed->Ort))
-			return(0L);		/* spielt eine Rolle und ist nicht erfÅllt */
+			return(0L);		/* spielt eine Rolle und ist nicht erf√ºllt */
 
 	/*
-	* öberprÅfen, ob ein Event eingetreten ist,
+	* √úberpr√ºfen, ob ein Event eingetreten ist,
 	* das nicht geschehen darf !
 	*/
 
@@ -452,7 +452,7 @@ void PrepareStory(char *filename)
 		else
 		    film->gameplay[i].bed = NULL;	/* Spielablaufszene : keine Bedingungen ! */
 
-		/* Scene Struktur fÅllen : */
+		/* Scene Struktur f√ºllen : */
 		scene->Done = StdDone;
 		scene->Init = StdInit;
 		scene->Moeglichkeiten=NS.Moeglichkeiten;
@@ -463,7 +463,7 @@ void PrepareStory(char *filename)
 		scene->LocationNr=NS.NewOrt;
 
 		/* Nachfolgerliste aufbauen !  */
-		/* Achtung! auch Patch Ñndern! */
+		/* Achtung! auch Patch √§ndern! */
 
 		if (NS.AnzahlderNachfolger)
 		{
@@ -483,7 +483,7 @@ void PrepareStory(char *filename)
 		    scene->std_succ = NULL;
 	}
 
-	/* von den Events mu· nichts geladen werden ! */
+	/* von den Events mu√ü nichts geladen werden ! */
 	dskClose(file);
 }
 

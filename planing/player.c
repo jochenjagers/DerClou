@@ -70,7 +70,7 @@ static struct
 	ubyte (*actionFunc)(ulong, ulong);
 
 	ubyte isItDark;
-	ubyte sndState;		// Achtung! Verhalten von sndState hat sich gegenÅber Amiga gewandelt
+	ubyte sndState;		// Achtung! Verhalten von sndState hat sich gegen√ºber Amiga gewandelt
 	ubyte pad[2];
 } PD;
 
@@ -1369,7 +1369,7 @@ long plPlayer(ulong objId , ulong actionTime, ubyte (*actionFunc)(ulong, ulong))
             }
 
 			SetMenuTimeOutFunc(NULL);
-            inpSetWaitTicks(0);  /* normales Ausmass· */
+            inpSetWaitTicks(0);  /* normales Ausmass√ü */
 
             Search.LastAreaId     = lsGetActivAreaID();
             Search.TimeOfBurglary = PD.realTime;

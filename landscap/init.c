@@ -47,13 +47,13 @@ void lsInitLandScape(ulong bID,ubyte mode)   	/* initialisiert das Landschaftsmo
 
 	ls->us_EscapeCarBobId = BobInit(LS_LOOTBAG_BUFFER, 14, 14);
 
-	// lootbags mÅssen vor den Livings initialisiert werden, da sie
+	// lootbags m√ºssen vor den Livings initialisiert werden, da sie
 	// einer kleiner Prioritaet haben (unter den Maxis erscheinen)
 	for (i = 9701; i <= 9708; i++)
 		{
 		LSObject lso = (LSObject)dbGetObject(i);
 
-		// OffsetFact wird am PC nicht fÅr den Offset in der Plane
+		// OffsetFact wird am PC nicht f√ºr den Offset in der Plane
 		// sondern als Handle des Bob verwendet
 		lso->us_OffsetFact = BobInit(LS_LOOTBAG_BUFFER, 14, 14);
 
@@ -215,7 +215,7 @@ void lsInitObjectDB(ulong bld, ulong areaID)
 	dbSetLoadObjectsMode(DB_LOAD_MODE_STD);
 	}
 
-// lÑdt im Gegensatz zur Amigaversion alle Bodendaten gleichzeitig
+// l√§dt im Gegensatz zur Amigaversion alle Bodendaten gleichzeitig
 // in den Speicher
 static void lsInitFloorSquares(void)
 	{
@@ -317,7 +317,7 @@ void lsDoneObjectDB(ulong areaID)
 	RemRelations(area->ul_ObjectBaseNr, DB_tcBuild_SIZE);
 	dbDeleteAllObjects(area->ul_ObjectBaseNr, DB_tcBuild_SIZE);
 
-	/* globale Relation wieder lîschen */
+	/* globale Relation wieder l√∂schen */
 	RemRelations(Relation_hasClock - 1, 3);
 
 	/* und die "Relationsheader" wieder anlegen */

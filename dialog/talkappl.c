@@ -32,7 +32,7 @@ void tcJobOffer(Person p)
 	{
 		joinSet(Person_Matt_Stuvysunt, dbGetObjectNr(p));
 		hasSet(Person_Matt_Stuvysunt, dbGetObjectNr(p));  /* Matt hat jetzt Daten von ihm */
-		p->TalkBits &= (0xffffffffL - (1<<Const_tcTALK_JOB_OFFER));  /* Joboffer l”schen! */
+		p->TalkBits &= (0xffffffffL - (1<<Const_tcTALK_JOB_OFFER));  /* Joboffer lÃ¶schen! */
 	}
 	else
 	{

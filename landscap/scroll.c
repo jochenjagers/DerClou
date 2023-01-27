@@ -152,9 +152,9 @@ ubyte lsIsCollision(uword x, uword y, ubyte direction)
 	for (i = 0; i < 14; i++)
 		color[i] = 255;
 
-	// Kollision ÅberprÅfen
-	// Da sich das Maxi immer um 2 Pixel weiterbewegt, mÅssen Pixel
-	// hintereinander abgefragt werden, au·erdem wird immer an jeder
+	// Kollision √ºberpr√ºfen
+	// Da sich das Maxi immer um 2 Pixel weiterbewegt, m√ºssen Pixel
+	// hintereinander abgefragt werden, au√üerdem wird immer an jeder
 	// Ecke einer Kollisionsseite kontrolliert
 
 	switch(direction)
@@ -335,14 +335,14 @@ ubyte lsIsCollision(uword x, uword y, ubyte direction)
 			collis = collisDir;
 		}
 	}
-	// wenn die aeusseren kollidieren, die inneren aber nicht -> keine Kollision (TÅr!)
+	// wenn die aeusseren kollidieren, die inneren aber nicht -> keine Kollision (T√ºr!)
 	if ((color[0] || color[1]) && (color[6] || color[5]) && !color[3])
 		collis = 0;
 
 	if ((color[7] || color[8]) && (color[13] || color[12]) && !color[10])
 		collis = 0;
 
-	// Raender ueÅberprueÅfen!
+	// Raender √ºberpr√ºfen!
 	if (x <= 2)
 		collis |= LS_COLLIS_LEFT;
 	if (x >= (LS_MAX_AREA_WIDTH - LS_PERSON_X_SIZE - 3))

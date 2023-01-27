@@ -10,14 +10,14 @@
 #define SCENE_NODE			((ubyte)100)
 #define EVENT_NODE         ((ubyte)101)
 #define MAX_SCENES_AMOUNT	1L<<14	/* 14 + 18 = 32 Bits !!! */
-#define MAX_EVENTS_AMOUNT	1L<<18	/* wichtig da story das ben”tigt ! */
+#define MAX_EVENTS_AMOUNT	1L<<18	/* wichtig da story das benÃ¶tigt ! */
 
 
 struct StoryHeader
 {
 	ubyte StoryName[20];
 
-	ulong EventCount;	/* Zaehler mit der h”chsten EventNr */
+	ulong EventCount;	/* Zaehler mit der hÃ¶chsten EventNr */
 	ulong SceneCount;
 
 	ulong AmountOfScenes;
@@ -49,13 +49,13 @@ struct NewScene
 	long	Tag;				   /* der Tag an dem sie eintritt */
 	long	MinZeitPunkt;		/* zeitlicher Bereich in dem 	*/
 	long	MaxZeitPunkt;		/* sie eintritt 			*/
-	long	Ort;					/* der erfllt sein muá 		*/
+	long	Ort;					/* der erfÃ¼llt sein muÃŸ 		*/
 
 	ulong	AnzahlderEvents;
 	ulong	AnzahlderN_Events;
 
-	ulong	*events;				/* Nr. der Events, die erfllt sein mssen */
-	ulong	*n_events;			/* Nr. der Events, die nicht erfllt sein mssen */
+	ulong	*events;				/* Nr. der Events, die erfÃ¼llt sein mÃ¼ssen */
+	ulong	*n_events;			/* Nr. der Events, die nicht erfÃ¼llt sein mÃ¼ssen */
 
 	ulong	AnzahlderNachfolger;
 	ulong	*nachfolger;		/* Nr. der NachfolgerEvents */

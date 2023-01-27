@@ -74,8 +74,8 @@ v0.6 (2017-11-16)
   without the CD in drive.
 
   Um die Sprachausgabe der CD von Festplatte abzuspielen, wird das
-  AUDIO Verzeichnis aus "cosp-cdaudio-22khz.zip" benötigt und man
-  muss natürlich die CDROM-Version spielen, ohne CD im Laufwerk.
+  AUDIO Verzeichnis aus "cosp-cdaudio-22khz.zip" benÃ¶tigt und man
+  muss natÃ¼rlich die CDROM-Version spielen, ohne CD im Laufwerk.
 
 v0.5a (2017-10-31)
 - fix: crash on planning Natural Museum (LucyG, reported by Neno)

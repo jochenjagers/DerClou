@@ -162,10 +162,10 @@ struct Scene
 
 struct Bedingungen
 	{
-	long		Ort;						/* der erfllt sein muá */
+	long		Ort;						/* der erfÃ¼llt sein muÃŸ */
 
 	LIST		*events;					/* welche Events schon geschehen sein muessen */
-	LIST		*n_events;				/* Events, die nicht geschehen sein drfen */
+	LIST		*n_events;				/* Events, die nicht geschehen sein dÃ¼rfen */
 	};
 
 struct TCEventNode

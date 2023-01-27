@@ -756,8 +756,8 @@ static ubyte plCheckRequiredTools (ulong checkToolId)
 
 static void plCorrectToolsList(ulong flags)
 {
-	// fÅge Stechkarte nur ein, wenn zum aktuellen Zeitpunkt
-	// ein WÑchter niedergedîgelt wurde
+	// f√ºge Stechkarte nur ein, wenn zum aktuellen Zeitpunkt
+	// ein W√§chter niederged√∂gelt wurde
 	if (PersonsNr > BurglarsNr)
 	{
 		ubyte i;
@@ -1566,7 +1566,7 @@ void plPlaner(ulong objId)
 
 	if ((Planing_BldId == Building_Starford_Kaserne) && !(GamePlayMode & GP_LEVEL_DESIGN))
 	{
-		// im Falle Starford Kaserne mu· der Plan geladen werden
+		// im Falle Starford Kaserne mu√ü der Plan geladen werden
 		plLoad(Planing_BldId);
 
 		plPrepareSys(0L, 0, PLANING_HANDLER_SET);

@@ -18,7 +18,7 @@ ubyte tcCarFound(Car car, ulong time)
 	Person miles = (Person)dbGetObject (Person_Miles_Chickenwing);
 	ubyte found = 0;
 
-	/* Der Jaguar darf nicht gefunden werden - sonst kînnte er ja */
+	/* Der Jaguar darf nicht gefunden werden - sonst k√∂nnte er ja */
 	/* nicht explodieren! */
 
 	if (car != dbGetObject(Car_Jaguar_XK_1950))
@@ -95,7 +95,7 @@ ulong tcIsThereATraitor(void)
 				{
 				Person pers = (Person)OL_DATA(n);
 
-				if (OL_NR(n) != Person_Matt_Stuvysunt)  /* Matt verrÑt sich nicht selbst */
+				if (OL_NR(n) != Person_Matt_Stuvysunt)  /* Matt verr√§t sich nicht selbst */
 					{
 					if ((traitorId == 0) || (pers->Known < symp))
 						{
@@ -154,8 +154,8 @@ ulong tcStartEvidence(void)
 
 		/* alle folgenden Werte sind zwischen 0 und 255 */
 
-		/* statt durch 765 zu dividieren wurde ursprÅnglich durch 255 dividiert -> */
-		/* viel zu gro·e Werte */
+		/* statt durch 765 zu dividieren wurde urspr√ºnglich durch 255 dividiert -> */
+		/* viel zu gro√üe Werte */
 
 		if (Search.SpotTouchCount[i])
 			div = 1;
@@ -213,7 +213,7 @@ ulong tcStartEvidence(void)
 		 * Division durch 0!
 		 */
 
-		/* zufÑllig eine Spurenart auswÑhlen */
+		/* zuf√§llig eine Spurenart ausw√§hlen */
 		evidenceNr = CalcRandomNr (0, 7);
 
 		/* wenn diese Spurenart schon angzeigt wurde, eine freie
@@ -224,7 +224,7 @@ ulong tcStartEvidence(void)
 		while(((1<<evidenceNr) & shownEvidence[guyNr]) && (j++ < 7))
 					  evidenceNr = (evidenceNr + 1) % 7;
 
-		if (j < 8)     /* 8 stimmt! -> ober wird anschlie·end noch erhîht */
+		if (j < 8)     /* 8 stimmt! -> ober wird anschlie√üend noch erh√∂ht */
 			{
 			shownEvidence[guyNr] |= (1<<evidenceNr);
 
@@ -238,9 +238,9 @@ ulong tcStartEvidence(void)
 				evidence->Recognition  = Recognition[guyNr] / 3;  /* change also: totalEvidence /= 3.... */
 				evidence->pers         = (ulong) OL_NR(GetNthNode(guys, (ulong) guyNr));
 
-				/* fÅr alle "Evidences" - stimmt so, da fÅr alle */
+				/* f√ºr alle "Evidences" - stimmt so, da f√ºr alle */
 				/* Personen die selbe Evidence Struct benutzt wird -> */
-				/* bestimmte Werte sind von vorher gesetzt und mÅssen gelîscht */
+				/* bestimmte Werte sind von vorher gesetzt und m√ºssen gel√∂scht */
 				/* werden */
 
 				evidence->WalkTrail  = 0;
@@ -356,7 +356,7 @@ void tcForgetGuys(void)
 			{
 			Person pers = (Person)OL_DATA(node);
 
-			pers->TalkBits |= (1<<Const_tcTALK_JOB_OFFER);     /* Åber Jobs kann man wieder reden! */
+			pers->TalkBits |= (1<<Const_tcTALK_JOB_OFFER);     /* √ºber Jobs kann man wieder reden! */
 
 			joined_byUnSet(Person_Matt_Stuvysunt, OL_NR(node));
 			joinUnSet(Person_Matt_Stuvysunt, OL_NR(node));
@@ -536,7 +536,7 @@ long tcEscapeByCar(ulong escBits, long timeLeft)
 		Say (BUSINESS_TXT, 0, miles->PictID, "HINWEIS_2");     /* woher Hinweis? */
 		}
 
-	/* Gludo erzÑhlt woher Hinweise stammten (falls es welche gibt) */
+	/* Gludo erz√§hlt woher Hinweise stammten (falls es welche gibt) */
 	if (escBits & FAHN_ALARM)
 		{
 		if (escBits & FAHN_ALARM_ALARM)
@@ -630,7 +630,7 @@ long tcCalcCarEscape(long timeLeft)
 		kmh = CalcValue (kmh, 0, car->Speed + car->Speed / 4, i, driverWeight[wayType]);
 		ps  = CalcValue (ps , 0, car->PS + car->PS / 4, i, driverWeight[wayType]);
 
-		/* Ma·zahl fÅr Geschwindigkeit */
+		/* Ma√üzahl f√ºr Geschwindigkeit */
 		/* Einheit = m pro Schleifendurchlauf */
 		unrealSpeed = (kmh * kmhWeight[wayType] + ps * psWeight[wayType]) / 100;
 

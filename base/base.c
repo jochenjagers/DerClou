@@ -177,7 +177,7 @@ static int tcInit(void)
 
 		plInit();
 
-		gfxCopyCollToXMS(128, &StdRP0InXMS);    // MenÅ¸ nach StdRP0InXMS
+		gfxCopyCollToXMS(128, &StdRP0InXMS);    // Men√º nach StdRP0InXMS
 		gfxCopyCollToXMS(129, &StdRP1InXMS);    // Bubbles etc nach StdRP1InXMS
 
 		CurrentBackground = BGD_LONDON;
@@ -519,7 +519,7 @@ int SDL_main(int argc, char **argv)
 		}
 	}
 
-	// und den Pfad f¸År BuildPathName setzen!
+	// und den Pfad f√ºr BuildPathName setzen!
 	dskSetRootPath(result);
 
 	loadConfig(result);

@@ -39,12 +39,12 @@ void Log(const char *s, ...);
 
 /* Parameter : Fehlerart */
 
-#define  ERR_WARNING           2L   /* Programm lÑuft weiter */
+#define  ERR_WARNING           2L   /* Programm l√§uft weiter */
 #define  ERR_ERROR             4L   /* Programm bricht mit Resourcenfreigabe ab */
 #define  ERR_SHUT_DOWN         8L   /* Programm bricht ohne Resourcenfreigabe ab */
 												/* zur Resuurcenfreigabe wird CloseAll angesprungen */
 
-#define  ERR_REQUESTER        16L   /* zeige Requester - Fehlertext mu· weniger als
+#define  ERR_REQUESTER        16L   /* zeige Requester - Fehlertext mu√ü weniger als
 													78 Zeichen lang sein */
 
 /* some error types */
