@@ -115,12 +115,6 @@ int	CDROM_WaitForMedia(void)
 {
 	int count = 0;
 
-	// BAD: Windows specific code... sorry templer
-	/*
-	wchar_t message[256];
-	swprintf(message,255,(LPCWSTR)"could not find or read CD/DVD in drive: %s\n press 'Cancel' to continue without CD",CDDrive);
-	*/
-
 		while (CDROM_CheckMediaChanged() != 0)
 		{
 			count += 1;

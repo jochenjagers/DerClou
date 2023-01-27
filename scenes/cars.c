@@ -57,7 +57,7 @@ void tcBuyCar(void)
 
 	while ((choice1!=2) && (choice != GET_OUT))
 		{
-		ObjectListSuccString = (char *(__cdecl *)(ulong,ulong,void *))tcShowPriceOfCar;
+		ObjectListSuccString = (char *(*)(ulong,ulong,void *))tcShowPriceOfCar;
 		ObjectListWidth = 48;
 
 		hasAll(Person_Marc_Smith, OLF_ALIGNED|OLF_PRIVATE_LIST|OLF_INCLUDE_NAME|OLF_INSERT_STAR|OLF_ADD_SUCC_STRING, Object_Car);

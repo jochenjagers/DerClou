@@ -4,9 +4,6 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#ifdef WIN32
-#include <windows.h>
-#endif
 #include <stdlib.h>
 #include "memory/memory.h"
 
@@ -128,19 +125,6 @@ void MemFree(void *mem, unsigned long size)
 		RemAlloc(mem, size, func);
 #endif
 	}
-}
-
-unsigned long MemAvail(void)
-{
-	unsigned long av = 0;
-	#ifdef WIN32
-	MEMORYSTATUS memStat;
-	GlobalMemoryStatus(&memStat);
-	av = memStat.dwAvailPhys;
-	#else
-	#error MemAvail() is not implemented
-	#endif
-	return(av);
 }
 
 long MemGetAllocated(void)

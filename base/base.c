@@ -149,17 +149,7 @@ static int tcInit(void)
 				else
 				{
 					Log("%s|%s: could not find or read CD/DVD", __FILE__, __func__);
-					/* BAD: Windows specific code..., sorry templer
-					mID = MessageBox(NULL,(LPCWSTR)"could not find or read CD/DVD \n press 'Cancel' to continue without CD",(LPCWSTR)"CD/DVD Error!", MB_ICONWARNING | MB_RETRYCANCEL | MB_DEFBUTTON2);
-					if (mID == IDRETRY)
-					{
-						CDROM_SetGameCDDrive();
-					}
-					else 
-					*/
-					{
-						flag = 1;
-					}
+					flag = 1;
 				}
 			}
 		}
