@@ -43,7 +43,7 @@ void sndPlaySound(char *name, ulong mode)
 	char path[256];
 
 	if (pAudioMixer) {
-		if (stricmp(currSoundName, name)) {
+		if (strcasecmp(currSoundName, name)) {
 			strcpy(currSoundName, name);
 
 			dskBuildPathName(SOUND_DIRECTORY, name, path);

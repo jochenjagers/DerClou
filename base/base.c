@@ -446,43 +446,43 @@ static void loadConfig(const char *rootPath)
 			}
 			pParam = trimstr(line);
 
-			if (!stricmp(pParam, "screenwidth")) {
+			if (!strcasecmp(pParam, "screenwidth")) {
 				Config.gfxScreenWidth = atoi(pValue);
-			} else if (!stricmp(pParam, "screenheight")) {
+			} else if (!strcasecmp(pParam, "screenheight")) {
 				Config.gfxScreenHeight = atoi(pValue);
-			} else if (!stricmp(pParam, "fullscreen")) {
+			} else if (!strcasecmp(pParam, "fullscreen")) {
 				Config.gfxFullScreen = atoi(pValue) ? 1 : 0;
-			} else if (!stricmp(pParam, "scale2x")) {
+			} else if (!strcasecmp(pParam, "scale2x")) {
 				Config.gfxScaleNx = atoi(pValue) ? 1 : 0;
-			} else if (!stricmp(pParam, "soundvolume")) {
+			} else if (!strcasecmp(pParam, "soundvolume")) {
 				Config.SfxVolume = atoi(pValue);
-			} else if (!stricmp(pParam, "musicvolume")) {
+			} else if (!strcasecmp(pParam, "musicvolume")) {
 				Config.MusicVolume = atoi(pValue);
-			} else if (!stricmp(pParam, "voicevolume")) {
+			} else if (!strcasecmp(pParam, "voicevolume")) {
 				Config.VoiceVolume = atoi(pValue);
-			} else if (!stricmp(pParam, "nofontshadow")) {
+			} else if (!strcasecmp(pParam, "nofontshadow")) {
 				Config.gfxNoFontShadow = atoi(pValue) ? 1 : 0;
-			} else if (!stricmp(pParam, "nointro")) {
+			} else if (!strcasecmp(pParam, "nointro")) {
 				Config.NoIntro = atoi(pValue) ? 1 : 0;
-			} else if (!stricmp(pParam, "usejoystick")) {
+			} else if (!strcasecmp(pParam, "usejoystick")) {
 				Config.UseJoystick = atoi(pValue);
-			} else if (!stricmp(pParam, "demo") && (atoi(pValue) == 42)) {
+			} else if (!strcasecmp(pParam, "demo") && (atoi(pValue) == 42)) {
 				GamePlayMode |= GP_DEMO|GP_STORY_OFF;
-			} else if (!stricmp(pParam, "storyoff") && (atoi(pValue) == 42)) {
+			} else if (!strcasecmp(pParam, "storyoff") && (atoi(pValue) == 42)) {
 				GamePlayMode |= GP_STORY_OFF;
-			} else if (!stricmp(pParam, "fullenv") && (atoi(pValue) == 42)) {
+			} else if (!strcasecmp(pParam, "fullenv") && (atoi(pValue) == 42)) {
 				GamePlayMode |= GP_FULL_ENV;
-			} else if (!stricmp(pParam, "leveldesign") && (atoi(pValue) == 42)) {
+			} else if (!strcasecmp(pParam, "leveldesign") && (atoi(pValue) == 42)) {
 				GamePlayMode |= GP_LEVEL_DESIGN;
-			} else if (!stricmp(pParam, "guarddesign") && (atoi(pValue) == 42)) {
+			} else if (!strcasecmp(pParam, "guarddesign") && (atoi(pValue) == 42)) {
 				GamePlayMode |= GP_GUARD_DESIGN;
-			} else if (!stricmp(pParam, "nosamples") && (atoi(pValue) == 42)) {
+			} else if (!strcasecmp(pParam, "nosamples") && (atoi(pValue) == 42)) {
 				GamePlayMode |= GP_NO_SAMPLES;
-			} else if (!stricmp(pParam, "nocollision") && (atoi(pValue) == 42)) {
+			} else if (!strcasecmp(pParam, "nocollision") && (atoi(pValue) == 42)) {
 				GamePlayMode |= GP_COLLISION_CHECKING_OFF;
-			} else if (!stricmp(pParam, "showrooms") && (atoi(pValue) == 42)) {
+			} else if (!strcasecmp(pParam, "showrooms") && (atoi(pValue) == 42)) {
 				GamePlayMode |= GP_SHOW_ROOMS;
-			} else if (!stricmp(pParam, "moremoney") && (atoi(pValue) == 42)) {
+			} else if (!strcasecmp(pParam, "moremoney") && (atoi(pValue) == 42)) {
 				GamePlayMode |= GP_MORE_MONEY;
 			}
 		}
