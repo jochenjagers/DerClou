@@ -10,6 +10,7 @@
 
 // cheat function
 #include "base/fullenv.c"
+#include "theclou.h"
 
 Configuration_t Config;
 
@@ -411,7 +412,7 @@ static void loadConfig(const char *rootPath)
 	Config.VoiceVolume = SND_MAX_VOLUME;
 	Config.UseJoystick = 0;
 
-	sprintf(config_file, "%s\\%s", rootPath, "cosp.cfg");
+	sprintf(config_file, "%s"DIR_SEPARATOR"%s", rootPath, "cosp.cfg");
 	file = dskOpen(config_file, "rb", 0);
 	if (!file) {
 		Log("Failed to open cosp.cfg");
@@ -502,7 +503,7 @@ int SDL_main(int argc, char **argv)
 
 	for (i = strlen(result) - 1; i > 0; i--)
 	{
-		if (result[i] == '\\')
+		if (result[i] == DIR_SEPARATOR_CHAR)
 		{
 			result[i] = '\0';
 			break;

@@ -76,7 +76,7 @@ long dskLoad(const char *puch_Pathname, void *p_MemDest)
 
 void dskBuildPathName(const char *puch_Directory, const char *puch_Filename, char *puch_Result)
 {
-	sprintf(puch_Result, "%s\\%s\\%s", RootPathName, puch_Directory, puch_Filename);
+	sprintf(puch_Result, "%s"DIR_SEPARATOR"%s"DIR_SEPARATOR"%s", RootPathName, puch_Directory, puch_Filename);
 }
 
 long dskFileLength (const char *puch_Pathname)

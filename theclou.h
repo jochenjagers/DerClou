@@ -168,4 +168,12 @@ ulong ShowTheClouRequester(long error_class);	/* siehe Base.c */
 
 #define GFX_COLL_PARKING ((uword)27)
 
+#ifdef _WIN32
+#define DIR_SEPARATOR "\\"
+#define DIR_SEPARATOR_CHAR '\\'
+#else
+#define DIR_SEPARATOR "/"
+#define DIR_SEPARATOR_CHAR '/'
+#endif
+
 #endif

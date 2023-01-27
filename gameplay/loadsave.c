@@ -76,21 +76,21 @@ void tcSaveTheClou(int bAutoSave)
 
 			/*
 			// Speichern von tcMain
-			sprintf(line, "%s\\%s%d%s", DATADISK_DIRECTORY, MAIN_DATA_NAME, activ, GAME_DATA_EXT);
+			sprintf(line, "%s"DIR_SEPARATOR"%s%d%s", DATADISK_DIRECTORY, MAIN_DATA_NAME, activ, GAME_DATA_EXT);
 			dbSaveAllObjects (line, DB_tcMain_OFFSET, DB_tcMain_SIZE, 0);
 
-			sprintf(line, "%s\\%s%d%s", DATADISK_DIRECTORY, MAIN_DATA_NAME, activ, GAME_REL_EXT);
+			sprintf(line, "%s"DIR_SEPARATOR"%s%d%s", DATADISK_DIRECTORY, MAIN_DATA_NAME, activ, GAME_REL_EXT);
 			SaveRelations(line ,DB_tcMain_OFFSET, DB_tcMain_SIZE, 0);
 
 			// Speichern von tcBuild
-			sprintf(line, "%s\\%s%d%s", DATADISK_DIRECTORY, BUILD_DATA_NAME, activ, GAME_DATA_EXT);
+			sprintf(line, "%s"DIR_SEPARATOR"%s%d%s", DATADISK_DIRECTORY, BUILD_DATA_NAME, activ, GAME_DATA_EXT);
 			dbSaveAllObjects (line, (ulong) (DB_tcBuild_OFFSET), (ulong) (DB_tcBuild_SIZE), 0);
 
-			sprintf(line, "%s\\%s%d%s", DATADISK_DIRECTORY, BUILD_DATA_NAME, activ, GAME_REL_EXT);
+			sprintf(line, "%s"DIR_SEPARATOR"%s%d%s", DATADISK_DIRECTORY, BUILD_DATA_NAME, activ, GAME_REL_EXT);
 			SaveRelations(line ,(ulong) DB_tcBuild_OFFSET, (ulong) DB_tcBuild_SIZE, 0);
 
 			// Speichern der Story
-			sprintf(line, "%s\\%s%d%s", DATADISK_DIRECTORY, STORY_DATA_NAME, activ, GAME_DATA_EXT);
+			sprintf(line, "%s"DIR_SEPARATOR"%s%d%s", DATADISK_DIRECTORY, STORY_DATA_NAME, activ, GAME_DATA_EXT);
 			tcSaveChangesInScenes(line);
 			*/
 
@@ -152,22 +152,22 @@ ubyte tcLoadIt(char activ)
 	txtReset (OBJECTS_TXT);
 
 	/*
-	sprintf(line, "%s\\%s%d%s", DATADISK_DIRECTORY, MAIN_DATA_NAME, (int)activ, GAME_DATA_EXT);
+	sprintf(line, "%s"DIR_SEPARATOR"%s%d%s", DATADISK_DIRECTORY, MAIN_DATA_NAME, (int)activ, GAME_DATA_EXT);
 	if(dbLoadAllObjects (line, 0))
 	{
-		sprintf(line, "%s\\%s%d%s", DATADISK_DIRECTORY, BUILD_DATA_NAME, (int)activ, GAME_DATA_EXT);
+		sprintf(line, "%s"DIR_SEPARATOR"%s%d%s", DATADISK_DIRECTORY, BUILD_DATA_NAME, (int)activ, GAME_DATA_EXT);
 
 		if(dbLoadAllObjects (line, 0))
 		{
-			sprintf(line, "%s\\%s%d%s", DATADISK_DIRECTORY, MAIN_DATA_NAME, (int)activ, GAME_REL_EXT);
+			sprintf(line, "%s"DIR_SEPARATOR"%s%d%s", DATADISK_DIRECTORY, MAIN_DATA_NAME, (int)activ, GAME_REL_EXT);
 
 			if(LoadRelations (line, 0))
 			{
-				sprintf(line, "%s\\%s%d%s", DATADISK_DIRECTORY, BUILD_DATA_NAME, (int)activ, GAME_REL_EXT);
+				sprintf(line, "%s"DIR_SEPARATOR"%s%d%s", DATADISK_DIRECTORY, BUILD_DATA_NAME, (int)activ, GAME_REL_EXT);
 
 				if(LoadRelations (line, 0))
 				{
-					sprintf(line, "%s\\%s%d%s", DATADISK_DIRECTORY, STORY_DATA_NAME, (int)activ, GAME_DATA_EXT);
+					sprintf(line, "%s"DIR_SEPARATOR"%s%d%s", DATADISK_DIRECTORY, STORY_DATA_NAME, (int)activ, GAME_DATA_EXT);
 
 					if(tcLoadChangesInScenes(line))
 						loaded = 1;

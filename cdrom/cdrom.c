@@ -15,7 +15,7 @@ SDL_CD *CDROM_Struct = NULL;
 
 unsigned int	CDROM_DriveNr;
 unsigned int    CDRomInstalled = 0;
-char CDDrive[256]="X:\\";
+char CDDrive[256]="X:"DIR_SEPARATOR;
 
 //*********************************************************
 //*** CDROM_Install										***

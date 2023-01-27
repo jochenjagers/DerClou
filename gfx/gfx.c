@@ -172,7 +172,7 @@ void gfxScreenshot(void)
 	static int screenshotsTaken = 0;
 	char fileName[256];
 
-	sprintf(fileName, ".\\screenshot%02d.bmp", screenshotsTaken + 1);
+	sprintf(fileName, "."DIR_SEPARATOR"screenshot%02d.bmp", screenshotsTaken + 1);
 	if (!SDL_SaveBMP(SurfaceScreen, fileName)) {
 		screenshotsTaken++;
 	}
@@ -183,7 +183,7 @@ void gfxScreenshotShadow(void)
 	static int screenshotsShadowTaken = 0;
 	char fileName[256];
 
-	sprintf(fileName, ".\\shadow%02d.bmp", screenshotsShadowTaken + 1);
+	sprintf(fileName, "."DIR_SEPARATOR"shadow%02d.bmp", screenshotsShadowTaken + 1);
 	if (!SDL_SaveBMP(pShadowSurface, fileName)) {
 		screenshotsShadowTaken++;
 	}
