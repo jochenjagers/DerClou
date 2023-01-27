@@ -320,7 +320,7 @@ static void MXR_ProcessMixer(MXR_Mixer *pMixer, unsigned char *pStream, int nStr
 				if (pInput->fmt.nBitsPerChannel < pMixer->fmt.nBitsPerChannel) {
 					MXR__ConvertU8ToS16(pMixer->buffer, nInputSamples * pInput->fmt.nNumChannels);
 				} else if (pInput->fmt.nBitsPerChannel > pMixer->fmt.nBitsPerChannel) {
-					MXR__ConvertS16ToU8(pMixer->buffer, nInputSamples * pInput->fmt.nNumChannels);
+					MXR__ConvertS16ToU8((short*)pMixer->buffer, nInputSamples * pInput->fmt.nNumChannels);
 				}
 
 				if (pMixer->fmt.nBitsPerChannel == 8) {
@@ -340,15 +340,15 @@ static void MXR_ProcessMixer(MXR_Mixer *pMixer, unsigned char *pStream, int nStr
 				} else {
 					if (pInput->fmt.nNumChannels == 2) {
 						if (pMixer->fmt.nNumChannels == 2) {
-							MXR__ResampleAndMixS16StereoToStereo(pMixer, pStream, nStreamSamples, pInput, nInputSamples);
+							MXR__ResampleAndMixS16StereoToStereo(pMixer, (short*)pStream, nStreamSamples, pInput, nInputSamples);
 						} else {
-							MXR__ResampleAndMixS16StereoToMono(pMixer, pStream, nStreamSamples, pInput, nInputSamples);
+							MXR__ResampleAndMixS16StereoToMono(pMixer, (short*)pStream, nStreamSamples, pInput, nInputSamples);
 						}
 					} else {
 						if (pMixer->fmt.nNumChannels == 2) {
-							MXR__ResampleAndMixS16MonoToStereo(pMixer, pStream, nStreamSamples, pInput, nInputSamples);
+							MXR__ResampleAndMixS16MonoToStereo(pMixer, (short*)pStream, nStreamSamples, pInput, nInputSamples);
 						} else {
-							MXR__ResampleAndMixS16MonoToMono(pMixer, pStream, nStreamSamples, pInput, nInputSamples);
+							MXR__ResampleAndMixS16MonoToMono(pMixer, (short*)pStream, nStreamSamples, pInput, nInputSamples);
 						}
 					}
 				}

@@ -37,6 +37,8 @@ extern Configuration_t Config;	/* base.c */
  * verwendete Typen
  */
 
+struct Scene;
+
 typedef unsigned char	ubyte;
 typedef unsigned short	uword;
 typedef short			word;
