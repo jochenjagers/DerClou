@@ -9,20 +9,15 @@
 void rndInit(void)
 {
 	#ifndef __COSP__
-	randomize();	/* Zufallszahl Åber Timer initialiseren */
+	randomize();	/* Zufallszahl ueÅber Timer initialisieren */
 	#else
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	#endif
 }
 
-void rndDone(void)
-	{
-	return;
-	}
-
 ulong CalcRandomNr(ulong l_limit, ulong u_limit)
-	{
+{
 	ulong x = l_limit + (rand() % (u_limit - l_limit));
 
 	return x;
-	}
+}

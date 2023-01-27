@@ -18,17 +18,17 @@
 #define	Y_DEST_OFFSET_POS	10
 #define	PLAY_MODE_POS		11
 
-/* Defines fr Playmode */
+/* Defines fuer Playmode */
 #define	PM_NORMAL			     1
 #define	PM_PING_PONG		     2
 #define  PM_SYNCHRON            4
 
-/* Defines fr AnimPic Aufbau */
+/* Defines fuer AnimPic Aufbau */
 #define 	Y_OFFSET		           0	/* 1 Pixel zwischen 2 Reihen */
 
 struct AnimHandler
 {
-	ubyte	*RunningAnimID;      /* Anim, die gerade l„uft */
+	ubyte	*RunningAnimID;      /* Anim, die gerade laeuft */
 
 	uword destX;
 	uword destY;
@@ -59,8 +59,8 @@ struct AnimHandler
 	ubyte AnimatorState;
 };
 
-struct AnimHandler Handler = {NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-char  RunningAnimLine[TXT_KEY_LENGTH];
+static struct AnimHandler Handler = {NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static char  RunningAnimLine[TXT_KEY_LENGTH];
 
 #define ANIM_FRAME_XMS_RP	AnimRPInXMS
 #define ANIM_FRAME_RP		PrepareRP
@@ -101,7 +101,7 @@ void ContinueAnim(void)
 * prepare...
 */
 
-// initialisert diverse Werte und kopiert anschlieáend die Animphasen
+// initialisert diverse Werte und kopiert anschliessend die Animphasen
 // in den XMS Speicher
 static void PrepareAnim (char *AnimID)
 {
@@ -114,7 +114,7 @@ static void PrepareAnim (char *AnimID)
 	{
 		coll = gfxGetCollection((uword) txtGetKeyAsULONG((uword)ANIM_COLL_ID_POS, pict_list));
 
-		Handler.frameCount  = txtGetKeyAsULONG((uword)PIC_COUNT_POS, pict_list);
+		Handler.frameCount = (uword) txtGetKeyAsULONG((uword)PIC_COUNT_POS, pict_list);
 
 		Handler.width  = (uword) txtGetKeyAsULONG((uword)PHASE_WIDTH_POS, pict_list);
 		Handler.height = (uword) txtGetKeyAsULONG((uword)PHASE_HEIGHT_POS, pict_list);
@@ -124,7 +124,7 @@ static void PrepareAnim (char *AnimID)
 		Handler.destX  = (uword) txtGetKeyAsULONG((uword)X_DEST_OFFSET_POS, pict_list);
 		Handler.destY  = (uword) txtGetKeyAsULONG((uword)Y_DEST_OFFSET_POS, pict_list);
 
-		/* einen Offset muá ich zur Totalbreite addieren ! Beispiel :	 */
+		/* einen Offset muss ich zur Totalbreite addieren ! Beispiel :	 */
 		/* 3 Bilder mit Width = 80, Offset = 2 -> TotalWidth = 244		 */
 		/* 244 / 3 ist aber nur 2, obwohl in dieser Zeile 3 Bilder sind ! */
 		Handler.pictsPerRow    = (coll->us_TotalWidth+Handler.offset)/(Handler.width+Handler.offset);
@@ -255,6 +255,7 @@ void animator(void)
 {
 	long destX = Handler.destX;
 	long destY = Handler.destY;
+	uword sourceX, sourceY;
 
 	if (!(Handler.AnimatorState & ANIM_STATE_SUSPENDED))
 	{
@@ -285,10 +286,10 @@ void animator(void)
 
 					if(Handler.RepeatationCount <= Handler.Repeatation)
 					{
-						uword sourceX = ((Handler.width+Handler.offset)*Handler.CurrPictNr) % (Handler.totalWidth);
-						uword sourceY = (Handler.CurrPictNr / Handler.pictsPerRow) * (Handler.height+Y_OFFSET);
+						sourceX = ((Handler.width+Handler.offset)*Handler.CurrPictNr) % (Handler.totalWidth);
+						sourceY = (Handler.CurrPictNr / Handler.pictsPerRow) * (Handler.height+Y_OFFSET);
 
-						/* sicherstellen, daá Animframes immer vorhanden sind */
+						/* sicherstellen, dass Animframes immer vorhanden sind */
 
 						gfxCopyCollFromXMS(Handler.AnimCollection, ANIM_FRAME_RP.p_BitMap);
 

@@ -32,7 +32,7 @@ void plMessage(char *msg, ubyte flags)
 
 	if (flags & PLANING_MSG_WAIT)
 	{
-		inpSetWaitTicks(140L);
+		inpSetWaitTicks(120);	// 140
 		inpWaitFor(INP_LBUTTONP|INP_TIME);
 		inpSetWaitTicks(0L);
 	}

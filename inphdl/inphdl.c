@@ -246,6 +246,10 @@ uword inpGetMouseY(struct RastPort *p_RP)
 
 void inpSetWaitTicks(long l_Ticks)
 {
+	// 2018-09-26 : timing fixes
+	if (l_Ticks < INP_AS_FAST_AS_POSSIBLE) {
+		l_Ticks = INP_AS_FAST_AS_POSSIBLE;
+	}
 	IHandler.ul_WaitTicks = l_Ticks;
 }
 

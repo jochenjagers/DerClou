@@ -301,7 +301,7 @@ void tcRefreshAfterLoad(ubyte loaded)
 		if (player)
 			{
 			SetDay(player->CurrDay);
-			SetTime(player->CurrMinute);
+			SetMinute(player->CurrMinute);
 			SetLocation(-1);    /* auf alle F„lle ein Refresh! */
 
 			SceneArgs.ReturnValue = GetLocScene(player->CurrLocation)->EventNr;

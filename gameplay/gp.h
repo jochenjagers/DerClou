@@ -91,7 +91,6 @@
 #define SetMinute(zeit)		(film->akt_Minute=(ulong)(zeit))
 #define SetLocation(loc)	{film->alter_Ort = film->akt_Ort; film->akt_Ort=(ulong)(loc);}
 #define SetDay(tag)			(film->akt_Tag=(ulong)(tag))
-#define SetTime(time)		(film->akt_Minute=(ulong)(time))
 
 #define GetDay					(film->akt_Tag)
 #define GetMinute				(film->akt_Minute)

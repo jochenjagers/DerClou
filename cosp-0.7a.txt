@@ -1,4 +1,4 @@
-Der Clou! Open Source Project V0.7 (2018-09-25)
+Der Clou! Open Source Project V0.7a (2018-09-26)
 
 http://sourceforge.net/projects/cosp
 
@@ -31,6 +31,10 @@ license contained in the included 'mame.txt' file.
 ================================================================================
   CHANGES/FIXES
 ================================================================================
+
+v0.7a (2018-09-26)
+- fix: repainting car shows wrong colors
+- fix: time running too fast in some scenes
 
 v0.7 (2018-09-25)
 - fix: removed the experimental audio delay fake stereo effect

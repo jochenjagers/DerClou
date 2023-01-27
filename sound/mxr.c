@@ -45,7 +45,7 @@ static void MXR__ConvertU8ToS16(unsigned char *pBuffer, unsigned long nValues)
 
 static void MXR__ConvertS16ToU8(short *pBuffer, unsigned long nValues)
 {
-	long i;
+	unsigned long i;
 	unsigned char *pDest;
 	long s;
 
@@ -201,7 +201,7 @@ static void MXR__ResampleAndMixS16StereoToMono(MXR_Mixer *pMixer, short *pStream
 
 static void MXR__ResampleAndMixS16StereoToStereo(MXR_Mixer *pMixer, short *pStream, unsigned long nStreamSamples, MXR_Input *pInput, unsigned long nInputSamples)
 {
-	long s, s2, l, r;
+	long s, s2;
 	long rem;
 	unsigned long i, i2, ixSamples, j, j2, jx, j2x;
 	short *pBuffer;

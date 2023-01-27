@@ -81,17 +81,20 @@ void tcDoneHotelReception(void)
 {
 	Person      rig = (Person) dbGetObject(Person_Ben_Riggley);
 	Environment env = (Environment) dbGetObject(Environment_TheClou);
+	ubyte choice, evaluation;
 
 	knowsSet(Person_Matt_Stuvysunt, Person_Ben_Riggley);
 
-	if (env->MattHasHotelRoom==2)  /* er hat es bereits ! */
+	if (env->MattHasHotelRoom==2) {
+		/* er hat es bereits ! */
 		SceneArgs.ReturnValue = SCENE_HOTEL;
+	}
 	else
-	    {
+	{
 		AddTaxiLocation(2);      /* watling */
 		AddTaxiLocation(1);      /* cars */
 
-		if (tcGetPlayerMoney>=tcCOSTS_FOR_HOTEL)
+		if (tcGetPlayerMoney >= tcCOSTS_FOR_HOTEL)
 		{
 			Say(STORY_0_TXT,0,MATT_PICTID,"THE_KEY_PLEASE");
 			Say(STORY_0_TXT,0,rig->PictID,"I_LL_FETCH_THE_KEY");
@@ -104,10 +107,11 @@ void tcDoneHotelReception(void)
 			SceneArgs.ReturnValue = SCENE_HOTEL_ROOM;
 		}
 		else
-		    {
+		{
 			if (env->MattHasHotelRoom == 0)     /* 1. mal da */
 			{
-				ubyte choice = 2, evaluation = 0;
+				choice = 2;
+				evaluation = 0;
 
 				while ((choice == 2) || (choice == 3))
 				{
@@ -163,7 +167,7 @@ void tcDoneHotelReception(void)
 				}
 			}
 			else
-			    {
+			{
 				if (env->MattHasHotelRoom == 1)
 				{
 					Say(STORY_0_TXT,0,rig->PictID,"YOU_HAVE_NO_MONEY");
@@ -1108,7 +1112,7 @@ void tcSabienInWalrus(void)
 	Say (STORY_1_TXT, 0, OLD_MATT_PICTID, "ST_3_OLD_0");
 	gfxShow (157, GFX_NO_REFRESH|GFX_ONE_STEP, 0, -1, -1);  /* Kiss */
 
-	inpSetWaitTicks(200);
+	inpSetWaitTicks(180);	// 200
 	inpWaitFor(INP_LBUTTONP|INP_TIME);
 	inpSetWaitTicks(0);
 
@@ -1257,9 +1261,9 @@ void tcDone7thBurglary(void)
 	if (bProfidisk)
 		AddTaxiLocation(81);     /* bulstrode  */
 
-	/* Jaguar kommt hier, da: 1. man barucht ihn fr Villa, */
-	/* 2. Jaguar wird in Fahndung nie erwischt (sonst k”nnte er nicht explodieren) */
-	/* 3. man soll Jaguar nicht zu lange haben k”nnen (da man nie erwischt wird  */
+	/* Jaguar kommt hier, da: 1. man braucht ihn fuer Villa, */
+	/* 2. Jaguar wird in Fahndung nie erwischt (sonst koennte er nicht explodieren) */
+	/* 3. man soll Jaguar nicht zu lange haben koennen (da man nie erwischt wird)  */
 
 	hasSet(Person_Marc_Smith, Car_Jaguar_XK_1950);
 
@@ -1438,7 +1442,7 @@ void tcDone9thBurglary(void)
 	if (Env->MattIsInLove)
 		AddTaxiLocation(61);     /* lisson */
 
-	/* nur mehr M”glichkeiten: gehen */
+	/* nur mehr Moeglichkeiten: gehen */
 	SetEnabledChoices(GO|WAIT);
 
 	GetScene(SCENE_FAHNDUNG)->Geschehen = 0;     /* damit nicht gleich Burglary 2 geschieht */

@@ -52,7 +52,6 @@ static void tcDone(void)
 	txtDone();
 	inpCloseAllInputDevs();
 	gfxDone();
-	rndDone();
 
 	if (bCDRom)
 	{

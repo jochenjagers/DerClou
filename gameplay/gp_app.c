@@ -6,6 +6,9 @@
 */
 #include "gameplay\gp_app.h"
 
+// 2018-09-26 LucyG: in-game time was too fast
+#define GP_TICKS_PER_MINUTE		10
+#define GP_TICKS_PER_DAY		30
 
 void tcAsTimeGoesBy(ulong untilMinute)
 {
@@ -13,7 +16,7 @@ void tcAsTimeGoesBy(ulong untilMinute)
 
 	while (GetMinute != untilMinute)
 	{
-		inpDelay(1);
+		inpDelay(GP_TICKS_PER_MINUTE);
 
 		AddVTime(1);
 
@@ -28,7 +31,7 @@ void tcAsDaysGoBy(ulong day, ulong stepSize)
 
 	while (GetDay < day)
 	{
-		inpDelay(3);
+		inpDelay(GP_TICKS_PER_DAY);
 
 		add = CalcRandomNr(stepSize - stepSize/30, stepSize + stepSize/30);
 
@@ -291,6 +294,9 @@ void tcPlaySound()
 
 void tcPlayStreetSound()
 {
+	static ubyte counter = 0;
+	ubyte noStreetMusic;
+
 	if (!(GamePlayMode & GP_MUSIC_OFF))
 	{
 		switch(GetCurrentScene()->EventNr)
@@ -322,8 +328,7 @@ void tcPlayStreetSound()
 
 		default:
 			{
-				static ubyte counter = 0;
-				ubyte noStreetMusic = 0;
+				noStreetMusic = 0;
 
 				if (strcmp(sndGetCurrSoundName(), "street1.bk") &&
 					    strcmp(sndGetCurrSoundName(), "street2.bk") &&
@@ -472,12 +477,12 @@ ulong StdHandle(ulong choice)
 
 						if (building = tcOrganisation())
 						{
-							AddVTime(27153);       /* etwas Åber 15 Tage ! */
+							AddVTime(27153);       /* etwas ueÅber 15 Tage ! */
 							succ_eventnr = tcBurglary(building);
 						}
 						else
 					    {
-							AddVTime(443);         /* etwas Åber 7 Stunden */
+							AddVTime(443);         /* etwas Åueber 7 Stunden */
 
 							CurrentBackground = BGD_LONDON;
 							ShowMenuBackground();
@@ -574,7 +579,7 @@ void StdDone(void)
 
 void InitTaxiLocations(void)
 {
-	RemRelation(Relation_taxi);   /* alle Relationen lîschen! */
+	RemRelation(Relation_taxi);   /* alle Relationen loeschen! */
 	AddRelation(Relation_taxi);
 
 	if (GamePlayMode & GP_STORY_OFF)

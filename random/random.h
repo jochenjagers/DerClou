@@ -18,7 +18,6 @@
 #endif
 
 extern void rndInit(void);
-extern void rndDone(void);
 
 extern ulong CalcRandomNr(ulong l_limit, ulong u_limit);
 

@@ -1372,8 +1372,8 @@ long plPlayer(ulong objId , ulong actionTime, ubyte (*actionFunc)(ulong, ulong))
                }
             }
 
-				SetMenuTimeOutFunc(NULL);
-            inpSetWaitTicks(0);  /* normales Ausmaá */
+			SetMenuTimeOutFunc(NULL);
+            inpSetWaitTicks(0);  /* normales Ausmassá */
 
             Search.LastAreaId     = lsGetActivAreaID();
             Search.TimeOfBurglary = PD.realTime;

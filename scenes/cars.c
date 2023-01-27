@@ -6,29 +6,34 @@
 */
 #include "scenes\scenes.h"
 
-void SetCarColors(ubyte index)
+void SetCarColors(ubyte ndex)
 {
-	ubyte Col[10][4][3]= {
-          {{ 8,  8,  8}, { 7,  7,  7}, { 6,  6,  6}, { 5,  5,  5}},
-	     {{ 1, 12,  8}, { 3,  9,  6}, { 3,  6,  4}, { 2,  5,  3}},
-	     {{ 7, 15, 15}, { 7, 13, 12}, { 5, 10, 10}, { 4,  8,  8}},
-	     {{12,  0,  7}, {10,  0,  9}, { 9,  0,  8}, { 7,  0,  6}},
-          {{12,  8,  7}, {11,  7,  6}, { 9,  6,  6}, { 8,  5,  5}},
-	     {{13, 13, 13}, {12, 12, 12}, {10, 10, 10}, { 8,  8,  8}},
-	     {{14,  0,  3}, {13,  0,  3}, {11,  0,  2}, { 9,  0,  2}},
-	     {{ 0, 14,  1}, { 0, 12,  0}, { 0, 10,  0}, { 0,  8,  0}},
-	     {{ 0,  6, 15}, { 0,  4, 13}, { 0,  2, 11}, { 0,  0,  9}},
-	     {{15, 15,  6}, {13, 13,  3}, {11, 11,  1}, { 9,  9,  0}}};
+	// 2018-09-26 LucyG: finally fixed
+	const ubyte Col[10*12] = {
+         8,  8,  8,   7,  7,  7,   6,  6,  6,   5,  5,  5,
+	     1, 12,  8,   3,  9,  6,   3,  6,  4,   2,  5,  3,
+	     7, 15, 15,   7, 13, 12,   5, 10, 10,   4,  8,  8,
+	    12,  0,  7,  10,  0,  9,   9,  0,  8,   7,  0,  6,
+        12,  8,  7,  11,  7,  6,   9,  6,  6,   8,  5,  5,
+	    13, 13, 13,  12, 12, 12,  10, 10, 10,   8,  8,  8,
+	    14,  0,  3,  13,  0,  3,  11,  0,  2,   9,  0,  2,
+	     0, 14,  1,   0, 12,  0,   0, 10,  0,   0,  8,  0,
+	     0,  6, 15,   0,  4, 13,   0,  2, 11,   0,  0,  9,
+	    15, 15,  6,  13, 13,  3,  11, 11,  1,   9,  9,  0
+	};
 
-	 // RGB8
-	gfxSetRGB(l_wrp, 8,(long)Col[index][0][0]<<3,(long)Col[index][0][1]<<3,(long)Col[index][0][2]<<3);
-	gfxSetRGB(l_wrp, 9,(long)Col[index][1][0]<<3,(long)Col[index][1][1]<<3,(long)Col[index][1][2]<<3);
-	gfxSetRGB(l_wrp,10,(long)Col[index][2][0]<<3,(long)Col[index][2][1]<<3,(long)Col[index][2][2]<<3);
-	gfxSetRGB(l_wrp,11,(long)Col[index][3][0]<<3,(long)Col[index][3][1]<<3,(long)Col[index][3][2]<<3);
-	gfxSetRGB(l_wrp,40,(long)Col[index][0][0]<<2,(long)Col[index][0][1]<<2,(long)Col[index][0][2]<<2);
-	gfxSetRGB(l_wrp,41,(long)Col[index][1][0]<<2,(long)Col[index][1][1]<<2,(long)Col[index][1][2]<<2);
-	gfxSetRGB(l_wrp,42,(long)Col[index][2][0]<<2,(long)Col[index][2][1]<<2,(long)Col[index][2][2]<<2);
-	gfxSetRGB(l_wrp,43,(long)Col[index][3][0]<<2,(long)Col[index][3][1]<<2,(long)Col[index][3][2]<<2);
+	ndex *= 12;
+
+	// RGB8
+	gfxSetRGB(l_wrp, 8,Col[ndex  ]<<4,Col[ndex+ 1]<<4,Col[ndex+ 2]<<4);
+	gfxSetRGB(l_wrp, 9,Col[ndex+3]<<4,Col[ndex+ 4]<<4,Col[ndex+ 5]<<4);
+	gfxSetRGB(l_wrp,10,Col[ndex+6]<<4,Col[ndex+ 7]<<4,Col[ndex+ 8]<<4);
+	gfxSetRGB(l_wrp,11,Col[ndex+9]<<4,Col[ndex+10]<<4,Col[ndex+11]<<4);
+
+	gfxSetRGB(l_wrp,40,Col[ndex  ]<<3,Col[ndex+ 1]<<3,Col[ndex+ 2]<<3);
+	gfxSetRGB(l_wrp,41,Col[ndex+3]<<3,Col[ndex+ 4]<<3,Col[ndex+ 5]<<3);
+	gfxSetRGB(l_wrp,42,Col[ndex+6]<<3,Col[ndex+ 7]<<3,Col[ndex+ 8]<<3);
+	gfxSetRGB(l_wrp,43,Col[ndex+9]<<3,Col[ndex+10]<<3,Col[ndex+11]<<3);
 }
 
 char *tcShowPriceOfCar(ulong nr, ulong type, void *data)
@@ -195,7 +200,7 @@ void tcColorCar(Car car)
 				gfxPrepareRefresh();
 				PlayAnim("Umlackieren",3000,GFX_DONT_SHOW_FIRST_PIC);
 
-				inpSetWaitTicks(200L);
+				inpSetWaitTicks(180);	// 200
 
 				inpWaitFor(INP_LBUTTONP|INP_TIME);
 
@@ -291,7 +296,7 @@ void tcRepairCar(Car car,char *repairWhat)
 
 	gfxPrepareRefresh();
 	gfxShow ((uword)BIG_SHEET, GFX_NO_REFRESH|GFX_OVERLAY, 0L, -1L, -1L);
-	inpSetWaitTicks(3L);
+	inpSetWaitTicks(30);	// 3
 
 	PlayAnim("Reperatur",30000,GFX_DONT_SHOW_FIRST_PIC);
 

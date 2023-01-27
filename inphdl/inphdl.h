@@ -20,7 +20,7 @@
 #define INP_TICKS_PER_SECOND	60	// 2014-07-04
 #define INP_TICKS_TO_MS(t)		(((t) * 1000) / INP_TICKS_PER_SECOND)
 
-#define INP_AS_FAST_AS_POSSIBLE		1
+#define INP_AS_FAST_AS_POSSIBLE		2
 
 #define INP_UP                (1L<<0)
 #define INP_DOWN              (1L<<1)

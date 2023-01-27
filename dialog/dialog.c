@@ -121,7 +121,7 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 
 				key[key_pos++] = EOS;
 
-				mem_pos++;    /* Klammer Åberspringen ! */
+				mem_pos++;    /* Klammer ueÅberspringen ! */
 
 				for (i = 0; i < 3; i++)    /* Zahlen entfernen */
 				{
@@ -142,7 +142,7 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 				nr  = (ubyte)atol((char*)snr);
 				nr1 = (ubyte)atol((char*)snr1);
 
-				/* keyword einfÅgen */
+				/* keyword einfÅuegen */
 				for (i = 0; i < strlen(keyWord); i++)
 				{
 					line[line_pos++] = keyWord[i];
@@ -182,7 +182,7 @@ void DynamicTalk(ulong Person1ID, ulong Person2ID, ubyte TalkMode)
 
 	tcChgPersPopularity(p1, 5);   /* Bekanntheit steigt sehr gering */
 
-	/* je nach Bekanntheitsgrad wird Matt begrÅ·t ! */
+	/* je nach Bekanntheitsgrad wird Matt begrÅuesst ! */
 	dbGetObjectName(Person2ID, name);
 	strcpy(key, name);
 
@@ -200,7 +200,7 @@ void DynamicTalk(ulong Person1ID, ulong Person2ID, ubyte TalkMode)
 		}
 		else
 		{
-		    known = 1;  /* MOD - kein "FRIENDLY mehr mîglich!" */
+		    known = 1;  /* MOD - kein "FRIENDLY mehr moeglich!" */
 		}
 	}
 
@@ -241,7 +241,7 @@ void DynamicTalk(ulong Person1ID, ulong Person2ID, ubyte TalkMode)
 		if (uch_Max) uch_Max--;
 		uch_Quit = uch_Max;
 
-		for (i = 0, stdcount = 0; i < 32; i++)   /* Std Fragen zÑhlen */
+		for (i = 0, stdcount = 0; i < 32; i++)   /* Std Fragen zaehlen */
 		{
 			if (p2->TalkBits & (1 << i))
 			{

@@ -60,7 +60,7 @@ void Investigate(char *location)
 
 	ShowMenuBackground();    /* Bildschirmaufbau */
 	ShowTime(0);
-	inpSetWaitTicks(50);
+	inpSetWaitTicks(60);	// 50
 
 	gfxSetRect(0, 320);
 	gfxSetPens(l_wrp, 249, GFX_SAME_PEN, 0);

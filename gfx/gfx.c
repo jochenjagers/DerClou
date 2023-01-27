@@ -1075,7 +1075,7 @@ void gfxClearArea(struct RastPort *rp)
 
 void gfxSetRGB(struct RastPort *rp, ubyte uch_ColNr, ubyte uch_Red, ubyte uch_Green, ubyte uch_Blue)
 {
-	long n4 = (long)uch_ColNr << 2;
+	unsigned long n4 = (unsigned long)uch_ColNr << 2;
 	gfxPaletteGlobal[n4  ] = uch_Red;
 	gfxPaletteGlobal[n4+1] = uch_Green;
 	gfxPaletteGlobal[n4+2] = uch_Blue;

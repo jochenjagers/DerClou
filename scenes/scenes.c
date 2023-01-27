@@ -389,7 +389,7 @@ void tcWait(void)
 
 	ShowMenuBackground();
 	ShowTime(0);
-	inpSetWaitTicks(25L);
+	inpSetWaitTicks(60);	// 25
 
 	gfxSetRect(0, 320);
 	gfxSetPens(m_wrp, 249, 0, GFX_SAME_PEN);
