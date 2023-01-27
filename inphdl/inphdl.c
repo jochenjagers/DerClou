@@ -21,9 +21,9 @@ void removeMouseCursor(void);
 
 struct IHandler
 {
-	long	ul_XSensitivity;
-	long	ul_YSensitivity;
-	long	ul_WaitTicks;
+	int32_t	ul_XSensitivity;
+	int32_t	ul_YSensitivity;
+	int32_t	ul_WaitTicks;
 
 	Uint16	us_MouseX;
 	Uint16	us_MouseY;
@@ -194,9 +194,9 @@ void inpOpenAllInputDevs(void)
 static void inpDoPseudoMultiTasking(void)
 {
 	// 2014-06-30 LucyG : rewritten
-	static unsigned long timePrev = 0;
-	unsigned long timeNow;
-	unsigned long timePassed;
+	static uint32_t timePrev = 0;
+	uint32_t timeNow;
+	uint32_t timePassed;
 	timeNow = SDL_GetTicks();
 	if (!timePrev) {
 		timePrev = timeNow;
@@ -221,10 +221,10 @@ void inpCloseAllInputDevs(void)
 	}
 }
 
-void inpDelay(long l_Ticks)
+void inpDelay(int32_t l_Ticks)
 {
 	// 2014-07-03 LucyG : rewritten
-	unsigned long timePrev;
+	uint32_t timePrev;
 	timePrev = SDL_GetTicks();
 	l_Ticks = INP_TICKS_TO_MS(l_Ticks);
 	while ((SDL_GetTicks() - timePrev) < l_Ticks) {
@@ -244,7 +244,7 @@ uword inpGetMouseY(struct RastPort *p_RP)
 	return(IHandler.us_MouseY) - p_RP->us_TopEdge;
 }
 
-void inpSetWaitTicks(long l_Ticks)
+void inpSetWaitTicks(int32_t l_Ticks)
 {
 	// 2018-09-26 : timing fixes
 	if (l_Ticks < INP_AS_FAST_AS_POSSIBLE) {
@@ -268,12 +268,12 @@ void inpTurnMouse(uword us_NewStatus)
 	IHandler.uch_MouseStatus = (ubyte) us_NewStatus;
 }
 
-long inpWaitFor(long l_Mask)
+int32_t inpWaitFor(int32_t l_Mask)
 {
-	long action = 0;
-	ulong WaitTime = 0;
+	int32_t action = 0;
+	uint32_t WaitTime = 0;
 
-	unsigned long timePrev = SDL_GetTicks();
+	uint32_t timePrev = SDL_GetTicks();
 
 	SDL_Event event;
 	SDLKey sym = (SDLKey)0;

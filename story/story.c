@@ -6,10 +6,10 @@
 */
 #include "story/story.h"
 
-ubyte tcDoLastBurglarySpot(ulong ul_Time, ulong ul_BuildingId);
+ubyte tcDoLastBurglarySpot(uint32_t ul_Time, uint32_t ul_BuildingId);
 
 static void tcInitTowerBurglary(void);
-static long tcDoTowerBurglary(void);
+static int32_t tcDoTowerBurglary(void);
 
 static void tcSomebodyIsComing(void)
 {
@@ -33,7 +33,7 @@ static void tcSomebodyIsCalling(void)
 	}
 }
 
-ubyte tcKarateOpa(ulong ul_ActionTime, ulong ul_BuildingId)
+ubyte tcKarateOpa(uint32_t ul_ActionTime, uint32_t ul_BuildingId)
 {
 	livSetAllInvisible();
 	lsSetViewPort(0, 0);     /* links, oben */
@@ -202,7 +202,7 @@ void tcDoneGludoMoney(void)
 	Person Gludo = (Person) dbGetObject(Person_John_Gludo);
 	Environment env = (Environment)dbGetObject(Environment_TheClou);
 	ubyte  choice;
-	long money;
+	int32_t money;
 
 	knowsSet(Person_Matt_Stuvysunt,Person_John_Gludo);
 
@@ -473,9 +473,9 @@ void tcDonePrison(void)
 	SceneArgs.ReturnValue = SCENE_NEW_GAME;
 }
 
-long tcIsDeadlock(void)
+int32_t tcIsDeadlock(void)
 {
-	long deadlock = 0, total = 0;
+	int32_t deadlock = 0, total = 0;
 	CompleteLoot comp =(CompleteLoot)dbGetObject(CompleteLoot_LastLoot);
 
 	hasAll(Person_Matt_Stuvysunt, OLF_NORMAL, Object_Car);
@@ -483,7 +483,7 @@ long tcIsDeadlock(void)
 	if (LIST_EMPTY(ObjectList))
 	{
 		NODE *n;
-		long money = tcGetPlayerMoney, enough = 0;
+		int32_t money = tcGetPlayerMoney, enough = 0;
 
 		/* jetzt zum Geld noch die vorhandene Beute addieren */
 		RemoveList(tcMakeLootList(Person_Matt_Stuvysunt, Relation_has));
@@ -659,7 +659,7 @@ void tcDone2ndBurglary(void)
 void tcCheckForBones(void)
 {
 	Person luthm = (Person)dbGetObject(Person_Luthmilla_Nervesaw);
-	long money;
+	int32_t money;
 
 	if (has(Person_Matt_Stuvysunt, Loot_Gebeine))
 	{
@@ -867,7 +867,7 @@ void tcDone5thBurglary(void)
 
 void tcDoneDealerIsAfraid(void)
 {
-	ulong  persID;
+	uint32_t  persID;
 	Person pers;
 
 	switch(GetLocation)
@@ -1557,7 +1557,7 @@ void tcDoneSouthhamptonSabienUnknown(void)
 static void tcDoneFirstTimeLonelyInSouth(void)
 {
 	LIST *menu = txtGoKey (MENU_TXT, "SouthhamptonMenu");
-	ulong startTime = 0, actionTime;
+	uint32_t startTime = 0, actionTime;
 	ubyte ende = 0, activ = 1;
 	Environment Env = (Environment)dbGetObject(Environment_TheClou);
 	Person    Herb = (Person)dbGetObject(Person_Herbert_Briggs);
@@ -1664,7 +1664,7 @@ void tcDoneSouthhampton(void)
 {
 	LIST *menu = txtGoKey (MENU_TXT, "SouthhamptonMenu");
 	ubyte activ = 1;    /* !! */
-	ulong actionTime;
+	uint32_t actionTime;
 	Environment Env = (Environment)dbGetObject(Environment_TheClou);
 
 	SceneArgs.Ueberschrieben = 1;
@@ -1867,9 +1867,9 @@ static void tcDoneMafia(void)
 	Say(STORY_1_TXT, 0, OLD_MATT_PICTID, "ST_26_OLD_1");
 }
 
-static long tcDoTowerBurglary(void)
+static int32_t tcDoTowerBurglary(void)
 {
-	long burglary;
+	int32_t burglary;
 
 	/* das Organisatorische muß hier wiederholt werden, da */
 	/* es sonst zu Fehler kommen kann, da die Organisation */
@@ -1898,7 +1898,7 @@ void tcDoneKaserne(void)
 	Car car         = (Car)dbGetObject(Car_Cadillac_Club_1952);
 	LIST *menu      = txtGoKey(MENU_TXT, "KaserneMenu");
 	ubyte activ     = 0, burglary = 0;
-	ulong successor = 0;
+	uint32_t successor = 0;
 
 	joined_bySet(Person_Matt_Stuvysunt, Person_Matt_Stuvysunt);
 	joined_bySet(Person_Matt_Stuvysunt, Person_Herbert_Briggs);
@@ -2007,14 +2007,14 @@ void tcDoneKaserne(void)
 	SceneArgs.ReturnValue = successor;
 }
 
-long tcIsLastBurglaryOk(void)
+int32_t tcIsLastBurglaryOk(void)
 {
 	Building kaserne = (Building)dbGetObject(Building_Starford_Kaserne);
 	word carXPos0 = kaserne->CarXPos - 40;
 	word carYPos0 = kaserne->CarYPos - 40;
 	word carXPos1 = kaserne->CarXPos + 40;
 	word carYPos1 = kaserne->CarYPos + 40;
-	long madeIt = 1, i;
+	int32_t madeIt = 1, i;
 	LSObject left  = (LSObject)dbGetObject(tcLAST_BURGLARY_LEFT_CTRL_OBJ);
 	LSObject right = (LSObject)dbGetObject(tcLAST_BURGLARY_RIGHT_CTRL_OBJ);
 

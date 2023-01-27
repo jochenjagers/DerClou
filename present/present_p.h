@@ -24,8 +24,8 @@ struct presentationInfo
 	NODE link;
 
 	char  extendedText[70];
-	ulong extendedNr;
-	ulong maxNr;
+	uint32_t extendedNr;
+	uint32_t maxNr;
 
 	ubyte presentHow;
 	};

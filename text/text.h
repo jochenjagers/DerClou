@@ -45,29 +45,29 @@
 void txtInit(ubyte lang);
 void txtDone(void);
 
-void txtLoad(ulong textId);
-void txtUnLoad(ulong textId);
+void txtLoad(uint32_t textId);
+void txtUnLoad(uint32_t textId);
 
-void txtPrepare(ulong textId);
-void txtUnPrepare(ulong textId);
+void txtPrepare(uint32_t textId);
+void txtUnPrepare(uint32_t textId);
 
-void txtReset(ulong textId);
+void txtReset(uint32_t textId);
 
 
 // public prototypes - KEY
 char *txtGetKey(uword keyNr, char *key);
-ulong txtGetKeyAsULONG(uword keyNr, char *key);
+uint32_t txtGetKeyAsULONG(uword keyNr, char *key);
 
-LIST *txtGoKey(ulong textId, char *key);
-LIST *txtGoKeyAndInsert(ulong textId, char *key, ...);
+LIST *txtGoKey(uint32_t textId, char *key);
+LIST *txtGoKeyAndInsert(uint32_t textId, char *key, ...);
 
-ubyte txtKeyExists(ulong textId, char *key);
-ulong txtCountKey(char *key);
+ubyte txtKeyExists(uint32_t textId, char *key);
+uint32_t txtCountKey(char *key);
 
 
 // public prototypes - STRING
-char *txtGetString(ulong textId, char *key, char *dest);
-char *txtGetNthString(ulong textId, char *key, ulong nth, char *dest);
+char *txtGetString(uint32_t textId, char *key, char *dest);
+char *txtGetNthString(uint32_t textId, char *key, uint32_t nth, char *dest);
 void txtPutCharacter(LIST *list, uword pos, ubyte c);
 
 // public prototypes - LANGUAGE

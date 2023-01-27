@@ -78,15 +78,15 @@ struct Search	/* wegen Arrays nicht in objects */
 	uword	WorkTime[4];
 	uword	KillTime[4];
 
-	ulong DeriTime;         /* Abweichung vom Soll */
+	uint32_t DeriTime;         /* Abweichung vom Soll */
 
-	ulong	TimeOfBurglary;   /* Zeitpunkt! */
-	ulong TimeOfAlarm;      /* Zeitpunkt! */
+	uint32_t	TimeOfBurglary;   /* Zeitpunkt! */
+	uint32_t TimeOfAlarm;      /* Zeitpunkt! */
 
-	ulong BuildingId;       /* Einbruch */
-	ulong LastAreaId;       /* zum Zeitpunkt der Flucht */
+	uint32_t BuildingId;       /* Einbruch */
+	uint32_t LastAreaId;       /* zum Zeitpunkt der Flucht */
 
-	ulong EscapeBits;
+	uint32_t EscapeBits;
 
 	word  CallValue;			/* "Wert" der Funkspr., word!!! */
 	uword	CallCount;			/* Anzahl d. FUnkspr. */
@@ -97,7 +97,7 @@ struct Search	/* wegen Arrays nicht in objects */
 	ubyte KaserneOk;        /* ob die Kaserne geschafft wurde! */
 	};
 
-extern long tcCalcCarEscape(long timeLeft);
+extern int32_t tcCalcCarEscape(int32_t timeLeft);
 extern void tcForgetGuys(void);
 
 extern struct Search Search;

@@ -48,11 +48,11 @@ ubyte ChoiceOk (ubyte choice, ubyte xit, LIST *l)
 	return 1;
 }
 
-void DrawMenu (LIST *menu, ubyte nr, long mode)
+void DrawMenu (LIST *menu, ubyte nr, int32_t mode)
 {
 	ubyte i;
 	char *m1 = 0, *m2 = 0;
-	long x = 8, lastx = 0;
+	int32_t x = 8, lastx = 0;
 
 	if (mode == ACTIV_POSS)
 		gfxSetPens(m_wrp, 249, GFX_SAME_PEN, GFX_SAME_PEN);
@@ -97,7 +97,7 @@ void DrawMenu (LIST *menu, ubyte nr, long mode)
 	}
 }
 
-char SearchActiv (word delta, ubyte activ, ulong possibility, ubyte ub_max)
+char SearchActiv (word delta, ubyte activ, uint32_t possibility, ubyte ub_max)
 {
 	do
 	{
@@ -113,7 +113,7 @@ char SearchActiv (word delta, ubyte activ, ulong possibility, ubyte ub_max)
 	return -1;
 }
 
-char SearchMouseActiv(ulong possibility, ubyte ub_max)  /* MOD : 14.12.93 hg */
+char SearchMouseActiv(uint32_t possibility, ubyte ub_max)  /* MOD : 14.12.93 hg */
 {
 	char activ;
 	uword x, y;
@@ -159,10 +159,10 @@ void RefreshMenu(void)
 	}
 }
 
-ubyte Menu (LIST *menu, ulong possibility, ubyte activ, void (*func)(ubyte), ulong waitTime)
+ubyte Menu (LIST *menu, uint32_t possibility, ubyte activ, void (*func)(ubyte), uint32_t waitTime)
 {
 	ubyte i;
-	long action;
+	int32_t action;
 	char nextActiv;
 	ubyte ub_max;
 	char ende = FALSE;
@@ -379,7 +379,7 @@ ubyte Menu (LIST *menu, ulong possibility, ubyte activ, void (*func)(ubyte), ulo
 	return activ;
 }
 
-void DrawBubble (LIST *bubble, ubyte firstLine, ubyte activ, struct RastPort *rp, ulong ul_max)
+void DrawBubble (LIST *bubble, ubyte firstLine, ubyte activ, struct RastPort *rp, uint32_t ul_max)
 {
 	int i, j;
 	char *line = NULL;
@@ -441,12 +441,12 @@ void DrawBubble (LIST *bubble, ubyte firstLine, ubyte activ, struct RastPort *rp
 	gfxBlit(&RefreshRP, X_OFFSET, 3, rp, X_OFFSET, 3, INT_BUBBLE_WIDTH - 3, 46, GFX_ONE_STEP);
 }
 
-ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), ulong waitTime)
+ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), uint32_t waitTime)
 {
 	ubyte firstVis = 0;
 	ubyte ende = FALSE;
-	ulong action;
-	long l_max = GetNrOfNodes(bubble);
+	uint32_t action;
+	int32_t l_max = GetNrOfNodes(bubble);
 	uword x, y;
 	ubyte newactiv;
 

@@ -180,9 +180,9 @@ void tcDisplayCommon(void)
 	RemoveList(texts);
 }
 
-void tcDisplayPerson(ulong displayMode)
+void tcDisplayPerson(uint32_t displayMode)
 {
-	ulong  objNr,i;
+	uint32_t  objNr,i;
 	NODE   *node;
 	char  line[TXT_KEY_LENGTH];
 	LIST   *guys;
@@ -213,11 +213,11 @@ void tcDisplayPerson(ulong displayMode)
 	RemoveList (guys);
 }
 
-void tcDisplayAbilities(ulong personNr,ulong displayData)
+void tcDisplayAbilities(uint32_t personNr,uint32_t displayData)
 {
 	LIST  *abilities;
 	NODE  *node;
-	ulong i,abiNr, ability;
+	uint32_t i,abiNr, ability;
 	char line[TXT_KEY_LENGTH];
 
 	hasAll(personNr,OLF_PRIVATE_LIST|OLF_INCLUDE_NAME,Object_Ability);
@@ -229,7 +229,7 @@ void tcDisplayAbilities(ulong personNr,ulong displayData)
 	{
 		for (node=(NODE*)LIST_HEAD(abilities),i=0;NODE_SUCC(node);node=(NODE*)NODE_SUCC(node),i++)
 		{
-			abiNr =  ((struct ObjectNode *)GetNthNode(abilities,(ulong)i))->nr;
+			abiNr =  ((struct ObjectNode *)GetNthNode(abilities,(uint32_t)i))->nr;
 			ability = hasGet(personNr, abiNr);
 
 			/* 2014-06-27 templer

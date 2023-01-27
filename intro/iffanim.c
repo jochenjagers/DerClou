@@ -35,7 +35,7 @@ typedef struct {
 
 	int				reltime;    //relative display time in 1/60 sec
 	int				interleave; //indicates how many frames back the data is to modify
-	unsigned long	bits;       //options for some compressions as flags
+	uint32_t	bits;       //options for some compressions as flags
 
 	char *			cmap;          //original cmap (if exists), else NULL, number of color entries depends on bits per pixel resolution
 	char *			data;          //original pixel data from file (maybe compressed)
@@ -103,8 +103,8 @@ static int IffAnim_ConvertHamTo24bpp(IffAnim *anim, void *dst_, void *src_, void
 static int IffAnim_BitplanarToChunky(IffAnim *anim, void *dst_, void *src_, int w, int h, int bitssrc, int bitsdst, int dst_pitch);
 static int IffAnim_DecodeByteRun(IffAnim *anim, void *dst_, void *data_, int datasize, int w, int h, int bpp, int mask);
 static int IffAnim_DecodeByteVerticalDelta(IffAnim *anim, void *dst_, void *data_, int w, int bpp);
-static int IffAnim_DecodeLSVerticalDelta7(IffAnim *anim, void *dst_, void *data_, int w, int bpp, int long_data);
-static int IffAnim_DecodeLSVerticalDelta8(IffAnim *anim, void *dst_, void *data_, int w, int bpp, int long_data);
+static int IffAnim_DecodeLSVerticalDelta7(IffAnim *anim, void *dst_, void *data_, int w, int bpp, int int32_t_data);
+static int IffAnim_DecodeLSVerticalDelta8(IffAnim *anim, void *dst_, void *data_, int w, int bpp, int int32_t_data);
 static int IffAnim_DecodeDeltaJ(IffAnim *anim, void *dst_, void *delta_, int w, int h, int bpp);
 static int IffAnim_FindChunk(IffAnim *anim, FILE *file, char *idreq, int len);
 static int IffAnim_GetNumFrames(IffAnim *anim, FILE *file);
@@ -115,7 +115,7 @@ static int IffAnim_read_SBDY(IffAnim *anim, FILE *file, int searchlen, char **au
 static int IffAnim_ReadFrames(IffAnim *anim, FILE *file);
 static int IffAnim_PrintInfo(IffAnim *anim);
 static int IffAnim_DecodeFrame(IffAnim *anim, char *dstframe, int index);
-static long fget32(FILE *file);
+static int32_t fget32(FILE *file);
 static int fget16(FILE *file);
 
 static int IffAnim_AllocDeltaFrames(IffAnim *anim)
@@ -466,26 +466,26 @@ static int IffAnim_DecodeByteVerticalDelta(IffAnim *anim, void *dst_, void *data
 	return(TRUE);
 }
 
-//decode delta 7 long or short
-static int IffAnim_DecodeLSVerticalDelta7(IffAnim *anim, void *dst_, void *data_, int w, int bpp, int long_data)
+//decode delta 7 int32_t or short
+static int IffAnim_DecodeLSVerticalDelta7(IffAnim *anim, void *dst_, void *data_, int w, int bpp, int int32_t_data)
 {
 	unsigned char *data = (unsigned char *)data_;  //source buffer
 	char *dst = (char*)dst_;
 	int i, j;
-	unsigned long p_da;     //offset to data in source
-	unsigned long p_op;     //offset to opcode in source buffer
+	uint32_t p_da;     //offset to data in source
+	uint32_t p_op;     //offset to opcode in source buffer
 	int ofsdst;        //offset in destination buffer in bytes
 	int op;            //holds opcode
 	int opcnt;         //op counter
 	short val16;     //holds 16 bit data
-	long val32;     //holds 32 bit data
+	int32_t val32;     //holds 32 bit data
 	int t;             //help variable
-	int ncolumns;      //number of columns per bitplane (total number of columns for "long" data), each with size "wordsize"
-	int wordsize;      //bytes for one data word: 32 (long) or 16 bit (short)
+	int ncolumns;      //number of columns per bitplane (total number of columns for "int32_t" data), each with size "wordsize"
+	int wordsize;      //bytes for one data word: 32 (int32_t) or 16 bit (short)
 	int dstpitch;      //length of a scanline in destination buffer in bytes
 	int half = FALSE; //last column maybe only with 16 instead of 32 bits
 
-	if (long_data) {
+	if (int32_t_data) {
 		wordsize = 4;              
 		ncolumns = (w + 31) / 32;
 		if (((w + 15) / 16 * 2) != ((w + 31) / 32 * 4)) {  //relating to the width of a video frame, possibly for the last column of each plane one must copy only 16 bit words, 
@@ -545,10 +545,10 @@ static int IffAnim_DecodeLSVerticalDelta7(IffAnim *anim, void *dst_, void *data_
 						//SAME_OP, opcode is 0
 						if (op == 0) {
 							op = data[p_op++];   //number of same words
-							val32 = *((long *)(data + p_da));  //get data word
+							val32 = *((int32_t *)(data + p_da));  //get data word
 							p_da += 4;
 							while (op) {
-								*((long *)(dst + ofsdst)) = val32;
+								*((int32_t *)(dst + ofsdst)) = val32;
 								ofsdst += dstpitch;
 								op--;
 							}
@@ -559,7 +559,7 @@ static int IffAnim_DecodeLSVerticalDelta7(IffAnim *anim, void *dst_, void *data_
 							//UNIQ_OP, high bit is set 
 							op &= 0x7f;
 							while (op) {
-								*((long *)(dst + ofsdst)) = *((long *)(data + p_da));
+								*((int32_t *)(dst + ofsdst)) = *((int32_t *)(data + p_da));
 								p_da += 4;
 								ofsdst += dstpitch;
 								op--;
@@ -574,25 +574,25 @@ static int IffAnim_DecodeLSVerticalDelta7(IffAnim *anim, void *dst_, void *data_
 	return(TRUE);
 }
 
-// decompress delta mode 8 long or short
-static int IffAnim_DecodeLSVerticalDelta8(IffAnim *anim, void *dst_, void *data_, int w, int bpp, int long_data)
+// decompress delta mode 8 int32_t or short
+static int IffAnim_DecodeLSVerticalDelta8(IffAnim *anim, void *dst_, void *data_, int w, int bpp, int int32_t_data)
 {
 	unsigned char *data = (unsigned char *)data_;  //source buffer
 	char *dst = (char*)dst_;
 	int i, j;
-	unsigned long p_op;       //offset to opcode in source buffer
+	uint32_t p_op;       //offset to opcode in source buffer
 	int ofsdst;          //offset in destination buffer in bytes
-	unsigned long op;         //holds opcode
+	uint32_t op;         //holds opcode
 	unsigned int opcnt;  //op counter
 	short val16;       //holds 16 bit data
-	long val32;       //holds 32 bit data
+	int32_t val32;       //holds 32 bit data
 	int t;               //help variable
-	int ncolumns;        //number of columns per bitplane (total number of columns for "long" data), each with size "wordsize"
-	int wordsize;        //bytes for one data word: 32 (long) or 16 bit (short)
+	int ncolumns;        //number of columns per bitplane (total number of columns for "int32_t" data), each with size "wordsize"
+	int wordsize;        //bytes for one data word: 32 (int32_t) or 16 bit (short)
 	int dstpitch;        //length of a scanline in destination buffer in bytes
 	int half = FALSE;   //last column maybe only with 16 instead of 32 bits
 
-	if (long_data) {
+	if (int32_t_data) {
 		wordsize = 4;              
 		ncolumns = (w + 31) / 32;
 		if (((w + 15) / 16 * 2) != ((w + 31) / 32 * 4)) {  //relating to the width of a video frame, possibly for the last column of each plane one must copy only 16 bit words, 
@@ -662,10 +662,10 @@ static int IffAnim_DecodeLSVerticalDelta8(IffAnim *anim, void *dst_, void *data_
 						if (op == 0) {
 							op = (data[p_op] << 24) | (data[p_op + 1] << 16) | (data[p_op + 2] << 8) | data[p_op + 3];   //number of same words
 							p_op += 4;
-							val32 = *((long *)(data + p_op));  //get data word
+							val32 = *((int32_t *)(data + p_op));  //get data word
 							p_op += 4;
 							while (op) {
-								*((long *)(dst + ofsdst)) = val32;
+								*((int32_t *)(dst + ofsdst)) = val32;
 								ofsdst += dstpitch;
 								op--;
 							}
@@ -676,7 +676,7 @@ static int IffAnim_DecodeLSVerticalDelta8(IffAnim *anim, void *dst_, void *data_
 							//UNIQ_OP, high bit is set 
 							op &= 0x7fffffff;
 							while (op) {
-								*((long *)(dst + ofsdst)) = *((long *)(data + p_op));
+								*((int32_t *)(dst + ofsdst)) = *((int32_t *)(data + p_op));
 								p_op += 4;
 								ofsdst += dstpitch;
 								op--;
@@ -707,11 +707,11 @@ static int IffAnim_DecodeDeltaJ(IffAnim *anim, void *dst_, void *delta_, int w, 
 {
 	unsigned char *image = (unsigned char*)dst_;
 	unsigned char *delta = (unsigned char*)delta_;
-	long   pitch;     //scanline width in bytes
+	int32_t   pitch;     //scanline width in bytes
 	unsigned char   *i_ptr;    //used as destination pointer into the frame buffer
-	unsigned long  type, r_flag, b_cnt, g_cnt, r_cnt; 
+	uint32_t  type, r_flag, b_cnt, g_cnt, r_cnt; 
 	int b, g, r, d;    //loop counters
-	unsigned long  offset;    //byte offset
+	uint32_t  offset;    //byte offset
 	int planepitch_byte = (w + 7) / 8;      //plane pitch as multiple of 8 bits, needed to calc the right offset
 	int planepitch = ((w + 15) / 16) * 2;   //width of a line of a single bitplane in bytes (multiple of 16 bit)
 	int kludge_j;
@@ -824,7 +824,7 @@ int IffAnim_CurrentFrameIndex(IffAnim *anim)
 	return(anim->frameno);
 }
 
-static long fget32(FILE *file)
+static int32_t fget32(FILE *file)
 {
 	return((fgetc(file) << 24) | (fgetc(file) << 16) | (fgetc(file) << 8) | fgetc(file));
 }

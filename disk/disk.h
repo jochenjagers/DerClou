@@ -39,13 +39,13 @@ extern char CDDrive[256];
 extern void dskSetRootPath(const char *newRootPath);
 extern char *dskGetRootPath(char *result);
 
-extern long dskLoad(const char *puch_Pathname, void *p_MemDest);
+extern int32_t dskLoad(const char *puch_Pathname, void *p_MemDest);
 extern void dskBuildPathName(const char *puch_Directory, const char *puch_Filename, char *puch_Result);
 extern void dskClose(FILE *p_File);
-extern void dskWrite(FILE *p_File, void *p_MemSource, ulong ul_Size);
-extern void dskRead(FILE *p_File, void *p_MemDest, ulong ul_Size);
+extern void dskWrite(FILE *p_File, void *p_MemSource, uint32_t ul_Size);
+extern void dskRead(FILE *p_File, void *p_MemDest, uint32_t ul_Size);
 
-extern long dskFileLength (const char *puch_Pathname);
+extern int32_t dskFileLength (const char *puch_Pathname);
 
 extern FILE *dskOpen(const char *puch_Pathname, const char *puch_Mode, uword us_DiskId);
 

@@ -7,6 +7,8 @@
 #ifndef THECLOU_MODULE
 #define THECLOU_MODULE
 
+#include <stdint.h>
+
 #define __COSP__
 #define COSP_VERSION	"0.8"
 #define COSP_TITLE		"Der Clou! Open Source Project"
@@ -42,7 +44,6 @@ struct Scene;
 typedef unsigned char	ubyte;
 typedef unsigned short	uword;
 typedef short			word;
-typedef unsigned long	ulong;
 
 #define EOS 	 ((char)'\0')
 
@@ -147,7 +148,7 @@ extern char bCDRom;
  *
  */
 
-ulong ShowTheClouRequester(long error_class);	/* siehe Base.c */
+uint32_t ShowTheClouRequester(int32_t error_class);	/* siehe Base.c */
 
 /*
  * some defines ...

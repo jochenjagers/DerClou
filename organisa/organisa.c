@@ -6,9 +6,9 @@
 */
 #include "organisa/organisa.h"
 
-ulong tcChooseDestBuilding(ulong);
-ulong tcChooseEscapeCar(ulong);
-ulong tcChooseDriver(ulong);
+uint32_t tcChooseDestBuilding(uint32_t);
+uint32_t tcChooseEscapeCar(uint32_t);
+uint32_t tcChooseDriver(uint32_t);
 
 void tcChooseAccomplice(void);
 void tcSpreadTools(void);
@@ -33,9 +33,9 @@ void RefreshDisplayConfig(void);
 void tcDisplayOrganisation(void);
 
 void tcDisplayCommon(void);
-void tcDisplayPerson(ulong displayMode);
-void tcDisplayAbilities(ulong personNr,ulong displayData);
-void tcDisplayTools(ulong personNr,ulong displayData);
+void tcDisplayPerson(uint32_t displayMode);
+void tcDisplayAbilities(uint32_t personNr,uint32_t displayData);
+void tcDisplayTools(uint32_t personNr,uint32_t displayData);
 
 struct Organisation Organisation;
 
@@ -89,7 +89,7 @@ ubyte tcMakeCarOk(void)
 
 			choice = Bubble (ObjectList,0,0L,0L);
 			Organisation.GuyCount--;
-			joined_byUnSet(Person_Matt_Stuvysunt, OL_NR(GetNthNode(ObjectList,(ulong)choice)));
+			joined_byUnSet(Person_Matt_Stuvysunt, OL_NR(GetNthNode(ObjectList,(uint32_t)choice)));
 
 			inpTurnESC(1);
 
@@ -100,7 +100,7 @@ ubyte tcMakeCarOk(void)
 	return 1;
 	}
 
-ulong tcOrganisation(void)
+uint32_t tcOrganisation(void)
 	{
 	LIST  *menu  = txtGoKey(MENU_TXT,"ORGANISATION");
 	ubyte  activ = 0, ende = 0;
@@ -179,7 +179,7 @@ ulong tcOrganisation(void)
 
 		PrintStatus(line);
 
-		activ = Menu(menu, (ulong) 255, activ, 0, 0);
+		activ = Menu(menu, (uint32_t) 255, activ, 0, 0);
 		inpTurnESC(1);
 
 		switch(activ)
@@ -280,12 +280,12 @@ ubyte tcCheckOrganisation(void)
 	return(check);
 }
 
-ulong tcChooseDriver(ulong persID)
+uint32_t tcChooseDriver(uint32_t persID)
 	{
 	LIST   *list;
 	ubyte  choice;
 	Person matt = (Person) dbGetObject(Person_Matt_Stuvysunt);
-	ulong newPersID;
+	uint32_t newPersID;
 
 	joined_byAll(Person_Matt_Stuvysunt,OLF_INCLUDE_NAME|OLF_INSERT_STAR|OLF_PRIVATE_LIST , Object_Person);
 	list = ObjectListPrivate;
@@ -304,7 +304,7 @@ ulong tcChooseDriver(ulong persID)
 
 		if (ChoiceOk (choice = Bubble (list,0,0L,0L), GET_OUT, list))
 			{
-			newPersID = OL_NR(GetNthNode(list,(ulong)choice));
+			newPersID = OL_NR(GetNthNode(list,(uint32_t)choice));
 
 			if (!has(newPersID, Ability_Autos))
 				{
@@ -331,7 +331,7 @@ ulong tcChooseDriver(ulong persID)
 	return(persID);
 	}
 
-ulong tcChooseDestBuilding(ulong objID)
+uint32_t tcChooseDestBuilding(uint32_t objID)
 	{
 	LIST  *list;
 	ubyte choice;
@@ -345,7 +345,7 @@ ulong tcChooseDestBuilding(ulong objID)
 
 	if (ChoiceOk (choice = Bubble (list,0,0L,0L), GET_OUT, list))
 		{
-		objID   = OL_NR(GetNthNode(list,(ulong)choice));
+		objID   = OL_NR(GetNthNode(list,(uint32_t)choice));
 
 		rememberAll(Person_Matt_Stuvysunt, OLF_NORMAL, Object_Building);
 
@@ -360,12 +360,12 @@ ulong tcChooseDestBuilding(ulong objID)
 	return(objID);
 	}
 
-ulong tcChooseEscapeCar(ulong objID)
+uint32_t tcChooseEscapeCar(uint32_t objID)
 	{
 	LIST   *l1, *l2;
 	ubyte  choice;
 	Person matt = (Person) dbGetObject(Person_Matt_Stuvysunt);
-	ulong  newObjID;
+	uint32_t  newObjID;
 
 	hasAll(Person_Matt_Stuvysunt,OLF_INCLUDE_NAME|OLF_INSERT_STAR|OLF_PRIVATE_LIST,Object_Car);
 	l1 = ObjectListPrivate;
@@ -383,9 +383,9 @@ ulong tcChooseEscapeCar(ulong objID)
 
 		if (ChoiceOk (choice = Bubble (l1,0,0L,0L), GET_OUT, l1))
 			{
-			newObjID = OL_NR(GetNthNode(l1,(ulong)choice));
+			newObjID = OL_NR(GetNthNode(l1,(uint32_t)choice));
 
-			car = (Car) OL_DATA(GetNthNode(l1,(ulong)choice));
+			car = (Car) OL_DATA(GetNthNode(l1,(uint32_t)choice));
 
 			if (GetNrOfNodes(l2) <= car->PlacesInCar)
 				{
@@ -471,7 +471,7 @@ void tcAddGuyToParty(void)
 	{
 	LIST *l1, *l2;
 	struct ObjectNode *n;
-	ulong persID;
+	uint32_t persID;
 	ubyte choice;
 
 	joinAll(Person_Matt_Stuvysunt,OLF_INCLUDE_NAME|OLF_INSERT_STAR|OLF_PRIVATE_LIST,Object_Person);
@@ -494,7 +494,7 @@ void tcAddGuyToParty(void)
 
 			if (ChoiceOk (choice = Bubble (l1,0,0L,0L), GET_OUT, l1))
 				{
-				persID = (ulong) (((struct ObjectNode*)GetNthNode(l1,(ulong)choice))->nr);
+				persID = (uint32_t) (((struct ObjectNode*)GetNthNode(l1,(uint32_t)choice))->nr);
 
 				Organisation.GuyCount++;
 				joined_bySet(Person_Matt_Stuvysunt,persID);
@@ -536,7 +536,7 @@ void tcRemGuyFromParty(void)
 	else
 		{
 		ubyte  choice;
-		ulong  persID;
+		uint32_t  persID;
 		char   exp[TXT_KEY_LENGTH];
 
 		txtGetFirstLine (BUSINESS_TXT, "NO_CHOICE", exp);
@@ -544,7 +544,7 @@ void tcRemGuyFromParty(void)
 
 		if (ChoiceOk (choice = Bubble (list,0,0L,0L), GET_OUT, list))
 			{
-			persID = (ulong)(((struct ObjectNode*)GetNthNode(list,(ulong)choice))->nr);
+			persID = (uint32_t)(((struct ObjectNode*)GetNthNode(list,(uint32_t)choice))->nr);
 
 			Organisation.GuyCount--;
 			joined_byUnSet(Person_Matt_Stuvysunt,persID);

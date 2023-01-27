@@ -19,8 +19,8 @@ extern int CDROM_Install(void);
 extern void CDROM_UnInstall(void);
 extern int CDROM_WaitForMedia(void);
 extern void CDROM_PlayAudioTrack(unsigned char TrackNum);
-//extern void CDROM_PlayAudioFrames(unsigned long StartFrame, unsigned long NumOfFrames);
-extern void CDROM_PlayAudioSequence(unsigned char TrackNum,unsigned long StartOffset,unsigned long EndOffset);
+//extern void CDROM_PlayAudioFrames(uint32_t StartFrame, uint32_t NumOfFrames);
+extern void CDROM_PlayAudioSequence(unsigned char TrackNum,uint32_t StartOffset,uint32_t EndOffset);
 extern void CDROM_StopAudioTrack(void);
 extern int CDROM_SetGameCDDrive(void);
 

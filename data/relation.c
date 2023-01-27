@@ -295,7 +295,7 @@ void UnSetAll (KEY key, void (*UseKey)(KEY))
 	}
 }
 
-int SaveRelations (char *file, unsigned long offset, unsigned long size, uword disk_id)
+int SaveRelations (char *file, uint32_t offset, uint32_t size, uword disk_id)
 {
 	struct relationDef *rd = relationsDefBase;
 	struct relation    *r;
@@ -438,7 +438,7 @@ int LoadRelations(char *file, uword disk_id)
 	return 0;
 }
 
-void RemRelations (unsigned long offset, unsigned long size)
+void RemRelations (uint32_t offset, uint32_t size)
 {
 	struct relationDef *rd = relationsDefBase, *help;
 

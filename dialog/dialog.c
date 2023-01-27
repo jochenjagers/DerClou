@@ -8,9 +8,9 @@
 #include "dialog/talkappl.h"
 #include "sound/mxr.h"
 
-#define DLG_NO_SPEECH	((ulong) -1)
-ulong	StartFrame = DLG_NO_SPEECH;
-ulong EndFrame = DLG_NO_SPEECH;
+#define DLG_NO_SPEECH	((uint32_t) -1)
+uint32_t	StartFrame = DLG_NO_SPEECH;
+uint32_t EndFrame = DLG_NO_SPEECH;
 
 struct DynDlgNode
 {
@@ -23,17 +23,17 @@ struct DynDlgNode
 };
 
 
-LIST *PrepareQuestions(LIST *keyWords, ulong talkBits, ubyte textID)
+LIST *PrepareQuestions(LIST *keyWords, uint32_t talkBits, ubyte textID)
 {
 	LIST *stdQuestionList, *questionList, *preparedList;
 	NODE *n, *n2;
 	char question[TXT_KEY_LENGTH] = {0};
-	ulong r, i;
+	uint32_t r, i;
 	char *name;
 
 	preparedList = (LIST*)CreateList(0);
 	stdQuestionList = txtGoKey(BUSINESS_TXT, "STD_QUEST");
-	questionList = txtGoKey((ulong)textID, "QUESTIONS");
+	questionList = txtGoKey((uint32_t)textID, "QUESTIONS");
 
 	for (n = (NODE*)LIST_HEAD(keyWords); NODE_SUCC((NODE*)n); n=(NODE*)NODE_SUCC(n))
 	{
@@ -86,8 +86,8 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 	ubyte line_pos,mem_pos,key_pos;
 	char *mem;
 	ubyte snr[10],snr1[10],nr,nr1;
-	ulong i;
-	ulong sl;
+	uint32_t i;
+	uint32_t sl;
 
 	keyWords = (LIST*)CreateList(0);
 
@@ -159,7 +159,7 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 	return(keyWords);
 }
 
-void DynamicTalk(ulong Person1ID, ulong Person2ID, ubyte TalkMode)
+void DynamicTalk(uint32_t Person1ID, uint32_t Person2ID, ubyte TalkMode)
 {
 	char *Extension[4] = { "_UNKNOWN","_KNOWN","_FRIENDLY","_BUSINESS" };
 	char *Standard = "STANDARD";
@@ -251,7 +251,7 @@ void DynamicTalk(ulong Person1ID, ulong Person2ID, ubyte TalkMode)
 
 		if (choice < gencount)
 		{
-			if (n = (struct DynDlgNode*)GetNthNode(keyWords, (ulong)choice))
+			if (n = (struct DynDlgNode*)GetNthNode(keyWords, (uint32_t)choice))
 			{
 				strcpy(key, name);
 				strcat(key, "_");
@@ -322,7 +322,7 @@ void PlayFromCDROM(void)
 	}
 }
 
-ubyte Say(ulong TextID,ubyte activ,uword person,char *text)
+ubyte Say(uint32_t TextID,ubyte activ,uword person,char *text)
 {
 	LIST *bubble;
 	ubyte choice;
@@ -392,9 +392,9 @@ ubyte Say(ulong TextID,ubyte activ,uword person,char *text)
 	return(choice);
 }
 
-ulong Talk(void)
+uint32_t Talk(void)
 {
-	ulong succ_event_nr=0L,locNr,personID;
+	uint32_t succ_event_nr=0L,locNr,personID;
 	LIST  *bubble;
 	ubyte choice;
 	char helloFriends[TXT_KEY_LENGTH] = {0};
@@ -415,7 +415,7 @@ ulong Talk(void)
 
 			if (ChoiceOk((choice = Bubble(bubble, 0, 0L, 0L)), GET_OUT, bubble))
 			{
-				personID = ((struct ObjectNode *)GetNthNode(bubble,(ulong)choice))->nr;
+				personID = ((struct ObjectNode *)GetNthNode(bubble,(uint32_t)choice))->nr;
 
 				inpTurnESC (0);
 

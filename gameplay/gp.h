@@ -61,7 +61,7 @@
 #define INFO				(1L<<8)
 #define SLEEP           (1L<<9)
 
-#define GP_ALL_CHOICES_ENABLED     LONG_MAX
+#define GP_ALL_CHOICES_ENABLED     INT_MAX
 
 #define CAN_ALWAYS_HAPPEN			  65535L	/* Szene kann UNENDLICH oft geschehen */
 
@@ -88,9 +88,9 @@
 
 /* Zugriffsdefines */
 
-#define SetMinute(zeit)		(film->akt_Minute=(ulong)(zeit))
-#define SetLocation(loc)	{film->alter_Ort = film->akt_Ort; film->akt_Ort=(ulong)(loc);}
-#define SetDay(tag)			(film->akt_Tag=(ulong)(tag))
+#define SetMinute(zeit)		(film->akt_Minute=(uint32_t)(zeit))
+#define SetLocation(loc)	{film->alter_Ort = film->akt_Ort; film->akt_Ort=(uint32_t)(loc);}
+#define SetDay(tag)			(film->akt_Tag=(uint32_t)(tag))
 
 #define GetDay					(film->akt_Tag)
 #define GetMinute				(film->akt_Minute)
@@ -102,7 +102,7 @@
 
 struct Film
 	{
-	ulong	AmountOfScenes;
+	uint32_t	AmountOfScenes;
 
 	struct	Scene		*act_scene;
 	struct	Scene		*gameplay;
@@ -110,24 +110,24 @@ struct Film
 	LIST		*loc_names;	/* Liste aller Orte im Spiel */
 								/* OrtNr = Nr der Node in der */
 								/* Liste */
-	ulong	StartScene;
-	ulong	StartZeit;		/* =Tag seit dem Jahr 0*/
-	ulong	StartOrt;
+	uint32_t	StartScene;
+	uint32_t	StartZeit;		/* =Tag seit dem Jahr 0*/
+	uint32_t	StartOrt;
 
-	ulong	akt_Tag;
-	ulong	akt_Minute;
-	ulong	akt_Ort;
-	ulong	alter_Ort;
+	uint32_t	akt_Tag;
+	uint32_t	akt_Minute;
+	uint32_t	akt_Ort;
+	uint32_t	alter_Ort;
 
-	ulong     EnabledChoices;
+	uint32_t     EnabledChoices;
 
 	ubyte     StoryIsRunning;
 	};
 
 struct SceneArgs
 	{
-	ulong	Moeglichkeiten;
-	ulong	ReturnValue;	  /* wird AUCH (!) als Input verwendet,
+	uint32_t	Moeglichkeiten;
+	intptr_t	ReturnValue;	  /* wird AUCH (!) als Input verwendet,
 									* wenn als Output verwendet = EventNr der
 									* Nachfolgerszene
 									*/
@@ -138,7 +138,7 @@ struct SceneArgs
 
 struct Scene
 	{
-	ulong	EventNr;
+	intptr_t	EventNr;
 
 	void		(*Init)(void);
 	void		(*Done)(void);
@@ -147,22 +147,22 @@ struct Scene
 
 	LIST	 	*std_succ;	     		/* Standardnachfolger TCEventNode */
 
-	ulong		Moeglichkeiten;			/* siehe defines oben 			*/
-	ulong		Dauer;						/* Dauer dieser Szene in Sekunden	*/
+	uint32_t		Moeglichkeiten;			/* siehe defines oben 			*/
+	uint32_t		Dauer;						/* Dauer dieser Szene in Sekunden	*/
 	uword		Anzahl;						/* wie oft sie geschehen kann		*/
 	uword		Geschehen;					/* wie oft sie SCHON geschehen ist */
 	ubyte		Probability;				/* mit der sie eintritt 	0-255	*/
 
 	ubyte	Padding[3];
 
-	ulong		LocationNr;					/* Ort, den diese Szene darstellt 	*/
+	uint32_t		LocationNr;					/* Ort, den diese Szene darstellt 	*/
 												/* == -1 falls Szene = StorySzene 	*/
 												/* ansonsten Nr des Ortes		*/
 	};
 
 struct Bedingungen
 	{
-	long		Ort;						/* der erfüllt sein muß */
+	int32_t		Ort;						/* der erfüllt sein muß */
 
 	LIST		*events;					/* welche Events schon geschehen sein muessen */
 	LIST		*n_events;				/* Events, die nicht geschehen sein dürfen */
@@ -172,17 +172,17 @@ struct TCEventNode
 	{
 	NODE 	Node;
 
-	ulong 	EventNr;
+	uint32_t 	EventNr;
 	};
 
 /* global functions */
 extern void	InitStory(char *story_filename);
 extern void	CloseStory(void);
 
-extern ulong PlayStory(void);
+extern uint32_t PlayStory(void);
 extern void	 PatchStory(void);
 
-extern void SetEnabledChoices(ulong ChoiceMask);
+extern void SetEnabledChoices(uint32_t ChoiceMask);
 
 extern void	StdDone(void);
 extern void	StdInit(void);
@@ -192,22 +192,22 @@ extern void	SetCurrentScene(struct Scene *scene);
 
 extern char *GetCurrLocName(void);
 
-extern char *BuildDate(ulong days,char language,char *date);
-extern char *BuildTime(ulong min,char language,char *time);
+extern char *BuildDate(uint32_t days,char language,char *date);
+extern char *BuildTime(uint32_t min,char language,char *time);
 
-extern void FormatDigit(ulong digit,char *s);
+extern void FormatDigit(uint32_t digit,char *s);
 
 extern struct Scene *GetCurrentScene(void);
-extern struct Scene *GetLocScene(ulong locNr);
-extern struct Scene *GetScene(ulong EventNr);
+extern struct Scene *GetLocScene(uint32_t locNr);
+extern struct Scene *GetScene(uint32_t EventNr);
 
-extern void AddVTime(ulong Zeit);
+extern void AddVTime(uint32_t Zeit);
 
 extern void LinkScenes(void); /* Init und Done in jeder Scene Struktur setzen */
 
 extern struct SceneArgs	SceneArgs;
 extern struct Film *film;
-extern ulong GamePlayMode;
+extern uint32_t GamePlayMode;
 extern ubyte RefreshMode;
 
 #endif

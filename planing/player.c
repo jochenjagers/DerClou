@@ -49,25 +49,25 @@ static struct
 	ubyte currLoudness[PLANING_NR_PERSONS];
 	ubyte unableToWork[PLANING_NR_PERSONS];
 
-	ulong maxTimer;
-	ulong timer;
-	ulong realTime;
+	uint32_t maxTimer;
+	uint32_t timer;
+	uint32_t realTime;
 
 	ubyte ende;
 	ubyte badPlaning;
 	ubyte mood;
 	ubyte patrolCount;
 
-	ulong bldId;
+	uint32_t bldId;
 	Building bldObj;
 
 	uword changeCount;
 	uword totalCount;
 
-	ulong alarmTimer;
+	uint32_t alarmTimer;
 
-	ulong actionTime;
-	ubyte (*actionFunc)(ulong, ulong);
+	uint32_t actionTime;
+	ubyte (*actionFunc)(uint32_t, uint32_t);
 
 	ubyte isItDark;
 	ubyte sndState;		// Achtung! Verhalten von sndState hat sich gegenüber Amiga gewandelt
@@ -75,12 +75,12 @@ static struct
 } PD;
 
 
-static void CheckSurrounding(ulong current)
+static void CheckSurrounding(uint32_t current)
 {
    #ifndef PLAN_IS_PERFECT
 	if (has(OL_NR(GetNthNode(PersonsList, current)), Ability_Aufpassen))
    {
-		long watch = 0;
+		int32_t watch = 0;
 
       if (Search.EscapeBits & FAHN_QUIET_ALARM)
          watch = tcWatchDogWarning(OL_NR(GetNthNode(PersonsList, current)));
@@ -98,7 +98,7 @@ static void CheckSurrounding(ulong current)
 	#endif
 }
 
-static void UnableToWork(ulong current, ulong action)
+static void UnableToWork(uint32_t current, uint32_t action)
 {
    PD.currLoudness[current] = PLANING_LOUDNESS_STD;
    Search.Exhaust[current]  = tcGuyIsWaiting(OL_NR(GetNthNode(PersonsList, current)), Search.Exhaust[current]);
@@ -154,9 +154,9 @@ static void UnableToWork(ulong current, ulong action)
 		IncCurrentTimer(plSys, 1, 0);
 }
 
-static ubyte plGetMood (ulong time)
+static ubyte plGetMood (uint32_t time)
 {
-   ulong guyId[PLANING_NR_PERSONS];
+   uint32_t guyId[PLANING_NR_PERSONS];
    ubyte i;
 
    for (i = 0; i < PLANING_NR_PERSONS; i++)
@@ -168,9 +168,9 @@ static ubyte plGetMood (ulong time)
    return (ubyte)tcGetTeamMood(guyId, time);
 }
 
-static void plPersonLearns(ulong persId, ulong toolId)
+static void plPersonLearns(uint32_t persId, uint32_t toolId)
 {
-	ulong para;
+	uint32_t para;
 
    hasAll(persId, OLF_NORMAL, Object_Ability);
 
@@ -388,7 +388,7 @@ static void plPlayerAction(void)
 			ubyte j, i;
 			uword xpos[PLANING_NR_PERSONS];
 			uword ypos[PLANING_NR_PERSONS];
-			ulong area[PLANING_NR_PERSONS];
+			uint32_t area[PLANING_NR_PERSONS];
 
 			// there are more efficient solutions, but no safer ones (after
 			// 10 hours programming....,) mod 28-05-94 hg
@@ -396,7 +396,7 @@ static void plPlayerAction(void)
 			{
 				xpos[i] = (uword) -1;
 				ypos[i] = (uword) -1;
-				area[i] = (ulong) -1;
+				area[i] = (uint32_t) -1;
 			}
 
 			for (j = 0; j < BurglarsNr; j++)
@@ -585,8 +585,8 @@ static void plPlayerAction(void)
                            livLivesInArea(Planing_Name[i], StairConnectsGet(ActionData(PD.action, struct ActionUse *)->ItemId, ActionData(PD.action, struct ActionUse *)->ItemId));
                         else
                         {
-                           ulong needTime = PD.action->TimeNeeded;
-									ulong realTime = 0L;
+                           uint32_t needTime = PD.action->TimeNeeded;
+									uint32_t realTime = 0L;
 
                            if (dbIsObject(ActionData(PD.action, struct ActionUse *)->ItemId, Object_Police))
                            {
@@ -664,7 +664,7 @@ static void plPlayerAction(void)
                            {
                               if (i == CurrentPerson)
                               {
-                                 ulong newAreaId = StairConnectsGet(ActionData(PD.action, struct ActionUse *)->ItemId, ActionData(PD.action, struct ActionUse *)->ItemId);
+                                 uint32_t newAreaId = StairConnectsGet(ActionData(PD.action, struct ActionUse *)->ItemId, ActionData(PD.action, struct ActionUse *)->ItemId);
 
                                  lsDoneActivArea(newAreaId);
 											lsInitActivArea(newAreaId, livGetXPos(Planing_Name[i]), livGetYPos(Planing_Name[i]), Planing_Name[i]);
@@ -726,7 +726,7 @@ static void plPlayerAction(void)
                         }
                         else
                         {
-                           ulong state = lsGetObjectState(ActionData(PD.action, struct ActionUse *)->ItemId);
+                           uint32_t state = lsGetObjectState(ActionData(PD.action, struct ActionUse *)->ItemId);
 
 									if (CHECK_STATE(state, Const_tcON_OFF))
                            {
@@ -805,7 +805,7 @@ static void plPlayerAction(void)
 
                         if (ActionEnded(plSys))
 								{
-                           ulong newValue = GetP(dbGetObject(ActionData(PD.action, struct ActionTake *)->ItemId), hasLoot(i), dbGetObject(ActionData(PD.action, struct ActionTake *)->LootId));
+                           uint32_t newValue = GetP(dbGetObject(ActionData(PD.action, struct ActionTake *)->ItemId), hasLoot(i), dbGetObject(ActionData(PD.action, struct ActionTake *)->LootId));
 
                            Planing_Weight[i] += ((Loot)dbGetObject(ActionData(PD.action, struct ActionTake *)->LootId))->Weight;
                            Planing_Volume[i] += ((Loot)dbGetObject(ActionData(PD.action, struct ActionTake *)->LootId))->Volume;
@@ -830,7 +830,7 @@ static void plPlayerAction(void)
 
                            if (Ask(dbGetObject(OL_NR(GetNthNode(PersonsList, i))), take_RelId, dbGetObject(ActionData(PD.action, struct ActionTake *)->LootId)))
                            {
-                              ulong oldValue = GetP(dbGetObject(OL_NR(GetNthNode(PersonsList, i))), take_RelId, dbGetObject(ActionData(PD.action, struct ActionTake *)->LootId));
+                              uint32_t oldValue = GetP(dbGetObject(OL_NR(GetNthNode(PersonsList, i))), take_RelId, dbGetObject(ActionData(PD.action, struct ActionTake *)->LootId));
 
                               SetP(dbGetObject(OL_NR(GetNthNode(PersonsList, i))), take_RelId, dbGetObject(ActionData(PD.action, struct ActionTake *)->LootId), oldValue + newValue);
                            }
@@ -868,7 +868,7 @@ static void plPlayerAction(void)
 
                         if (ActionEnded(plSys))
                         {
-									ulong newValue = GetP(dbGetObject(OL_NR(GetNthNode(PersonsList, i))), take_RelId, dbGetObject(ActionData(PD.action, struct ActionDrop *)->LootId));
+									uint32_t newValue = GetP(dbGetObject(OL_NR(GetNthNode(PersonsList, i))), take_RelId, dbGetObject(ActionData(PD.action, struct ActionDrop *)->LootId));
 
                            Planing_Weight[i] -= ((Loot)dbGetObject(ActionData(PD.action, struct ActionDrop *)->LootId))->Weight;
                            Planing_Volume[i] -= ((Loot)dbGetObject(ActionData(PD.action, struct ActionDrop *)->LootId))->Volume;
@@ -1124,13 +1124,13 @@ static void plPlayerAction(void)
       SetMenuTimeOutFunc (NULL);
 }
 
-long plPlayer(ulong objId , ulong actionTime, ubyte (*actionFunc)(ulong, ulong))
+int32_t plPlayer(uint32_t objId , uint32_t actionTime, ubyte (*actionFunc)(uint32_t, uint32_t))
 {
    FILE *fh       = NULL;
    LIST *menu     = txtGoKey(PLAN_TXT, "PLAYER_MENU"), *l;
    ubyte activ    = 0, i;
-   ulong timeLeft = 0, bitset, choice1, choice2;
-   long  ret      = 0;
+   uint32_t timeLeft = 0, bitset, choice1, choice2;
+   int32_t  ret      = 0;
 
    plPrepareSys(0L, objId, PLANING_INIT_PERSONSLIST|PLANING_HANDLER_ADD|PLANING_HANDLER_OPEN|PLANING_GUARDS_LOAD|PLANING_HANDLER_SET);
 	plPrepareGfx(objId, LS_COLL_NORMAL, PLANING_GFX_LANDSCAPE|PLANING_GFX_SPRITES|PLANING_GFX_BACKGROUND);
@@ -1262,14 +1262,14 @@ long plPlayer(ulong objId , ulong actionTime, ubyte (*actionFunc)(ulong, ulong))
                      if (GamePlayMode & GP_GUARD_DESIGN)
                      {
                         if (PersonsNr > 2)
-                           choice1 = (ulong)Bubble(PersonsList, CurrentPerson, NULL, 0L);
+                           choice1 = (uint32_t)Bubble(PersonsList, CurrentPerson, NULL, 0L);
                         else
                            choice1 = ((CurrentPerson) ? 0L : 1L);
                      }
                      else
                      {
                         if (BurglarsNr > 2)
-                           choice1 = (ulong)Bubble(BurglarsList, CurrentPerson, NULL, 0L);
+                           choice1 = (uint32_t)Bubble(BurglarsList, CurrentPerson, NULL, 0L);
 								else
                            choice1 = ((CurrentPerson) ? 0L : 1L);
                      }
@@ -1340,7 +1340,7 @@ long plPlayer(ulong objId , ulong actionTime, ubyte (*actionFunc)(ulong, ulong))
                         SetPictID(((Person)dbGetObject(OL_NR(GetNthNode(BurglarsList, 0))))->PictID);
                         SetBubbleType(RADIO_BUBBLE);
 
-                        if ((choice2 = (ulong)Bubble(l, 0, NULL, 0L)) != GET_OUT)
+                        if ((choice2 = (uint32_t)Bubble(l, 0, NULL, 0L)) != GET_OUT)
                         {
                            if (choice2 < 3)
                            {
@@ -1397,14 +1397,14 @@ long plPlayer(ulong objId , ulong actionTime, ubyte (*actionFunc)(ulong, ulong))
                {
                   if (has(Person_Matt_Stuvysunt, OL_NR(n)))
                   {
-                     ulong oldValue = hasGet(Person_Matt_Stuvysunt, OL_NR(n));
-                     ulong newValue = GetP(dbGetObject(OL_NR(GetNthNode(PersonsList, i))), take_RelId, dbGetObject(OL_NR(n)));
+                     uint32_t oldValue = hasGet(Person_Matt_Stuvysunt, OL_NR(n));
+                     uint32_t newValue = GetP(dbGetObject(OL_NR(GetNthNode(PersonsList, i))), take_RelId, dbGetObject(OL_NR(n)));
 
                      hasSetP(Person_Matt_Stuvysunt, OL_NR(n), oldValue + newValue);
                   }
                   else
                   {
-                     ulong newValue = GetP(dbGetObject(OL_NR(GetNthNode(PersonsList, i))), take_RelId, dbGetObject(OL_NR(n)));
+                     uint32_t newValue = GetP(dbGetObject(OL_NR(GetNthNode(PersonsList, i))), take_RelId, dbGetObject(OL_NR(n)));
 
                      hasSetP(Person_Matt_Stuvysunt, OL_NR(n), newValue);
                   }
@@ -1417,12 +1417,12 @@ long plPlayer(ulong objId , ulong actionTime, ubyte (*actionFunc)(ulong, ulong))
 
                while (plCarTooFull())
                {
-                  ulong choice;
+                  uint32_t choice;
 
                   hasAll(Person_Matt_Stuvysunt, OLF_INCLUDE_NAME|OLF_INSERT_STAR|OLF_NORMAL, Object_Loot);
 
                   if ((choice = Bubble(ObjectList,0,0L,0L)) != GET_OUT)
-							hasUnSet(Person_Matt_Stuvysunt, OL_NR(GetNthNode(ObjectList, (ulong)choice)));
+							hasUnSet(Person_Matt_Stuvysunt, OL_NR(GetNthNode(ObjectList, (uint32_t)choice)));
                   else
                      plSay("PLAYER_LEAVE_LOOTS_2", 0);
                }

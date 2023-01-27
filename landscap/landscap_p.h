@@ -87,8 +87,8 @@
 
 struct LandScape
 	{
-	ulong   ul_BuildingID;
-	ulong   ul_AreaID;
+	uint32_t   ul_BuildingID;
+	uint32_t   ul_AreaID;
 
 	uword   us_WindowXSize;          /* total Size of Window    */
 	uword	  us_WindowYSize;
@@ -110,11 +110,11 @@ struct LandScape
 
 	struct  LSFloorSquare	*p_CurrFloor;		/* holds floor and object information */
 	struct  LSFloorSquare	*p_AllFloors[3];
-	ulong   ul_FloorAreaId[3];
+	uint32_t   ul_FloorAreaId[3];
 
 	LIST    *p_ObjectRetrieval;
 	LIST    *p_ObjectRetrievalLists[3];
-	ulong   ul_ObjectRetrievalAreaId[3];
+	uint32_t   ul_ObjectRetrievalAreaId[3];
 
 	LIST	  *p_DoorRefreshList;
 
@@ -152,7 +152,7 @@ extern struct LandScape *ls;
 
 static void lsInitFloorSquares(void);
 static void lsLoadAllSpots(void);
-static void lsSetCurrFloorSquares(ulong areaId);
+static void lsSetCurrFloorSquares(uint32_t areaId);
 
 extern void lsPrepareFromXMSRastPort(struct XMSRastPort *rp);
 extern void lsPrepareToXMSRastPort(struct XMSRastPort *rp);

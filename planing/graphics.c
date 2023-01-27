@@ -38,17 +38,17 @@ void plMessage(char *msg, ubyte flags)
 	}
 }
 
-void plDisplayTimer(ulong time, ubyte doSpotsImmediatly)
+void plDisplayTimer(uint32_t time, ubyte doSpotsImmediatly)
 {
 	char info[80];
-	static ulong oldTimer = -1;	/* 2014-06-28 LucyG : static */
+	static uint32_t oldTimer = -1;	/* 2014-06-28 LucyG : static */
 
 	if (!time)
 		time = CurrentTimer(plSys) / PLANING_CORRECT_TIME;
 
 	if (GamePlayMode & GP_GUARD_DESIGN)
 	{
-		sprintf(info, "x:%d, y:%d   %s %0.2ld:%0.2ld:%0.2ld %s", livGetXPos(Planing_Name[CurrentPerson]), livGetYPos(Planing_Name[CurrentPerson]), txtTimer, (ulong)(time/3600), (ulong)((time/60)%60), (ulong)(time%60), txtSeconds);
+		sprintf(info, "x:%d, y:%d   %s %0.2ld:%0.2ld:%0.2ld %s", livGetXPos(Planing_Name[CurrentPerson]), livGetYPos(Planing_Name[CurrentPerson]), txtTimer, (uint32_t)(time/3600), (uint32_t)((time/60)%60), (uint32_t)(time%60), txtSeconds);
 
 		gfxSetPens(m_wrp, 0, 0, 0);
 		gfxRectFill(m_wrp, 120, 0, 320, 10);
@@ -59,7 +59,7 @@ void plDisplayTimer(ulong time, ubyte doSpotsImmediatly)
 	}
 	else
 	{
-		sprintf(info, "%s %0.2ld:%0.2ld:%0.2ld %s", txtTimer, (ulong)(time/3600), (ulong)((time/60)%60), (ulong)(time%60), txtSeconds);
+		sprintf(info, "%s %0.2ld:%0.2ld:%0.2ld %s", txtTimer, (uint32_t)(time/3600), (uint32_t)((time/60)%60), (uint32_t)(time%60), txtSeconds);
 
 		gfxSetPens(m_wrp, 0, 0, 0);
 		gfxRectFill(m_wrp, 220, 0, 320, 10);
@@ -90,7 +90,7 @@ void plDisplayInfo(void)
 	gfxPrint(m_wrp, info, 2, GFX_PRINT_LEFT|GFX_PRINT_SHADOW);
 }
 
-ubyte plSay(char *msg, ulong persId)
+ubyte plSay(char *msg, uint32_t persId)
 {
 	LIST *l = txtGoKey(PLAN_TXT, msg);
 	ubyte choice;
@@ -114,11 +114,11 @@ ubyte plSay(char *msg, ulong persId)
 	return choice;
 }
 
-void plDrawWait(ulong sec)
+void plDrawWait(uint32_t sec)
 {
 	char time[10];
 
-	sprintf(time, "%0.2ld:%0.2ld", (ulong)(sec/60), (ulong)(sec%60));
+	sprintf(time, "%0.2ld:%0.2ld", (uint32_t)(sec/60), (uint32_t)(sec%60));
 
 	gfxSetDrMd(m_wrp, GFX_JAM_2);
 	gfxSetPens(m_wrp, 248, GFX_SAME_PEN, GFX_SAME_PEN);
@@ -127,7 +127,7 @@ void plDrawWait(ulong sec)
 	gfxSetDrMd(m_wrp, GFX_JAM_1);
 }
 
-void plRefresh(ulong ItemId)
+void plRefresh(uint32_t ItemId)
 {
 	LSObject obj = (LSObject)dbGetObject(ItemId);
 

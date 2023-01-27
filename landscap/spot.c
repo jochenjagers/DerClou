@@ -21,7 +21,7 @@ struct SpotControl {
 	SDL_Surface *		pSurface;
 };
 
-static void lsShowSpot(struct Spot *s, ulong time);
+static void lsShowSpot(struct Spot *s, uint32_t time);
 static void lsLoadSpotBitMap(struct SpotControl *spc);
 static void lsHideSpot(struct Spot *s);
 static void lsBlitSpot(uword us_Size, uword us_XPos, uword us_YPos, ubyte visible);
@@ -69,13 +69,13 @@ void lsDoneSpots(void)
 	}
 }
 
-static long lsIsSpotVisible(struct Spot *spot)
+static int32_t lsIsSpotVisible(struct Spot *spot)
 {
 	return 1;
 }
 
 /* zeigt alle Spots, die sich bewegen */
-void lsMoveAllSpots(ulong time)
+void lsMoveAllSpots(uint32_t time)
 {
 	struct Spot *spot;
 
@@ -92,7 +92,7 @@ void lsMoveAllSpots(ulong time)
 	}
 }
 
-void lsShowAllSpots(ulong time, ulong mode)
+void lsShowAllSpots(uint32_t time, uint32_t mode)
 {
 	struct Spot *spot;
 
@@ -113,10 +113,10 @@ void lsShowAllSpots(ulong time, ulong mode)
 	}
 }
 
-static void lsShowSpot(struct Spot *s, ulong time)    /* zum Abspielen! */
+static void lsShowSpot(struct Spot *s, uint32_t time)    /* zum Abspielen! */
 {
 	struct SpotPosition *pos;
-	ulong count;
+	uint32_t count;
 
 	if (!(time % s->us_Speed)) {    /* nur alle x Sekunden Bewegung */
 		count = (time / s->us_Speed);
@@ -165,7 +165,7 @@ static void lsHideSpot(struct Spot *s)
 
 static void lsGetAreaForSpot(struct Spot *spot)
 {
-	ulong area = (spot->ul_CtrlObjId / 1000) * 1000;
+	uint32_t area = (spot->ul_CtrlObjId / 1000) * 1000;
 
 	switch(area)
 	{
@@ -232,10 +232,10 @@ static void lsGetAreaForSpot(struct Spot *spot)
 	}
 }
 
-static struct Spot *lsAddSpot(uword us_Size, uword us_Speed, ulong ul_CtrlObjId)
+static struct Spot *lsAddSpot(uword us_Size, uword us_Speed, uint32_t ul_CtrlObjId)
 {
 	struct Spot *spot;
-	ulong  SpotNr;
+	uint32_t  SpotNr;
 	char line[TXT_KEY_LENGTH];
 
 	SpotNr = GetNrOfNodes(sc->p_spots);
@@ -263,7 +263,7 @@ static struct Spot *lsAddSpot(uword us_Size, uword us_Speed, ulong ul_CtrlObjId)
 	return(spot);
 }
 
-void lsSetSpotStatus(ulong CtrlObjId, ubyte uch_Status)
+void lsSetSpotStatus(uint32_t CtrlObjId, ubyte uch_Status)
 {
 	struct Spot *s;
 
@@ -278,7 +278,7 @@ static void lsAddSpotPosition(struct Spot *spot, uword us_XPos, uword us_YPos)
 	{
 	struct SpotPosition *pos;
 
-	pos = (struct SpotPosition*) CreateNode(spot->p_positions, (long) sizeof(struct SpotPosition), NULL);
+	pos = (struct SpotPosition*) CreateNode(spot->p_positions, (int32_t) sizeof(struct SpotPosition), NULL);
 
 	pos->us_XPos = (word) us_XPos + (word) LS_PC_CORRECT_X;
 	pos->us_YPos = (word) us_YPos + (word) LS_PC_CORRECT_Y;
@@ -289,7 +289,7 @@ static void lsAddSpotPosition(struct Spot *spot, uword us_XPos, uword us_YPos)
 static void lsLoadSpotBitMap(struct SpotControl *spc)
 {
 	char Result[TXT_KEY_LENGTH];
-	long  i,j;
+	int32_t  i,j;
 	ubyte *d;
 
 	// Dateiname erstellen
@@ -317,12 +317,12 @@ static void lsLoadSpotBitMap(struct SpotControl *spc)
 	}
 }
 
-void lsLoadSpots(ulong bldId, char *uch_FileName)
+void lsLoadSpots(uint32_t bldId, char *uch_FileName)
 	{
 	FILE *file;
 	char filename[TXT_KEY_LENGTH], buffer[TXT_KEY_LENGTH];
 	uword SpotCount,i,j;
-	ulong CtrlObjId;
+	uint32_t CtrlObjId;
 	struct Spot *spot;
 	uword Size, Speed, Count, XPos, YPos;
 
@@ -374,7 +374,7 @@ LIST *lsGetSpotList(void)
 
 static void lsBlitSpot(uword us_Size, uword us_XPos, uword us_YPos, ubyte visible)
 	{
-	ulong sourceX = 0;
+	uint32_t sourceX = 0;
 	void  *Src, *Dest;
 
 	switch(us_Size)

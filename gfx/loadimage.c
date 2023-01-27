@@ -33,9 +33,9 @@ static const ubyte idBMHD[] = {'B','M','H','D'};
 static const ubyte idBODY[] = {'B','O','D','Y'};
 static const ubyte idCMAP[] = {'C','M','A','P'};
 
-static inline ulong PeekL_BE(ubyte *p)
+static inline uint32_t PeekL_BE(ubyte *p)
 {
-	return( ((ulong)p[0]<<24) | ((ulong)p[1]<<16) | ((ulong)p[2]<<8) | (ulong)p[3] );
+	return( ((uint32_t)p[0]<<24) | ((uint32_t)p[1]<<16) | ((uint32_t)p[2]<<8) | (uint32_t)p[3] );
 }
 
 static inline uword PeekW_BE(ubyte *p)
@@ -43,9 +43,9 @@ static inline uword PeekW_BE(ubyte *p)
 	return( ((uword)p[0]<<8) | (uword)p[1] );
 }
 
-static ulong IFFFindChunk(ubyte *pFileBuffer, long sizeOfForm, const ubyte *chkID)
+static uint32_t IFFFindChunk(ubyte *pFileBuffer, int32_t sizeOfForm, const ubyte *chkID)
 {
-	ulong currPos = 12;
+	uint32_t currPos = 12;
 	while ((currPos + 4) <= sizeOfForm) {
 		if (!memcmp(&pFileBuffer[currPos], chkID, 4)) {
 			currPos += 4;
@@ -127,21 +127,21 @@ static void ILBMCopyToSurface(ubyte *pBody, ILBMHeader *hdr, SDL_Surface *pSurfa
 	}
 }
 
-static SDL_Surface *gfxLoadILBM(ubyte *pFileBuffer, long ulSizeOfFile, const char *puch_Pathname)
+static SDL_Surface *gfxLoadILBM(ubyte *pFileBuffer, int32_t ulSizeOfFile, const char *puch_Pathname)
 {
-	long sizeOfForm = PeekL_BE(&pFileBuffer[4]) + 8;
+	int32_t sizeOfForm = PeekL_BE(&pFileBuffer[4]) + 8;
 	if (sizeOfForm > ulSizeOfFile) {
 		// file truncated!
 		Log("ILBM truncated: %s\n", puch_Pathname);
 		return(NULL);
 	}
-	ulong currPos = IFFFindChunk(pFileBuffer, sizeOfForm, idBMHD);
+	uint32_t currPos = IFFFindChunk(pFileBuffer, sizeOfForm, idBMHD);
 	if (!currPos) {
 		Log("No BMHD found: %s\n", puch_Pathname);
 		return(NULL);
 	}
 
-	long chunkSize = PeekL_BE(&pFileBuffer[currPos]);	currPos += 4;
+	int32_t chunkSize = PeekL_BE(&pFileBuffer[currPos]);	currPos += 4;
 	if (chunkSize < 20) {
 		Log("Invalid BMHD: %s\n", puch_Pathname);
 		return(NULL);
@@ -210,7 +210,7 @@ static SDL_Surface *gfxLoadILBM(ubyte *pFileBuffer, long ulSizeOfFile, const cha
 SDL_Surface *gfxLoadImage(const char *puch_Pathname)
 {
 	FILE *p_File = NULL;
-	long ul_SizeOfFile;
+	int32_t ul_SizeOfFile;
 	ubyte *p_FileBuffer;
 	SDL_Surface *pSurface = NULL;
 

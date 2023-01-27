@@ -8,7 +8,7 @@
 
 
 // loot support
-ulong plGetNextLoot(void)
+uint32_t plGetNextLoot(void)
 {
    ubyte i;
 
@@ -25,7 +25,7 @@ ulong plGetNextLoot(void)
 }
 
 // check support
-ubyte plLivingsPosAtCar(ulong bldId)
+ubyte plLivingsPosAtCar(uint32_t bldId)
 {
    Building bldObj = (Building)dbGetObject(bldId);
    uword xpos, ypos, carxpos, carypos;
@@ -57,10 +57,10 @@ ubyte plLivingsPosAtCar(ulong bldId)
    return atCar;
 }
 
-ubyte plAllInCar(ulong bldId)
+ubyte plAllInCar(uint32_t bldId)
 {
    ubyte maxPerson = 0, i, ret = 1;
-   ulong maxTimer = 0L, oldTimer = CurrentTimer(plSys), realCurrentPerson = CurrentPerson;
+   uint32_t maxTimer = 0L, oldTimer = CurrentTimer(plSys), realCurrentPerson = CurrentPerson;
 
    for (i = 0; i < BurglarsNr; i++)
    {
@@ -96,7 +96,7 @@ ubyte plAllInCar(ulong bldId)
    return ret;
 }
 
-ubyte plIsStair(ulong objId)
+ubyte plIsStair(uint32_t objId)
 {
    return (ubyte)((((LSObject)dbGetObject(objId))->Type == Item_Treppe));
 }
@@ -120,7 +120,7 @@ void plCorrectOpened(LSObject obj, ubyte open)
    }
 }
 
-ubyte plIgnoreLock(ulong objId)
+ubyte plIgnoreLock(uint32_t objId)
 {
 	ubyte back = 0;
 
@@ -147,7 +147,7 @@ ubyte plIgnoreLock(ulong objId)
 }
 
 // livings support
-void plMove(ulong current, ubyte direction)
+void plMove(uint32_t current, ubyte direction)
 {
    switch (direction)
    {
@@ -169,7 +169,7 @@ void plMove(ulong current, ubyte direction)
    }
 }
 
-void plWork (ulong current)
+void plWork (uint32_t current)
 {
    switch (livGetViewDirection(Planing_Name[current]))
    {
@@ -191,10 +191,10 @@ void plWork (ulong current)
    }
 }
 
-LIST *plGetObjectsList(ulong current, ubyte addLootBags)
+LIST *plGetObjectsList(uint32_t current, ubyte addLootBags)
 {
    LIST *list = NULL;
-   ulong areaId = livWhereIs(Planing_Name[current]), oldAreaId;
+   uint32_t areaId = livWhereIs(Planing_Name[current]), oldAreaId;
 
 	oldAreaId = lsGetCurrObjectRetrieval();
    lsSetObjectRetrievalList(areaId);
@@ -230,7 +230,7 @@ LIST *plGetObjectsList(ulong current, ubyte addLootBags)
 	return list;
 }
 
-void plInsertGuard(LIST *list, ulong current, ulong guard)
+void plInsertGuard(LIST *list, uint32_t current, uint32_t guard)
 {
 	switch (livGetViewDirection(Planing_Name[current]))
 	{
@@ -268,7 +268,7 @@ void plInsertGuard(LIST *list, ulong current, ulong guard)
 	}
 }
 
-ubyte plObjectInReach(ulong current, ulong objId)
+ubyte plObjectInReach(uint32_t current, uint32_t objId)
 {
 	LIST *actionList = plGetObjectsList(current, 1);
 	ubyte i, ret = 0;

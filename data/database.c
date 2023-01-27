@@ -13,14 +13,14 @@
 // public declaration
 LIST *ObjectList           = NULL;
 LIST *ObjectListPrivate    = NULL;
-ulong ObjectListWidth      = 0L;
-char *(*ObjectListPrevString)(ulong, ulong, void *) = NULL;
-char *(*ObjectListSuccString)(ulong, ulong, void *) = NULL;
+uint32_t ObjectListWidth      = 0L;
+char *(*ObjectListPrevString)(uint32_t, uint32_t, void *) = NULL;
+char *(*ObjectListSuccString)(uint32_t, uint32_t, void *) = NULL;
 
 
 // private declaration
-ulong ObjectListType       = 0L;
-ulong ObjectListFlags      = OLF_NORMAL;
+uint32_t ObjectListType       = 0L;
+uint32_t ObjectListFlags      = OLF_NORMAL;
 
 ubyte ObjectLoadMode			= DB_LOAD_MODE_STD;
 
@@ -55,7 +55,7 @@ KEY dbEncode(char *key)
 	return(obj);
 }
 
-struct dbObject *dbFindRealObject(ulong realNr, ulong offset, ulong size)
+struct dbObject *dbFindRealObject(uint32_t realNr, uint32_t offset, uint32_t size)
 {
    struct dbObject *obj;
    ubyte            objHashValue;
@@ -92,9 +92,9 @@ void dbSetLoadObjectsMode(ubyte mode)
  * We could also convert the data files
  * to the new format instead...
  */
-static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *file, ulong structSize, char mode)
+static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *file, uint32_t structSize, char mode)
 {
-	void (*func)(FILE*, void*,ulong);
+	void (*func)(FILE*, void*,uint32_t);
 
 	if (mode == 0) // Read mode
 	{
@@ -124,7 +124,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			func(file, &((Person)obj)->Avarice, sizeof(unsigned char));
 			func(file, &((Person)obj)->Panic, sizeof(unsigned char));
 			func(file, &((Person)obj)->KnownToPolice, sizeof(unsigned char));
-			func(file, &((Person)obj)->TalkBits, sizeof(unsigned long));
+			func(file, &((Person)obj)->TalkBits, sizeof(uint32_t));
 			EndianL(&((Person)obj)->TalkBits);
 			func(file, &((Person)obj)->TalkFileID, sizeof(unsigned char));
 			func(file, &((Person)obj)->OldHealth, sizeof(unsigned char));
@@ -132,22 +132,22 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 		case Object_Player:
 			dbcheckSize(sizeof(*(Player)obj),structSize);
 
-			func(file, &((Player)obj)->Money, sizeof(unsigned long));
+			func(file, &((Player)obj)->Money, sizeof(uint32_t));
 			EndianL(&((Player)obj)->Money);
-			func(file, &((Player)obj)->StolenMoney, sizeof(unsigned long));
+			func(file, &((Player)obj)->StolenMoney, sizeof(uint32_t));
 			EndianL(&((Player)obj)->StolenMoney);
-			func(file, &((Player)obj)->MyStolenMoney, sizeof(unsigned long));
+			func(file, &((Player)obj)->MyStolenMoney, sizeof(uint32_t));
 			EndianL(&((Player)obj)->MyStolenMoney);
 			func(file, &((Player)obj)->NrOfBurglaries, sizeof(unsigned char));
 			func(file, &((Player)obj)->JobOfferCount, sizeof(unsigned char));
 			func(file, &((Player)obj)->MattsPart, sizeof(unsigned char));
-			func(file, &((Player)obj)->CurrScene, sizeof(unsigned long));
+			func(file, &((Player)obj)->CurrScene, sizeof(uint32_t));
 			EndianL(&((Player)obj)->CurrScene);
-			func(file, &((Player)obj)->CurrDay, sizeof(unsigned long));
+			func(file, &((Player)obj)->CurrDay, sizeof(uint32_t));
 			EndianL(&((Player)obj)->CurrDay);
-			func(file, &((Player)obj)->CurrMinute, sizeof(unsigned long));
+			func(file, &((Player)obj)->CurrMinute, sizeof(uint32_t));
 			EndianL(&((Player)obj)->CurrMinute);
-			func(file, &((Player)obj)->CurrLocation, sizeof(unsigned long));
+			func(file, &((Player)obj)->CurrLocation, sizeof(uint32_t));
 			EndianL(&((Player)obj)->CurrLocation);
 			break;
 		case Object_Car:
@@ -157,14 +157,14 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			EndianW(&((Car)obj)->PictID);
 			func(file, &((Car)obj)->Land, sizeof(unsigned short));
 			EndianW(&((Car)obj)->Land);
-			func(file, &((Car)obj)->Value, sizeof(unsigned long));
+			func(file, &((Car)obj)->Value, sizeof(uint32_t));
 			EndianL(&((Car)obj)->Value);
 			func(file, &((Car)obj)->YearOfConstruction, sizeof(unsigned short));
 			EndianW(&((Car)obj)->YearOfConstruction);
 			func(file, &((Car)obj)->ColorIndex, sizeof(unsigned short));
 			EndianW(&((Car)obj)->ColorIndex);
 			func(file, &((Car)obj)->Strike, sizeof(unsigned char));
-			func(file, &((Car)obj)->Capacity, sizeof(unsigned long));
+			func(file, &((Car)obj)->Capacity, sizeof(uint32_t));
 			EndianL(&((Car)obj)->Capacity);
 			func(file, &((Car)obj)->PS, sizeof(unsigned char));
 			func(file, &((Car)obj)->Speed, sizeof(unsigned char));
@@ -179,7 +179,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 
 			func(file, &((Ability)obj)->Name, sizeof(unsigned short));
 			EndianW(&((Ability)obj)->Name);
-			func(file, &((Ability)obj)->Use, sizeof(unsigned long));
+			func(file, &((Ability)obj)->Use, sizeof(uint32_t));
 			EndianL(&((Ability)obj)->Use);
 			break;
 		case Object_Tool:
@@ -187,7 +187,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 
 			func(file, &((Tool)obj)->PictID, sizeof(unsigned short));
 			EndianW(&((Tool)obj)->PictID);
-			func(file, &((Tool)obj)->Value, sizeof(unsigned long));
+			func(file, &((Tool)obj)->Value, sizeof(uint32_t));
 			EndianL(&((Tool)obj)->Value);
 			func(file, &((Tool)obj)->Danger, sizeof(unsigned char));
 			func(file, &((Tool)obj)->Volume, sizeof(unsigned char));
@@ -209,15 +209,15 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			func(file, &((LSObject)obj)->uch_Size, sizeof(unsigned char));
 			func(file, &((LSObject)obj)->uch_Visible, sizeof(unsigned char));
 			func(file, &((LSObject)obj)->uch_Chained, sizeof(unsigned char));
-			func(file, &((LSObject)obj)->ul_Status, sizeof(unsigned long));
+			func(file, &((LSObject)obj)->ul_Status, sizeof(uint32_t));
 			EndianL(&((LSObject)obj)->ul_Status);
-			func(file, &((LSObject)obj)->Type, sizeof(unsigned long));
+			func(file, &((LSObject)obj)->Type, sizeof(uint32_t));
 			EndianL(&((LSObject)obj)->Type);
 			break;
 		case Object_Building:
 			dbcheckSize(sizeof(*(Building)obj),structSize);
 
-			func(file, &((Building)obj)->LocationNr, sizeof(unsigned long));
+			func(file, &((Building)obj)->LocationNr, sizeof(uint32_t));
 			EndianL(&((Building)obj)->LocationNr);
 			func(file, &((Building)obj)->PoliceTime, sizeof(unsigned short));
 			EndianW(&((Building)obj)->PoliceTime);
@@ -226,7 +226,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			func(file, &((Building)obj)->Exactlyness, sizeof(unsigned char));
 			func(file, &((Building)obj)->GRate, sizeof(unsigned char));
 			func(file, &((Building)obj)->Strike, sizeof(unsigned char));
-			func(file, &((Building)obj)->Values, sizeof(unsigned long));
+			func(file, &((Building)obj)->Values, sizeof(uint32_t));
 			EndianL(&((Building)obj)->Values);
 			func(file, &((Building)obj)->EscapeRoute, sizeof(unsigned short));
 			EndianW(&((Building)obj)->EscapeRoute);
@@ -264,7 +264,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			EndianW(&((LSArea)obj)->us_Width);
 			func(file, &((LSArea)obj)->us_Height, sizeof(unsigned short));
 			EndianW(&((LSArea)obj)->us_Height);
-			func(file, &((LSArea)obj)->ul_ObjectBaseNr, sizeof(unsigned long));
+			func(file, &((LSArea)obj)->ul_ObjectBaseNr, sizeof(uint32_t));
 			EndianL(&((LSArea)obj)->ul_ObjectBaseNr);
 			func(file, &((LSArea)obj)->uch_Darkness, sizeof(unsigned char));
 			func(file, &((LSArea)obj)->us_StartX0, sizeof(unsigned short));
@@ -296,7 +296,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 		case Object_Location:
 			dbcheckSize(sizeof(*(Location)obj),structSize);
 
-			func(file, &((Location)obj)->LocationNr, sizeof(unsigned long));
+			func(file, &((Location)obj)->LocationNr, sizeof(uint32_t));
 			EndianL(&((Location)obj)->LocationNr);
 
 			func(file, &((Location)obj)->OpenFromMinute, sizeof(unsigned short));
@@ -364,7 +364,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 		case Object_Evidence:
 			dbcheckSize(sizeof(*(Evidence)obj),structSize);
 
-			func(file, &((Evidence)obj)->pers, sizeof(unsigned long));
+			func(file, &((Evidence)obj)->pers, sizeof(uint32_t));
 			EndianL(&((Evidence)obj)->pers);
 			func(file, &((Evidence)obj)->Recognition, sizeof(unsigned char));
 			func(file, &((Evidence)obj)->WalkTrail, sizeof(unsigned char));
@@ -382,7 +382,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			EndianW(&((Loot)obj)->Type);
 			func(file, &((Loot)obj)->Name, sizeof(unsigned short));
 			EndianW(&((Loot)obj)->Name);
-			func(file, &((Loot)obj)->Volume, sizeof(unsigned long));
+			func(file, &((Loot)obj)->Volume, sizeof(uint32_t));
 			EndianL(&((Loot)obj)->Volume);
 			func(file, &((Loot)obj)->Weight, sizeof(unsigned short));
 			EndianW(&((Loot)obj)->Weight);
@@ -393,29 +393,29 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			dbcheckSize(sizeof(*(CompleteLoot)obj),structSize);
 			
 
-			func(file, &((CompleteLoot)obj)->Bild, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Bild, sizeof(uint32_t));
 			EndianL(&((CompleteLoot)obj)->Bild);
-			func(file, &((CompleteLoot)obj)->Gold, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Gold, sizeof(uint32_t));
 			EndianL(&((CompleteLoot)obj)->Gold);
-			func(file, &((CompleteLoot)obj)->Geld, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Geld, sizeof(uint32_t));
 			EndianL(&((CompleteLoot)obj)->Geld);
-			func(file, &((CompleteLoot)obj)->Juwelen, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Juwelen, sizeof(uint32_t));
 			EndianL(&((CompleteLoot)obj)->Juwelen);
-			func(file, &((CompleteLoot)obj)->Delikates, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Delikates, sizeof(uint32_t));
 			EndianL(&((CompleteLoot)obj)->Delikates);
-			func(file, &((CompleteLoot)obj)->Statue, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Statue, sizeof(uint32_t));
 			EndianL(&((CompleteLoot)obj)->Statue);
-			func(file, &((CompleteLoot)obj)->Kuriositaet, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Kuriositaet, sizeof(uint32_t));
 			EndianL(&((CompleteLoot)obj)->Kuriositaet);
-			func(file, &((CompleteLoot)obj)->HistKunst, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->HistKunst, sizeof(uint32_t));
 			EndianL(&((CompleteLoot)obj)->HistKunst);
-			func(file, &((CompleteLoot)obj)->GebrauchsArt, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->GebrauchsArt, sizeof(uint32_t));
 			EndianL(&((CompleteLoot)obj)->GebrauchsArt);
-			func(file, &((CompleteLoot)obj)->Vase, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Vase, sizeof(uint32_t));
 			EndianL(&((CompleteLoot)obj)->Vase);
-			func(file, &((CompleteLoot)obj)->TotalWeight, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->TotalWeight, sizeof(uint32_t));
 			EndianL(&((CompleteLoot)obj)->TotalWeight);
-			func(file, &((CompleteLoot)obj)->TotalVolume, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->TotalVolume, sizeof(uint32_t));
 			EndianL(&((CompleteLoot)obj)->TotalVolume);
 			break;
 		case Object_LSOLock:
@@ -480,7 +480,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			func(file, &((Person)obj)->KnownToPolice, sizeof(unsigned char));
 
 			EndianL(&((Person)obj)->TalkBits);
-			func(file, &((Person)obj)->TalkBits, sizeof(unsigned long));
+			func(file, &((Person)obj)->TalkBits, sizeof(uint32_t));
 			func(file, &((Person)obj)->TalkFileID, sizeof(unsigned char));
 			func(file, &((Person)obj)->OldHealth, sizeof(unsigned char));
 			break;
@@ -488,28 +488,28 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			dbcheckSize(sizeof(*(Player)obj),structSize);
 
 			EndianL(&((Player)obj)->Money);
-			func(file, &((Player)obj)->Money, sizeof(unsigned long));
+			func(file, &((Player)obj)->Money, sizeof(uint32_t));
 
 			EndianL(&((Player)obj)->StolenMoney);
-			func(file, &((Player)obj)->StolenMoney, sizeof(unsigned long));
+			func(file, &((Player)obj)->StolenMoney, sizeof(uint32_t));
 
 			EndianL(&((Player)obj)->MyStolenMoney);
-			func(file, &((Player)obj)->MyStolenMoney, sizeof(unsigned long));
+			func(file, &((Player)obj)->MyStolenMoney, sizeof(uint32_t));
 			func(file, &((Player)obj)->NrOfBurglaries, sizeof(unsigned char));
 			func(file, &((Player)obj)->JobOfferCount, sizeof(unsigned char));
 			func(file, &((Player)obj)->MattsPart, sizeof(unsigned char));
 
 			EndianL(&((Player)obj)->CurrScene);
-			func(file, &((Player)obj)->CurrScene, sizeof(unsigned long));
+			func(file, &((Player)obj)->CurrScene, sizeof(uint32_t));
 
 			EndianL(&((Player)obj)->CurrDay);
-			func(file, &((Player)obj)->CurrDay, sizeof(unsigned long));
+			func(file, &((Player)obj)->CurrDay, sizeof(uint32_t));
 
 			EndianL(&((Player)obj)->CurrMinute);
-			func(file, &((Player)obj)->CurrMinute, sizeof(unsigned long));
+			func(file, &((Player)obj)->CurrMinute, sizeof(uint32_t));
 
 			EndianL(&((Player)obj)->CurrLocation);
-			func(file, &((Player)obj)->CurrLocation, sizeof(unsigned long));
+			func(file, &((Player)obj)->CurrLocation, sizeof(uint32_t));
 
 			break;
 		case Object_Car:
@@ -522,7 +522,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			func(file, &((Car)obj)->Land, sizeof(unsigned short));
 
 			EndianL(&((Car)obj)->Value);
-			func(file, &((Car)obj)->Value, sizeof(unsigned long));
+			func(file, &((Car)obj)->Value, sizeof(uint32_t));
 
 			EndianW(&((Car)obj)->YearOfConstruction);
 			func(file, &((Car)obj)->YearOfConstruction, sizeof(unsigned short));
@@ -532,7 +532,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			func(file, &((Car)obj)->Strike, sizeof(unsigned char));
 			
 			EndianL(&((Car)obj)->Capacity);
-			func(file, &((Car)obj)->Capacity, sizeof(unsigned long));
+			func(file, &((Car)obj)->Capacity, sizeof(uint32_t));
 			func(file, &((Car)obj)->PS, sizeof(unsigned char));
 			func(file, &((Car)obj)->Speed, sizeof(unsigned char));
 			func(file, &((Car)obj)->State, sizeof(unsigned char));
@@ -548,7 +548,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			func(file, &((Ability)obj)->Name, sizeof(unsigned short));
 
 			EndianL(&((Ability)obj)->Use);
-			func(file, &((Ability)obj)->Use, sizeof(unsigned long));
+			func(file, &((Ability)obj)->Use, sizeof(uint32_t));
 
 			break;
 		case Object_Tool:
@@ -558,7 +558,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			func(file, &((Tool)obj)->PictID, sizeof(unsigned short));
 
 			EndianL(&((Tool)obj)->Value);
-			func(file, &((Tool)obj)->Value, sizeof(unsigned long));
+			func(file, &((Tool)obj)->Value, sizeof(uint32_t));
 			func(file, &((Tool)obj)->Danger, sizeof(unsigned char));
 			func(file, &((Tool)obj)->Volume, sizeof(unsigned char));
 			func(file, &((Tool)obj)->Effect, sizeof(unsigned char));
@@ -583,17 +583,17 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			func(file, &((LSObject)obj)->uch_Chained, sizeof(unsigned char));
 
 			EndianL(&((LSObject)obj)->ul_Status);
-			func(file, &((LSObject)obj)->ul_Status, sizeof(unsigned long));
+			func(file, &((LSObject)obj)->ul_Status, sizeof(uint32_t));
 
 			EndianL(&((LSObject)obj)->Type);
-			func(file, &((LSObject)obj)->Type, sizeof(unsigned long));
+			func(file, &((LSObject)obj)->Type, sizeof(uint32_t));
 
 			break;
 		case Object_Building:
 			dbcheckSize(sizeof(*(Building)obj),structSize);
 
 			EndianL(&((Building)obj)->LocationNr);
-			func(file, &((Building)obj)->LocationNr, sizeof(unsigned long));
+			func(file, &((Building)obj)->LocationNr, sizeof(uint32_t));
 
 			EndianW(&((Building)obj)->PoliceTime);
 			func(file, &((Building)obj)->PoliceTime, sizeof(unsigned short));
@@ -605,7 +605,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			func(file, &((Building)obj)->Strike, sizeof(unsigned char));
 
 			EndianL(&((Building)obj)->Values);
-			func(file, &((Building)obj)->Values, sizeof(unsigned long));
+			func(file, &((Building)obj)->Values, sizeof(uint32_t));
 
 			EndianW(&((Building)obj)->EscapeRoute);
 			func(file, &((Building)obj)->EscapeRoute, sizeof(unsigned short));
@@ -657,7 +657,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			func(file, &((LSArea)obj)->us_Height, sizeof(unsigned short));
 
 			EndianL(&((LSArea)obj)->ul_ObjectBaseNr);
-			func(file, &((LSArea)obj)->ul_ObjectBaseNr, sizeof(unsigned long));
+			func(file, &((LSArea)obj)->ul_ObjectBaseNr, sizeof(uint32_t));
 			func(file, &((LSArea)obj)->uch_Darkness, sizeof(unsigned char));
 
 			EndianW(&((LSArea)obj)->us_StartX0);
@@ -702,7 +702,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			dbcheckSize(sizeof(*(Location)obj),structSize);
 
 			EndianL(&((Location)obj)->LocationNr);
-			func(file, &((Location)obj)->LocationNr, sizeof(unsigned long));
+			func(file, &((Location)obj)->LocationNr, sizeof(uint32_t));
 
 			EndianW(&((Location)obj)->OpenFromMinute);
 			func(file, &((Location)obj)->OpenFromMinute, sizeof(unsigned short));
@@ -772,7 +772,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			dbcheckSize(sizeof(*(Evidence)obj),structSize);
 
 			EndianL(&((Evidence)obj)->pers);
-			func(file, &((Evidence)obj)->pers, sizeof(unsigned long));
+			func(file, &((Evidence)obj)->pers, sizeof(uint32_t));
 
 			func(file, &((Evidence)obj)->Recognition, sizeof(unsigned char));
 			func(file, &((Evidence)obj)->WalkTrail, sizeof(unsigned char));
@@ -793,7 +793,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			func(file, &((Loot)obj)->Name, sizeof(unsigned short));
 
 			EndianL(&((Loot)obj)->Volume);
-			func(file, &((Loot)obj)->Volume, sizeof(unsigned long));
+			func(file, &((Loot)obj)->Volume, sizeof(uint32_t));
 
 			EndianW(&((Loot)obj)->Weight);
 			func(file, &((Loot)obj)->Weight, sizeof(unsigned short));
@@ -806,40 +806,40 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 			dbcheckSize(sizeof(*(CompleteLoot)obj),structSize);
 
 			EndianL(&((CompleteLoot)obj)->Bild);
-			func(file, &((CompleteLoot)obj)->Bild, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Bild, sizeof(uint32_t));
 
 			EndianL(&((CompleteLoot)obj)->Gold);
-			func(file, &((CompleteLoot)obj)->Gold, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Gold, sizeof(uint32_t));
 
 			EndianL(&((CompleteLoot)obj)->Geld);
-			func(file, &((CompleteLoot)obj)->Geld, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Geld, sizeof(uint32_t));
 
 			EndianL(&((CompleteLoot)obj)->Juwelen);
-			func(file, &((CompleteLoot)obj)->Juwelen, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Juwelen, sizeof(uint32_t));
 
 			EndianL(&((CompleteLoot)obj)->Delikates);
-			func(file, &((CompleteLoot)obj)->Delikates, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Delikates, sizeof(uint32_t));
 
 			EndianL(&((CompleteLoot)obj)->Statue);
-			func(file, &((CompleteLoot)obj)->Statue, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Statue, sizeof(uint32_t));
 
 			EndianL(&((CompleteLoot)obj)->Kuriositaet);
-			func(file, &((CompleteLoot)obj)->Kuriositaet, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Kuriositaet, sizeof(uint32_t));
 
 			EndianL(&((CompleteLoot)obj)->HistKunst);
-			func(file, &((CompleteLoot)obj)->HistKunst, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->HistKunst, sizeof(uint32_t));
 
 			EndianL(&((CompleteLoot)obj)->GebrauchsArt);
-			func(file, &((CompleteLoot)obj)->GebrauchsArt, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->GebrauchsArt, sizeof(uint32_t));
 
 			EndianL(&((CompleteLoot)obj)->Vase);
-			func(file, &((CompleteLoot)obj)->Vase, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->Vase, sizeof(uint32_t));
 
 			EndianL(&((CompleteLoot)obj)->TotalWeight);
-			func(file, &((CompleteLoot)obj)->TotalWeight, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->TotalWeight, sizeof(uint32_t));
 
 			EndianL(&((CompleteLoot)obj)->TotalVolume);
-			func(file, &((CompleteLoot)obj)->TotalVolume, sizeof(unsigned long));
+			func(file, &((CompleteLoot)obj)->TotalVolume, sizeof(uint32_t));
 
 			break;
 		case Object_LSOLock:
@@ -882,7 +882,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
 	return(1);
 }
 
-void	dbcheckSize(ulong objSize, ulong structSize)
+void	dbcheckSize(uint32_t objSize, uint32_t structSize)
 {
     if (objSize != structSize)
     { 
@@ -896,7 +896,7 @@ ubyte dbLoadAllObjects(char *fileName, uword diskId)
 
 	if (fh = dskOpen(fileName, "rb", diskId))
 	{
-		ulong realNr = 1L;
+		uint32_t realNr = 1L;
 		struct dbObjectHeader objHd;
 
 		while (!dskIsEOF(fh))
@@ -905,9 +905,9 @@ ubyte dbLoadAllObjects(char *fileName, uword diskId)
 			objHd.type = 0L;
 			objHd.size = 0L;
 
-			dskRead(fh, &objHd.nr,sizeof(unsigned long));
-			dskRead(fh, &objHd.type,sizeof(unsigned long));
-			dskRead(fh, &objHd.size,sizeof(unsigned long));
+			dskRead(fh, &objHd.nr,sizeof(uint32_t));
+			dskRead(fh, &objHd.type,sizeof(uint32_t));
+			dskRead(fh, &objHd.size,sizeof(uint32_t));
 
 			EndianL(&objHd.nr);
 			EndianL(&objHd.type);
@@ -919,7 +919,7 @@ ubyte dbLoadAllObjects(char *fileName, uword diskId)
 				LIST *list = NULL;
 				void *obj;
 				char *name = NULL;
-				ulong objSize = dbGetObjLoadSize(objHd.type);
+				uint32_t objSize = dbGetObjLoadSize(objHd.type);
 
 				if (ObjectLoadMode)
 				{
@@ -954,7 +954,7 @@ ubyte dbLoadAllObjects(char *fileName, uword diskId)
 	return 0;
 }
 
-ulong dbGetObjLoadSize(ulong structType)
+uint32_t dbGetObjLoadSize(uint32_t structType)
 {
 	switch (structType) 
 	{
@@ -999,7 +999,7 @@ ulong dbGetObjLoadSize(ulong structType)
 	}
 }
 
-ulong dbGetObjSaveSize(struct dbObjectHeader *objHd)
+uint32_t dbGetObjSaveSize(struct dbObjectHeader *objHd)
 {
    switch (objHd->type) 
 	{
@@ -1058,13 +1058,13 @@ ulong dbGetObjSaveSize(struct dbObjectHeader *objHd)
 	} 
 }
 
-ubyte dbSaveAllObjects(char *fileName, ulong offset, ulong size, uword diskId)
+ubyte dbSaveAllObjects(char *fileName, uint32_t offset, uint32_t size, uword diskId)
 {
 	FILE *fh;
 	struct dbObject *obj;
-	ulong realNr = 1;
-	ulong dbSize = dbGetObjectCountOfDB(offset, size);
-	ulong objSize;
+	uint32_t realNr = 1;
+	uint32_t dbSize = dbGetObjectCountOfDB(offset, size);
+	uint32_t objSize;
 
 	if (fh = dskOpen(fileName, "wb", diskId))
 	{
@@ -1103,7 +1103,7 @@ ubyte dbSaveAllObjects(char *fileName, ulong offset, ulong size, uword diskId)
 	return 0;
 }
 
-void dbDeleteAllObjects(ulong offset, ulong size)
+void dbDeleteAllObjects(uint32_t offset, uint32_t size)
 {
 	struct dbObject *obj, *pred;
    ubyte objHashValue;
@@ -1126,9 +1126,9 @@ void dbDeleteAllObjects(ulong offset, ulong size)
    }
 }
 
-ulong dbGetObjectCountOfDB(ulong offset, ulong size)
+uint32_t dbGetObjectCountOfDB(uint32_t offset, uint32_t size)
 {
-   ulong count = 0;
+   uint32_t count = 0;
    struct dbObject *obj;
    ubyte i;
 
@@ -1146,7 +1146,7 @@ ulong dbGetObjectCountOfDB(ulong offset, ulong size)
 
 
 // public functions - OBJECT
-void *dbNewObject (ulong nr, ulong type, ulong size, char *name, ulong realNr)
+void *dbNewObject (uint32_t nr, uint32_t type, uint32_t size, char *name, uint32_t realNr)
 {
 	struct dbObject *obj;
 	ubyte objHashValue = dbGetObjectHashNr(nr);
@@ -1161,7 +1161,7 @@ void *dbNewObject (ulong nr, ulong type, ulong size, char *name, ulong realNr)
    return dbGetObjectKey(obj);
 }
 
-void dbDeleteObject (ulong nr)
+void dbDeleteObject (uint32_t nr)
 {
    struct dbObject *obj = NULL;
    ubyte objHashValue = dbGetObjectHashNr(nr);
@@ -1178,7 +1178,7 @@ void dbDeleteObject (ulong nr)
 	}
 }
 
-void *dbGetObject(ulong nr)
+void *dbGetObject(uint32_t nr)
 {
    struct dbObject *obj;
    ubyte objHashValue = dbGetObjectHashNr(nr);
@@ -1192,12 +1192,12 @@ void *dbGetObject(ulong nr)
    return NULL;
 }
 
-ulong dbGetObjectNr(void *key)
+uint32_t dbGetObjectNr(void *key)
 {
   return dbGetObjectReal(key)->nr;
 }
 
-char *dbGetObjectName(ulong nr, char *objName)
+char *dbGetObjectName(uint32_t nr, char *objName)
 {
    struct dbObject *obj;
    ubyte objHashValue = dbGetObjectHashNr(nr);
@@ -1214,7 +1214,7 @@ char *dbGetObjectName(ulong nr, char *objName)
    return NULL;
 }
 
-void *dbIsObject (ulong nr, ulong type)
+void *dbIsObject (uint32_t nr, uint32_t type)
 {
    struct dbObject *obj;
    ubyte objHashValue = dbGetObjectHashNr(nr);
@@ -1234,7 +1234,7 @@ void *dbIsObject (ulong nr, ulong type)
 }
 
 // public prototypes - OBJECTNODE
-struct ObjectNode *dbAddObjectNode (LIST *objectList, ulong nr, ulong flags)
+struct ObjectNode *dbAddObjectNode (LIST *objectList, uint32_t nr, uint32_t flags)
 {
    struct ObjectNode *n = NULL;
    struct dbObject *obj = dbGetObjectReal(dbGetObject(nr));
@@ -1286,7 +1286,7 @@ struct ObjectNode *dbAddObjectNode (LIST *objectList, ulong nr, ulong flags)
    return n;
 }
 
-void dbRemObjectNode (LIST *objectList, ulong nr)
+void dbRemObjectNode (LIST *objectList, uint32_t nr)
 {
    struct ObjectNode *n = dbHasObjectNode (objectList, nr);
 
@@ -1297,7 +1297,7 @@ void dbRemObjectNode (LIST *objectList, ulong nr)
    }
 }
 
-struct ObjectNode *dbHasObjectNode(LIST *objectList, ulong nr)
+struct ObjectNode *dbHasObjectNode(LIST *objectList, uint32_t nr)
 {
    struct ObjectNode *n;
 
@@ -1310,7 +1310,7 @@ struct ObjectNode *dbHasObjectNode(LIST *objectList, ulong nr)
    return NULL;
 }
 
-void SetObjectListAttr(ulong flags, ulong type)
+void SetObjectListAttr(uint32_t flags, uint32_t type)
 {
 	ObjectListType  = type;
 	ObjectListFlags = flags;
@@ -1368,7 +1368,7 @@ void dbSortPartOfList(LIST *l,struct ObjectNode *start, struct ObjectNode *end, 
 {
 	LIST *newList = (LIST*)CreateList(0L);
 	struct ObjectNode *n, *n1, *startPred;
-	long i, j;
+	int32_t i, j;
 
 	if (start == (struct ObjectNode *) LIST_HEAD(l))
 		startPred = 0L;
@@ -1404,11 +1404,11 @@ void dbSortPartOfList(LIST *l,struct ObjectNode *start, struct ObjectNode *end, 
 	RemoveList(newList);
 }
 
-long dbSortObjectList (LIST **objectList, word (*processNode)(struct ObjectNode *, struct ObjectNode *))
+int32_t dbSortObjectList (LIST **objectList, word (*processNode)(struct ObjectNode *, struct ObjectNode *))
 {
 	LIST *newList;
 	struct ObjectNode *n1, *n2, *pred, *newNode;
-	long i = 0;
+	int32_t i = 0;
 
 	if (!LIST_EMPTY(*objectList))
 	{
@@ -1491,7 +1491,7 @@ void dbDone(void)
 
 /* Functions for the return of the correct value 
 for the double assigned values of std and profi version */
-ulong getValue(DoubleAssignValueE val)
+uint32_t getValue(DoubleAssignValueE val)
 {
 	switch (val) 
 	{

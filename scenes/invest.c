@@ -6,10 +6,10 @@
 */
 #include "scenes/scenes.h"
 
-ulong tcShowPatrol(LIST *bubble_l, char *c_time, char *patr, ubyte first, Building bui, ulong raise)
+uint32_t tcShowPatrol(LIST *bubble_l, char *c_time, char *patr, ubyte first, Building bui, uint32_t raise)
 	{
 	char patrolie[TXT_KEY_LENGTH];
-	ulong choice = 0;
+	uint32_t choice = 0;
 
 	sprintf(patrolie, "%s  %s", c_time, patr);
 
@@ -33,9 +33,9 @@ void Investigate(char *location)
 	LIST 	*origin, *bubble_l;
 	char	patr[TXT_KEY_LENGTH], line[TXT_KEY_LENGTH];
 	char    c_time[10];
-	ulong minutes=0, guarding=0, choice=0, count=0, buiID=0, first = 0, raise;
+	uint32_t minutes=0, guarding=0, choice=0, count=0, buiID=0, first = 0, raise;
 	Building  bui;
-	ulong     patrolCount;
+	uint32_t     patrolCount;
 
 	buiID = GetObjNrOfBuilding(GetLocation);
 	bui   = (Building)dbGetObject(buiID);
@@ -74,7 +74,7 @@ void Investigate(char *location)
 	origin   = txtGoKey(INVESTIGATIONS_TXT,location);
 	bubble_l = (LIST*)CreateList(0);
 	count    = GetNrOfNodes(origin);
-	guarding = (ulong) tcRGetGRate(bui);
+	guarding = (uint32_t) tcRGetGRate(bui);
 	patrolCount = (270 - guarding) / 4 + 1;
 
 	/* Wissensgewinn pro Ereignis =

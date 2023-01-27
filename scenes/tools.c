@@ -6,7 +6,7 @@
 */
 #include "scenes/scenes.h"
 
-char *tcShowPriceOfTool(ulong nr, ulong type, void *data)
+char *tcShowPriceOfTool(uint32_t nr, uint32_t type, void *data)
 	{
 	static char line[TXT_KEY_LENGTH];
 	char  line1[TXT_KEY_LENGTH];
@@ -22,7 +22,7 @@ ubyte tcBuyTool(ubyte choice)
 	{
 	LIST      *tools;
 	NODE      *node;
-	ulong     toolID, price, count;
+	uint32_t     toolID, price, count;
 	Person    mary = (Person)dbGetObject(Person_Mary_Bolton);
 	Tool      tool;
 	ubyte     oldChoice;
@@ -54,7 +54,7 @@ ubyte tcBuyTool(ubyte choice)
 
 		if (ChoiceOk(choice = Bubble(tools, choice, 0L, 0L), GET_OUT, tools))
 			{
-			node   = (NODE*)GetNthNode(tools, (ulong) choice);
+			node   = (NODE*)GetNthNode(tools, (uint32_t) choice);
 			toolID = OL_NR(node);
 			tool   = (Tool)dbGetObject(toolID);
 			price  = tcGetToolPrice(tool);
@@ -109,7 +109,7 @@ ubyte tcDescTool(ubyte choice)
 
 		if (ChoiceOk(choice = Bubble(tools, choice, 0L, 0L), GET_OUT, tools))
 			{
-			dbGetObjectName(OL_NR(GetNthNode(tools, (ulong) choice)), line);
+			dbGetObjectName(OL_NR(GetNthNode(tools, (uint32_t) choice)), line);
 
 			desc = txtGoKey (TOOLS_TXT , line);
 
@@ -131,7 +131,7 @@ ubyte tcShowTool(ubyte choice)
 	{
 	LIST *tools;
 	NODE *node;
-	ulong toolID;
+	uint32_t toolID;
 	ubyte oldChoice;
 	char exp[TXT_KEY_LENGTH];
 
@@ -157,7 +157,7 @@ ubyte tcShowTool(ubyte choice)
 
 		if (ChoiceOk (choice = Bubble(tools,choice,0L,0L), GET_OUT, tools))
 			{
-			node   = (NODE*)GetNthNode(tools, (ulong) choice);
+			node   = (NODE*)GetNthNode(tools, (uint32_t) choice);
 			toolID = OL_NR(node);
 
 			Present(toolID,"Tool",InitToolPresent);
@@ -175,7 +175,7 @@ void tcSellTool()
 	{
 	LIST      *bubble,*tools;
 	NODE      *node;
-	ulong     toolID,price;
+	uint32_t     toolID,price;
 	ubyte     choice=0;
 	Tool      tool;
 	Person    mary;
@@ -203,7 +203,7 @@ void tcSellTool()
 			{
 			ubyte choice2 = 0;
 
-			node   =  (NODE*)GetNthNode(tools, (ulong) choice);
+			node   =  (NODE*)GetNthNode(tools, (uint32_t) choice);
 			toolID =  OL_NR(node);
 
 			tool   =  (Tool)dbGetObject(toolID);

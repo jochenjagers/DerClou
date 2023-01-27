@@ -21,9 +21,9 @@ void EndianW(uword *pw)
 }
 
 /**
- * Convert little to native endian long.
+ * Convert little to native endian int32_t.
  */
-void EndianL(ulong *pl)
+void EndianL(uint32_t *pl)
 {
 	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	*pl = SDL_Swap32(*pl);

@@ -26,8 +26,8 @@
 
 NODE 	  *lsGetSuccObject(NODE *start);
 NODE 	  *lsGetPredObject(NODE *start);
-void  	lsFadeRasterObject(ulong areaID, LSObject lso, ubyte status);
-void  	lsShowAllConnections(ulong areaID, NODE *node, ubyte perc);
-void  	lsShowRaster(ulong areaID, ubyte perc);
+void  	lsFadeRasterObject(uint32_t areaID, LSObject lso, ubyte status);
+void  	lsShowAllConnections(uint32_t areaID, NODE *node, ubyte perc);
+void  	lsShowRaster(uint32_t areaID, ubyte perc);
 
 #endif

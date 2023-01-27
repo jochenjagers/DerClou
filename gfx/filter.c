@@ -11,13 +11,13 @@
 unsigned char *gfxFilter_x4_Buffer = NULL;
 
 void gfxFilter_x1_Copy(	void *srcmem,
-						long srcw,
-						long srch,
+						int32_t srcw,
+						int32_t srch,
 						void *dstmem,
-						long dstpitch)
+						int32_t dstpitch)
 {
 	unsigned char *src, *dst;
-	long y;
+	int32_t y;
 
 	src = (unsigned char *)srcmem;
 	dst = (unsigned char *)dstmem;
@@ -33,13 +33,13 @@ void gfxFilter_x1_Copy(	void *srcmem,
 }
 
 void gfxFilter_x2_Copy(	void *srcmem,
-						long srcw,
-						long srch,
+						int32_t srcw,
+						int32_t srch,
 						void *dstmem,
-						long dstpitch)
+						int32_t dstpitch)
 {
 	unsigned char *src, *dst;
-	long x, x2, x2d, y;
+	int32_t x, x2, x2d, y;
 
 	src = (unsigned char *)srcmem;
 	dst = (unsigned char *)dstmem;
@@ -58,13 +58,13 @@ void gfxFilter_x2_Copy(	void *srcmem,
 }
 
 void gfxFilter_x3_Copy(	void *srcmem,
-						long srcw,
-						long srch,
+						int32_t srcw,
+						int32_t srch,
 						void *dstmem,
-						long dstpitch)
+						int32_t dstpitch)
 {
 	unsigned char *src, *dst;
-	long x, y, x3, x3d, x3d2, d2, d3;
+	int32_t x, y, x3, x3d, x3d2, d2, d3;
 
 	d2 = dstpitch << 1;
 	d3 = dstpitch * 3;
@@ -94,13 +94,13 @@ void gfxFilter_x3_Copy(	void *srcmem,
 }
 
 void gfxFilter_x4_Copy(	void *srcmem,
-						long srcw,
-						long srch,
+						int32_t srcw,
+						int32_t srch,
 						void *dstmem,
-						long dstpitch)
+						int32_t dstpitch)
 {
 	unsigned char *src, *dst;
-	long x, y, x4, d2, d3, d4, x4d, x4d2, x4d3;
+	int32_t x, y, x4, d2, d3, d4, x4d, x4d2, x4d3;
 
 	d2 = dstpitch << 1;
 	d3 = dstpitch * 3;
@@ -140,12 +140,12 @@ void gfxFilter_x4_Copy(	void *srcmem,
 }
 
 void gfxFilter_x2_Scale2x(	void *srcmem,
-							long srcw,
-							long srch,
+							int32_t srcw,
+							int32_t srch,
 							void *dstmem,
-							long dstpitch)
+							int32_t dstpitch)
 {
-	unsigned long loopw, looph, loopw2, looph2, ts = 0, td = 0;
+	uint32_t loopw, looph, loopw2, looph2, ts = 0, td = 0;
 	unsigned char B, D, E, F, H;
 	unsigned char *src, *dst;
 
@@ -192,15 +192,15 @@ void gfxFilter_x2_Scale2x(	void *srcmem,
 }
 
 void gfxFilter_x3_Scale3x(	void *srcmem,
-							long srcw,
-							long srch,
+							int32_t srcw,
+							int32_t srch,
 							void *dstmem,
-							long dstpitch)
+							int32_t dstpitch)
 {
-	unsigned long loopw, looph, loopw3, looph3, ts = 0, td = 0;
+	uint32_t loopw, looph, loopw3, looph3, ts = 0, td = 0;
 	unsigned char A, B, C, D, E, F, G, H, I;
 	unsigned char *src, *dst;
-	long dstpitch2 = dstpitch << 1;
+	int32_t dstpitch2 = dstpitch << 1;
 
 	src = (unsigned char *)srcmem;
 	dst = (unsigned char *)dstmem;
@@ -264,10 +264,10 @@ void gfxFilter_x3_Scale3x(	void *srcmem,
 }
 
 void gfxFilter_x4_Scale4x(	void *srcmem,
-							long srcw,
-							long srch,
+							int32_t srcw,
+							int32_t srch,
 							void *dstmem,
-							long dstpitch)
+							int32_t dstpitch)
 {
 	gfxFilter_x2_Scale2x(srcmem, srcw, srch, gfxFilter_x4_Buffer, 640);
 	gfxFilter_x2_Scale2x(gfxFilter_x4_Buffer, 640, 400, dstmem, dstpitch);

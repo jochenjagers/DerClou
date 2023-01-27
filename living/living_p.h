@@ -20,8 +20,8 @@ struct SpriteControl
 	LIST	   *p_Livings;
 	LIST 		*p_Template;
 
-	ulong    ul_SprPlayMode;
-	ulong		ul_ActivAreaId;
+	uint32_t    ul_SprPlayMode;
+	uint32_t		ul_ActivAreaId;
 
 	uword		us_VisLScapeX;
 	uword		us_VisLScapeY;
@@ -54,7 +54,7 @@ struct Living                        /* komplette Daten einer Instanz   */
 	{                                  /* eines Lebewesens                */
 	NODE	   Link;
 
-	ulong		ul_LivesInAreaId;                       /* Area -> LandScap */
+	uint32_t		ul_LivesInAreaId;                       /* Area -> LandScap */
 
 	uword		us_LivingNr;
 

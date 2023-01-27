@@ -8,14 +8,14 @@
 
 void gfxMCGABlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY,
 				 struct RastPort *drp, uword us_DestX, uword us_DestY,
-				 uword us_Width, uword us_Height, ulong ul_BlitMode)
+				 uword us_Width, uword us_Height, uint32_t ul_BlitMode)
 {
 	unsigned int x;
 	ubyte *sbm = (ubyte*)srp->p_BitMap;
 	ubyte *dbm = (ubyte*)drp->p_BitMap;
 
-	sbm += (ulong)us_SourceX + (ulong)us_SourceY * srp->us_Width;
-	dbm += (ulong)us_DestX + (ulong)us_DestY * drp->us_Width;
+	sbm += (uint32_t)us_SourceX + (uint32_t)us_SourceY * srp->us_Width;
+	dbm += (uint32_t)us_DestX + (uint32_t)us_DestY * drp->us_Width;
 
 	switch (ul_BlitMode)
 	{

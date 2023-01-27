@@ -73,10 +73,10 @@
 #define PLANING_OPEN_ERR_NO_PLAN      2
 
 
-ubyte plOpen(ulong objId, ubyte mode, FILE **fh);
-void  plLoad(ulong objId);
-void  plSave(ulong objId);
-void  plSaveChanged (ulong objId);
+ubyte plOpen(uint32_t objId, ubyte mode, FILE **fh);
+void  plLoad(uint32_t objId);
+void  plSave(uint32_t objId);
+void  plSaveChanged (uint32_t objId);
 
 LIST *plLoadTools(FILE *fh);
 void plSaveTools(FILE *fh);

@@ -15,7 +15,7 @@ Revision History:
  - binary exact Envelope Generator (verified on real YM3812);
    compared to YM2151: the EG clock is equal to internal_clock,
    rates are 2 times slower and volume resolution is one bit less
- - modified interface functions (they no longer return pointer -
+ - modified interface functions (they no int32_ter return pointer -
    that's internal to the emulator now):
     - new wrapper functions for OPLCreate: YM3526Init(), YM3812Init() and Y8950Init()
  - corrected 'off by one' error in feedback calculations (when feedback is off)
@@ -59,10 +59,10 @@ Revision History:
 /* XXX */
 typedef unsigned char	UINT8;   /* unsigned  8bit */
 typedef unsigned short	UINT16;  /* unsigned 16bit */
-typedef unsigned long	UINT32;  /* unsigned 32bit */
+typedef uint32_t	UINT32;  /* unsigned 32bit */
 typedef char			INT8;    /* signed  8bit   */
 typedef short			INT16;   /* signed 16bit   */
-typedef long			INT32;   /* signed 32bit   */
+typedef int32_t			INT32;   /* signed 32bit   */
 
 #define INLINE  static
 /* XXX */
@@ -671,7 +671,7 @@ INLINE void advance_lfo(FM_OPL *OPL)
 
 	/* LFO */
 	OPL->lfo_am_cnt += OPL->lfo_am_inc;
-	if (OPL->lfo_am_cnt >= (LFO_AM_TAB_ELEMENTS<<LFO_SH) )	/* lfo_am_table is 210 elements long */
+	if (OPL->lfo_am_cnt >= (LFO_AM_TAB_ELEMENTS<<LFO_SH) )	/* lfo_am_table is 210 elements int32_t */
 		OPL->lfo_am_cnt -= (LFO_AM_TAB_ELEMENTS<<LFO_SH);
 
 	tmp = lfo_am_table[ OPL->lfo_am_cnt >> LFO_SH ];

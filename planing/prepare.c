@@ -12,10 +12,10 @@ LIST *BurglarsList = NULL;
 
 ubyte PersonsNr = 0;
 ubyte BurglarsNr = 0;
-ulong CurrentPerson = 0;
+uint32_t CurrentPerson = 0;
 
-ulong Planing_Weight[PLANING_NR_PERSONS];
-ulong Planing_Volume[PLANING_NR_PERSONS];
+uint32_t Planing_Weight[PLANING_NR_PERSONS];
+uint32_t Planing_Volume[PLANING_NR_PERSONS];
 
 ubyte Planing_Loot[PLANING_NR_LOOTS];
 ubyte Planing_Guard[PLANING_NR_GUARDS];
@@ -24,13 +24,13 @@ char  Planing_Name[PLANING_NR_PERSONS + PLANING_NR_GUARDS][20];
 
 LIST *Planing_GuardRoomList[PLANING_NR_GUARDS];
 
-ulong Planing_BldId;
+uint32_t Planing_BldId;
 
 
 // Handler functions
 void plBuildHandler(NODE *n)
 {
-   ulong flags = SHF_NORMAL;
+   uint32_t flags = SHF_NORMAL;
 
    if (OL_TYPE(n) == Object_Police)
       flags |= SHF_AUTOREVERS;
@@ -66,7 +66,7 @@ void plPrepareData(void)
       Planing_Guard[i] = 0;
 }
 
-void plPrepareSprite(ulong livNr, ulong areaId)
+void plPrepareSprite(uint32_t livNr, uint32_t areaId)
 {
    LSArea activArea = (LSArea)dbGetObject(areaId);
    uword  xpos, ypos;
@@ -128,7 +128,7 @@ void plPrepareSprite(ulong livNr, ulong areaId)
    }
 }
 
-void plPrepareGfx(ulong objId, ubyte landscapMode, ubyte prepareMode)
+void plPrepareGfx(uint32_t objId, ubyte landscapMode, ubyte prepareMode)
 {
 	if (prepareMode & PLANING_GFX_LANDSCAPE)
 		lsInitLandScape(objId, landscapMode);
@@ -144,7 +144,7 @@ void plPrepareGfx(ulong objId, ubyte landscapMode, ubyte prepareMode)
 
 	if (prepareMode & PLANING_GFX_SPRITES)
 	{
-		ulong i;
+		uint32_t i;
 
 		for (i = 0; i < PersonsNr; i++)
 		{
@@ -219,7 +219,7 @@ void plPrepareNames(void)
    }
 }
 
-void plPrepareSys(ulong currPer, ulong objId, ubyte sysMode)
+void plPrepareSys(uint32_t currPer, uint32_t objId, ubyte sysMode)
 {
    CurrentPerson = currPer;
 

@@ -45,51 +45,51 @@
 #include "landscap/landscap.h"
 #endif
 
-extern ubyte tcSpendMoney(long money,ubyte breakAnim);
+extern ubyte tcSpendMoney(int32_t money,ubyte breakAnim);
 
-extern ulong GetObjNrOfLocation(ulong LocNr);
-extern ulong GetObjNrOfBuilding(ulong LocNr);
+extern uint32_t GetObjNrOfLocation(uint32_t LocNr);
+extern uint32_t GetObjNrOfBuilding(uint32_t LocNr);
 
-extern void	 tcCalcCallValue(ulong callNr, ulong timer, ulong persId);
-extern void  tcPersonLearns(ulong pId);
-extern void  tcRefreshTimeClock(ulong buildId, ulong timerId);
-extern ulong tcGetPersOffer(Person person, ubyte persCount);
+extern void	 tcCalcCallValue(uint32_t callNr, uint32_t timer, uint32_t persId);
+extern void  tcPersonLearns(uint32_t pId);
+extern void  tcRefreshTimeClock(uint32_t buildId, uint32_t timerId);
+extern uint32_t tcGetPersOffer(Person person, ubyte persCount);
 
-extern long  tcCalcEscapeTime(void);
-extern long  tcKillTheGuard(ulong guyId, ulong buildingId);
-extern long  tcAlarmByPowerLoss (ulong powerId);
-extern long  tcAlarmByTouch(ulong lsoId);
-extern long  tcGuardDetectsGuy(LIST *roomsList, uword us_XPos, uword us_YPos, ubyte uch_ViewDirection, char *puch_GuardName, char *puch_LivingName);
-extern long  tcGetCarStrike(Car car);
-extern long  tcCalcEscapeOfTeam(void);
-extern long  tcGuyTellsAll(Person p);
-extern long  tcGuyCanEscape(Person p);
-extern long  tcGetCarTraderOffer(Car car);
-extern long  tcGetTeamMood(ulong *guyId, ulong timer);   /* ptr auf 4 ulongs */
-extern long  tcGuyInAction(ulong persId, long exhaustion);
-extern long  tcGuyIsWaiting(ulong persId, long exhaustion);
-extern long  tcGetTrail(Person p, ubyte which);
-extern long  tcGetDanger(ulong persId, ulong toolId, ulong itemId);
-extern long  tcGetToolLoudness(ulong persId, ulong toolId, ulong itemId);
-extern long  tcGetWalkLoudness(void);
-extern long  tcGetTotalLoudness(long loudp0, long loudp1, long loudp2, long loudp3);
-extern long  tcAlarmByLoudness(Building b, long totalLoudness);
-extern long  tcAlarmByRadio(Building b);
-extern long  tcAlarmByMicro(uword us_XPos, uword us_YPos, long loudness);
-extern long  tcAlarmByPatrol(Building b, uword objChangedCount, uword totalCount, ubyte patrolCount);
-extern long  tcWatchDogWarning(ulong persId);
-extern long  tcWrongWatchDogWarning(ulong persId);
-extern long  tcIsCarRecognised(Car car, long time);
-extern long  tcGuardChecksObject(LSObject lso);
-extern long  tcCheckTimeClocks(ulong builId);
+extern int32_t  tcCalcEscapeTime(void);
+extern int32_t  tcKillTheGuard(uint32_t guyId, uint32_t buildingId);
+extern int32_t  tcAlarmByPowerLoss (uint32_t powerId);
+extern int32_t  tcAlarmByTouch(uint32_t lsoId);
+extern int32_t  tcGuardDetectsGuy(LIST *roomsList, uword us_XPos, uword us_YPos, ubyte uch_ViewDirection, char *puch_GuardName, char *puch_LivingName);
+extern int32_t  tcGetCarStrike(Car car);
+extern int32_t  tcCalcEscapeOfTeam(void);
+extern int32_t  tcGuyTellsAll(Person p);
+extern int32_t  tcGuyCanEscape(Person p);
+extern int32_t  tcGetCarTraderOffer(Car car);
+extern int32_t  tcGetTeamMood(uint32_t *guyId, uint32_t timer);   /* ptr auf 4 uint32_ts */
+extern int32_t  tcGuyInAction(uint32_t persId, int32_t exhaustion);
+extern int32_t  tcGuyIsWaiting(uint32_t persId, int32_t exhaustion);
+extern int32_t  tcGetTrail(Person p, ubyte which);
+extern int32_t  tcGetDanger(uint32_t persId, uint32_t toolId, uint32_t itemId);
+extern int32_t  tcGetToolLoudness(uint32_t persId, uint32_t toolId, uint32_t itemId);
+extern int32_t  tcGetWalkLoudness(void);
+extern int32_t  tcGetTotalLoudness(int32_t loudp0, int32_t loudp1, int32_t loudp2, int32_t loudp3);
+extern int32_t  tcAlarmByLoudness(Building b, int32_t totalLoudness);
+extern int32_t  tcAlarmByRadio(Building b);
+extern int32_t  tcAlarmByMicro(uword us_XPos, uword us_YPos, int32_t loudness);
+extern int32_t  tcAlarmByPatrol(Building b, uword objChangedCount, uword totalCount, ubyte patrolCount);
+extern int32_t  tcWatchDogWarning(uint32_t persId);
+extern int32_t  tcWrongWatchDogWarning(uint32_t persId);
+extern int32_t  tcIsCarRecognised(Car car, int32_t time);
+extern int32_t  tcGuardChecksObject(LSObject lso);
+extern int32_t  tcCheckTimeClocks(uint32_t builId);
 
-extern long  tcCalcMattsPart(void);
+extern int32_t  tcCalcMattsPart(void);
 
-extern ulong tcGuyEscapes(void);
-extern ulong tcGuyUsesTool(ulong persId, Building b, ulong toolId, ulong itemId);
-extern ulong tcGuyUsesToolInPlayer(ulong persId, Building b, ulong toolId, ulong itemId, ulong neededTime);
+extern uint32_t tcGuyEscapes(void);
+extern uint32_t tcGuyUsesTool(uint32_t persId, Building b, uint32_t toolId, uint32_t itemId);
+extern uint32_t tcGuyUsesToolInPlayer(uint32_t persId, Building b, uint32_t toolId, uint32_t itemId, uint32_t neededTime);
 
-extern void  tcInsertGuard(LIST *list, LIST *roomsList, uword x, uword y, uword width, uword height, ulong guardId, ubyte livId, ulong areaId);
+extern void  tcInsertGuard(LIST *list, LIST *roomsList, uword x, uword y, uword width, uword height, uint32_t guardId, ubyte livId, uint32_t areaId);
 
 /* defines for Persons */
 #define   tcPERSON_IS_ARRESTED          240 /* KnownToPolice */
@@ -101,8 +101,8 @@ extern void  tcInsertGuard(LIST *list, LIST *roomsList, uword x, uword y, uword 
 #define   tcGetPersHealth(p)            ((p)->Health)
 #define   tcGetPersMood(p)              (((Person)p)->Mood)
 
-#define   tcWeightPersCanCarry(p)       (((long)(p)->Stamina + (long)(p)->Strength) * 200)     /* 0 - 100000 (100 kg) in gramm ! */
-#define   tcVolumePersCanCarry(p)       (((long)(p)->Stamina + (long)(p)->Strength) * 200)  /* in cm3 -> max 1 m3 für eine Person */
+#define   tcWeightPersCanCarry(p)       (((int32_t)(p)->Stamina + (int32_t)(p)->Strength) * 200)     /* 0 - 100000 (100 kg) in gramm ! */
+#define   tcVolumePersCanCarry(p)       (((int32_t)(p)->Stamina + (int32_t)(p)->Strength) * 200)  /* in cm3 -> max 1 m3 für eine Person */
 
 #define   tcImprovePanic(p, v)          ((p)->Panic = (p)->Panic - ((p)->Panic / (v)))
 #define   tcImproveKnown(p, v)          ((p)->Known = min(255, (v)))
@@ -112,7 +112,7 @@ extern void  tcInsertGuard(LIST *list, LIST *roomsList, uword x, uword y, uword 
 #define   tcBODY_PERC                   40   /* 40 % of costs of a car is bodywork */
 #define   tcTYRE_PERC                   10   /* 10 % of costs of a car are tyres   */
 
-#define   tcCalcCarState(car)           (car->State = ( (long)(car->MotorState) + (long)(car->BodyWorkState) + (long)(car->TyreState)) /3)
+#define   tcCalcCarState(car)           (car->State = ( (int32_t)(car->MotorState) + (int32_t)(car->BodyWorkState) + (int32_t)(car->TyreState)) /3)
 
 #define   tcCostsPerEngineRepair(car)   (max(((car->Value * tcENGINE_PERC) / 25500), 2))
 #define   tcCostsPerBodyRepair(car)     (max(((car->Value * tcBODY_PERC  ) / 25500), 2))
@@ -127,15 +127,15 @@ extern void  tcInsertGuard(LIST *list, LIST *roomsList, uword x, uword y, uword 
 #define   tcRGetCarValue(car)           (car->Value)
 
 #define   tcGetCarPrice(car)            (Round(max(((car->Value) * (car->State)) / 255, 100), 1))
-#define   tcGetCarTotalState(car)       (((long)car->MotorState + (long)car->BodyWorkState + (long)car->TyreState) / 3)
+#define   tcGetCarTotalState(car)       (((int32_t)car->MotorState + (int32_t)car->BodyWorkState + (int32_t)car->TyreState) / 3)
 
-#define   tcGetDealerPerc(d, p)         (min((p + (((long)p * ((long)127L - (long)d->Known)) / (long)1270)), 255))
-#define   tcGetDealerOffer(v, p)        (((long)v * (long)p) / (long)255)
+#define   tcGetDealerPerc(d, p)         (min((p + (((int32_t)p * ((int32_t)127L - (int32_t)d->Known)) / (int32_t)1270)), 255))
+#define   tcGetDealerOffer(v, p)        (((int32_t)v * (int32_t)p) / (int32_t)255)
 #define   tcAddDealerSymp(d, v)         ((d)->Known = ChangeAbs ((d)->Known, v, 0, 255))
 
-#define   tcSetCarMotorState(car,v)     {car->MotorState = (ubyte)ChangeAbs((long)car->MotorState,(long)v, 0, 255); tcCalcCarState(car);}
-#define   tcSetCarBodyState(car,v)      {car->BodyWorkState = (ubyte)ChangeAbs((long)car->BodyWorkState,(long)v, 0, 255); tcCalcCarState(car);}
-#define   tcSetCarTyreState(car,v)      {car->TyreState = (ubyte)ChangeAbs((long)car->TyreState,(long)v, 0, 255); tcCalcCarState(car);}
+#define   tcSetCarMotorState(car,v)     {car->MotorState = (ubyte)ChangeAbs((int32_t)car->MotorState,(int32_t)v, 0, 255); tcCalcCarState(car);}
+#define   tcSetCarBodyState(car,v)      {car->BodyWorkState = (ubyte)ChangeAbs((int32_t)car->BodyWorkState,(int32_t)v, 0, 255); tcCalcCarState(car);}
+#define   tcSetCarTyreState(car,v)      {car->TyreState = (ubyte)ChangeAbs((int32_t)car->TyreState,(int32_t)v, 0, 255); tcCalcCarState(car);}
 
 /* defines for object Player */
 #define   tcGetPlayerMoney              (((Player)dbGetObject(Player_Player_1))->Money)
@@ -149,10 +149,10 @@ extern void  tcInsertGuard(LIST *list, LIST *roomsList, uword x, uword y, uword 
 #define   tcGetBuildPoliceT(bui)        (bui->PoliceTime)
 #define   tcGetBuildGRate(bui)          (bui->GRate)
 
-ulong     tcGetBuildValues(Building bui);
+uint32_t     tcGetBuildValues(Building bui);
 
-#define   tcAddBuildExactlyness(bui,v)  (bui->Exactlyness = (ubyte)ChangeAbs((long)bui->Exactlyness,(long)v, 0, 255))
-#define   tcAddBuildStrike(bui,v)       (bui->Strike = (ubyte)ChangeAbs((long)bui->Strike,(long)v, 0, 255))
+#define   tcAddBuildExactlyness(bui,v)  (bui->Exactlyness = (ubyte)ChangeAbs((int32_t)bui->Exactlyness,(int32_t)v, 0, 255))
+#define   tcAddBuildStrike(bui,v)       (bui->Strike = (ubyte)ChangeAbs((int32_t)bui->Strike,(int32_t)v, 0, 255))
 
 /* defines for object Tool */
 #define   tcRGetDanger(tool)            (tool->Danger)

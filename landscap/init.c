@@ -13,9 +13,9 @@ static void lsInitObjects(void);
  *   global functions for landscape
  *------------------------------------------------------------------------------*/
 
-void lsInitLandScape(ulong bID,ubyte mode)   	/* initialisiert das Landschaftsmodul */
+void lsInitLandScape(uint32_t bID,ubyte mode)   	/* initialisiert das Landschaftsmodul */
 	{
-	long i;
+	int32_t i;
 
 	if(!ls)
 		ls = (struct LandScape*)MemAlloc(sizeof(struct LandScape));
@@ -57,7 +57,7 @@ void lsInitLandScape(ulong bID,ubyte mode)   	/* initialisiert das Landschaftsmo
 		// sondern als Handle des Bob verwendet
 		lso->us_OffsetFact = BobInit(LS_LOOTBAG_BUFFER, 14, 14);
 
-		hasLootBagUnSet(ls->ul_AreaID, (ulong)i);
+		hasLootBagUnSet(ls->ul_AreaID, (uint32_t)i);
 		}
 
 	livInit(0,0,LS_VISIBLE_X_SIZE,LS_VISIBLE_Y_SIZE,LS_MAX_AREA_WIDTH,LS_MAX_AREA_HEIGHT, 8, ls->ul_AreaID);
@@ -75,7 +75,7 @@ void lsInitLandScape(ulong bID,ubyte mode)   	/* initialisiert das Landschaftsmo
 	lsShowEscapeCar();
 	}
 
-void lsInitActivArea(ulong areaID,uword x,uword y, char *livingName)
+void lsInitActivArea(uint32_t areaID,uword x,uword y, char *livingName)
 	{
 	LSArea area = (LSArea) dbGetObject(areaID);
 
@@ -106,7 +106,7 @@ void lsInitActivArea(ulong areaID,uword x,uword y, char *livingName)
 	lsRefreshAllLootBags();
 	}
 
-void lsInitRelations(ulong areaID)
+void lsInitRelations(uint32_t areaID)
 	{
 	LSArea area = (LSArea)dbGetObject(areaID);
 
@@ -118,7 +118,7 @@ void lsInitRelations(ulong areaID)
 	AddRelation(area->ul_ObjectBaseNr + REL_HAS_ROOM_OFFSET);
 	}
 
-void lsSetRelations(ulong areaID)
+void lsSetRelations(uint32_t areaID)
 	{
 	LSArea area = (LSArea)dbGetObject(areaID);
 
@@ -132,7 +132,7 @@ void lsSetRelations(ulong areaID)
 
 static void lsInitObjects(void)
 	{
-	ulong  areaCount = 0, i;
+	uint32_t  areaCount = 0, i;
 	LIST  *areas;
 	NODE  *n;
 
@@ -171,7 +171,7 @@ static void lsInitObjects(void)
 	RemoveList(areas);
 	}
 
-void lsLoadGlobalData(ulong bld, ulong ul_AreaId)
+void lsLoadGlobalData(uint32_t bld, uint32_t ul_AreaId)
 	{
 	char areaName[TXT_KEY_LENGTH], fileName[TXT_KEY_LENGTH];
 
@@ -188,7 +188,7 @@ void lsLoadGlobalData(ulong bld, ulong ul_AreaId)
 		NewErrorMsg(Disk_Defect, __FILE__, __func__, 2);
 	}
 
-void lsInitObjectDB(ulong bld, ulong areaID)
+void lsInitObjectDB(uint32_t bld, uint32_t areaID)
 	{
 	char fileName[TXT_KEY_LENGTH],areaName[TXT_KEY_LENGTH];
 
@@ -219,8 +219,8 @@ void lsInitObjectDB(ulong bld, ulong areaID)
 // in den Speicher
 static void lsInitFloorSquares(void)
 	{
-	ulong count;
-	long i;
+	uint32_t count;
+	int32_t i;
 	char fileName[TXT_KEY_LENGTH], areaName[TXT_KEY_LENGTH];
 	NODE *n;
 	LIST *areas;
@@ -236,7 +236,7 @@ static void lsInitFloorSquares(void)
 	/* jetzt alle Stockwerke durchgehen! */
 	for (n = (NODE *)LIST_HEAD(areas), i = 0; NODE_SUCC(n); n = (NODE *) NODE_SUCC(n), i++)
 		{
-		ulong size = (ulong) count * (sizeof(struct LSFloorSquare));
+		uint32_t size = (uint32_t) count * (sizeof(struct LSFloorSquare));
 
 		ls->p_AllFloors[i]    = (struct LSFloorSquare*)MemAlloc(size);
 		ls->ul_FloorAreaId[i] = OL_NR(n);
@@ -274,9 +274,9 @@ static void lsLoadAllSpots(void)
 	RemoveList(areas);
 	}
 
-static void lsSetCurrFloorSquares(ulong areaId)
+static void lsSetCurrFloorSquares(uint32_t areaId)
 	{
-	long i;
+	int32_t i;
 
 	for (i = 0; i < 3; i++)
 		if (areaId == ls->ul_FloorAreaId[i])
@@ -292,7 +292,7 @@ static void lsSetCurrFloorSquares(ulong areaId)
 // gibt alle Bodendaten wieder frei
 static void lsDoneFloorSquares(void)
 	{
-	ulong count, i, size;
+	uint32_t count, i, size;
 
 	for (i = 0; i < 3; i++)
 		{
@@ -300,7 +300,7 @@ static void lsDoneFloorSquares(void)
 			{
 			count = LS_FLOORS_PER_LINE * LS_FLOORS_PER_COLUMN;
 
-			size = (ulong) count * (sizeof(struct LSFloorSquare));
+			size = (uint32_t) count * (sizeof(struct LSFloorSquare));
 
 			MemFree(ls->p_AllFloors[i], size);
 
@@ -310,7 +310,7 @@ static void lsDoneFloorSquares(void)
 
 	}
 
-void lsDoneObjectDB(ulong areaID)
+void lsDoneObjectDB(uint32_t areaID)
 	{
 	LSArea area = (LSArea)dbGetObject(areaID);
 
@@ -329,7 +329,7 @@ void lsDoneObjectDB(ulong areaID)
 void lsDoneLandScape(void)
 	{
 	NODE *n;
-	long areaCount = 0, i;
+	int32_t areaCount = 0, i;
 
 	if(ls)
 		{
@@ -379,7 +379,7 @@ void lsDoneLandScape(void)
 		}
 	}
 
-void lsDoneActivArea(ulong newAreaID)
+void lsDoneActivArea(uint32_t newAreaID)
 	{
 	livSetAllInvisible();                    /* MOD 14-01-94 */
 	}

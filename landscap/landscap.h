@@ -117,47 +117,47 @@
 #define   lsSetOldState(lso)           ((lso)->ul_Status = (((lso)->ul_Status << 16) & 0xffff0000) + (((lso)->ul_Status) & 0xffff))
 
 /* globale functions ! */
-extern void  lsInitLandScape(ulong bID,ubyte mode);
+extern void  lsInitLandScape(uint32_t bID,ubyte mode);
 extern void  lsDoneLandScape(void);
 
 extern void  lsSetScrollSpeed(ubyte pixel);
 extern void  lsSetActivLiving(char *Name,uword x,uword y);
 
-extern void  lsRefreshObjectList(ulong areaID);
+extern void  lsRefreshObjectList(uint32_t areaID);
 
-extern ulong lsAddLootBag(uword x, uword y, ubyte bagNr); /* bagNr : 1 - 8! */
-extern void  lsRemLootBag(ulong bagId);
+extern uint32_t lsAddLootBag(uword x, uword y, ubyte bagNr); /* bagNr : 1 - 8! */
+extern void  lsRemLootBag(uint32_t bagId);
 extern void  lsRefreshAllLootBags(void);
 
 extern void  lsShowEscapeCar(void);
 
 extern void  lsFastRefresh(LSObject lso);
 
-extern void  lsSetObjectState(ulong objID, ubyte bitNr, ubyte value);
+extern void  lsSetObjectState(uint32_t objID, ubyte bitNr, ubyte value);
 
 extern void  lsSetViewPort(uword x,uword y);
 
 extern void  lsSetDarkness(ubyte value);
 extern void  lsSetCollMode(ubyte collMode);
 
-extern LIST *lsGetRoomsOfArea(ulong ul_AreaId);
+extern LIST *lsGetRoomsOfArea(uint32_t ul_AreaId);
 
-extern void  lsSetObjectRetrievalList(ulong ul_AreaId);
-extern ulong lsGetCurrObjectRetrieval(void);
+extern void  lsSetObjectRetrievalList(uint32_t ul_AreaId);
+extern uint32_t lsGetCurrObjectRetrieval(void);
 
-extern ulong lsGetObjectState(ulong objID);
+extern uint32_t lsGetObjectState(uint32_t objID);
 extern uword lsGetObjectCount(void);
 extern ubyte lsGetLoudness(uword x, uword y);
 
 extern void  lsDoScroll(void);
-extern void  lsScrollCorrectData(long dx,long dy);
+extern void  lsScrollCorrectData(int32_t dx,int32_t dy);
 extern ubyte lsScrollLandScape(ubyte direction);
 extern ubyte lsInitScrollLandScape(ubyte direction, ubyte mode);
 
 extern LIST *lsGetObjectsByList(uword x,uword y,uword width,uword height, ubyte showInvisible, ubyte addLootBags);
 
-extern void  lsInitActivArea(ulong areaID,uword x,uword y,char *livingName);
-extern void  lsDoneActivArea(ulong newAreaID);
+extern void  lsInitActivArea(uint32_t areaID,uword x,uword y,char *livingName);
+extern void  lsDoneActivArea(uint32_t newAreaID);
 extern void  lsTurnObject(LSObject lso,ubyte status, ubyte Collis);
 
 extern void  lsCalcExactSize(LSObject lso, uword *x0, uword *y0, uword *x1, uword *y1);
@@ -166,26 +166,26 @@ extern void  lsDoDoorRefresh(LSObject lso);
 
 extern uword lsGetFloorIndex(uword x,uword y);
 
-extern void  lsGuyInsideSpot(uword *us_XPos, uword *us_YPos, ulong *areaId);
+extern void  lsGuyInsideSpot(uword *us_XPos, uword *us_YPos, uint32_t *areaId);
 
-extern long  lsIsObjectAWall(LSObject lso);
-extern long  lsIsObjectAnAddOn(LSObject lso);
-extern long  lsIsObjectADoor(LSObject lso);
-extern long  lsIsObjectAStdObj(LSObject lso);
-extern long  lsIsObjectSpecial(LSObject lso);
+extern int32_t  lsIsObjectAWall(LSObject lso);
+extern int32_t  lsIsObjectAnAddOn(LSObject lso);
+extern int32_t  lsIsObjectADoor(LSObject lso);
+extern int32_t  lsIsObjectAStdObj(LSObject lso);
+extern int32_t  lsIsObjectSpecial(LSObject lso);
 
-extern long  lsIsLSObjectInActivArea(LSObject lso);
+extern int32_t  lsIsLSObjectInActivArea(LSObject lso);
 
 extern ubyte lsIsCollision(uword x,uword y, ubyte direction);      /* sprite needs it */
 
-extern ulong lsGetCurrBuildingID(void);
-extern ulong lsGetActivAreaID(void);
+extern uint32_t lsGetCurrBuildingID(void);
+extern uint32_t lsGetActivAreaID(void);
 
-extern void  lsInitObjectDB(ulong bld, ulong areaID);
-extern void  lsLoadGlobalData(ulong bld, ulong ul_AreaId);
-extern void  lsDoneObjectDB(ulong areaID);
-extern void  lsInitRelations(ulong areaID);
-extern void  lsSetRelations(ulong areaID);
+extern void  lsInitObjectDB(uint32_t bld, uint32_t areaID);
+extern void  lsLoadGlobalData(uint32_t bld, uint32_t ul_AreaId);
+extern void  lsDoneObjectDB(uint32_t areaID);
+extern void  lsInitRelations(uint32_t areaID);
+extern void  lsSetRelations(uint32_t areaID);
 
 extern void  lsBlitFloor(uword floorIndex, uword destx, uword desty);
 
@@ -198,23 +198,23 @@ extern void  lsSetVisibleWindow(uword x, uword y);
 
 extern ubyte lsIsInside(LSObject lso,uword x,uword y,uword x1,uword y1);
 
-extern ulong lsGetStartArea(void);
+extern uint32_t lsGetStartArea(void);
 
 extern void  lsBuildScrollWindow(void);
-extern void  lsShowAlarmAndPower(LSObject lso, ulong x, ulong y);
+extern void  lsShowAlarmAndPower(LSObject lso, uint32_t x, uint32_t y);
 
-extern long  lsShowOneObject(LSObject lso, word destx, word desty, ulong ObjTypeFilter);
+extern int32_t  lsShowOneObject(LSObject lso, word destx, word desty, uint32_t ObjTypeFilter);
 
 /* external functions */
 extern void  lsInitGfx(void);
 extern void  lsCloseGfx(void);
 
-extern ulong ConsistOfRelationID;
-extern ulong hasLockRelationID;
-extern ulong hasAlarmRelationID;
-extern ulong hasPowerRelationID;
-extern ulong hasLootRelationID;
-extern ulong hasRoomRelationID;
+extern uint32_t ConsistOfRelationID;
+extern uint32_t hasLockRelationID;
+extern uint32_t hasAlarmRelationID;
+extern uint32_t hasPowerRelationID;
+extern uint32_t hasLootRelationID;
+extern uint32_t hasRoomRelationID;
 
 /* COSP: hardware.c */
 extern void lsRefreshStatue(LSObject lso);

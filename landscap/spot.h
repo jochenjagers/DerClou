@@ -58,9 +58,9 @@ struct Spot {
 	uword	us_Size;
 	uword	us_Speed;	     /* secconds per move */
 
-	ulong 	ul_CtrlObjId;  /* data : objId */
+	uint32_t 	ul_CtrlObjId;  /* data : objId */
 
-	ulong	ul_AreaId;
+	uint32_t	ul_AreaId;
 
 	ubyte	uch_Status;
 	ubyte	Padding;
@@ -78,12 +78,12 @@ struct Spot {
 extern void lsInitSpots(struct RastPort *rp);
 extern void lsDoneSpots(void);
 
-extern void lsMoveAllSpots(ulong time);
-extern void lsShowAllSpots(ulong time, ulong mode);
+extern void lsMoveAllSpots(uint32_t time);
+extern void lsShowAllSpots(uint32_t time, uint32_t mode);
 
-extern void lsSetSpotStatus(ulong CtrlObjId, ubyte uch_Status);
+extern void lsSetSpotStatus(uint32_t CtrlObjId, ubyte uch_Status);
 
-extern void lsLoadSpots(ulong bldId, char *uch_FileName);
+extern void lsLoadSpots(uint32_t bldId, char *uch_FileName);
 extern void lsWriteSpots(char *uch_FileName);
 extern void lsRemSpot(struct Spot *spot);
 

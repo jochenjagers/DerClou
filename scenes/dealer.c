@@ -8,7 +8,7 @@
 
 void tcDealerDlg(void)
 	{
-	ulong locNr = GetObjNrOfLocation(GetLocation);
+	uint32_t locNr = GetObjNrOfLocation(GetLocation);
 	Person dealer = NULL;
 	ubyte dealerNr, choice = 0;
 
@@ -67,9 +67,9 @@ void tcDealerDlg(void)
 	}
 
 // 2014-06-29 LucyG : increase price variation for less predictable gameplay
-static long moreRandom(long v)
+static int32_t moreRandom(int32_t v)
 {
-	long r;
+	int32_t r;
 	r = CalcRandomNr(0, (v / 4) + 1);
 	r -= (v / 8);
 	v += r;
@@ -79,7 +79,7 @@ static long moreRandom(long v)
 void tcDealerOffer(Person dealer, ubyte which)
 	{
 	// 2014-06-29 LucyG : possible compiler bug fixed
-	static const long Price[3*10] =    {  70, 150, 220,  90, 210, 110, 200,   0, 190,  80,   /* maloya */
+	static const int32_t Price[3*10] =    {  70, 150, 220,  90, 210, 110, 200,   0, 190,  80,   /* maloya */
 										 120, 200, 180, 220,  79, 110,   0,   0, 110, 200,   /* pooly */
 										 220,  66,   0, 110,   0, 220,   0, 212,  20, 130};  /* parker */
 	CompleteLoot comp = (CompleteLoot)dbGetObject (CompleteLoot_LastLoot);
@@ -98,7 +98,7 @@ void tcDealerOffer(Person dealer, ubyte which)
 	if(comp->Vase)           tcDealerSays(dealer, 9, moreRandom(Price[which*10+9]));
 	}
 
-void tcDealerSays(Person dealer, ubyte textNr, long perc)
+void tcDealerSays(Person dealer, ubyte textNr, int32_t perc)
 	{
 	LIST *lootNames   = txtGoKey(OBJECTS_ENUM_TXT, "enum_LootE");
 	LIST *specialLoot = txtGoKey(OBJECTS_ENUM_TXT, "enum_LootNameE");
@@ -115,7 +115,7 @@ void tcDealerSays(Person dealer, ubyte textNr, long perc)
 
 	if (perc == 0)
 		{
-		sprintf(line, NODE_NAME(GetNthNode(dealerText, 4)), NODE_NAME(GetNthNode(lootNames, (ulong) textNr)));
+		sprintf(line, NODE_NAME(GetNthNode(dealerText, 4)), NODE_NAME(GetNthNode(lootNames, (uint32_t) textNr)));
 		CreateNode (dealerOffer, 0L, line);
 
 		CreateNode (dealerOffer, 0L, NODE_NAME(GetNthNode(dealerText, 5)));
@@ -131,7 +131,7 @@ void tcDealerSays(Person dealer, ubyte textNr, long perc)
 		for (n = (struct ObjectNode *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (struct ObjectNode *) NODE_SUCC(n))
 			{
 			Loot loot = (Loot)OL_DATA(n);
-			ulong price = hasGet(Person_Matt_Stuvysunt, OL_NR(n)), offer;
+			uint32_t price = hasGet(Person_Matt_Stuvysunt, OL_NR(n)), offer;
 
 			offer = tcGetDealerOffer(price, perc);
 			offer = max(offer, 1);
@@ -144,7 +144,7 @@ void tcDealerSays(Person dealer, ubyte textNr, long perc)
 					{
 					symp = 10;
 
-					sprintf(line, NODE_NAME(GetNthNode(dealerText, 2)), NODE_NAME(GetNthNode(specialLoot, (ulong) loot->Name)));
+					sprintf(line, NODE_NAME(GetNthNode(dealerText, 2)), NODE_NAME(GetNthNode(specialLoot, (uint32_t) loot->Name)));
 					CreateNode (dealerOffer, 0L, line);
 
 					sprintf (line, NODE_NAME(GetNthNode(dealerText, 3)), offer);
@@ -154,7 +154,7 @@ void tcDealerSays(Person dealer, ubyte textNr, long perc)
 					{
 					symp = 1;
 
-					sprintf (line, NODE_NAME(GetNthNode(dealerText, 0)), NODE_NAME(GetNthNode(lootNames, (ulong)textNr)));
+					sprintf (line, NODE_NAME(GetNthNode(dealerText, 0)), NODE_NAME(GetNthNode(lootNames, (uint32_t)textNr)));
 					CreateNode (dealerOffer, 0L, line);
 
 					sprintf (line, NODE_NAME(GetNthNode(dealerText, 1)), price, offer);
@@ -166,7 +166,7 @@ void tcDealerSays(Person dealer, ubyte textNr, long perc)
 
 				if (!(Say (BUSINESS_TXT, 0, MATT_PICTID, "DEALER_ANSWER")))
 					{
-					long mattsMoney;
+					int32_t mattsMoney;
 
 					hasUnSet(Person_Matt_Stuvysunt, OL_NR(n));
 
@@ -195,13 +195,13 @@ void tcDealerSays(Person dealer, ubyte textNr, long perc)
 	RemoveList (lootNames);
 	}
 
-LIST *tcMakeLootList(ulong containerID, ulong relID)
+LIST *tcMakeLootList(uint32_t containerID, uint32_t relID)
 	{
 	NODE *n;
 	Loot loot;
 	CompleteLoot comp = (CompleteLoot)dbGetObject(CompleteLoot_LastLoot);
 	char data[TXT_KEY_LENGTH];
-	ulong value;
+	uint32_t value;
 	LIST *out = (LIST*)CreateList (0);
 	LIST *loots;
 	LIST *lootE     = txtGoKey(OBJECTS_ENUM_TXT,"enum_LootE");

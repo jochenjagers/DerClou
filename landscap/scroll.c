@@ -33,7 +33,7 @@ ubyte lsScrollLandScape(ubyte direction)
 ubyte lsInitScrollLandScape(ubyte direction, ubyte mode)
 	{
 	struct LandScape *l=ls;
-	long dx=0,dy=0,px=0,py=0,tx=0,ty=0,speed=(long)l->uch_ScrollSpeed;
+	int32_t dx=0,dy=0,px=0,py=0,tx=0,ty=0,speed=(int32_t)l->uch_ScrollSpeed;
 	ubyte collis=0;
 
 	if (direction & LS_SCROLL_LEFT)
@@ -145,7 +145,7 @@ ubyte lsInitScrollLandScape(ubyte direction, ubyte mode)
 
 ubyte lsIsCollision(uword x, uword y, ubyte direction)
 	{
-	long i;
+	int32_t i;
 	ubyte collis = 0;
 	ubyte color[14], collisDir = 0;
 

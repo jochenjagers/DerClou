@@ -13,7 +13,7 @@ uword	CurrentBackground = BGD_LONDON;
  * a little static func for presentation of data
  */
 
-static ubyte tcDisplayInfoAboutPerson(ulong objID)
+static ubyte tcDisplayInfoAboutPerson(uint32_t objID)
 	{
 	LIST *bubble;
 	char name[TXT_KEY_LENGTH]; 
@@ -42,17 +42,17 @@ static ubyte tcDisplayInfoAboutPerson(ulong objID)
  * RemTaxiLocation
  */
 
-void	AddTaxiLocation(ulong locNr)
+void	AddTaxiLocation(uint32_t locNr)
 	{
-	ulong objNr;
+	uint32_t objNr;
 
 	if(objNr = GetObjNrOfLocation(locNr))
 		taxiSet(Person_Matt_Stuvysunt, objNr);
 	}
 
-void RemTaxiLocation(ulong locNr)
+void RemTaxiLocation(uint32_t locNr)
 	{
-	ulong objNr;
+	uint32_t objNr;
 
 	if (objNr = GetObjNrOfLocation(locNr))
 		taxiUnSet(Person_Matt_Stuvysunt, objNr);
@@ -67,11 +67,11 @@ void RemTaxiLocation(ulong locNr)
  * Wait
  */
 
-ulong Go(LIST *succ)
+uint32_t Go(LIST *succ)
 	{
 	struct	TCEventNode *node;
 	struct 	Scene *sc;
-	ulong	prob,succ_eventnr;
+	uint32_t	prob,succ_eventnr;
 	NODE 	*location;
 	char 	line[255];
 
@@ -91,7 +91,7 @@ ulong Go(LIST *succ)
 			{
 			sc=GetScene(node->EventNr);
 
-			location=(NODE*)GetNthNode(film->loc_names,(ulong)sc->LocationNr);
+			location=(NODE*)GetNthNode(film->loc_names,(uint32_t)sc->LocationNr);
 
 			NODE_NAME(node)=NODE_NAME(location);
 
@@ -102,7 +102,7 @@ ulong Go(LIST *succ)
 
 		prob=Menu(succ,prob,0,NULL,0L);
 
-		succ_eventnr=((struct TCEventNode*)GetNthNode(succ,(ulong)prob))->EventNr;
+		succ_eventnr=((struct TCEventNode*)GetNthNode(succ,(uint32_t)prob))->EventNr;
 
 		/* jetzt die Zuweisung wieder entfernen, damit der Name */
 		/* nicht 2 mal freigegeben wird */
@@ -112,7 +112,7 @@ ulong Go(LIST *succ)
 		}
 	else
 		{
-		succ_eventnr=(ulong) ((struct TCEventNode*)
+		succ_eventnr=(uint32_t) ((struct TCEventNode*)
 			GetNthNode(succ,0L))->EventNr;
 		}
 
@@ -127,7 +127,7 @@ void Information(void)
 	LIST   *bubble,*list;
 	ubyte  choice=0,choice1=0, ret = 0;
 	char enough[TXT_KEY_LENGTH];
-	ulong  objID;
+	uint32_t  objID;
 
 	inpTurnESC(1);
 
@@ -161,7 +161,7 @@ void Information(void)
 						{
 						SetBubbleType(THINK_BUBBLE);
 
-						objID = (ulong)(((struct ObjectNode*)GetNthNode(list ,(ulong)choice1))->nr);
+						objID = (uint32_t)(((struct ObjectNode*)GetNthNode(list ,(uint32_t)choice1))->nr);
 						ret   = Present (objID ,"Car" ,InitCarPresent);
 						}
 					}
@@ -185,7 +185,7 @@ void Information(void)
 						{
 						SetBubbleType(THINK_BUBBLE);
 
-						objID = (ulong)(((struct ObjectNode*)GetNthNode(list,(ulong)choice1))->nr);
+						objID = (uint32_t)(((struct ObjectNode*)GetNthNode(list,(uint32_t)choice1))->nr);
 						ret   = tcDisplayInfoAboutPerson(objID);
 						}
 					}
@@ -209,7 +209,7 @@ void Information(void)
 						{
 						SetBubbleType(THINK_BUBBLE);
 
-						objID   = (ulong)(((struct ObjectNode*)GetNthNode(list,(ulong)choice1))->nr);
+						objID   = (uint32_t)(((struct ObjectNode*)GetNthNode(list,(uint32_t)choice1))->nr);
 						ret = Present(objID,"Tool",InitToolPresent);
 						}
 					}
@@ -233,7 +233,7 @@ void Information(void)
 						{
 						SetBubbleType(THINK_BUBBLE);
 
-						objID = (ulong)(((struct ObjectNode*)GetNthNode(list,(ulong)choice1))->nr);
+						objID = (uint32_t)(((struct ObjectNode*)GetNthNode(list,(uint32_t)choice1))->nr);
 						ret   = Present(objID,"Building",InitBuildingPresent);
 						}
 					}
@@ -255,12 +255,12 @@ void Information(void)
 	}
 
 
-void Look(ulong locNr)
+void Look(uint32_t locNr)
 	{
 	LIST  *menu, *bubble;
 	ubyte choice=0 ,choice1=0;
 	char enough[TXT_KEY_LENGTH];
-	ulong objID;
+	uint32_t objID;
 
 	inpTurnESC(1);
 
@@ -301,7 +301,7 @@ void Look(ulong locNr)
 
 						while(ChoiceOk((choice1 = Bubble(bubble,choice1,0L,0L)), GET_OUT, bubble))
 							{
-							objID  = ((struct ObjectNode *)GetNthNode(bubble,(ulong)choice1))->nr;
+							objID  = ((struct ObjectNode *)GetNthNode(bubble,(uint32_t)choice1))->nr;
 
 							tcDisplayInfoAboutPerson(objID);
 							}
@@ -321,10 +321,10 @@ void Look(ulong locNr)
 		}
 	}
 
-ulong tcTelefon(void)
+uint32_t tcTelefon(void)
 	{
 	char connect[TXT_KEY_LENGTH];
-	ulong eventNr = 0L;
+	uint32_t eventNr = 0L;
 	Person ben = (Person)dbGetObject(Person_Ben_Riggley);
 
 	gfxShow(175, GFX_NO_REFRESH|GFX_ONE_STEP, 0, -1, -1);
@@ -334,7 +334,7 @@ ulong tcTelefon(void)
 	if(!(LIST_EMPTY(ObjectList)))
 		{
 		ubyte choice = 0;
-		ulong persID;
+		uint32_t persID;
 
 		txtGetFirstLine(BUSINESS_TXT, "DONT_CONNECT_ME", connect);
 		ExpandObjectList(ObjectList, connect);
@@ -347,7 +347,7 @@ ulong tcTelefon(void)
 			{
 			if (ChoiceOk((choice = Bubble(ObjectList, 0, 0L, 0L)), GET_OUT, ObjectList))
 				{
-				persID =  (ulong)(((struct ObjectNode*)GetNthNode(ObjectList,(ulong)choice))->nr);
+				persID =  (uint32_t)(((struct ObjectNode*)GetNthNode(ObjectList,(uint32_t)choice))->nr);
 
 				if(persID == Person_Ben_Riggley)
 					Say(BUSINESS_TXT,0,ben->PictID, "ALREADY_PHONING");
@@ -382,8 +382,8 @@ void tcWait(void)
 	{
 	char line[TXT_KEY_LENGTH];
 	ubyte ende = 0;
-	ulong action=0L, minutes=0L, locNr = GetObjNrOfLocation(GetLocation);
-	ulong newCount=0, oldCount=0;
+	uint32_t action=0L, minutes=0L, locNr = GetObjNrOfLocation(GetLocation);
+	uint32_t newCount=0, oldCount=0;
 
 	inpTurnESC(0);
 

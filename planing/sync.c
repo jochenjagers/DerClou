@@ -8,7 +8,7 @@
 
 
 // Sync functions
-uword plXMoveSync(ulong id, uword xpos, ubyte animate, ubyte direction, uword gowhere)
+uword plXMoveSync(uint32_t id, uword xpos, ubyte animate, ubyte direction, uword gowhere)
 {
    if (direction)
    {
@@ -81,7 +81,7 @@ uword plXMoveSync(ulong id, uword xpos, ubyte animate, ubyte direction, uword go
 	return xpos;
 }
 
-uword plYMoveSync(ulong id, uword ypos, ubyte animate, ubyte direction, uword gowhere)
+uword plYMoveSync(uint32_t id, uword ypos, ubyte animate, ubyte direction, uword gowhere)
 {
 	if (direction)
    {
@@ -154,7 +154,7 @@ uword plYMoveSync(ulong id, uword ypos, ubyte animate, ubyte direction, uword go
 	return ypos;
 }
 
-void plSync(ubyte animate, ulong targetTime, ulong times, ubyte direction)
+void plSync(ubyte animate, uint32_t targetTime, uint32_t times, ubyte direction)
 {
    struct Action *action;
    struct Action  *a;
@@ -163,11 +163,11 @@ void plSync(ubyte animate, ulong targetTime, ulong times, ubyte direction)
    Police pol;
    uword xpos, ypos;
    ubyte i;
-   ulong seconds, lastAreaId = 0;
-   ulong state;
-   ulong weightLoot;
-   ulong volumeLoot;
-   ulong newValue, oldValue;
+   uint32_t seconds, lastAreaId = 0;
+   uint32_t state;
+   uint32_t weightLoot;
+   uint32_t volumeLoot;
+   uint32_t newValue, oldValue;
 
    for (seconds = 0; seconds < times; seconds ++)
    {

@@ -47,7 +47,7 @@ struct AnimHandler
 	uword Repeatation;	      /* wie oft wiederholen */
 	uword RepeatationCount;	/* wie oft schon wiederholt */
 
-	ulong WaitCounter;
+	uint32_t WaitCounter;
 
 	uword AnimCollection;		/* einzelnen Animphasen */
 
@@ -110,7 +110,7 @@ static void PrepareAnim (char *AnimID)
 
 	GetAnim(AnimID, pict_list);
 
-	if ((ulong)(txtCountKey(pict_list)) > PIC_1_ID_POS)
+	if ((uint32_t)(txtCountKey(pict_list)) > PIC_1_ID_POS)
 	{
 		coll = gfxGetCollection((uword) txtGetKeyAsULONG((uword)ANIM_COLL_ID_POS, pict_list));
 
@@ -142,7 +142,7 @@ static void PrepareAnim (char *AnimID)
 * StopAnim
 */
 
-void PlayAnim (char *AnimID, word how_often, ulong mode)
+void PlayAnim (char *AnimID, word how_often, uint32_t mode)
 {
 	char pict_list[TXT_KEY_LENGTH] = {0};
 	uword	pict_id=0, rate;
@@ -163,7 +163,7 @@ void PlayAnim (char *AnimID, word how_often, ulong mode)
 		{
 			if (!mode)
 			{
-				mode = (ulong)txtGetKeyAsULONG((uword)PIC_MODE_POS,(char*)pict_list);
+				mode = (uint32_t)txtGetKeyAsULONG((uword)PIC_MODE_POS,(char*)pict_list);
 			}
 			pict_id = (uword)txtGetKeyAsULONG((uword)PIC_1_ID_POS,(char*)pict_list);
 		}
@@ -173,7 +173,7 @@ void PlayAnim (char *AnimID, word how_often, ulong mode)
 			gfxShow(pict_id, mode, 2, -1L, -1L);
 		}
 
-		if ((ulong)(txtCountKey((char*)pict_list)) > PIC_1_ID_POS)
+		if ((uint32_t)(txtCountKey((char*)pict_list)) > PIC_1_ID_POS)
 		{
 			rate = (uword)txtGetKeyAsULONG((uword)PIC_P_SEC_POS, (char*)pict_list);
 
@@ -236,7 +236,7 @@ void StopAnim(void)
 
 static void GetAnim(char *AnimID,char *Dest)
 {
-	long i;
+	int32_t i;
 	char ID[TXT_KEY_LENGTH] = {0};
 
 	strcpy(ID, (char*)AnimID);
@@ -253,8 +253,8 @@ static void GetAnim(char *AnimID,char *Dest)
 
 void animator(void)
 {
-	long destX = Handler.destX;
-	long destY = Handler.destY;
+	int32_t destX = Handler.destX;
+	int32_t destY = Handler.destY;
 	uword sourceX, sourceY;
 
 	if (!(Handler.AnimatorState & ANIM_STATE_SUSPENDED))

@@ -20,13 +20,13 @@ void LoadStory(ubyte *filename);
 
 void InitConditions(struct Scene *scene,struct NewScene *ns);
 void FreeConditions(struct Scene *scene);
-long GetEventCount(ulong EventNr);
-long CheckConditions(struct Scene *scene);
-void EventDidHappen(ulong EventNr);
+int32_t GetEventCount(uint32_t EventNr);
+int32_t CheckConditions(struct Scene *scene);
+void EventDidHappen(uint32_t EventNr);
 
 struct Scene *GetStoryScene(struct Scene *scene);
 
-ulong GamePlayMode = 0;
+uint32_t GamePlayMode = 0;
 ubyte RefreshMode  = 0;
 
 struct Film 	*film=0L;
@@ -50,7 +50,7 @@ void InitStory(char *story_filename)
 
 void CloseStory(void)
 {
-	long i;
+	int32_t i;
 
 	if(film)
 	{
@@ -74,7 +74,7 @@ void CloseStory(void)
 	}
 }
 
-void SetEnabledChoices(ulong ChoiceMask)
+void SetEnabledChoices(uint32_t ChoiceMask)
 {
 	film->EnabledChoices = ChoiceMask;
 }
@@ -96,7 +96,7 @@ void InitLocations(void)
 
 	dskBuildPathName(TEXT_DIRECTORY, LOCATIONS_TXT, pathname);
 
-	if(ReadList(l,(ulong)(sizeof(struct TCEventNode)), pathname, 0))
+	if(ReadList(l,(uint32_t)(sizeof(struct TCEventNode)), pathname, 0))
 		film->loc_names=(LIST*) l;
 	else
 		NewErrorMsg(Disk_Defect, __FILE__, __func__, 1);
@@ -140,7 +140,7 @@ void PatchStory(void)
 	}
 }
 
-ulong PlayStory(void)
+uint32_t PlayStory(void)
 {
 	struct Scene *curr, *next;
 	struct Scene *story_scene = 0;
@@ -272,7 +272,7 @@ ulong PlayStory(void)
 
 struct Scene *GetStoryScene(struct Scene *curr)
 {
-	ulong i,j;
+	uint32_t i,j;
 
 	for (i = 0;i < film->AmountOfScenes;i++)
 	{
@@ -284,7 +284,7 @@ struct Scene *GetStoryScene(struct Scene *curr)
 			{
 				j = CalcRandomNr(0L,255L);
 
-				if ( j<= (ulong)(sc->Probability))
+				if ( j<= (uint32_t)(sc->Probability))
 					if (CheckConditions(sc))
 						return(sc);
 			}
@@ -294,9 +294,9 @@ struct Scene *GetStoryScene(struct Scene *curr)
 	return(0);
 }
 
-struct Scene *GetScene(ulong EventNr)
+struct Scene *GetScene(uint32_t EventNr)
 {
-	long i;
+	int32_t i;
 	struct Scene *sc = NULL;
 
 	for ( i = 0;i < film->AmountOfScenes;i++)
@@ -306,27 +306,27 @@ struct Scene *GetScene(ulong EventNr)
 	return sc;
 }
 
-long GetEventCount(ulong EventNr)
+int32_t GetEventCount(uint32_t EventNr)
 {
 	struct Scene *sc;
 
 	if (sc = GetScene(EventNr))
-		return((long)(sc->Geschehen));
+		return((int32_t)(sc->Geschehen));
 	else
 		return 0;
 }
 
-void EventDidHappen(ulong EventNr)
+void EventDidHappen(uint32_t EventNr)
 {
 	struct Scene *sc;
-	ulong  max = CAN_ALWAYS_HAPPEN;
+	uint32_t  max = CAN_ALWAYS_HAPPEN;
 
 	if (sc = GetScene(EventNr))
 		if (sc->Geschehen < max)
 			sc->Geschehen+=1;
 }
 
-long CheckConditions(struct Scene *scene)
+int32_t CheckConditions(struct Scene *scene)
 {
 	struct Bedingungen *bed;
 	NODE *node;
@@ -386,7 +386,7 @@ void PrepareStory(char *filename)
 * revised : 2014-07-01 - templer
 */
 {
-	long i,j;
+	int32_t i,j;
 	struct Scene *scene;
 	struct StoryHeader  SH;
 	struct NewScene	NS;
@@ -402,15 +402,15 @@ void PrepareStory(char *filename)
 	file = dskOpen(pathname, "rb", 0);
 
 	dskRead(file, SH.StoryName, sizeof(SH.StoryName));
-	dskRead(file, &SH.EventCount,sizeof(ulong));
-	dskRead(file, &SH.SceneCount,sizeof(ulong));
+	dskRead(file, &SH.EventCount,sizeof(uint32_t));
+	dskRead(file, &SH.SceneCount,sizeof(uint32_t));
 
-	dskRead(file, &SH.AmountOfScenes,sizeof(ulong));
-	dskRead(file, &SH.AmountOfEvents,sizeof(ulong));
+	dskRead(file, &SH.AmountOfScenes,sizeof(uint32_t));
+	dskRead(file, &SH.AmountOfEvents,sizeof(uint32_t));
 
-	dskRead(file, &SH.StartZeit,sizeof(ulong));
-	dskRead(file, &SH.StartOrt,sizeof(ulong));
-	dskRead(file, &SH.StartSzene,sizeof(ulong));
+	dskRead(file, &SH.StartZeit,sizeof(uint32_t));
+	dskRead(file, &SH.StartOrt,sizeof(uint32_t));
+	dskRead(file, &SH.StartSzene,sizeof(uint32_t));
 
 	EndianL(&SH.EventCount);
 	EndianL(&SH.SceneCount);
@@ -471,13 +471,13 @@ void PrepareStory(char *filename)
 
 			for (j = 0;j < NS.AnzahlderNachfolger;j++)
 			{
-				node = (struct TCEventNode*)CreateNode(scene->std_succ,(ulong)(sizeof(struct TCEventNode)),0L);
+				node = (struct TCEventNode*)CreateNode(scene->std_succ,(uint32_t)(sizeof(struct TCEventNode)),0L);
 
 				node->EventNr = NS.nachfolger[j];
 			}
 
 			if(NS.nachfolger)
-				MemFree(NS.nachfolger, sizeof(ulong) * NS.AnzahlderNachfolger);
+				MemFree(NS.nachfolger, sizeof(uint32_t) * NS.AnzahlderNachfolger);
 		}
 		else
 		    scene->std_succ = NULL;
@@ -491,7 +491,7 @@ void InitConditions(struct Scene *scene, struct NewScene *ns)
 {
 	struct Bedingungen *bed;
 	struct TCEventNode *node;
-	long i;
+	int32_t i;
 
 	bed=(struct Bedingungen*)MemAlloc(sizeof(struct Bedingungen));
 
@@ -503,13 +503,13 @@ void InitConditions(struct Scene *scene, struct NewScene *ns)
 
 		for(i=0;i<ns->AnzahlderEvents;i++)
 		{
-			node=(struct TCEventNode*)CreateNode(bed->events,(ulong)(sizeof(struct TCEventNode)),0);
+			node=(struct TCEventNode*)CreateNode(bed->events,(uint32_t)(sizeof(struct TCEventNode)),0);
 
 			node->EventNr=ns->events[i];
 		}
 
 		if(ns->events)
-			MemFree(ns->events, sizeof(ulong) * ns->AnzahlderEvents);
+			MemFree(ns->events, sizeof(uint32_t) * ns->AnzahlderEvents);
 	}
 	else
 		bed->events=NULL;
@@ -520,13 +520,13 @@ void InitConditions(struct Scene *scene, struct NewScene *ns)
 
 		for(i=0;i<ns->AnzahlderN_Events;i++)
 		{
-			node=(struct TCEventNode*)CreateNode(bed->n_events,(ulong)(sizeof(struct TCEventNode)),0);
+			node=(struct TCEventNode*)CreateNode(bed->n_events,(uint32_t)(sizeof(struct TCEventNode)),0);
 
 			node->EventNr=ns->n_events[i];
 		}
 
 		if(ns->n_events)
-			MemFree(ns->n_events, sizeof(ulong) * ns->AnzahlderN_Events);
+			MemFree(ns->n_events, sizeof(uint32_t) * ns->AnzahlderN_Events);
 	}
 	else
 		bed->n_events=NULL;
@@ -551,37 +551,37 @@ void FreeConditions(struct Scene *scene)
 
 void LoadSceneforStory(struct NewScene *dest,FILE *file)
 {
-	ulong *event_nrs = NULL;
-	ulong i, tmp;
+	uint32_t *event_nrs = NULL;
+	uint32_t i, tmp;
 
 		/* struct NewScene is byte-aligned
 	and needs some padding... */
-	dskRead(file, &dest->EventNr,sizeof(ulong));
+	dskRead(file, &dest->EventNr,sizeof(uint32_t));
     dskRead(file, dest->SceneName, sizeof(dest->SceneName));
-    dskRead(file, &dest->Tag,sizeof(long));
-    dskRead(file, &dest->MinZeitPunkt,sizeof(long));
-    dskRead(file, &dest->MaxZeitPunkt,sizeof(long));
-    dskRead(file, &dest->Ort,sizeof(long));
-    dskRead(file, &dest->AnzahlderEvents,sizeof(ulong));
-    dskRead(file, &dest->AnzahlderN_Events,sizeof(ulong));
-    dskRead(file, &tmp,sizeof(ulong));
-    dskRead(file, &tmp,sizeof(ulong));
-    dskRead(file, &dest->AnzahlderNachfolger,sizeof(ulong));
-    dskRead(file, &tmp,sizeof(ulong));
-    dskRead(file, &dest->Moeglichkeiten,sizeof(ulong));
-    dskRead(file, &dest->Dauer,sizeof(ulong));
+    dskRead(file, &dest->Tag,sizeof(int32_t));
+    dskRead(file, &dest->MinZeitPunkt,sizeof(int32_t));
+    dskRead(file, &dest->MaxZeitPunkt,sizeof(int32_t));
+    dskRead(file, &dest->Ort,sizeof(int32_t));
+    dskRead(file, &dest->AnzahlderEvents,sizeof(uint32_t));
+    dskRead(file, &dest->AnzahlderN_Events,sizeof(uint32_t));
+    dskRead(file, &tmp,sizeof(uint32_t));
+    dskRead(file, &tmp,sizeof(uint32_t));
+    dskRead(file, &dest->AnzahlderNachfolger,sizeof(uint32_t));
+    dskRead(file, &tmp,sizeof(uint32_t));
+    dskRead(file, &dest->Moeglichkeiten,sizeof(uint32_t));
+    dskRead(file, &dest->Dauer,sizeof(uint32_t));
     dskRead(file, &dest->Anzahl,sizeof(uword));
     dskRead(file, &dest->Geschehen,sizeof(uword));
     dskRead(file, &dest->Possibility,sizeof(ubyte));
-    dskRead(file, &dest->Sample,sizeof(ulong));
-    dskRead(file, &dest->Anim,sizeof(ulong));
-    dskRead(file, &dest->NewOrt,sizeof(long));
+    dskRead(file, &dest->Sample,sizeof(uint32_t));
+    dskRead(file, &dest->Anim,sizeof(uint32_t));
+    dskRead(file, &dest->NewOrt,sizeof(int32_t));
 
 	EndianL(&dest->EventNr);
-	EndianL((ulong *)&dest->Tag);
-	EndianL((ulong *)&dest->MinZeitPunkt);
-	EndianL((ulong *)&dest->MaxZeitPunkt);
-	EndianL((ulong *)&dest->Ort);
+	EndianL((uint32_t *)&dest->Tag);
+	EndianL((uint32_t *)&dest->MinZeitPunkt);
+	EndianL((uint32_t *)&dest->MaxZeitPunkt);
+	EndianL((uint32_t *)&dest->Ort);
 	EndianL(&dest->AnzahlderEvents);
 	EndianL(&dest->AnzahlderN_Events);
 	EndianL(&dest->AnzahlderNachfolger);
@@ -591,51 +591,51 @@ void LoadSceneforStory(struct NewScene *dest,FILE *file)
 	EndianW(&dest->Geschehen);
 	EndianL(&dest->Sample);
 	EndianL(&dest->Anim);
-	EndianL((ulong *)&dest->NewOrt);
+	EndianL((uint32_t *)&dest->NewOrt);
 
 	/* allocate mem for events and read them */
 	if (dest->AnzahlderEvents)
 	{
-		event_nrs = (ulong *)MemAlloc(sizeof(ulong) * dest->AnzahlderEvents);
+		event_nrs = (uint32_t *)MemAlloc(sizeof(uint32_t) * dest->AnzahlderEvents);
 		if (!event_nrs) NewErrorMsg(No_Mem, __FILE__, __func__, 8);
 
 		for (i = 0; i < dest->AnzahlderEvents; i++)
 		{
-			dskRead(file, &event_nrs[i],sizeof(ulong));
+			dskRead(file, &event_nrs[i],sizeof(uint32_t));
 			EndianL(&event_nrs[i]);
 		}
 	}
 	else
 	    event_nrs=NULL;
 
-	dest->events=(ulong *) event_nrs;
+	dest->events=(uint32_t *) event_nrs;
 
 	/* allocate mem for n_events and read them */
 	if(dest->AnzahlderN_Events)
 	{
-		event_nrs = (ulong *)MemAlloc(sizeof(ulong) * dest->AnzahlderN_Events);
+		event_nrs = (uint32_t *)MemAlloc(sizeof(uint32_t) * dest->AnzahlderN_Events);
 		if (!event_nrs) NewErrorMsg(No_Mem, __FILE__, __func__, 9);
 
 		for (i = 0; i < dest->AnzahlderN_Events; i++)
 		{
-			dskRead(file, &event_nrs[i],sizeof(ulong));
+			dskRead(file, &event_nrs[i],sizeof(uint32_t));
 			EndianL(&event_nrs[i]);
 		}
 	}
 	else
 	    event_nrs = NULL;
 
-	dest->n_events=(ulong *)event_nrs;
+	dest->n_events=(uint32_t *)event_nrs;
 
 	/* allocate mem for successors and read them */
 	if (dest->AnzahlderNachfolger)
 	{
-		event_nrs = (ulong *)MemAlloc(sizeof(ulong) * dest->AnzahlderNachfolger);
+		event_nrs = (uint32_t *)MemAlloc(sizeof(uint32_t) * dest->AnzahlderNachfolger);
 		if (!event_nrs) NewErrorMsg(No_Mem, __FILE__, __func__, 10);
 
 		for (i = 0; i < dest->AnzahlderNachfolger; i++)
 		{
-			dskRead(file, &event_nrs[i],sizeof(ulong));
+			dskRead(file, &event_nrs[i],sizeof(uint32_t));
 			EndianL(&event_nrs[i]);
 		}
 	}
@@ -645,10 +645,10 @@ void LoadSceneforStory(struct NewScene *dest,FILE *file)
 	dest->nachfolger=event_nrs;
 }
 
-void AddVTime(ulong add)
+void AddVTime(uint32_t add)
 {
-	ulong time;
-	ulong tag;
+	uint32_t time;
+	uint32_t tag;
 
 	time=GetMinute+add;
 
@@ -664,7 +664,7 @@ void AddVTime(ulong add)
 	tcTheAlmighty(time);
 }
 
-ulong GetAmountOfScenes(void)	/* for extern modules */
+uint32_t GetAmountOfScenes(void)	/* for extern modules */
 {
 	if (film)
 		return(film->AmountOfScenes);
@@ -687,9 +687,9 @@ struct Scene *GetCurrentScene(void)
 	return sc;
 }
 
-struct Scene *GetLocScene(ulong locNr)
+struct Scene *GetLocScene(uint32_t locNr)
 {
-	long i;
+	int32_t i;
 	struct Scene *sc;
 
 	for(i=0;i<film->AmountOfScenes;i++)
@@ -700,7 +700,7 @@ struct Scene *GetLocScene(ulong locNr)
 	return NULL;
 }
 
-void FormatDigit(ulong digit,char *s)
+void FormatDigit(uint32_t digit,char *s)
 {
 	if (digit<10)
 		sprintf(s,"0%ld",digit);
@@ -708,9 +708,9 @@ void FormatDigit(ulong digit,char *s)
 	    sprintf(s,"%ld",digit);
 }
 
-char *BuildTime(ulong min,char language,char *time)
+char *BuildTime(uint32_t min,char language,char *time)
 {
-	ulong h = (min/60) % 24;
+	uint32_t h = (min/60) % 24;
 	char s[TXT_KEY_LENGTH];
 
 	min=min%60;
@@ -723,11 +723,11 @@ char *BuildTime(ulong min,char language,char *time)
 	return(time);
 }
 
-char *BuildDate(ulong days,char language,char *date)
+char *BuildDate(uint32_t days,char language,char *date)
 {
 	ubyte days_per_month[12]={
 		31,28,31,30,31,30,31,31,30,31,30,31	};
-	ulong i,p_year,year,month,day;
+	uint32_t i,p_year,year,month,day;
 	char s[TXT_KEY_LENGTH];
 
 	for(i=0,p_year=0;i<12;i++)
@@ -773,7 +773,7 @@ char *BuildDate(ulong days,char language,char *date)
 
 char *GetCurrLocName(void)
 {
-	long index;
+	int32_t index;
 
 	index=GetCurrentScene()->LocationNr;
 

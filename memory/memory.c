@@ -9,15 +9,15 @@
 
 #define ERR_MEMORY_NO_MEM 1
 
-static long l_MemAllocated = 0;
-static long l_MemMaxAllocated = 0;
+static int32_t l_MemAllocated = 0;
+static int32_t l_MemMaxAllocated = 0;
 
 #ifdef THECLOU_DEBUG_ALLOC
 typedef struct Allocation Allocation;
 struct Allocation {
 	Allocation *	next;
 	void *			mem;
-	unsigned long	size;
+	uint32_t	size;
 	char			name[64];
 };
 static Allocation Alloc;
@@ -38,7 +38,7 @@ void MemQuit(void)
 	}
 }
 
-static void AddAlloc(void *ptr, unsigned long size, const char *func)
+static void AddAlloc(void *ptr, uint32_t size, const char *func)
 {
 	Allocation *next;
 	next = &Alloc;
@@ -56,7 +56,7 @@ static void AddAlloc(void *ptr, unsigned long size, const char *func)
 	}
 }
 
-static void RemAlloc(void *ptr, unsigned long size, const char *func)
+static void RemAlloc(void *ptr, uint32_t size, const char *func)
 {
 	Allocation *next, *prev;
 	next = &Alloc;
@@ -78,9 +78,9 @@ static void RemAlloc(void *ptr, unsigned long size, const char *func)
 #endif
 
 #ifdef THECLOU_DEBUG_ALLOC
-void *MemAllocDbg(unsigned long size, const char *file, const char *func)
+void *MemAllocDbg(uint32_t size, const char *file, const char *func)
 #else
-void *MemAlloc(unsigned long size)
+void *MemAlloc(uint32_t size)
 #endif
 {
 	#ifdef THECLOU_DEBUG_ALLOC
@@ -91,7 +91,7 @@ void *MemAlloc(unsigned long size)
 	{
 		if (mem = calloc(1, size))
 		{
-			l_MemAllocated += (long)size;
+			l_MemAllocated += (int32_t)size;
 			if (l_MemMaxAllocated < l_MemAllocated) {
 				l_MemMaxAllocated = l_MemAllocated;
 			}
@@ -109,9 +109,9 @@ void *MemAlloc(unsigned long size)
 }
 
 #ifdef THECLOU_DEBUG_ALLOC
-void MemFreeDbg(void *mem, unsigned long size, const char *file, const char *func)
+void MemFreeDbg(void *mem, uint32_t size, const char *file, const char *func)
 #else
-void MemFree(void *mem, unsigned long size)
+void MemFree(void *mem, uint32_t size)
 #endif
 {
 	#ifdef THECLOU_DEBUG_ALLOC
@@ -120,19 +120,19 @@ void MemFree(void *mem, unsigned long size)
 	if (mem)
 	{
 		free(mem);
-		l_MemAllocated -= (long)size;
+		l_MemAllocated -= (int32_t)size;
 #ifdef THECLOU_DEBUG_ALLOC
 		RemAlloc(mem, size, func);
 #endif
 	}
 }
 
-long MemGetAllocated(void)
+int32_t MemGetAllocated(void)
 {
 	return(l_MemAllocated);
 }
 
-long MemGetMaxAllocated(void)
+int32_t MemGetMaxAllocated(void)
 {
 	return(l_MemMaxAllocated);
 }

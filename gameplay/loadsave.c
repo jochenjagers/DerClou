@@ -84,10 +84,10 @@ void tcSaveTheClou(int bAutoSave)
 
 			// Speichern von tcBuild
 			sprintf(line, "%s"DIR_SEPARATOR"%s%d%s", DATADISK_DIRECTORY, BUILD_DATA_NAME, activ, GAME_DATA_EXT);
-			dbSaveAllObjects (line, (ulong) (DB_tcBuild_OFFSET), (ulong) (DB_tcBuild_SIZE), 0);
+			dbSaveAllObjects (line, (uint32_t) (DB_tcBuild_OFFSET), (uint32_t) (DB_tcBuild_SIZE), 0);
 
 			sprintf(line, "%s"DIR_SEPARATOR"%s%d%s", DATADISK_DIRECTORY, BUILD_DATA_NAME, activ, GAME_REL_EXT);
-			SaveRelations(line ,(ulong) DB_tcBuild_OFFSET, (ulong) DB_tcBuild_SIZE, 0);
+			SaveRelations(line ,(uint32_t) DB_tcBuild_OFFSET, (uint32_t) DB_tcBuild_SIZE, 0);
 
 			// Speichern der Story
 			sprintf(line, "%s"DIR_SEPARATOR"%s%d%s", DATADISK_DIRECTORY, STORY_DATA_NAME, activ, GAME_DATA_EXT);
@@ -108,11 +108,11 @@ void tcSaveTheClou(int bAutoSave)
 			// Speichern von tcBuild
 			sprintf(line, "%s%d%s", BUILD_DATA_NAME, activ, GAME_DATA_EXT);
 			dskBuildPathName(DATADISK_DIRECTORY, line, pathname);
-			dbSaveAllObjects (pathname, (ulong)DB_tcBuild_OFFSET, (ulong)DB_tcBuild_SIZE, 0);
+			dbSaveAllObjects (pathname, (uint32_t)DB_tcBuild_OFFSET, (uint32_t)DB_tcBuild_SIZE, 0);
 
 			sprintf(line, "%s%d%s", BUILD_DATA_NAME, activ, GAME_REL_EXT);
 			dskBuildPathName(DATADISK_DIRECTORY, line, pathname);
-			SaveRelations(pathname, (ulong)DB_tcBuild_OFFSET, (ulong)DB_tcBuild_SIZE, 0);
+			SaveRelations(pathname, (uint32_t)DB_tcBuild_OFFSET, (uint32_t)DB_tcBuild_SIZE, 0);
 
 			// Speichern der Story
 			sprintf(line, "%s%d%s", STORY_DATA_NAME, activ, GAME_DATA_EXT);
@@ -141,11 +141,11 @@ ubyte tcLoadIt(char activ)
 
 	tcResetOrganisation();
 
-	RemRelations ((ulong) DB_tcMain_OFFSET, (ulong) DB_tcMain_SIZE);
-	RemRelations ((ulong) DB_tcBuild_OFFSET, (ulong) DB_tcBuild_SIZE);
+	RemRelations ((uint32_t) DB_tcMain_OFFSET, (uint32_t) DB_tcMain_SIZE);
+	RemRelations ((uint32_t) DB_tcBuild_OFFSET, (uint32_t) DB_tcBuild_SIZE);
 
-	dbDeleteAllObjects ((ulong) DB_tcMain_OFFSET, (ulong) DB_tcMain_SIZE);
-	dbDeleteAllObjects ((ulong) DB_tcBuild_OFFSET, (ulong) DB_tcBuild_SIZE);
+	dbDeleteAllObjects ((uint32_t) DB_tcMain_OFFSET, (uint32_t) DB_tcMain_SIZE);
+	dbDeleteAllObjects ((uint32_t) DB_tcBuild_OFFSET, (uint32_t) DB_tcBuild_SIZE);
 
 	/* neue Daten laden ! */
 
@@ -213,11 +213,11 @@ ubyte tcBackToStartupMenu(void)
 
 	tcResetOrganisation();
 
-	RemRelations ((ulong) DB_tcMain_OFFSET, (ulong) DB_tcMain_SIZE);
-	RemRelations ((ulong) DB_tcBuild_OFFSET, (ulong) DB_tcBuild_SIZE);
+	RemRelations ((uint32_t) DB_tcMain_OFFSET, (uint32_t) DB_tcMain_SIZE);
+	RemRelations ((uint32_t) DB_tcBuild_OFFSET, (uint32_t) DB_tcBuild_SIZE);
 
-	dbDeleteAllObjects ((ulong) DB_tcMain_OFFSET, (ulong) DB_tcMain_SIZE);
-	dbDeleteAllObjects ((ulong) DB_tcBuild_OFFSET, (ulong) DB_tcBuild_SIZE);
+	dbDeleteAllObjects ((uint32_t) DB_tcMain_OFFSET, (uint32_t) DB_tcMain_SIZE);
+	dbDeleteAllObjects ((uint32_t) DB_tcBuild_OFFSET, (uint32_t) DB_tcBuild_SIZE);
 
 	return 0;
 }
@@ -227,7 +227,7 @@ ubyte tcLoadTheClou(void)
 	char line[TXT_KEY_LENGTH], loaded;
 	LIST *games = (LIST*)CreateList (0);
 	LIST *origin = (LIST*)CreateList (0);
-	ulong activ;
+	uint32_t activ;
 	Player player;
 	char pathname1[TXT_KEY_LENGTH];
 	char pathname2[TXT_KEY_LENGTH];
@@ -243,11 +243,11 @@ ubyte tcLoadTheClou(void)
 
 		inpTurnFunctionKey(0);
 		inpTurnESC(1);
-		activ = (ulong) Menu (games, 15L, 0, NULL, 0L);
+		activ = (uint32_t) Menu (games, 15L, 0, NULL, 0L);
 		inpTurnFunctionKey(1);
 
-		if ((activ != GET_OUT) && (strcmp (NODE_NAME(GetNthNode(games, (long) activ)),
-													  NODE_NAME(GetNthNode(origin, (long) activ)))))
+		if ((activ != GET_OUT) && (strcmp (NODE_NAME(GetNthNode(games, (int32_t) activ)),
+													  NODE_NAME(GetNthNode(origin, (int32_t) activ)))))
 			{
 			loaded = tcLoadIt((ubyte)activ);
 			}
@@ -311,7 +311,7 @@ void tcRefreshAfterLoad(ubyte loaded)
 
 ubyte tcSaveChangesInScenes(char *fileName)
 {
-	long i;
+	int32_t i;
 	ubyte back = 0;
 	FILE *file;
 
@@ -334,10 +334,10 @@ ubyte tcSaveChangesInScenes(char *fileName)
 
 ubyte tcLoadChangesInScenes(char *fileName)
 {
-	long i;
+	int32_t i;
 	char buffer[TXT_KEY_LENGTH];
 	ubyte back = 1;
-	ulong eventNr, count;
+	uint32_t eventNr, count;
 	FILE *file;
 	struct Scene *sc;
 

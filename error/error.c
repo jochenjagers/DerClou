@@ -42,7 +42,7 @@ void Log(const char *s, ...)
 	}
 }
 
-long pcErrOpen(long l_Mode, void (*fp_CloseAll)(), ubyte *puch_ErrorFilename)
+int32_t pcErrOpen(int32_t l_Mode, void (*fp_CloseAll)(), ubyte *puch_ErrorFilename)
 {
 	if (fp_CloseAll)
 	{
@@ -56,7 +56,7 @@ void pcErrClose()
 {
 }
 
-void NewErrorMsg(long l_ErrorType, const char *filename, const char *funcname, ulong ul_ErrorId)
+void NewErrorMsg(int32_t l_ErrorType, const char *filename, const char *funcname, uint32_t ul_ErrorId)
 {
 	ubyte lang = txtGetLanguage();	/* 2014-06-27 templer */
 

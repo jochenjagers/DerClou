@@ -13,6 +13,7 @@
 
 #include "gfx/filter.h"
 #include "port/port.h"
+#include <stdint.h>
 
 /************************************************/
 
@@ -323,7 +324,7 @@ void gfxDoneSDL(void)
 void gfxUpdateSDL(struct RastPort *rp)
 {
 	ubyte *src, *dst;
-	long dstpitch;
+	int32_t dstpitch;
 
 	if ((rp != &RefreshRP) && (rp != &PrepareRP))
 	{
@@ -600,7 +601,7 @@ static void gfxInitXMSRastPort(struct XMSRastPort *rp, uword us_Width, uword us_
 	/*
 	rp->us_Width  = us_Width;
 	rp->us_Height = us_Height;
-	rp->p_MemHandle = MemAlloc((ulong)rp->us_Width * (ulong)rp->us_Height);
+	rp->p_MemHandle = MemAlloc((uint32_t)rp->us_Width * (uint32_t)rp->us_Height);
 	*/
 	rp->us_CollId = GFX_NO_COLL_IN_XMS;
 }
@@ -612,7 +613,7 @@ static void gfxDoneXMSRastPort(struct XMSRastPort *rp)
 	}
 	/*
 	if (rp->p_MemHandle) {
-		MemFree(rp->p_MemHandle, (ulong)rp->us_Width * (ulong)rp->us_Height);
+		MemFree(rp->p_MemHandle, (uint32_t)rp->us_Width * (uint32_t)rp->us_Height);
 		rp->p_MemHandle = NULL;
 	}
 	*/
@@ -815,14 +816,14 @@ void gfxSetFont(struct RastPort *rp, struct Font *font)
 }
 
 /* calculates the length of a text in pixels */
-long gfxTextLength(struct RastPort *rp, char *puch_Text, uword us_CharCount)
+int32_t gfxTextLength(struct RastPort *rp, char *puch_Text, uword us_CharCount)
 {
-	long length;
+	int32_t length;
 	if (!rp) {
 		Log("%s: RastPort is NULL", __func__);
 		return(0);
 	}
-	length = (long) strlen(puch_Text);
+	length = (int32_t) strlen(puch_Text);
 	return (length * (rp->p_Font->us_Width));
 }
 
@@ -832,19 +833,19 @@ long gfxTextLength(struct RastPort *rp, char *puch_Text, uword us_CharCount)
 
 struct Collection *gfxGetCollection(uword us_CollId)
 {
-	return (struct Collection*)GetNthNode(CollectionList, (ulong) (us_CollId - 1));
+	return (struct Collection*)GetNthNode(CollectionList, (uint32_t) (us_CollId - 1));
 }
 
 struct Picture *gfxGetPicture(uword us_PictId)
 {
-	return (struct Picture*)GetNthNode(PictureList, (ulong) (us_PictId - 1));
+	return (struct Picture*)GetNthNode(PictureList, (uint32_t) (us_PictId - 1));
 }
 
 // The Collection must be prepared one step before (with gfxPrepareColl)
 void gfxGetColorTable(uword us_CollId, ubyte *puch_ColorTable)
 {
-	long i;
-	ubyte *p = (ubyte *) ((ulong) StdBuffer1 + (ulong) GFX_CMAP_OFFSET);
+	int32_t i;
+	ubyte *p = (ubyte *) ((intptr_t) StdBuffer1 + (intptr_t) GFX_CMAP_OFFSET);
 
 	for (i = 0; i < GFX_COLORTABLE_SIZE; i++)
 		puch_ColorTable[i] = p[i];
@@ -852,8 +853,8 @@ void gfxGetColorTable(uword us_CollId, ubyte *puch_ColorTable)
 
 void gfxSetColorTable_hack(SDL_Surface *pSurface)
 {
-	long i;
-	ubyte *p = (ubyte *) ((ulong) StdBuffer1 + (ulong) GFX_CMAP_OFFSET);
+	int32_t i;
+	ubyte *p = (ubyte *) ((intptr_t) StdBuffer1 + (intptr_t) GFX_CMAP_OFFSET);
 
 	SDL_Color *pc;
 	for (i = 0; i < 256; i++) {
@@ -864,7 +865,7 @@ void gfxSetColorTable_hack(SDL_Surface *pSurface)
 	}
 }
 
-static long gfxGetRealDestY(struct RastPort *rp, long destY)
+static int32_t gfxGetRealDestY(struct RastPort *rp, int32_t destY)
 {
 	if (!rp) {
 		Log("%s: RastPort is NULL", __func__);
@@ -1030,7 +1031,7 @@ void gfxPrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword us_Y)
 	bGfxInvalidate = 1;
 }
 
-void gfxPrint(struct RastPort *rp, char *puch_Text, uword us_Y, ulong ul_Mode)
+void gfxPrint(struct RastPort *rp, char *puch_Text, uword us_Y, uint32_t ul_Mode)
 {
 	uword x, y, l;
 
@@ -1127,7 +1128,7 @@ void gfxRefresh(void)
 
 void gfxBlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY,
 				 struct RastPort *drp, uword us_DestX, uword us_DestY,
-				 uword us_Width, uword us_Height, ulong ul_BlitMode)
+				 uword us_Width, uword us_Height, uint32_t ul_BlitMode)
 {
 	if (!srp) {
 		Log("%s: source RastPort is NULL", __func__);
@@ -1161,7 +1162,7 @@ void gfxBlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY,
 	bGfxInvalidate = 1;
 }
 
-struct RastPort *gfxGetDestRP(long l_DestX, long l_DestY)
+struct RastPort *gfxGetDestRP(int32_t l_DestX, int32_t l_DestY)
 {
 	struct RastPort *rp = NULL;
 
@@ -1235,7 +1236,7 @@ void gfxClearArea(struct RastPort *rp)
 
 void gfxSetRGB(struct RastPort *rp, ubyte uch_ColNr, ubyte uch_Red, ubyte uch_Green, ubyte uch_Blue)
 {
-	unsigned long n4 = (unsigned long)uch_ColNr << 2;
+	uint32_t n4 = (uint32_t)uch_ColNr << 2;
 	gfxPaletteGlobal[n4  ] = uch_Red;
 	gfxPaletteGlobal[n4+1] = uch_Green;
 	gfxPaletteGlobal[n4+2] = uch_Blue;
@@ -1295,7 +1296,7 @@ void gfxGetColorTableFromReg(ubyte *puch_Colortable)
 
 #define interpol(i,f,d)	(ubyte)((float)(i) + ((float)(f) - (float)(i)) * (float)(d))
 
-void gfxChangeColors(struct RastPort *rp, long l_Delay, ulong ul_Mode, ubyte *colorTable)
+void gfxChangeColors(struct RastPort *rp, int32_t l_Delay, uint32_t ul_Mode, ubyte *colorTable)
 {
 	ubyte cols[768];
 	ubyte cols2[768];
@@ -1368,14 +1369,14 @@ void gfxChangeColors(struct RastPort *rp, long l_Delay, ulong ul_Mode, ubyte *co
 	}
 }
 
-void gfxShow(uword us_PictId, ulong ul_Mode, long l_Delay, long l_XPos, long l_YPos)
+void gfxShow(uword us_PictId, uint32_t ul_Mode, int32_t l_Delay, int32_t l_XPos, int32_t l_YPos)
 {
 	struct Picture    *pict;
 	struct Collection *coll;
 	struct RastPort   *destRP;
 	ubyte   *colorTable;
-	long   destX;
-	long   destY;
+	int32_t   destX;
+	int32_t   destY;
 
 	pict = gfxGetPicture(us_PictId);
 	if (!pict) {

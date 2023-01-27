@@ -135,7 +135,7 @@ void txtDone(void)
 	}
 }
 
-void txtLoad (ulong textId)
+void txtLoad (uint32_t textId)
 {
 	struct Text *txt = (struct Text*)GetNthNode(txtBase->tc_Texts, textId);
 
@@ -170,7 +170,7 @@ void txtLoad (ulong textId)
 	}
 }
 
-void txtUnLoad(ulong textId)
+void txtUnLoad(uint32_t textId)
 {
 	struct Text *txt = (struct Text*)GetNthNode(txtBase->tc_Texts, textId);
 
@@ -187,7 +187,7 @@ void txtUnLoad(ulong textId)
 	}
 }
 
-void txtPrepare(ulong textId)
+void txtPrepare(uint32_t textId)
 {
 	struct Text *txt = (struct Text*)GetNthNode(txtBase->tc_Texts, textId);
 
@@ -197,7 +197,7 @@ void txtPrepare(ulong textId)
 	}
 }
 
-void txtUnPrepare(ulong textId)
+void txtUnPrepare(uint32_t textId)
 {
 	struct Text *txt = (struct Text*)GetNthNode(txtBase->tc_Texts, textId);
 
@@ -205,7 +205,7 @@ void txtUnPrepare(ulong textId)
 		txt->txt_LastMark = NULL;
 }
 
-void txtReset(ulong textId)
+void txtReset(uint32_t textId)
 {
 	struct Text *txt = (struct Text*)GetNthNode(txtBase->tc_Texts, textId);
 
@@ -251,11 +251,11 @@ char *txtGetKey(uword keyNr, char *key)
 	return NULL;
 }
 
-ulong txtGetKeyAsULONG(uword keyNr, char *key)
+uint32_t txtGetKeyAsULONG(uword keyNr, char *key)
 {
 	char *t = txtGetKey(keyNr, key);
 	if (!t) return(0);
-	return((ulong)atol(t));
+	return((uint32_t)atol(t));
 }
 
 /* 2015-01-10 LucyG: the Czech localization crashed when asking Dan Stanford about */
@@ -267,7 +267,7 @@ ulong txtGetKeyAsULONG(uword keyNr, char *key)
 /* of the problem (data file, some "strange" char converted to 0, whatever). */
 
 /* Same as txtGoKey, but uses strncmp instead of strcmp. */
-static LIST *txtGoKeyN(ulong textId, char *key)
+static LIST *txtGoKeyN(uint32_t textId, char *key)
 {
 	LIST *txtList = NULL;
 	char *LastMark = NULL;
@@ -318,7 +318,7 @@ static LIST *txtGoKeyN(ulong textId, char *key)
 	return txtList;
 }
 
-LIST *txtGoKey(ulong textId, char *key)
+LIST *txtGoKey(uint32_t textId, char *key)
 {
 	LIST *txtList = NULL;
 	char *LastMark = NULL;
@@ -393,7 +393,7 @@ LIST *txtGoKey(ulong textId, char *key)
 	return txtList;
 }
 
-LIST *txtGoKeyAndInsert(ulong textId, char *key, ...)
+LIST *txtGoKeyAndInsert(uint32_t textId, char *key, ...)
 {
 	va_list argument;
 	LIST *txtList = (LIST*)CreateList(0L), *originList = NULL;
@@ -415,7 +415,7 @@ LIST *txtGoKeyAndInsert(ulong textId, char *key, ...)
 		{
 			if (originLine[i-2] == '%')
 			{
-				sprintf(txtLine, originLine, va_arg(argument, ulong));
+				sprintf(txtLine, originLine, va_arg(argument, uint32_t));
 				i = strlen(originLine)+1;
 			}
 		}
@@ -428,7 +428,7 @@ LIST *txtGoKeyAndInsert(ulong textId, char *key, ...)
 	return txtList;
 }
 
-ubyte txtKeyExists(ulong textId, char *key)
+ubyte txtKeyExists(uint32_t textId, char *key)
 {
 	ubyte found = 0;
 	struct Text *txt = (struct Text*)GetNthNode(txtBase->tc_Texts, textId);
@@ -457,9 +457,9 @@ ubyte txtKeyExists(ulong textId, char *key)
 	return found;
 }
 
-ulong txtCountKey(char *key)
+uint32_t txtCountKey(char *key)
 {
-	ulong i = strlen(key), j, k;
+	uint32_t i = strlen(key), j, k;
 	for (j = 0, k = 0; j < i; j++)
 	{
 		if (key[j] == TXT_CHAR_KEY_SEPERATOR) k++;
@@ -468,7 +468,7 @@ ulong txtCountKey(char *key)
 }
 
 // functions - STRING
-char *txtGetNthString(ulong textId, char *key, ulong nth, char *dest)
+char *txtGetNthString(uint32_t textId, char *key, uint32_t nth, char *dest)
 {
 	LIST *txtList = txtGoKey(textId, key);
 	char *src;

@@ -10,6 +10,6 @@
 #include "theclou.h"
 
 extern void EndianW(uword *pw);
-extern void EndianL(ulong *pl);
+extern void EndianL(uint32_t *pl);
 
 #endif /* __port_h__ */

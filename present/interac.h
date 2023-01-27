@@ -45,8 +45,8 @@
 
 extern ubyte ChoiceOk (ubyte choice, ubyte xit, LIST *l);
 
-extern ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), ulong waitTime);
-extern ubyte Menu (LIST *menu, ulong possibility, ubyte activ, void (*func)(ubyte), ulong waitTime);
+extern ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), uint32_t waitTime);
+extern ubyte Menu (LIST *menu, uint32_t possibility, ubyte activ, void (*func)(ubyte), uint32_t waitTime);
 
 extern void RefreshMenu(void);
 

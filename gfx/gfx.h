@@ -168,7 +168,7 @@ extern void gfxSetVideoMode(ubyte uch_NewMode);
 extern void wfd(void);
 extern void wfr(void);
 
-extern long gfxGetILBMSize(struct Collection *coll);
+extern int32_t gfxGetILBMSize(struct Collection *coll);
 
 extern void gfxCorrectUpperRPBitmap(void);
 
@@ -178,7 +178,7 @@ extern void gfxSetPalette32(struct RastPort *rp, ubyte uch_ColStart, ubyte uch_C
 
 extern void gfxBlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY,
 				 struct RastPort *drp, uword us_DestX, uword us_DestY,
-				 uword us_Width, uword us_Height, ulong ul_BlitMode);
+				 uword us_Width, uword us_Height, uint32_t ul_BlitMode);
 
 extern void gfxMoveCursor(struct RastPort *rp, uword us_X, uword us_Y);
 extern void gfxSetPens(struct RastPort *rp, ubyte uch_Front, ubyte uch_Back, ubyte uch_Out);
@@ -195,16 +195,16 @@ extern void gfxRefresh(void);
 extern void gfxClearArea(struct RastPort *rp);
 extern void gfxSetRect(uword us_X, uword us_Width);
 
-extern long gfxTextLength(struct RastPort *rp, char *puch_Text, uword us_CharCount);
+extern int32_t gfxTextLength(struct RastPort *rp, char *puch_Text, uword us_CharCount);
 extern ubyte gfxReadPixel(struct RastPort *rp, uword us_X, uword us_Y);
 
-extern void gfxPrint(struct RastPort *rp, char *puch_Text, uword us_Y, ulong ul_Mode);
+extern void gfxPrint(struct RastPort *rp, char *puch_Text, uword us_Y, uint32_t ul_Mode);
 extern void gfxPrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword us_Y);
 
 extern void gfxSetColorRange(ubyte uch_ColorStart, ubyte uch_ColorEnd);
 
-extern void gfxChangeColors(struct RastPort *rp, long l_Delay, ulong ul_Mode, ubyte *colorTable);
-extern void gfxShow(uword us_PictId, ulong ul_Mode, long l_Delay, long l_XPos, long l_YPos);
+extern void gfxChangeColors(struct RastPort *rp, int32_t l_Delay, uint32_t ul_Mode, ubyte *colorTable);
+extern void gfxShow(uword us_PictId, uint32_t ul_Mode, int32_t l_Delay, int32_t l_XPos, int32_t l_YPos);
 
 extern void gfxSetDestRPForShow(struct RastPort *rp);
 
@@ -237,7 +237,7 @@ extern ubyte gfxMCGAReadPixel(struct RastPort *rp, uword us_X, uword us_Y);
 
 extern void gfxMCGABlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY,
 				 struct RastPort *drp, uword us_DestX, uword us_DestY,
-				 uword us_Width, uword us_Height, ulong ul_BlitMode);
+				 uword us_Width, uword us_Height, uint32_t ul_BlitMode);
 #endif
 
 /* gfxnch4.h */
@@ -246,7 +246,7 @@ extern void gfxMCGABlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY
 
 #define GFX_NCH4_SCROLLOFFSET 	(640 * 72)  // Speicher , den die fixe Anzeige belegt
 
-extern ulong gfxNCH4GetCurrScrollOffset(void);
+extern uint32_t gfxNCH4GetCurrScrollOffset(void);
 
 extern void  gfxNCH4SetViewPort(uword x, uword y);
 extern void  gfxNCH4Scroll(int x,int y);

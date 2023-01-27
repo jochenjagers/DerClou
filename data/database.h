@@ -57,23 +57,23 @@
 struct dbObject
 {
 	NODE  link;
-	ulong nr;
-	ulong type;
-	ulong realNr;
+	uint32_t nr;
+	uint32_t type;
+	uint32_t realNr;
 };
 
 struct dbObjectHeader
 {
-	ulong nr;
-	ulong type;
-	ulong size;
+	uint32_t nr;
+	uint32_t type;
+	uint32_t size;
 };
 
 struct ObjectNode
 {
 	NODE   Link;
-	ulong  nr;
-	ulong  type;
+	uint32_t  nr;
+	uint32_t  type;
 	void  *data;
 };
 
@@ -81,48 +81,48 @@ struct ObjectNode
 // public global data
 extern LIST *ObjectList;
 extern LIST *ObjectListPrivate;
-extern ulong ObjectListWidth;
-extern char *(*ObjectListPrevString)(ulong, ulong, void *);
-extern char *(*ObjectListSuccString)(ulong, ulong, void *);
+extern uint32_t ObjectListWidth;
+extern char *(*ObjectListPrevString)(uint32_t, uint32_t, void *);
+extern char *(*ObjectListSuccString)(uint32_t, uint32_t, void *);
 
 extern LIST *objHash[OBJ_HASH_SIZE];
 
 
 // public prototypes - OBJECTS
 ubyte dbLoadAllObjects(char *fileName, uword diskId);
-ubyte dbSaveAllObjects(char *fileName, ulong offset, ulong size, uword diskId);
-void  dbDeleteAllObjects(ulong offset, ulong size);
+ubyte dbSaveAllObjects(char *fileName, uint32_t offset, uint32_t size, uword diskId);
+void  dbDeleteAllObjects(uint32_t offset, uint32_t size);
 
-ulong dbGetObjectCountOfDB(ulong offset, ulong size);
+uint32_t dbGetObjectCountOfDB(uint32_t offset, uint32_t size);
 
 void dbSetLoadObjectsMode(ubyte mode);
 
 // public prototypes - OBJECT
-void *dbNewObject(ulong nr, ulong type, ulong size, char *name, ulong realNr);
-void  dbDeleteObject(ulong nr);
+void *dbNewObject(uint32_t nr, uint32_t type, uint32_t size, char *name, uint32_t realNr);
+void  dbDeleteObject(uint32_t nr);
 
-void *dbGetObject(ulong nr);
-ulong dbGetObjectNr(void *key);
-char *dbGetObjectName(ulong nr, char *objName);
+void *dbGetObject(uint32_t nr);
+uint32_t dbGetObjectNr(void *key);
+char *dbGetObjectName(uint32_t nr, char *objName);
 
-void *dbIsObject(ulong nr, ulong type);
+void *dbIsObject(uint32_t nr, uint32_t type);
 
 // public prototypes - OBJECTNODE
-struct ObjectNode *dbAddObjectNode(LIST *objectList, ulong nr, ulong flags);
-void   dbRemObjectNode(LIST *objectList, ulong nr);
-struct ObjectNode *dbHasObjectNode(LIST *objectList, ulong nr);
+struct ObjectNode *dbAddObjectNode(LIST *objectList, uint32_t nr, uint32_t flags);
+void   dbRemObjectNode(LIST *objectList, uint32_t nr);
+struct ObjectNode *dbHasObjectNode(LIST *objectList, uint32_t nr);
 
-void	SetObjectListAttr(ulong flags, ulong type);
+void	SetObjectListAttr(uint32_t flags, uint32_t type);
 void	BuildObjectList(void *key);
 void	ExpandObjectList(LIST *objectList, char *expandItem);
 
 word	dbStdCompareObjects(struct ObjectNode *obj1, struct ObjectNode *obj2);
-long	dbSortObjectList(LIST **objectList, word (*processNode)(struct ObjectNode *, struct ObjectNode *));
+int32_t	dbSortObjectList(LIST **objectList, word (*processNode)(struct ObjectNode *, struct ObjectNode *));
 void	dbSortPartOfList(LIST *objectList,struct ObjectNode *start, struct ObjectNode *end, word (*processNode)(struct ObjectNode *, struct ObjectNode *));
 
 
-struct ObjectNode *dbAddObjectNode (LIST *objectList, ulong nr, ulong flags);
-void   dbRemObjectNode (LIST *objectList, ulong nr);
+struct ObjectNode *dbAddObjectNode (LIST *objectList, uint32_t nr, uint32_t flags);
+void   dbRemObjectNode (LIST *objectList, uint32_t nr);
 
 // public prototypes
 void	dbInit(void);

@@ -171,7 +171,7 @@ void CDROM_PlayAudioTrack(unsigned char TrackNum)
 //*** CDROM_PlayAudioFrames				***
 //**********************************************************
 
-void CDROM_PlayAudioFrames(unsigned long StartFrame, unsigned long NumOfFrames)
+void CDROM_PlayAudioFrames(uint32_t StartFrame, uint32_t NumOfFrames)
 {
 	if (CDRomInstalled && (CDROM_CheckMediaChanged() == 0))	// 2014-07-13 LucyG : check CDRomInstalled
 	{
@@ -189,7 +189,7 @@ void CDROM_PlayAudioFrames(unsigned long StartFrame, unsigned long NumOfFrames)
 //*** CDROM_PlayAudioSequence				***
 //**********************************************************
 
-void CDROM_PlayAudioSequence(unsigned char TrackNum,unsigned long StartOffset,unsigned long EndOffset)
+void CDROM_PlayAudioSequence(unsigned char TrackNum,uint32_t StartOffset,uint32_t EndOffset)
 {
 	Log("%s|%s: TrackNum=%d, StartOffset=%d, EndOffset=%d", __FILE__, __func__, TrackNum, StartOffset, EndOffset);
 

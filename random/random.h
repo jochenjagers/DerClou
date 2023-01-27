@@ -19,6 +19,6 @@
 
 extern void rndInit(void);
 
-extern ulong CalcRandomNr(ulong l_limit, ulong u_limit);
+extern uint32_t CalcRandomNr(uint32_t l_limit, uint32_t u_limit);
 
 #endif

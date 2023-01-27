@@ -30,7 +30,7 @@ void (*MenuTimeOutFunc)(void);
 // refresh
 LIST *refreshMenu  = NULL;
 ubyte refreshActiv = 0;
-ulong refreshPoss  = 0;
+uint32_t refreshPoss  = 0;
 
 
 

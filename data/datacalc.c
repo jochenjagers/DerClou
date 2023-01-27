@@ -6,9 +6,9 @@
 */
 #include "data/datacalc.h"
 
-long Round(long v,long p)     /* p...Stellen ! */
+int32_t Round(int32_t v,int32_t p)     /* p...Stellen ! */
      {
-     long i,z;
+     int32_t i,z;
 
      for(i=0,z=1; i<p; i++,z*=10);
 
@@ -18,7 +18,7 @@ long Round(long v,long p)     /* p...Stellen ! */
      return(v);
      }
 
-long CalcValue(long value, long min, long max, long fact, long perc)
+int32_t CalcValue(int32_t value, int32_t min, int32_t max, int32_t fact, int32_t perc)
      {
      perc = ((perc * fact) - (perc * 128)) / 127;
 
@@ -30,7 +30,7 @@ long CalcValue(long value, long min, long max, long fact, long perc)
      return value;
      }
 
-long ChangeAbs(long item, long value, long min, long max)
+int32_t ChangeAbs(int32_t item, int32_t value, int32_t min, int32_t max)
      {
      item+=value;
 
@@ -40,12 +40,12 @@ long ChangeAbs(long item, long value, long min, long max)
      return(item);
      }
 
-long RoundF(float num)
+int32_t RoundF(float num)
 {
     if (num < 0)
-		return (long) (num - 0.5f);
+		return (int32_t) (num - 0.5f);
 	else
-		return (long) (num + 0.5f);
+		return (int32_t) (num + 0.5f);
 }
 
 

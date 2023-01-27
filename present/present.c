@@ -78,12 +78,12 @@ void DrawPresent (LIST *present, ubyte firstLine, struct RastPort *rp, ubyte max
 	gfxBlit(&RefreshRP, 88, 3, rp, 88, 3, 228, 46, GFX_ONE_STEP);
 }
 
-ubyte Present (ulong nr, const char *presentationText,void (*initPresentation)(ulong, LIST*, LIST*))
+ubyte Present (uint32_t nr, const char *presentationText,void (*initPresentation)(uint32_t, LIST*, LIST*))
 {
 	ubyte firstVis;
 	ubyte maxNr;
 	ubyte exitLoop;
-	ulong action;
+	uint32_t action;
 	LIST *presentationData, *list;
 	Person obj;
 	Evidence e;
@@ -180,16 +180,16 @@ ubyte Present (ulong nr, const char *presentationText,void (*initPresentation)(u
 	}
 }
 
-void AddPresentLine(LIST *l, ubyte presentHow, ulong data, ulong maxNr, LIST *texts, uword textNr)
+void AddPresentLine(LIST *l, ubyte presentHow, intptr_t data, uint32_t maxNr, LIST *texts, uword textNr)
 {
 	char *name = NULL;
 	struct presentationInfo *p;
 
 	if (textNr != ((uword)-1)) {
-		name = NODE_NAME(GetNthNode(texts, (ulong)textNr));
+		name = NODE_NAME(GetNthNode(texts, (uint32_t)textNr));
 	}
 
-	p = (struct presentationInfo *)CreateNode(l, (ulong)sizeof(struct presentationInfo), name);
+	p = (struct presentationInfo *)CreateNode(l, (uint32_t)sizeof(struct presentationInfo), name);
 
 	p->presentHow = presentHow;
 	p->maxNr      = maxNr;
@@ -222,7 +222,7 @@ void prSetBarPrefs(struct RastPort *p_RP,uword us_BarWidth,uword us_BarHeight,ub
 	PresentControl.uch_TCol		= uch_TCol;
 }
 
-void prDrawTextBar(char *puch_Text,ulong ul_Value,ulong ul_Max,uword us_XPos,uword us_YPos)
+void prDrawTextBar(char *puch_Text,uint32_t ul_Value,uint32_t ul_Max,uword us_XPos,uword us_YPos)
 {
 	struct RastPort *p_RP = PresentControl.p_CurrRP;
 	uword us_Width        = PresentControl.us_BarWidth;

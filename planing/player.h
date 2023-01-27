@@ -50,6 +50,6 @@
 #include "planing/planer.h"
 #endif
 
-long plPlayer(ulong objId , ulong actionTime, ubyte (*actionFunc)(ulong, ulong));
+int32_t plPlayer(uint32_t objId , uint32_t actionTime, ubyte (*actionFunc)(uint32_t, uint32_t));
 
 #endif

@@ -6,14 +6,14 @@
 */
 #include "landscap/raster.h"
 
-static uword lsGetRasterXSize(ulong areaID);
-static uword lsGetRasterYSize(ulong areaID);
+static uword lsGetRasterXSize(uint32_t areaID);
+static uword lsGetRasterYSize(uint32_t areaID);
 
-void lsShowRaster(ulong areaID, ubyte perc)
+void lsShowRaster(uint32_t areaID, ubyte perc)
 	{
 	LSArea area = (LSArea)dbGetObject(areaID);
 	struct ObjectNode *node;
-	long count, i;
+	int32_t count, i;
 	LIST *objects;
 	LSObject lso;
 
@@ -110,9 +110,9 @@ NODE *lsGetPredObject(NODE *start)
 	}
 
 
-void lsFadeRasterObject(ulong areaID, LSObject lso, ubyte status)
+void lsFadeRasterObject(uint32_t areaID, LSObject lso, ubyte status)
 	{
-	ulong  rasterXSize, rasterYSize, rasterSize, col;
+	uint32_t  rasterXSize, rasterYSize, rasterSize, col;
 	uword   xStart, yStart, xEnd, yEnd;
 
 	rasterXSize = lsGetRasterXSize(areaID);
@@ -141,12 +141,12 @@ void lsFadeRasterObject(ulong areaID, LSObject lso, ubyte status)
 	gfxRectFill(l_wrp, xStart, yStart, xEnd, yEnd);
 	}
 
-void lsShowAllConnections(ulong areaID, NODE *node, ubyte perc)
+void lsShowAllConnections(uint32_t areaID, NODE *node, ubyte perc)
 	{
 	NODE  *n;
 	LSObject lso1, lso2;
-	ulong relID = 0, col, destX, destY, srcX, srcY;
-	ulong rasterXSize, rasterYSize, rasterSize;
+	uint32_t relID = 0, col, destX, destY, srcX, srcY;
+	uint32_t rasterXSize, rasterYSize, rasterSize;
 	static ubyte Alarm_Power;
 
 	lso1 = (LSObject)OL_DATA(node);
@@ -210,14 +210,14 @@ void lsShowAllConnections(ulong areaID, NODE *node, ubyte perc)
 		}
 	}
 
-static uword lsGetRasterXSize(ulong areaID)
+static uword lsGetRasterXSize(uint32_t areaID)
 	{
 	LSArea area = (LSArea)dbGetObject(areaID);
 
 	return (uword)(LS_RASTER_DISP_WIDTH / ((area->us_Width) / LS_RASTER_X_SIZE));
 	}
 
-static uword lsGetRasterYSize(ulong areaID)
+static uword lsGetRasterYSize(uint32_t areaID)
 	{
 	LSArea area = (LSArea)dbGetObject(areaID);
 

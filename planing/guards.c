@@ -6,7 +6,7 @@
 */
 #include "planing/guards.h"
 
-void grdDo(FILE *fh, struct System *sys, LIST *PersonsList, ulong BurglarsNr, ulong PersonsNr, ubyte grdAction)
+void grdDo(FILE *fh, struct System *sys, LIST *PersonsList, uint32_t BurglarsNr, uint32_t PersonsNr, ubyte grdAction)
 {
 	ubyte i;
 	struct ObjectNode *n;
@@ -24,7 +24,7 @@ void grdDo(FILE *fh, struct System *sys, LIST *PersonsList, ulong BurglarsNr, ul
 	}
 }
 
-ubyte grdInit(FILE **fh, char *mode, ulong bldId, ulong areaId)
+ubyte grdInit(FILE **fh, char *mode, uint32_t bldId, uint32_t areaId)
 {
 	char bldName[TXT_KEY_LENGTH], fileName[TXT_KEY_LENGTH];
 
@@ -45,7 +45,7 @@ void grdDone(FILE *fh)
 	dskClose(fh);
 }
 
-ubyte grdAddToList(ulong bldId, LIST *l)
+ubyte grdAddToList(uint32_t bldId, LIST *l)
 {
 	struct ObjectNode *n;
 
@@ -60,13 +60,13 @@ ubyte grdAddToList(ulong bldId, LIST *l)
 	return 0;
 }
 
-ubyte grdDraw(struct RastPort *rp, ulong bldId, ulong areaId)
+ubyte grdDraw(struct RastPort *rp, uint32_t bldId, uint32_t areaId)
 {
 	FILE  *fh;
 	ubyte  ret = 0;
 	LIST *GuardsList;
 	struct System *grdSys;
-	ulong GuardsNr, i;
+	uint32_t GuardsNr, i;
 	uword xpos, ypos;
 	struct Handler *h;
 	struct Action  *action;

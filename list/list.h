@@ -70,17 +70,17 @@ extern void *CreateNode(void *list, uword size, char *name);
 extern void RemoveNode(void *list, char *name);
 extern void FreeNode(void *node);
 extern void *GetNode(void *list, char *name);
-extern void *GetNthNode(void *list, ulong nth);
-extern ulong GetNrOfNodes(void *list);
-extern ulong GetNodeNrByAddr(void *list, void *node);
-extern ulong GetNodeNr(void *list, char *name);
+extern void *GetNthNode(void *list, uint32_t nth);
+extern uint32_t GetNrOfNodes(void *list);
+extern uint32_t GetNodeNrByAddr(void *list, void *node);
+extern uint32_t GetNodeNr(void *list, char *name);
 extern void foreach(void *list, void (*processNode)(void *));
 extern void Link(void *list, void *node, void *predNode);
 extern void *UnLinkByAddr(void *list, void *node, void **predNode);
 extern void *UnLink(void *list, char *name, void **predNode);
 extern void ReplaceNodeByAddr(void *list, void *node, void *newNode);
 extern void ReplaceNode(void *list, char *name, void *newNode);
-extern ulong ReadList(void *list, uword size, char *fileName, uword diskId);
+extern uint32_t ReadList(void *list, uword size, char *fileName, uword diskId);
 extern void WriteList(void *list, char *fileName, uword diskId);
 
 #endif /* MODULE_LIST */

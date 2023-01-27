@@ -55,15 +55,15 @@ extern void inpCloseAllInputDevs(void);
 extern void inpGetMouseXY(struct RastPort *p_RP, uword *p_X, uword *p_Y);
 extern uword inpGetMouseY(struct RastPort *p_RP);
 
-extern long inpWaitFor(long l_Mask);                 /* retourniert was passiert ist
+extern int32_t inpWaitFor(int32_t l_Mask);                 /* retourniert was passiert ist
 																		  * (siehe defines) */
-extern void inpSetWaitTicks(long l_Ticks);
+extern void inpSetWaitTicks(int32_t l_Ticks);
 
 extern void inpTurnESC(uword us_NewStatus);          /* 0 means off, 1 means on */
 extern void inpTurnFunctionKey(uword us_NewStatus);  /* 0 means off, 1 means on */
 extern void inpTurnMouse(uword us_NewStatus);		  // 0 means off, 1 means on
 
-extern void inpDelay(long l_Ticks);
+extern void inpDelay(int32_t l_Ticks);
 extern void inpSetKeyRepeat(unsigned char rate);
 
 extern void setMouseCursor(ubyte fact);

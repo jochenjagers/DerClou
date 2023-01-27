@@ -80,10 +80,10 @@ extern LIST *BurglarsList;
 
 extern ubyte PersonsNr;
 extern ubyte BurglarsNr;
-extern ulong CurrentPerson;
+extern uint32_t CurrentPerson;
 
-extern ulong Planing_Weight[PLANING_NR_PERSONS];
-extern ulong Planing_Volume[PLANING_NR_PERSONS];
+extern uint32_t Planing_Weight[PLANING_NR_PERSONS];
+extern uint32_t Planing_Volume[PLANING_NR_PERSONS];
 
 extern ubyte Planing_Loot[PLANING_NR_LOOTS];
 extern ubyte Planing_Guard[PLANING_NR_GUARDS];
@@ -92,7 +92,7 @@ extern char Planing_Name[PLANING_NR_PERSONS + PLANING_NR_GUARDS][20];
 
 extern LIST *Planing_GuardRoomList[PLANING_NR_GUARDS];
 
-extern ulong Planing_BldId;
+extern uint32_t Planing_BldId;
 
 
 
@@ -101,12 +101,12 @@ void plClearHandler(NODE *n);
 void plCloseHandler(NODE *n);
 
 void plPrepareData(void);
-void plPrepareSprite(ulong livNr, ulong areaId);
+void plPrepareSprite(uint32_t livNr, uint32_t areaId);
 void plPrepareNames(void);
 
-void plPrepareGfx(ulong objId, ubyte landscapMode, ubyte prepareMode);
+void plPrepareGfx(uint32_t objId, ubyte landscapMode, ubyte prepareMode);
 void plPrepareRel(void);
-void plPrepareSys(ulong currPer, ulong objId, ubyte sysMode);
+void plPrepareSys(uint32_t currPer, uint32_t objId, ubyte sysMode);
 
 void plUnprepareGfx(void);
 void plUnprepareRel(void);

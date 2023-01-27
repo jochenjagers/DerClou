@@ -25,7 +25,7 @@ char bCDRom=0; //default = 0
 
 void tcClearStdBuffer(void *p_Buffer)
 {
-	long i;
+	int32_t i;
 	char *p = (char *)p_Buffer;
 	for (i = 0; i < STD_BUFFER1_SIZE; i++)
 		p[i] = 0;
@@ -265,7 +265,7 @@ void tcSetPermanentColors(void)
 static ubyte StartupMenu(void)
 {
 	LIST *menu = txtGoKey(MENU_TXT, "STARTUP_MENU");
-	ulong activ;
+	uint32_t activ;
 	char line[TXT_KEY_LENGTH] = COSP_TITLE " v" COSP_VERSION;
 	ubyte ret = 0;
 
@@ -336,7 +336,7 @@ static ubyte StartupMenu(void)
 
 static void tcDo(void)
 {
-	ulong sceneId = SCENE_NEW_GAME;
+	uint32_t sceneId = SCENE_NEW_GAME;
 
 	gfxChangeColors(l_wrp, 0, GFX_FADE_OUT, 0);
 	gfxChangeColors(m_wrp, 0, GFX_FADE_OUT, 0);
@@ -485,7 +485,7 @@ static void loadConfig(const char *rootPath)
 int SDL_main(int argc, char **argv)
 {
 	char result[256], res;
-	long i;
+	int32_t i;
 
 #ifdef THECLOU_DEBUG_ALLOC
 	MemInit();

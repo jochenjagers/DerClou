@@ -15,9 +15,9 @@ void rndInit(void)
 	#endif
 }
 
-ulong CalcRandomNr(ulong l_limit, ulong u_limit)
+uint32_t CalcRandomNr(uint32_t l_limit, uint32_t u_limit)
 {
-	ulong x = l_limit + (rand() % (u_limit - l_limit));
+	uint32_t x = l_limit + (rand() % (u_limit - l_limit));
 
 	return x;
 }

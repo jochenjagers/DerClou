@@ -6,14 +6,14 @@
 */
 #include "scenes/evidence.h"
 
-ulong tcPersonWanted(ulong persId);
-ulong tcPersonQuestioning(Person person);
+uint32_t tcPersonWanted(uint32_t persId);
+uint32_t tcPersonQuestioning(Person person);
 
 struct Search Search;
 
-ubyte tcCarFound(Car car, ulong time)
+ubyte tcCarFound(Car car, uint32_t time)
 	{
-	long i = 0, hours;
+	int32_t i = 0, hours;
 	Person john  = (Person)dbGetObject (Person_John_Gludo);
 	Person miles = (Person)dbGetObject (Person_Miles_Chickenwing);
 	ubyte found = 0;
@@ -52,7 +52,7 @@ ubyte tcCarFound(Car car, ulong time)
 	return found;
 	}
 
-ulong tcATraitor(ulong traitorId)
+uint32_t tcATraitor(uint32_t traitorId)
 	{
 	char name[TXT_KEY_LENGTH], line[TXT_KEY_LENGTH];
 	LIST *bubble  = txtGoKey(BUSINESS_TXT, "A_TRAITOR");
@@ -77,12 +77,12 @@ ulong tcATraitor(ulong traitorId)
 	return 1; /* gefangen! */
 	}
 
-ulong tcIsThereATraitor(void)
+uint32_t tcIsThereATraitor(void)
 	{
 	Player player = (Player)dbGetObject(Player_Player_1);
 	Person matt   = (Person)dbGetObject(Person_Matt_Stuvysunt);
 	ubyte symp = 255;
-	ulong traitorId = 0, caught = 0;
+	uint32_t traitorId = 0, caught = 0;
 	NODE *n;
 
 	if (player->JobOfferCount > 50 + CalcRandomNr(0, 20))     /* ein Verrat?! */
@@ -112,10 +112,10 @@ ulong tcIsThereATraitor(void)
 	return caught;
 	}
 
-ulong tcStartEvidence(void)
+uint32_t tcStartEvidence(void)
 	{
-	long     MyEvidence[4][7], guarded, radio;
-	ulong    totalEvidence[7], i, j, shownEvidence[4], Recognition[4], caught = 0;
+	int32_t     MyEvidence[4][7], guarded, radio;
+	uint32_t    totalEvidence[7], i, j, shownEvidence[4], Recognition[4], caught = 0;
 	ubyte    guyReady, guyNr, evidenceNr, guyCount;
 	char     line[TXT_KEY_LENGTH];
 	ubyte	 shown = 0;
@@ -123,8 +123,8 @@ ulong tcStartEvidence(void)
 	Evidence evidence = (Evidence)dbGetObject(Evidence_Evidence_1);    /* just for presentation */
 	struct   ObjectNode *n;
 	LIST     *guys, *spuren;
-	long div;
-	long newStrike;
+	int32_t div;
+	int32_t newStrike;
     Car  car;
 
 	if ((!(Search.EscapeBits & FAHN_ALARM)) && (!(Search.EscapeBits & FAHN_QUIET_ALARM)))
@@ -144,7 +144,7 @@ ulong tcStartEvidence(void)
 	guarded = ChangeAbs(((Building)dbGetObject(Search.BuildingId))->GRate,
 							  ((Building)dbGetObject(Search.BuildingId))->Strike / 7, 0, 255);
 
-	radio = (long) ((Building)dbGetObject(Search.BuildingId))->RadioGuarding;
+	radio = (int32_t) ((Building)dbGetObject(Search.BuildingId))->RadioGuarding;
 
 	for(n = (struct ObjectNode *) LIST_HEAD(guys), i = 0; NODE_SUCC(n); n = (struct ObjectNode*) NODE_SUCC(n), i++)
 		{
@@ -160,13 +160,13 @@ ulong tcStartEvidence(void)
 		if (Search.SpotTouchCount[i])
 			div = 1;
 
-		MyEvidence[i][0] = (((tcGetTrail(p[i], 0) * (long) Search.WalkTime[i] * (max(1, 255-guarded))) / ((long)Search.TimeOfBurglary + 1)) ) / div;
-		MyEvidence[i][1] = (((tcGetTrail(p[i], 1) * (long) Search.WaitTime[i] * (max(1, 255-guarded))) / ((long)Search.TimeOfBurglary + 1)) ) / div;
-		MyEvidence[i][2] = (((tcGetTrail(p[i], 2) * (long) Search.WorkTime[i] * (max(1, 255-guarded))) / ((long)Search.TimeOfBurglary + 1)) ) / div;
-		MyEvidence[i][3] = (((tcGetTrail(p[i], 3) * (long) Search.KillTime[i] * (max(1, 255-guarded))) / ((long)Search.TimeOfBurglary + 1)) );
-		MyEvidence[i][4] = ChangeAbs(0, (long) Search.CallCount * (long) radio / 5, 0, 255);
+		MyEvidence[i][0] = (((tcGetTrail(p[i], 0) * (int32_t) Search.WalkTime[i] * (max(1, 255-guarded))) / ((int32_t)Search.TimeOfBurglary + 1)) ) / div;
+		MyEvidence[i][1] = (((tcGetTrail(p[i], 1) * (int32_t) Search.WaitTime[i] * (max(1, 255-guarded))) / ((int32_t)Search.TimeOfBurglary + 1)) ) / div;
+		MyEvidence[i][2] = (((tcGetTrail(p[i], 2) * (int32_t) Search.WorkTime[i] * (max(1, 255-guarded))) / ((int32_t)Search.TimeOfBurglary + 1)) ) / div;
+		MyEvidence[i][3] = (((tcGetTrail(p[i], 3) * (int32_t) Search.KillTime[i] * (max(1, 255-guarded))) / ((int32_t)Search.TimeOfBurglary + 1)) );
+		MyEvidence[i][4] = ChangeAbs(0, (int32_t) Search.CallCount * (int32_t) radio / 5, 0, 255);
 		MyEvidence[i][5] = (p[i]->KnownToPolice * (max(1, guarded))) / (div * 3);
-		MyEvidence[i][6] = ChangeAbs(0, (long) CalcRandomNr(200, 255) * (long) Search.SpotTouchCount[i], 0, 255);
+		MyEvidence[i][6] = ChangeAbs(0, (int32_t) CalcRandomNr(200, 255) * (int32_t) Search.SpotTouchCount[i], 0, 255);
 
 		for (j = 0; j < 7; j++)       /* jeden Betrag != 0 AUFRUNDEN auf 1% ! */
 			if (MyEvidence[i][j])
@@ -236,7 +236,7 @@ ulong tcStartEvidence(void)
 				Recognition[guyNr] += MyEvidence[guyNr][evidenceNr];
 
 				evidence->Recognition  = Recognition[guyNr] / 3;  /* change also: totalEvidence /= 3.... */
-				evidence->pers         = (ulong) OL_NR(GetNthNode(guys, (ulong) guyNr));
+				evidence->pers         = (uint32_t) OL_NR(GetNthNode(guys, (uint32_t) guyNr));
 
 				/* für alle "Evidences" - stimmt so, da für alle */
 				/* Personen die selbe Evidence Struct benutzt wird -> */
@@ -325,10 +325,10 @@ ulong tcStartEvidence(void)
 		{
 		car = (Car)dbGetObject(Organisation.CarID);
 
-		newStrike = CalcValue ((long)car->Strike, 0, 255, 255, 15);
+		newStrike = CalcValue ((int32_t)car->Strike, 0, 255, 255, 15);
 
 		if (newStrike < (car->Strike + 40))
-			newStrike = ChangeAbs ((long)car->Strike, 40, 0, 255);
+			newStrike = ChangeAbs ((int32_t)car->Strike, 40, 0, 255);
 
 		car->Strike = newStrike;
 		}
@@ -367,9 +367,9 @@ void tcForgetGuys(void)
 	RemoveList(guys);
 	}
 
-ulong tcPersonWanted(ulong persId)
+uint32_t tcPersonWanted(uint32_t persId)
 	{
-	ulong hours, i = 0, caught = 0;
+	uint32_t hours, i = 0, caught = 0;
 	Person john  = (Person)dbGetObject(Person_John_Gludo);
 	Person miles = (Person)dbGetObject(Person_Miles_Chickenwing);
 	LIST *bubble;
@@ -418,9 +418,9 @@ ulong tcPersonWanted(ulong persId)
 	return caught;
 	}
 
-ulong tcPersonQuestioning(Person person)
+uint32_t tcPersonQuestioning(Person person)
 	{
-	ulong caught = 0;
+	uint32_t caught = 0;
 	Person john = (Person)dbGetObject(Person_John_Gludo);
 	Person miles = (Person)dbGetObject(Person_Miles_Chickenwing);
 
@@ -444,11 +444,11 @@ ulong tcPersonQuestioning(Person person)
 	return caught;
 	}
 
-long tcEscapeFromBuilding(ulong escBits)
+int32_t tcEscapeFromBuilding(uint32_t escBits)
 	{
 	Person gludo      = (Person)dbGetObject(Person_John_Gludo);
 	ubyte  escapeSucc = FAHN_NOT_ESCAPED;
-	long   timeLeft   = LONG_MAX;
+	int32_t   timeLeft   = INT_MAX;
 
 	/* Fluchtbilder zeigen! */
 	livSetAllInvisible();
@@ -498,7 +498,7 @@ long tcEscapeFromBuilding(ulong escBits)
 	return timeLeft;
 	}
 
-long tcEscapeByCar(ulong escBits, long timeLeft)
+int32_t tcEscapeByCar(uint32_t escBits, int32_t timeLeft)
 	{
 	Person gludo = (Person)dbGetObject(Person_John_Gludo);
 	Person miles = (Person)dbGetObject(Person_Miles_Chickenwing);
@@ -575,20 +575,20 @@ long tcEscapeByCar(ulong escBits, long timeLeft)
 	if (escapeSucc != FAHN_ESCAPED)
 		StopAnim();
 
-	return((long)escapeSucc);
+	return((int32_t)escapeSucc);
 	}
 
-long tcCalcCarEscape(long timeLeft)
+int32_t tcCalcCarEscape(int32_t timeLeft)
 	{
 	ubyte kmhWeight[4]    = {32, 44, 60,   67};
 	ubyte psWeight[4]     = {68, 56, 40,   33};
 	ubyte driverWeight[4] = {50, 40, 25,   20};
 	ubyte policeSpeed[4]  = {90, 95, 103, 107}, paint, colortable[GFX_COLORTABLE_SIZE];
 	char line[TXT_KEY_LENGTH];
-	long kmh, ps, i, j, YardsInFront, length, wayType, unrealSpeed, x, xOldMatt = -1, xOldPoli = -1;
+	int32_t kmh, ps, i, j, YardsInFront, length, wayType, unrealSpeed, x, xOldMatt = -1, xOldPoli = -1;
 	Car car        = (Car)dbGetObject (Organisation.CarID);
 	Building build = (Building)dbGetObject (Organisation.BuildingID);
-	long result = FAHN_ESCAPED;
+	int32_t result = FAHN_ESCAPED;
 
 	if ((Organisation.BuildingID != Building_Tower_of_London) &&
 		 (Organisation.BuildingID != Building_Starford_Kaserne))
@@ -634,7 +634,7 @@ long tcCalcCarEscape(long timeLeft)
 		/* Einheit = m pro Schleifendurchlauf */
 		unrealSpeed = (kmh * kmhWeight[wayType] + ps * psWeight[wayType]) / 100;
 
-		unrealSpeed = unrealSpeed + 5 - (long)(CalcRandomNr(0, 10));
+		unrealSpeed = unrealSpeed + 5 - (int32_t)(CalcRandomNr(0, 10));
 
 		if (unrealSpeed <= 0)
 			unrealSpeed = 5;

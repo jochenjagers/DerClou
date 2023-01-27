@@ -62,7 +62,7 @@ struct System
 
 struct System *InitSystem(void);                          /* Initialize system for use */
 void CloseSystem(struct System *sys);                    /* Close all system immedietly */
-void SetActivHandler(struct System *sys, ulong id);
+void SetActivHandler(struct System *sys, uint32_t id);
 
 void  SaveSystem(FILE *fh, struct System *sys);
 LIST *LoadSystem(FILE *fh, struct System *sys);
@@ -77,29 +77,29 @@ struct Handler
 {
 	NODE	Link;                   /* Link to next handler */
 
-	ulong	Id;                     /* ID of handler (all handlers will be identified with their ID and
+	uint32_t	Id;                     /* ID of handler (all handlers will be identified with their ID and
 	                                 not through pointers, which will save global data) */
 
-	ulong Timer;                  /* Handler time in seconds/3 */
+	uint32_t Timer;                  /* Handler time in seconds/3 */
 
-	ulong Flags;                  /* Handler flags */
+	uint32_t Flags;                  /* Handler flags */
 
 	LIST	*Actions;               /* Action table */
 	NODE	*CurrentAction;         /* Current action */
 };
 
 
-struct Handler *InitHandler(struct System *sys, ulong id, ulong flags);    /* Initialize handler         */
-void CloseHandler(struct System *sys, ulong id);                           /* Close Handler              */
-struct Handler *ClearHandler(struct System *sys, ulong id);                /* Clear Handlers action list */
-struct Handler *FindHandler(struct System *sys, ulong id);
+struct Handler *InitHandler(struct System *sys, uint32_t id, uint32_t flags);    /* Initialize handler         */
+void CloseHandler(struct System *sys, uint32_t id);                           /* Close Handler              */
+struct Handler *ClearHandler(struct System *sys, uint32_t id);                /* Clear Handlers action list */
+struct Handler *FindHandler(struct System *sys, uint32_t id);
 
 ubyte IsHandlerCleared(struct System *sys);
 
-void  SaveHandler(FILE *fh, struct System *sys, ulong id);
-ubyte LoadHandler(FILE *fh, struct System *sys, ulong id);
+void  SaveHandler(FILE *fh, struct System *sys, uint32_t id);
+ubyte LoadHandler(FILE *fh, struct System *sys, uint32_t id);
 
-ulong plGetUsedMem(void);
+uint32_t plGetUsedMem(void);
 
 /* here we are at the real part - the actions */
 #define ACTION_GO           1
@@ -147,59 +147,59 @@ struct ActionGo
    Figure sends out a signal of a special type to a receiver */
 struct ActionSignal
 {
-   ulong ReceiverId;
+   uint32_t ReceiverId;
 };
 
 /* Type : ACTION_WAIT_SIGNAL
    Figure waits until it receives a signal of a special type from a special sender */
 struct ActionWaitSignal
 {
-	ulong SenderId;
+	uint32_t SenderId;
 };
 
 /* Type : ACTION_USE */
 struct ActionUse
 {
-   ulong ItemId;
-   ulong ToolId;
+   uint32_t ItemId;
+   uint32_t ToolId;
 };
 
 /* Type : ACTION_TAKE */
 struct ActionTake
 {
-   ulong ItemId;
-   ulong LootId;
+   uint32_t ItemId;
+   uint32_t LootId;
 };
 
 /* Type : ACTION_DROP */
 struct ActionDrop
 {
-   ulong ItemId;
-   ulong LootId;
+   uint32_t ItemId;
+   uint32_t LootId;
 };
 
 /* Type : ACTION_OPEN */
 struct ActionOpen
 {
-   ulong ItemId;
+   uint32_t ItemId;
 };
 
 /* Type : ACTION_CLOSE */
 struct ActionClose
 {
-   ulong ItemId;
+   uint32_t ItemId;
 };
 
 /* Type : ACTION_CONTROL */
 struct ActionControl
 {
-   ulong ItemId;
+   uint32_t ItemId;
 };
 
 /* LucyG 2017-10-29 : this macro looks suspicious */
 #define ActionData(ac,type)      ((type)(ac+1))
 
-struct Action *InitAction(struct System *sys, uword type, ulong data1, ulong data2, ulong time);
+struct Action *InitAction(struct System *sys, uword type, uint32_t data1, uint32_t data2, uint32_t time);
 struct Action *CurrentAction(struct System *sys);
 struct Action *GoFirstAction(struct System *sys);
 struct Action *GoLastAction(struct System *sys);
@@ -220,18 +220,18 @@ struct plSignal
 {
 	NODE  Link;
 
-	ulong	SenderId;
-	ulong	ReceiverId;
+	uint32_t	SenderId;
+	uint32_t	ReceiverId;
 };
 
-struct plSignal *InitSignal(struct System *sys, ulong sender, ulong receiver);
+struct plSignal *InitSignal(struct System *sys, uint32_t sender, uint32_t receiver);
 void CloseSignal(struct plSignal *sig);
-struct plSignal *IsSignal(struct System *sys, ulong sender, ulong receiver);
+struct plSignal *IsSignal(struct System *sys, uint32_t sender, uint32_t receiver);
 
 
-ulong CurrentTimer(struct System *sys);
-void  IncCurrentTimer(struct System *sys, ulong time, ubyte alsoTime);
-ulong GetMaxTimer(struct System *sys);
+uint32_t CurrentTimer(struct System *sys);
+void  IncCurrentTimer(struct System *sys, uint32_t time, ubyte alsoTime);
+uint32_t GetMaxTimer(struct System *sys);
 
 void ResetMem(void);
 void CorrectMem(LIST *l);

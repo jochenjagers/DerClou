@@ -63,12 +63,12 @@
 
 void plPrintInfo(char *person);
 void plMessage(char *msg, ubyte flags);
-void plPersonPict(ulong personId);
+void plPersonPict(uint32_t personId);
 void plDisplayAbilities (void);
-void plDisplayTimer(ulong time, ubyte doSpotsImmediatly);
+void plDisplayTimer(uint32_t time, ubyte doSpotsImmediatly);
 void plDisplayInfo(void);
-void plRefresh(ulong ItemId);
-void plDrawWait(ulong sec);
-ubyte plSay(char *msg, ulong persId);
+void plRefresh(uint32_t ItemId);
+void plDrawWait(uint32_t sec);
+ubyte plSay(char *msg, uint32_t persId);
 
 #endif

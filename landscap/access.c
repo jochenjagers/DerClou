@@ -7,7 +7,7 @@
 #include "landscap/landscap.h"
 #include "landscap/landscap_p.h"
 
-long lsIsLSObjectInActivArea(LSObject lso)
+int32_t lsIsLSObjectInActivArea(LSObject lso)
 	{
 	if (AskP(dbGetObject(ls->ul_AreaID), ConsistOfRelationID, lso, NO_PARAMETER, CMP_NO))
 		return 1;
@@ -15,18 +15,18 @@ long lsIsLSObjectInActivArea(LSObject lso)
 	return 0;
 	}
 
-void lsSetObjectRetrievalList(ulong ul_AreaId)
+void lsSetObjectRetrievalList(uint32_t ul_AreaId)
 	{
-	long i;
+	int32_t i;
 
 	for (i = 0; i < 3; i++)
 		if (ul_AreaId == ls->ul_ObjectRetrievalAreaId[i])
 			ls->p_ObjectRetrieval = ls->p_ObjectRetrievalLists[i];
 	}
 
-ulong lsGetCurrObjectRetrieval(void)
+uint32_t lsGetCurrObjectRetrieval(void)
 	{
-	long i;
+	int32_t i;
 
 	for (i = 0; i < 3; i++)
 		if (ls->p_ObjectRetrieval == ls->p_ObjectRetrievalLists[i])
@@ -35,7 +35,7 @@ ulong lsGetCurrObjectRetrieval(void)
 	return 0;
 	}
 
-long lsIsObjectAStdObj(LSObject lso)
+int32_t lsIsObjectAStdObj(LSObject lso)
 	{
 	if (lsIsObjectADoor(lso))
 		return 0;
@@ -52,7 +52,7 @@ long lsIsObjectAStdObj(LSObject lso)
 	return 1;
 	}
 
-long lsIsObjectADoor(LSObject lso)
+int32_t lsIsObjectADoor(LSObject lso)
 	{
 	switch(lso->Type)
 		{
@@ -66,7 +66,7 @@ long lsIsObjectADoor(LSObject lso)
 	return 0;
 	}
 
-long lsIsObjectAWall(LSObject lso)
+int32_t lsIsObjectAWall(LSObject lso)
 {
 	switch(lso->Type)
 	{
@@ -99,7 +99,7 @@ long lsIsObjectAWall(LSObject lso)
 }
 
 // Objekte die den gleichen Refresh wie Tueren benoetigen
-long lsIsObjectSpecial(LSObject lso)
+int32_t lsIsObjectSpecial(LSObject lso)
 {
 	if (bProfidisk)
 	{
@@ -122,7 +122,7 @@ long lsIsObjectSpecial(LSObject lso)
 }
 
 
-long lsIsObjectAnAddOn(LSObject lso)
+int32_t lsIsObjectAnAddOn(LSObject lso)
 	{
 	switch(lso->Type)
 		{
@@ -178,16 +178,16 @@ ubyte lsGetLoudness(uword x, uword y)
 	return loudness;
 	}
 
-ulong lsGetObjectState(ulong objID)
+uint32_t lsGetObjectState(uint32_t objID)
 	{
 	LSObject obj = (LSObject)dbGetObject(objID);
 
 	return(lsGetNewState(obj));
 	}
 
-ulong lsGetStartArea(void)
+uint32_t lsGetStartArea(void)
 	{
-	ulong areaID;  /* attention, planing has to be changed to! */
+	uint32_t areaID;  /* attention, planing has to be changed to! */
 
 	startsWithAll(ls->ul_BuildingID, OLF_NORMAL, Object_LSArea);
 
@@ -208,7 +208,7 @@ uword lsGetFloorIndex(uword x,uword y)
 	return(uword)(line*fpl+row);
 	}
 
-static void lsExtendGetList(LIST *list, ulong nr, ulong type, void *data)
+static void lsExtendGetList(LIST *list, uint32_t nr, uint32_t type, void *data)
 	{
 	struct ObjectNode *newNode = dbAddObjectNode(list, type, OLF_INCLUDE_NAME|OLF_INSERT_STAR);
 
@@ -221,7 +221,7 @@ LIST *lsGetObjectsByList(uword x, uword y, uword width, uword height, ubyte show
 	{
 	struct ObjectNode *node;
 	LIST *list  = (LIST*)CreateList(0);
-	ulong i;
+	uint32_t i;
 
 	/* diverse Objekte eintragen */
 	for (node=(struct ObjectNode*)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC((NODE*)node);
@@ -256,20 +256,20 @@ void lsSetCollMode(ubyte collMode)
 	ls->uch_CollMode = collMode;
 	}
 
-ulong lsGetCurrBuildingID(void)
+uint32_t lsGetCurrBuildingID(void)
 	{
 	return ls->ul_BuildingID;
 	}
 
-ulong lsGetActivAreaID(void)
+uint32_t lsGetActivAreaID(void)
 	{
 	return(ls->ul_AreaID);
 	}
 
-LIST *lsGetRoomsOfArea(ulong ul_AreaId)
+LIST *lsGetRoomsOfArea(uint32_t ul_AreaId)
 	{
 	LSArea area     = (LSArea) dbGetObject(ul_AreaId);
-	ulong roomRelId = area->ul_ObjectBaseNr + REL_HAS_ROOM_OFFSET;
+	uint32_t roomRelId = area->ul_ObjectBaseNr + REL_HAS_ROOM_OFFSET;
 	NODE *room;
 
 	SetObjectListAttr(OLF_PRIVATE_LIST, Object_LSRoom);

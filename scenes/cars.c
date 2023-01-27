@@ -36,7 +36,7 @@ void SetCarColors(ubyte ndex)
 	gfxSetRGB(l_wrp,43,Col[ndex+9]<<3,Col[ndex+10]<<3,Col[ndex+11]<<3);
 }
 
-char *tcShowPriceOfCar(ulong nr, ulong type, void *data)
+char *tcShowPriceOfCar(uint32_t nr, uint32_t type, void *data)
 	{
 	static char line [TXT_KEY_LENGTH];
 	char        line1[TXT_KEY_LENGTH];
@@ -57,7 +57,7 @@ void tcBuyCar(void)
 
 	while ((choice1!=2) && (choice != GET_OUT))
 		{
-		ObjectListSuccString = (char *(*)(ulong,ulong,void *))tcShowPriceOfCar;
+		ObjectListSuccString = (char *(*)(uint32_t,uint32_t,void *))tcShowPriceOfCar;
 		ObjectListWidth = 48;
 
 		hasAll(Person_Marc_Smith, OLF_ALIGNED|OLF_PRIVATE_LIST|OLF_INCLUDE_NAME|OLF_INSERT_STAR|OLF_ADD_SUCC_STRING, Object_Car);
@@ -77,12 +77,12 @@ void tcBuyCar(void)
 
 			if (ChoiceOk(choice = Bubble(bubble,0,0L,0L), GET_OUT, bubble))
 				{
-				matts_car = (Car)dbGetObject(((struct ObjectNode *)GetNthNode(bubble,(ulong)choice))->nr);
+				matts_car = (Car)dbGetObject(((struct ObjectNode *)GetNthNode(bubble,(uint32_t)choice))->nr);
 
 				SetCarColors((ubyte)matts_car->ColorIndex);
 				gfxShow((uword)matts_car->PictID,GFX_NO_REFRESH|GFX_OVERLAY,0L,-1L,-1L);
 
-				if (Present (((struct ObjectNode *)GetNthNode(bubble,(ulong)choice))->nr,"Car",InitCarPresent))
+				if (Present (((struct ObjectNode *)GetNthNode(bubble,(uint32_t)choice))->nr,"Car",InitCarPresent))
 					{
 					choice1 = Say(BUSINESS_TXT,0,MATT_PICTID,"AUTOKAUF");
 
@@ -90,11 +90,11 @@ void tcBuyCar(void)
 
 					if(choice1==1)
 						{
-						long price = tcGetCarPrice(matts_car);
+						int32_t price = tcGetCarPrice(matts_car);
 
 						if (tcSpendMoney(price,0))
 							{
-							ulong carID = ((struct ObjectNode *)GetNthNode(bubble,(ulong)choice))->nr;
+							uint32_t carID = ((struct ObjectNode *)GetNthNode(bubble,(uint32_t)choice))->nr;
 
 							hasSet(Person_Matt_Stuvysunt, carID);
 							hasUnSet(Person_Marc_Smith, carID);
@@ -122,7 +122,7 @@ void tcBuyCar(void)
 		}
 	}
 
-void tcCarInGarage(ulong carID)
+void tcCarInGarage(uint32_t carID)
 	{
 	ubyte     choice1=0;
 	Car       matts_car;
@@ -168,12 +168,12 @@ void tcColorCar(Car car)
 	{
 	LIST   *colors,*bubble;
 	ubyte  choice;
-	ulong  costs;
+	uint32_t  costs;
 	Person marc = (Person) dbGetObject(Person_Marc_Smith);
 
-	costs  = (ulong)tcColorCosts(car);
+	costs  = (uint32_t)tcColorCosts(car);
 
-	bubble = txtGoKeyAndInsert (BUSINESS_TXT,"LACKIEREN",(ulong)costs,NULL);
+	bubble = txtGoKeyAndInsert (BUSINESS_TXT,"LACKIEREN",(uint32_t)costs,NULL);
 
 	SetPictID(marc->PictID);
 	Bubble(bubble,0,0L,0L);
@@ -219,10 +219,10 @@ void tcColorCar(Car car)
 	AddVTime(137);
 	}
 
-void tcSellCar(ulong ObjectID)
+void tcSellCar(uint32_t ObjectID)
 	{
 	LIST      *bubble;
-	ulong     offer;
+	uint32_t     offer;
 	Car       car;
 	Person    marc = (Person) dbGetObject(Person_Marc_Smith);
 
@@ -258,7 +258,7 @@ void tcRepairCar(Car car,char *repairWhat)
 	LIST   *presentationData = (LIST*)CreateList(0);
 	LIST   *list = NULL;
 	ubyte  *item=NULL,enough=1,type=7,ready=0;
-	ulong  costs=0L,choice=0L,totalCosts=0L;
+	uint32_t  costs=0L,choice=0L,totalCosts=0L;
 	uword  line=0;
 	Person marc = (Person) dbGetObject(Person_Marc_Smith);
 
@@ -309,12 +309,12 @@ void tcRepairCar(Car car,char *repairWhat)
 		AddPresentLine(presentationData,PRESENT_AS_TEXT,0L,0L,list,line++);
 
 		if(item)
-			AddPresentLine(presentationData,PRESENT_AS_BAR,(ulong)(*item),255L,list,line++);
+			AddPresentLine(presentationData,PRESENT_AS_BAR,(uint32_t)(*item),255L,list,line++);
 
-		AddPresentLine(presentationData,PRESENT_AS_BAR,(ulong)(car->State),255L,list,line++);
+		AddPresentLine(presentationData,PRESENT_AS_BAR,(uint32_t)(car->State),255L,list,line++);
 
 		AddPresentLine(presentationData,PRESENT_AS_NUMBER,totalCosts,0L,list,line++);
-		AddPresentLine(presentationData,PRESENT_AS_NUMBER,(ulong)tcGetPlayerMoney,0L,list,line++);
+		AddPresentLine(presentationData,PRESENT_AS_NUMBER,(uint32_t)tcGetPlayerMoney,0L,list,line++);
 
 		DrawPresent(presentationData,0,u_wrp,(ubyte) GetNrOfNodes(presentationData));
 
@@ -376,10 +376,10 @@ void tcRepairCar(Car car,char *repairWhat)
 	RemoveList(list);
 	}
 
-ulong tcChooseCar(ulong backgroundNr)
+uint32_t tcChooseCar(uint32_t backgroundNr)
 	{
 	LIST  *bubble;
-	ulong carCount, carID = 0L;
+	uint32_t carCount, carID = 0L;
 	ubyte choice;
 	Car matts_car;
 
@@ -407,7 +407,7 @@ ulong tcChooseCar(ulong backgroundNr)
 
 			choice = Bubble(bubble,0,0L,0L);
 			if (ChoiceOk(choice, GET_OUT, bubble))
-				carID  =  OL_NR(GetNthNode(bubble,(ulong)choice));
+				carID  =  OL_NR(GetNthNode(bubble,(uint32_t)choice));
 			else
 				choice = GET_OUT;
 		}
@@ -434,7 +434,7 @@ void tcCarGeneralOverhoul(Car car)
 
 	SetPictID (marc->PictID);
 
-	bubble = txtGoKeyAndInsert (BUSINESS_TXT, "GENERAL_OVERHOUL", (ulong)((tcCostsPerTotalRepair(car) * 255) / 8), NULL);
+	bubble = txtGoKeyAndInsert (BUSINESS_TXT, "GENERAL_OVERHOUL", (uint32_t)((tcCostsPerTotalRepair(car) * 255) / 8), NULL);
 	Bubble (bubble, 0, 0L, 0L);
 	RemoveList (bubble);
 

@@ -10,7 +10,7 @@
 #define GP_TICKS_PER_MINUTE		10
 #define GP_TICKS_PER_DAY		30
 
-void tcAsTimeGoesBy(ulong untilMinute)
+void tcAsTimeGoesBy(uint32_t untilMinute)
 {
 	untilMinute = untilMinute % 1440;
 
@@ -25,9 +25,9 @@ void tcAsTimeGoesBy(ulong untilMinute)
 	}
 }
 
-void tcAsDaysGoBy(ulong day, ulong stepSize)
+void tcAsDaysGoBy(uint32_t day, uint32_t stepSize)
 {
-	ulong add;
+	uint32_t add;
 
 	while (GetDay < day)
 	{
@@ -41,7 +41,7 @@ void tcAsDaysGoBy(ulong day, ulong stepSize)
 	}
 }
 
-void tcMattGoesTo(ulong locNr)
+void tcMattGoesTo(uint32_t locNr)
 {
 	NODE *node = (NODE*)GetNthNode(film->loc_names,locNr);
 
@@ -53,15 +53,15 @@ void tcMattGoesTo(ulong locNr)
 	PlayAnim (NODE_NAME(node),(word)30000,GFX_NO_REFRESH|GFX_ONE_STEP|GFX_BLEND_UP);
 }
 
-void tcTheAlmighty(ulong time)
+void tcTheAlmighty(uint32_t time)
 {
 	tcMovePersons(2,time);
 }
 
-void tcMovePersons(ulong personCount,ulong time)
+void tcMovePersons(uint32_t personCount,uint32_t time)
 {
-	ulong i, count;
-	ulong persID,locID;
+	uint32_t i, count;
+	uint32_t persID,locID;
 
 	for (i=0;i<personCount;i++)
 	{
@@ -91,9 +91,9 @@ void tcMovePersons(ulong personCount,ulong time)
 	}
 }
 
-void tcMoveAPerson(ulong persID, ulong newLocID)
+void tcMoveAPerson(uint32_t persID, uint32_t newLocID)
 {
-	ulong oldLocID;
+	uint32_t oldLocID;
 
 	hasAll(persID, 0, Object_Location); /* wo is er denn ? */
 
@@ -114,11 +114,11 @@ void tcMoveAPerson(ulong persID, ulong newLocID)
 	hasSet(newLocID,persID);
 }
 
-ulong tcBurglary(ulong buildingID)
+uint32_t tcBurglary(uint32_t buildingID)
 /* wird von 2 Stellen aufgerufen! (story_9)! */
 {
-	ulong succNr;
-	long  ret;
+	uint32_t succNr;
+	int32_t  ret;
 	Building b = (Building)dbGetObject(buildingID);
 
 	if (buildingID == Building_Seniorenheim)
@@ -174,7 +174,7 @@ ulong tcBurglary(ulong buildingID)
 	return(succNr);
 }
 
-void tcRefreshLocationInTitle(ulong locNr)
+void tcRefreshLocationInTitle(uint32_t locNr)
 {
 	char date[TXT_KEY_LENGTH], line[TXT_KEY_LENGTH];
 	NODE  *node;
@@ -360,7 +360,7 @@ void tcPlayStreetSound()
 	}
 }
 
-void ShowTime(ulong delay)
+void ShowTime(uint32_t delay)
 {
 	char time[TXT_KEY_LENGTH];
 
@@ -376,9 +376,9 @@ void ShowTime(ulong delay)
 	gfxPrint(u_wrp, time, 5, GFX_PRINT_CENTER|GFX_PRINT_SHADOW);
 }
 
-ulong StdHandle(ulong choice)
+uint32_t StdHandle(uint32_t choice)
 {
-	ulong succ_eventnr = 0L, locNr, objNr;
+	uint32_t succ_eventnr = 0L, locNr, objNr;
 	struct Scene *scene;
 	char line[TXT_KEY_LENGTH];
 	Location loc;
@@ -426,7 +426,7 @@ ulong StdHandle(ulong choice)
 			ShowTime(0);
 		break;
 		case LOOK:
-			Look((ulong)GetCurrentScene()->LocationNr);
+			Look((uint32_t)GetCurrentScene()->LocationNr);
 			AddVTime(1);
 			ShowTime(0);
 		break;
@@ -469,7 +469,7 @@ ulong StdHandle(ulong choice)
 					}
 					else
 				    {
-						ulong building;
+						uint32_t building;
 						gfxChangeColors(l_wrp, 0, GFX_FADE_OUT, 0);
 
 						if (GamePlayMode & GP_NO_MUSIC_IN_PLANING)
@@ -512,7 +512,7 @@ ulong StdHandle(ulong choice)
 
 void StdDone(void)
 {
-	ulong choice;
+	uint32_t choice;
 	ubyte activ=0;
 	LIST *menu = txtGoKey (MENU_TXT, "Mainmenu");
 
@@ -556,7 +556,7 @@ void StdDone(void)
 					activ = 0;
 				else
 				    {
-					choice=(ulong) 1L << (activ);
+					choice=(uint32_t) 1L << (activ);
 
 					SceneArgs.ReturnValue=StdHandle(choice);
 				}
@@ -747,7 +747,7 @@ void SetFunc(struct Scene *sc,void (*init)(void),void (*done)(void))
 
 ubyte tcPersonIsHere(void)
 {
-	ulong locNr = GetObjNrOfLocation(GetLocation);
+	uint32_t locNr = GetObjNrOfLocation(GetLocation);
 
 	if (locNr)
 	{
@@ -789,8 +789,8 @@ ubyte tcPersonIsHere(void)
 
 void tcPersonGreetsMatt(void)
 {
-	static ulong upper=4L;
-	ulong locNr;
+	static uint32_t upper=4L;
+	uint32_t locNr;
 
 	if (CalcRandomNr(0L,upper) == 1)    /* alle upper mal wird Matt gegrüßt ! */
 	{
@@ -805,7 +805,7 @@ void tcPersonGreetsMatt(void)
 
 			if (!(LIST_EMPTY(ObjectList)))
 			{
-				ulong  persNr = OL_NR(LIST_HEAD(ObjectList));
+				uint32_t  persNr = OL_NR(LIST_HEAD(ObjectList));
 
 				if (knows(Person_Matt_Stuvysunt,persNr))
 				{
@@ -819,9 +819,9 @@ void tcPersonGreetsMatt(void)
 	ShowTime(0);
 }
 
-void tcGetLastName(char *Name, char *dest, ulong maxLength)
+void tcGetLastName(char *Name, char *dest, uint32_t maxLength)
 {
-	long i;
+	int32_t i;
 	char lastName[TXT_KEY_LENGTH];
 
 	for (i=0; i < strlen(Name); i++)
@@ -835,9 +835,9 @@ void tcGetLastName(char *Name, char *dest, ulong maxLength)
 	strcpy(dest, lastName);
 }
 
-void tcCutName(char *Name, char Sign, ulong maxLength)
+void tcCutName(char *Name, char Sign, uint32_t maxLength)
 {
-	long i,j;
+	int32_t i,j;
 	char Source[TXT_KEY_LENGTH];
 
 	strcpy(Source,Name);

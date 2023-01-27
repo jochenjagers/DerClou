@@ -37,9 +37,9 @@
 #include "disk/disk.h"
 #endif
 
-#define RELATION           unsigned long
+#define RELATION           uint32_t
 #define KEY                void *
-#define PARAMETER          unsigned long
+#define PARAMETER          uint32_t
 #define COMPARSION         unsigned char
 
 #define CMP_NO             ((COMPARSION)0)
@@ -92,8 +92,8 @@ RELATION  AskP    (KEY, RELATION, KEY, PARAMETER, COMPARSION);
 void      AskAll  (KEY, RELATION, void (*)(void *));
 void      UnSetAll(KEY, void (*)(KEY));
 
-int  SaveRelations(char *, unsigned long, unsigned long, uword disk_id);
+int  SaveRelations(char *, uint32_t, uint32_t, uword disk_id);
 int  LoadRelations(char *, uword disk_id);
-void RemRelations (unsigned long, unsigned long);
+void RemRelations (uint32_t, uint32_t);
 
 #endif

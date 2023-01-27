@@ -58,10 +58,10 @@ FILE *dskOpen(const char *puch_Pathname, const char *puch_Mode, uword us_DiskId)
 	return(p_File);
 }
 
-long dskLoad(const char *puch_Pathname, void *p_MemDest)
+int32_t dskLoad(const char *puch_Pathname, void *p_MemDest)
 {
 	FILE *p_File = NULL;
-	long ul_SizeOfFile;
+	int32_t ul_SizeOfFile;
 
 	if (ul_SizeOfFile = dskFileLength(puch_Pathname))
 	{
@@ -87,9 +87,9 @@ void dskBuildPathName(const char *puch_Directory, const char *puch_Filename, cha
 	}
 }
 
-long dskFileLength (const char *puch_Pathname)
+int32_t dskFileLength (const char *puch_Pathname)
 {
-	long l_Size = 0;
+	int32_t l_Size = 0;
 	FILE *file;
 
 	if (file = fopen(puch_Pathname, "rb"))
@@ -108,7 +108,7 @@ void dskClose(FILE *p_File)
 		fclose(p_File);
 }
 
-void dskWrite(FILE *p_File, void *p_MemSource, ulong ul_Size)
+void dskWrite(FILE *p_File, void *p_MemSource, uint32_t ul_Size)
 {
 	if (ul_Size != fwrite(p_MemSource, 1, ul_Size, p_File))
 	{
@@ -116,9 +116,9 @@ void dskWrite(FILE *p_File, void *p_MemSource, ulong ul_Size)
 	}
 }
 
-void dskRead(FILE *p_File, void *p_MemDest, ulong ul_Size)
+void dskRead(FILE *p_File, void *p_MemDest, uint32_t ul_Size)
 {
-	ulong ul_Read;
+	uint32_t ul_Read;
 	ul_Read = fread(p_MemDest, 1, ul_Size, p_File);
 	if (ul_Read != ul_Size)
 	{

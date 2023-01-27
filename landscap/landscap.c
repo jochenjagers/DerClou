@@ -7,14 +7,14 @@
 #include "landscap/landscap.h"
 #include "landscap/landscap_p.h"
 
-static void lsInitDoorRefresh(ulong ObjId);
+static void lsInitDoorRefresh(uint32_t ObjId);
 
-ulong     ConsistOfRelationID = 0;
-ulong     hasLockRelationID   = 0;
-ulong     hasAlarmRelationID  = 0;
-ulong     hasPowerRelationID  = 0;
-ulong     hasLootRelationID   = 0;
-ulong     hasRoomRelationID   = 0;
+uint32_t     ConsistOfRelationID = 0;
+uint32_t     hasLockRelationID   = 0;
+uint32_t     hasAlarmRelationID  = 0;
+uint32_t     hasPowerRelationID  = 0;
+uint32_t     hasLootRelationID   = 0;
+uint32_t     hasRoomRelationID   = 0;
 
 struct    LandScape *ls = NULL;
 
@@ -86,7 +86,7 @@ static void lsShowRooms(void)
 
 void lsBuildScrollWindow(void)
 {
-	long i, j;
+	int32_t i, j;
 	NODE *node;
 	LSArea area = (LSArea) dbGetObject(ls->ul_AreaID);
 	ubyte colortable[768];
@@ -267,7 +267,7 @@ void lsSetActivLiving(char *Name,uword x,uword y)
 		}
 	}
 
-void lsSetObjectState(ulong objID, ubyte bitNr, ubyte value)
+void lsSetObjectState(uint32_t objID, ubyte bitNr, ubyte value)
 	{
 	LSObject object = (LSObject) dbGetObject(objID);
 
@@ -354,7 +354,7 @@ static void lsSortObjectList(LIST **l)
 		}
 	}
 
-void lsRefreshObjectList(ulong areaID)
+void lsRefreshObjectList(uint32_t areaID)
 	{
 	SetObjectListAttr (OLF_PRIVATE_LIST, Object_LSObject);
 	AskAll (dbGetObject(areaID), ConsistOfRelationID, BuildObjectList);
@@ -363,14 +363,14 @@ void lsRefreshObjectList(ulong areaID)
 	lsSortObjectList(&ls->p_ObjectRetrieval);
 	}
 
-ulong lsAddLootBag(uword x, uword y, ubyte bagNr) /* bagNr : 1 - 8! */
+uint32_t lsAddLootBag(uword x, uword y, ubyte bagNr) /* bagNr : 1 - 8! */
 	{
 	LSObject lso = (LSObject)dbGetObject (9700 + bagNr);
 
 	lso->uch_Visible = LS_OBJECT_VISIBLE;
 
 	/* add loot bag */
-	if (!hasLootBag(ls->ul_AreaID, (ulong) (9700 + bagNr)))
+	if (!hasLootBag(ls->ul_AreaID, (uint32_t) (9700 + bagNr)))
 		{
 		lso->us_DestX = x;
 		lso->us_DestY = y;
@@ -378,13 +378,13 @@ ulong lsAddLootBag(uword x, uword y, ubyte bagNr) /* bagNr : 1 - 8! */
 		BobSet(lso->us_OffsetFact, x, y, LS_LOOTBAG_X_OFFSET, LS_LOOTBAG_Y_OFFSET);
 		BobVis(lso->us_OffsetFact);
 
-		hasLootBagSet(ls->ul_AreaID, (ulong)(9700 + bagNr));
+		hasLootBagSet(ls->ul_AreaID, (uint32_t)(9700 + bagNr));
 		}
 
-	return ((ulong)(9700 + bagNr));
+	return ((uint32_t)(9700 + bagNr));
 	}
 
-void lsRemLootBag(ulong bagId)
+void lsRemLootBag(uint32_t bagId)
 	{
 	LSObject lso = (LSObject)dbGetObject(bagId);
 
@@ -397,7 +397,7 @@ void lsRemLootBag(ulong bagId)
 
 void lsRefreshAllLootBags(void)
 	{
-	ulong i;
+	uint32_t i;
 	LSObject lso;
 
 	livPrepareAnims();	// copy sprite anim to StdBuffer1
@@ -406,7 +406,7 @@ void lsRefreshAllLootBags(void)
 		{
 		lso = (LSObject)dbGetObject(9700 + i);
 
-		if ((lso->uch_Visible == LS_OBJECT_VISIBLE) && (hasLootBag(ls->ul_AreaID, (ulong) (9700 + i))))
+		if ((lso->uch_Visible == LS_OBJECT_VISIBLE) && (hasLootBag(ls->ul_AreaID, (uint32_t) (9700 + i))))
 			{
 			BobSet(lso->us_OffsetFact, lso->us_DestX, lso->us_DestY, LS_LOOTBAG_X_OFFSET, LS_LOOTBAG_Y_OFFSET);
 			BobVis(lso->us_OffsetFact);
@@ -414,11 +414,11 @@ void lsRefreshAllLootBags(void)
 		}
 	}
 
-void lsGuyInsideSpot(uword *us_XPos, uword *us_YPos, ulong *areaId)
+void lsGuyInsideSpot(uword *us_XPos, uword *us_YPos, uint32_t *areaId)
 	{
 	LIST *spots = lsGetSpotList();
 	struct Spot *s;
-	long i;
+	int32_t i;
 
 	for (s = (struct Spot *) LIST_HEAD(spots); NODE_SUCC(s); s = (struct Spot *) NODE_SUCC(s))
 		{
@@ -432,9 +432,9 @@ void lsGuyInsideSpot(uword *us_XPos, uword *us_YPos, ulong *areaId)
 						{
 						if (((struct Spot*)s)->p_CurrPos)
 							{
-							long x    = s->p_CurrPos->us_XPos; /* linke, obere */
-							long y    = s->p_CurrPos->us_YPos; /* Ecke des Spot! */
-							long size = s->us_Size - 4;
+							int32_t x    = s->p_CurrPos->us_XPos; /* linke, obere */
+							int32_t y    = s->p_CurrPos->us_YPos; /* Ecke des Spot! */
+							int32_t size = s->us_Size - 4;
 
 							if ((us_XPos[i] < x + size - 2) && (us_XPos[i] > x + 2))
 								if ((us_YPos[i] < y + size - 2) && (us_YPos[i] > y + 2))
@@ -568,7 +568,7 @@ void lsCalcExactSize(LSObject lso, uword *x0, uword *y0, uword *x1, uword *y1)
 
 // kopiert den Hintergrund, der durch eine Tür verdeckt wird
 // in einen XMS Buffer
-static void lsInitDoorRefresh(ulong ObjId)
+static void lsInitDoorRefresh(uint32_t ObjId)
 	{
 	LSObject lso  = (LSObject)dbGetObject(ObjId);
 	uword    width, height, destX, destY;

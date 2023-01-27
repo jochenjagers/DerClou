@@ -60,8 +60,8 @@ enum
 	Last_Error
 };
 
-extern long pcErrOpen(long l_Mode, void (*fp_CloseAll)(), ubyte *puch_ErrorFilename);
-extern void NewErrorMsg(long l_ErrorType, const char *filename, const char *funcname, ulong ul_ErrorId);
+extern int32_t pcErrOpen(int32_t l_Mode, void (*fp_CloseAll)(), ubyte *puch_ErrorFilename);
+extern void NewErrorMsg(int32_t l_ErrorType, const char *filename, const char *funcname, uint32_t ul_ErrorId);
 extern void pcErrClose(void);
 
 #endif

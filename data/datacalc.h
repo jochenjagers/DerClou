@@ -23,9 +23,9 @@
 
 #define   tcDerivation(min,max)          (CalcRandomNr(min,max))
 
-extern long Round(long v,long p);
-extern long CalcValue(long value, long min, long max, long fact, long perc);
-extern long ChangeAbs(long item, long value, long min, long max);
-extern long RoundF(float num);
+extern int32_t Round(int32_t v,int32_t p);
+extern int32_t CalcValue(int32_t value, int32_t min, int32_t max, int32_t fact, int32_t perc);
+extern int32_t ChangeAbs(int32_t item, int32_t value, int32_t min, int32_t max);
+extern int32_t RoundF(float num);
 
 #endif

@@ -17,10 +17,10 @@ void PrintStatus(char *text)
 	gfxPrint(m_wrp,text,10,GFX_PRINT_SHADOW|GFX_PRINT_CENTER);
 	}
 
-ulong ShowTheClouRequester(long error_class)
+uint32_t ShowTheClouRequester(int32_t error_class)
 	{
 	LIST *menu;
-	ulong answer = 0;
+	uint32_t answer = 0;
 	ubyte choices;
 	Player player = (Player)dbGetObject(Player_Player_1); // MOD hg, 29-04-94
 

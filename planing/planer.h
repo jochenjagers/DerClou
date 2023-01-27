@@ -87,6 +87,6 @@ extern ubyte AnimCounter;
 extern ubyte PlanChanged;
 
 
-void plPlaner (ulong objId);
+void plPlaner (uint32_t objId);
 
 #endif

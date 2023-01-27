@@ -16,7 +16,7 @@
 
 struct MXR_Mixer {
 	MXR_Format		fmt;
-	unsigned long	nVolume;
+	uint32_t	nVolume;
 
 	MXR_Input *		pInput[MXR_MAX_INPUTS];
 	unsigned char	buffer[MXR_BUFFER_SAMPLES * 2 * sizeof(short)];	/* (hopefully) the largest required buffer */
@@ -26,14 +26,14 @@ struct MXR_Mixer {
 
 /******************************************************************************/
 
-static void MXR__ConvertU8ToS16(unsigned char *pBuffer, unsigned long nValues)
+static void MXR__ConvertU8ToS16(unsigned char *pBuffer, uint32_t nValues)
 {
-	long i;
+	int32_t i;
 	short *pDest;
-	long s;
+	int32_t s;
 
 	pDest = (short *)pBuffer;
-	for (i = (long)nValues - 1; i >= 0; --i) {
+	for (i = (int32_t)nValues - 1; i >= 0; --i) {
 		s = pBuffer[i];
 		s <<= 8;
 		s -= 0x008000;
@@ -43,11 +43,11 @@ static void MXR__ConvertU8ToS16(unsigned char *pBuffer, unsigned long nValues)
 
 /******************************************************************************/
 
-static void MXR__ConvertS16ToU8(short *pBuffer, unsigned long nValues)
+static void MXR__ConvertS16ToU8(short *pBuffer, uint32_t nValues)
 {
-	unsigned long i;
+	uint32_t i;
 	unsigned char *pDest;
-	long s;
+	int32_t s;
 
 	pDest = (unsigned char *)pBuffer;
 	for (i = 0; i < nValues; i++) {
@@ -60,11 +60,11 @@ static void MXR__ConvertS16ToU8(short *pBuffer, unsigned long nValues)
 
 /******************************************************************************/
 
-static void MXR__ResampleAndMixS16MonoToMono(MXR_Mixer *pMixer, short *pStream, unsigned long nStreamSamples, MXR_Input *pInput, unsigned long nInputSamples)
+static void MXR__ResampleAndMixS16MonoToMono(MXR_Mixer *pMixer, short *pStream, uint32_t nStreamSamples, MXR_Input *pInput, uint32_t nInputSamples)
 {
-	long s, s2;
-	long rem;
-	unsigned long i, ixSamples, j, j2;
+	int32_t s, s2;
+	int32_t rem;
+	uint32_t i, ixSamples, j, j2;
 	short *pBuffer;
 
 	pBuffer = (short *)pMixer->buffer;
@@ -89,7 +89,7 @@ static void MXR__ResampleAndMixS16MonoToMono(MXR_Mixer *pMixer, short *pStream, 
 
 		s = pBuffer[j];
 		s2 = pBuffer[j2];
-		s = s + (((s2 - s) * rem) / (long)nStreamSamples);
+		s = s + (((s2 - s) * rem) / (int32_t)nStreamSamples);
 
 		s *= pInput->nVolume;
 		s /= 255;
@@ -100,11 +100,11 @@ static void MXR__ResampleAndMixS16MonoToMono(MXR_Mixer *pMixer, short *pStream, 
 
 /******************************************************************************/
 
-static void MXR__ResampleAndMixS16MonoToStereo(MXR_Mixer *pMixer, short *pStream, unsigned long nStreamSamples, MXR_Input *pInput, unsigned long nInputSamples)
+static void MXR__ResampleAndMixS16MonoToStereo(MXR_Mixer *pMixer, short *pStream, uint32_t nStreamSamples, MXR_Input *pInput, uint32_t nInputSamples)
 {
-	long s, s2;
-	long rem;
-	unsigned long i, i2, ixSamples, j, j2;
+	int32_t s, s2;
+	int32_t rem;
+	uint32_t i, i2, ixSamples, j, j2;
 	short *pBuffer;
 
 	pBuffer = (short *)pMixer->buffer;
@@ -133,7 +133,7 @@ static void MXR__ResampleAndMixS16MonoToStereo(MXR_Mixer *pMixer, short *pStream
 
 		s = pBuffer[j];
 		s2 = pBuffer[j2];
-		s = s + (((s2 - s) * rem) / (long)nStreamSamples);
+		s = s + (((s2 - s) * rem) / (int32_t)nStreamSamples);
 
 		s *= pInput->nVolume;
 		s /= 255;
@@ -148,11 +148,11 @@ static void MXR__ResampleAndMixS16MonoToStereo(MXR_Mixer *pMixer, short *pStream
 
 /******************************************************************************/
 
-static void MXR__ResampleAndMixS16StereoToMono(MXR_Mixer *pMixer, short *pStream, unsigned long nStreamSamples, MXR_Input *pInput, unsigned long nInputSamples)
+static void MXR__ResampleAndMixS16StereoToMono(MXR_Mixer *pMixer, short *pStream, uint32_t nStreamSamples, MXR_Input *pInput, uint32_t nInputSamples)
 {
-	long s, s2, l, r;
-	long rem;
-	unsigned long i, i2, ixSamples, j, j2, jx, j2x;
+	int32_t s, s2, l, r;
+	int32_t rem;
+	uint32_t i, i2, ixSamples, j, j2, jx, j2x;
 	short *pBuffer;
 
 	pBuffer = (short *)pMixer->buffer;
@@ -183,10 +183,10 @@ static void MXR__ResampleAndMixS16StereoToMono(MXR_Mixer *pMixer, short *pStream
 		j2x = j2 << 1;
 		s = pBuffer[jx];
 		s2 = pBuffer[j2x];
-		l = s + (((s2 - s) * rem) / (long)nStreamSamples);
+		l = s + (((s2 - s) * rem) / (int32_t)nStreamSamples);
 		s = pBuffer[jx + 1];
 		s2 = pBuffer[j2x + 1];
-		r = s + (((s2 - s) * rem) / (long)nStreamSamples);
+		r = s + (((s2 - s) * rem) / (int32_t)nStreamSamples);
 
 		s = (l + r) / 2;
 
@@ -199,11 +199,11 @@ static void MXR__ResampleAndMixS16StereoToMono(MXR_Mixer *pMixer, short *pStream
 
 /******************************************************************************/
 
-static void MXR__ResampleAndMixS16StereoToStereo(MXR_Mixer *pMixer, short *pStream, unsigned long nStreamSamples, MXR_Input *pInput, unsigned long nInputSamples)
+static void MXR__ResampleAndMixS16StereoToStereo(MXR_Mixer *pMixer, short *pStream, uint32_t nStreamSamples, MXR_Input *pInput, uint32_t nInputSamples)
 {
-	long s, s2;
-	long rem;
-	unsigned long i, i2, ixSamples, j, j2, jx, j2x;
+	int32_t s, s2;
+	int32_t rem;
+	uint32_t i, i2, ixSamples, j, j2, jx, j2x;
 	short *pBuffer;
 
 	pBuffer = (short *)pMixer->buffer;
@@ -241,7 +241,7 @@ static void MXR__ResampleAndMixS16StereoToStereo(MXR_Mixer *pMixer, short *pStre
 		j2x = j2 << 1;
 		s = pBuffer[jx];
 		s2 = pBuffer[j2x];
-		s = s + (((s2 - s) * rem) / (long)nStreamSamples);
+		s = s + (((s2 - s) * rem) / (int32_t)nStreamSamples);
 		s *= pInput->nVolume;
 		s /= 255;
 		s += pStream[i2];
@@ -249,7 +249,7 @@ static void MXR__ResampleAndMixS16StereoToStereo(MXR_Mixer *pMixer, short *pStre
 
 		s = pBuffer[jx + 1];
 		s2 = pBuffer[j2x + 1];
-		s = s + (((s2 - s) * rem) / (long)nStreamSamples);
+		s = s + (((s2 - s) * rem) / (int32_t)nStreamSamples);
 		s *= pInput->nVolume;
 		s /= 255;
 		s += pStream[i2+1];
@@ -259,25 +259,25 @@ static void MXR__ResampleAndMixS16StereoToStereo(MXR_Mixer *pMixer, short *pStre
 
 /******************************************************************************/
 
-static void MXR__ResampleAndMixU8MonoToMono(MXR_Mixer *pMixer, unsigned char *pStream, unsigned long nStreamSamples, MXR_Input *pInput, unsigned long nInputSamples)
+static void MXR__ResampleAndMixU8MonoToMono(MXR_Mixer *pMixer, unsigned char *pStream, uint32_t nStreamSamples, MXR_Input *pInput, uint32_t nInputSamples)
 {
 }
 
 /******************************************************************************/
 
-static void MXR__ResampleAndMixU8MonoToStereo(MXR_Mixer *pMixer, unsigned char *pStream, unsigned long nStreamSamples, MXR_Input *pInput, unsigned long nInputSamples)
+static void MXR__ResampleAndMixU8MonoToStereo(MXR_Mixer *pMixer, unsigned char *pStream, uint32_t nStreamSamples, MXR_Input *pInput, uint32_t nInputSamples)
 {
 }
 
 /******************************************************************************/
 
-static void MXR__ResampleAndMixU8StereoToMono(MXR_Mixer *pMixer, unsigned char *pStream, unsigned long nStreamSamples, MXR_Input *pInput, unsigned long nInputSamples)
+static void MXR__ResampleAndMixU8StereoToMono(MXR_Mixer *pMixer, unsigned char *pStream, uint32_t nStreamSamples, MXR_Input *pInput, uint32_t nInputSamples)
 {
 }
 
 /******************************************************************************/
 
-static void MXR__ResampleAndMixU8StereoToStereo(MXR_Mixer *pMixer, unsigned char *pStream, unsigned long nStreamSamples, MXR_Input *pInput, unsigned long nInputSamples)
+static void MXR__ResampleAndMixU8StereoToStereo(MXR_Mixer *pMixer, unsigned char *pStream, uint32_t nStreamSamples, MXR_Input *pInput, uint32_t nInputSamples)
 {
 }
 
@@ -288,7 +288,7 @@ static void MXR_ProcessMixer(MXR_Mixer *pMixer, unsigned char *pStream, int nStr
 {
 	int i;
 	MXR_Input *pInput;
-	unsigned long nStreamSamples, nInputSamples;
+	uint32_t nStreamSamples, nInputSamples;
 
 	nStreamSamples = nStreamSize / pMixer->fmt.nSampleSize;	/* should(!) be MXR_BUFFER_SAMPLES */
 
@@ -439,7 +439,7 @@ void MXR_DestroyMixer(MXR_Mixer *pMixer)
 
 /******************************************************************************/
 
-void MXR_SetInput(MXR_Mixer *pMixer, long nInput, MXR_Input *pInput)
+void MXR_SetInput(MXR_Mixer *pMixer, int32_t nInput, MXR_Input *pInput)
 {
 	MXR_Input *pOldInput;
 
@@ -473,7 +473,7 @@ unsigned char MXR_SetOutputVolume(MXR_Mixer *pMixer, unsigned char nVolume)
 
 /******************************************************************************/
 
-unsigned char MXR_SetInputVolume(MXR_Mixer *pMixer, long nInput, unsigned char nVolume)
+unsigned char MXR_SetInputVolume(MXR_Mixer *pMixer, int32_t nInput, unsigned char nVolume)
 {
 	unsigned char nOldVolume = 0;
 

@@ -62,14 +62,14 @@
 
 
 // main method
-void grdDo(FILE *fh, struct System *sys, LIST *PersonsList, ulong BurglarsNr, ulong PersonsNr, ubyte grdAction);
+void grdDo(FILE *fh, struct System *sys, LIST *PersonsList, uint32_t BurglarsNr, uint32_t PersonsNr, ubyte grdAction);
 
 // support
-ubyte grdAddToList(ulong bldId, LIST *l);
-ubyte grdDraw(struct RastPort *rp, ulong bldId, ulong areaId);
+ubyte grdAddToList(uint32_t bldId, LIST *l);
+ubyte grdDraw(struct RastPort *rp, uint32_t bldId, uint32_t areaId);
 
 // con- & destructor
-ubyte grdInit(FILE **fh, char *mode, ulong bldId, ulong areaId);
+ubyte grdInit(FILE **fh, char *mode, uint32_t bldId, uint32_t areaId);
 void  grdDone(FILE *fh);
 
 #endif

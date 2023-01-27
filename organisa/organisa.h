@@ -38,9 +38,9 @@ struct Organisation
 	  {
 	  struct RastPort *rp;
 
-	  ulong     CarID;
-	  ulong     DriverID;
-	  ulong     BuildingID;
+	  uint32_t     CarID;
+	  uint32_t     DriverID;
+	  uint32_t     BuildingID;
 
 	  ubyte     GuyCount;
 	  ubyte     PlacesInCar;
@@ -50,7 +50,7 @@ struct Organisation
 
 extern struct Organisation Organisation;
 
-extern ulong  tcOrganisation(void);
+extern uint32_t  tcOrganisation(void);
 extern void	  tcResetOrganisation(void);
 
 #endif

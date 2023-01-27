@@ -11,7 +11,7 @@
 
 void livInit(uword us_VisLScapeX,uword us_VisLScapeY,
 				 uword us_VisLScapeWidth,uword us_VisLScapeHeight,
-				 uword us_TotalLScapeWidth,uword us_TotalLScapeHeight,ubyte uch_FrameCount, ulong ul_StartArea)
+				 uword us_TotalLScapeWidth,uword us_TotalLScapeHeight,ubyte uch_FrameCount, uint32_t ul_StartArea)
 {
 	sc = (struct SpriteControl*)MemAlloc(sizeof(struct SpriteControl));
 
@@ -77,13 +77,13 @@ void livDone(void)
 		}
 	}
 
-void livSetActivAreaId(ulong areaId)
+void livSetActivAreaId(uint32_t areaId)
 	{
 	if (sc)
 		sc->ul_ActivAreaId = areaId;
 	}
 
-void livLivesInArea(char *uch_Name, ulong areaId)
+void livLivesInArea(char *uch_Name, uint32_t areaId)
 	{
 	struct Living *liv = livGet(uch_Name);
 
@@ -108,7 +108,7 @@ void livSetAllInvisible(void)
 		}
 	}
 
-void livSetPlayMode(ulong playMode)
+void livSetPlayMode(uint32_t playMode)
 	{
 	sc->ul_SprPlayMode = playMode;
 
@@ -127,10 +127,10 @@ void livSetPlayMode(ulong playMode)
 		}
 	}
 
-ulong livWhereIs(char *uch_Name)
+uint32_t livWhereIs(char *uch_Name)
 	{
 	struct Living *liv = livGet(uch_Name);
-	ulong loc = 0;
+	uint32_t loc = 0;
 
 	if (liv)
 		loc = liv->ul_LivesInAreaId;
@@ -359,7 +359,7 @@ static void livAdd(char *uch_Name,char *uch_TemplateName, ubyte uch_XSize,
 	struct AnimTemplate *tlt;
 
 	liv = (struct Living*)
-		 CreateNode(sc->p_Livings, (long)sizeof(struct Living), uch_Name);
+		 CreateNode(sc->p_Livings, (int32_t)sizeof(struct Living), uch_Name);
 
 	liv->uch_XSize = uch_XSize;
 	liv->uch_YSize = uch_YSize;
@@ -409,7 +409,7 @@ static void livLoadTemplates(void)
 		line = NODE_NAME(GetNthNode(l,i));
 
 		tlt = (struct AnimTemplate*)CreateNode(sc->p_Template,
-				  (ulong)sizeof(struct AnimTemplate),txtGetKey(1,line));
+				  (uint32_t)sizeof(struct AnimTemplate),txtGetKey(1,line));
 
 		tlt->us_Width  = (uword) txtGetKeyAsULONG(2,line);
 		tlt->us_Height = (uword) txtGetKeyAsULONG(3,line);

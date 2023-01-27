@@ -405,10 +405,10 @@ static void hscReset(HSC_File *pHSC)
 
 /******************************************************************************/
 
-static long HSCOpen(HSC_File *pHSC, const char *pszFileName)
+static int32_t HSCOpen(HSC_File *pHSC, const char *pszFileName)
 {
     int i, line, channel, num_pattern;
-	long hsc_size;
+	int32_t hsc_size;
     ubyte *hsc_data, *hsc_file;
 	FILE *pFile;
 
@@ -508,10 +508,10 @@ typedef struct {
 
 /******************************************************************************/
 
-static unsigned long MXR_ProcessInputHSC(MXR_InputHSC *pInput, void *pStream, unsigned long nNumSamples)
+static uint32_t MXR_ProcessInputHSC(MXR_InputHSC *pInput, void *pStream, uint32_t nNumSamples)
 {
 	short *out;
-	long nSamples, nWrite, i;
+	int32_t nSamples, nWrite, i;
 	out = (short *)pStream;
 	nSamples = nNumSamples;
 	while (nSamples > 0) {

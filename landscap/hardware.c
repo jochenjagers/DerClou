@@ -192,7 +192,7 @@ void lsFastRefresh(LSObject lso)
 void lsPrepareFromXMSRastPort(struct XMSRastPort *rp)
 {
 	if (rp) {
-		ulong buffer_size = rp->pSurface->w * rp->pSurface->h;			/* temporary solution */
+		uint32_t buffer_size = rp->pSurface->w * rp->pSurface->h;			/* temporary solution */
 		if (LS_PREPARE_BUFFER_SIZE > buffer_size) {
 			memset(LS_PREPARE_BUFFER, 0, LS_PREPARE_BUFFER_SIZE);
 		}
@@ -207,7 +207,7 @@ void lsPrepareFromXMSRastPort(struct XMSRastPort *rp)
 void lsPrepareToXMSRastPort(struct XMSRastPort *rp)
 {
 	if (rp) {
-		ulong buffer_size = rp->pSurface->w * rp->pSurface->h;			/* temporary solution */
+		uint32_t buffer_size = rp->pSurface->w * rp->pSurface->h;			/* temporary solution */
 		if (LS_PREPARE_BUFFER_SIZE < buffer_size) {
 			buffer_size = LS_PREPARE_BUFFER_SIZE;
 		}
@@ -257,10 +257,10 @@ static void lsBlitOneObject(uword offsetFact, word destx, word desty, uword size
 				destx, desty, size, size,320,160);
 	}
 
-long lsShowOneObject(LSObject lso, word destx, word desty, ulong ul_Mode)
+int32_t lsShowOneObject(LSObject lso, word destx, word desty, uint32_t ul_Mode)
 	{
 	Item item = (Item)dbGetObject(lso->Type);
-	long show = 0;
+	int32_t show = 0;
 	uword offsetFact;
 
 	switch (lso->Type)
@@ -351,7 +351,7 @@ void lsCloseGfx(void)
 	tcSetPermanentColors();	// mod 31-06-94 nach divereses Beschwerden (hg)
 	}
 
-void lsScrollCorrectData(long dx,long dy)
+void lsScrollCorrectData(int32_t dx,int32_t dy)
 	{
 	ls->us_WindowXPos += dx;
 	ls->us_WindowYPos += dy;

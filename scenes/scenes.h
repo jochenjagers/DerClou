@@ -59,17 +59,17 @@ extern uword	CurrentBackground;
 
 /* standard scene functions - look at scenes.c */
 
-extern ulong Go(LIST *succ);
-extern ulong tcTelefon(void);
+extern uint32_t Go(LIST *succ);
+extern uint32_t tcTelefon(void);
 
-extern void Look(ulong locNr);
+extern void Look(uint32_t locNr);
 extern void Information(void);
 extern void tcWait(void);
 
 /* taxi functions */
 
-extern void AddTaxiLocation(ulong locNr);
-extern void RemTaxiLocation(ulong locNr);
+extern void AddTaxiLocation(uint32_t locNr);
+extern void RemTaxiLocation(uint32_t locNr);
 
 /* Done Funktionen */
 
@@ -90,27 +90,27 @@ void Investigate(char *location);
 
 void SetCarColors(ubyte index);
 
-void tcSellCar(ulong ObjectID);
+void tcSellCar(uint32_t ObjectID);
 void tcColorCar(Car car);
 void tcRepairCar(Car car,char *repairWhat);
 void tcCarGeneralOverhoul(Car car);
 void tcToolsShop(void);
 
-long tcEscapeFromBuilding(ulong escBits);
-long tcEscapeByCar(ulong escBits, long timeLeft);
+int32_t tcEscapeFromBuilding(uint32_t escBits);
+int32_t tcEscapeByCar(uint32_t escBits, int32_t timeLeft);
 
-ulong tcChooseCar(ulong backgroundNr);
+uint32_t tcChooseCar(uint32_t backgroundNr);
 
-LIST  *tcMakeLootList(ulong containerID, ulong relID);
+LIST  *tcMakeLootList(uint32_t containerID, uint32_t relID);
 
-char *tcShowPriceOfCar(ulong nr, ulong type, void *data);
-char *tcShowPriceOfTool(ulong nr, ulong type, void *data);
+char *tcShowPriceOfCar(uint32_t nr, uint32_t type, void *data);
+char *tcShowPriceOfTool(uint32_t nr, uint32_t type, void *data);
 
-void tcDealerSays(Person dealer, ubyte textNr, long perc);
+void tcDealerSays(Person dealer, ubyte textNr, int32_t perc);
 void tcDealerOffer(Person dealer, ubyte which);
 
 void  tcBuyCar(void);
-void  tcCarInGarage(ulong carID);
+void  tcCarInGarage(uint32_t carID);
 
 ubyte tcBuyTool(ubyte choice);
 void  tcSellTool(void);
@@ -118,11 +118,11 @@ ubyte tcShowTool(ubyte choice);
 ubyte tcDescTool(ubyte choice);
 void  tcDealerDlg(void);
 
-ulong tcStartEvidence(void);
-ulong tcGoInsideOfHouse(ulong buildingID);
+uint32_t tcStartEvidence(void);
+uint32_t tcGoInsideOfHouse(uint32_t buildingID);
 
 void  tcShowLootInfo(Loot loot);
-void  tcInsideOfHouse(ulong buildingID, ulong areaID, ubyte perc);
-void  tcShowObjectData(ulong areaID, NODE *node, ubyte perc);
+void  tcInsideOfHouse(uint32_t buildingID, uint32_t areaID, ubyte perc);
+void  tcShowObjectData(uint32_t areaID, NODE *node, ubyte perc);
 
 #endif

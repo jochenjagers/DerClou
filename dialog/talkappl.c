@@ -10,7 +10,7 @@ void tcJobOffer(Person p)
 {
 	LIST  *bubble;
 	ubyte  choice;
-	long   part;
+	int32_t   part;
 	Player player = (Player)dbGetObject(Player_Player_1);
 
 	if(!(join(Person_Matt_Stuvysunt, dbGetObjectNr(p))))
@@ -20,7 +20,7 @@ void tcJobOffer(Person p)
 
 	part = tcGetPersOffer(p,(choice+2));
 
-	bubble = txtGoKeyAndInsert(BUSINESS_TXT,"JOB_ANSWER",(ulong)part,NULL);
+	bubble = txtGoKeyAndInsert(BUSINESS_TXT,"JOB_ANSWER",(uint32_t)part,NULL);
 
 	SetPictID      (p->PictID);
 	Bubble         (bubble,0,0L,0L);
@@ -85,7 +85,7 @@ void tcPrisonAnswer(Person p)
 	RemoveList (bubble);
 }
 
-void tcAbilityAnswer(ulong personID)
+void tcAbilityAnswer(uint32_t personID)
 {
 	char name[TXT_KEY_LENGTH];
 	LIST *bubble;

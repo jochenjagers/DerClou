@@ -31,19 +31,19 @@ typedef struct {
 
 typedef struct {
 	FILE *			pFile;
-	unsigned long	dwNumSamples;
-	unsigned long	dwDataOffset;
-	unsigned long	dwDataSize;
-	unsigned long	dwSampleSize;
-	unsigned long	dwPosition;
-	unsigned long	dwSamplesPerSec;
+	uint32_t	dwNumSamples;
+	uint32_t	dwDataOffset;
+	uint32_t	dwDataSize;
+	uint32_t	dwSampleSize;
+	uint32_t	dwPosition;
+	uint32_t	dwSamplesPerSec;
 	unsigned short	wChannels;
 	unsigned short	wBitsPerSample;
 } VOCFile;
 
 /******************************************************************************/
 
-static long VOCOpen(VOCFile *voc, const char *pszFileName)
+static int32_t VOCOpen(VOCFile *voc, const char *pszFileName)
 {
 	VOCHeader hdr;
 	VOCDataHeader dat;
@@ -85,9 +85,9 @@ typedef struct {
 	VOCFile		vocFile;
 } MXR_InputVOC;
 
-static unsigned long MXR_ProcessInputVOC(MXR_InputVOC *pInput, void *pStream, unsigned long nNumSamples)
+static uint32_t MXR_ProcessInputVOC(MXR_InputVOC *pInput, void *pStream, uint32_t nNumSamples)
 {
-	long nSamplesRemain, nSamplesRead;
+	int32_t nSamplesRemain, nSamplesRead;
 	nSamplesRemain = (pInput->vocFile.dwDataSize - pInput->vocFile.dwPosition) / pInput->mxrInput.fmt.nSampleSize;
 	if (nNumSamples > nSamplesRemain) {
 		nNumSamples = nSamplesRemain;

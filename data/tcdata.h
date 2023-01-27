@@ -892,7 +892,7 @@ typedef struct _London *London;
 #define Object_Evidence_Size         sizeof(struct _Evidence)
 struct _Evidence
 {
-   unsigned long pers;
+   uint32_t pers;
    unsigned char Recognition;
    unsigned char WalkTrail;
    unsigned char WaitTrail;
@@ -909,7 +909,7 @@ typedef struct _Evidence *Evidence;
 #define Object_Location_Size         sizeof(struct _Location)
 struct _Location
 {
-   unsigned long LocationNr;
+   uint32_t LocationNr;
    unsigned short OpenFromMinute;
    unsigned short OpenToMinute;
 
@@ -936,7 +936,7 @@ struct _Person
    unsigned char Avarice;
    unsigned char Panic;
    unsigned char KnownToPolice;
-   unsigned long TalkBits;
+   uint32_t TalkBits;
    unsigned char TalkFileID;
    unsigned char OldHealth;
 };
@@ -948,11 +948,11 @@ struct _Car
 {
    unsigned short PictID;
    TCenum(LandE) Land;
-   unsigned long Value;
+   uint32_t Value;
    unsigned short YearOfConstruction;
    TCenum(ColorE) ColorIndex;
    unsigned char Strike;
-   unsigned long Capacity;
+   uint32_t Capacity;
    unsigned char PS;
    unsigned char Speed;
    unsigned char State;
@@ -969,7 +969,7 @@ typedef struct _Car *Car;
 struct _Tool
 {
    unsigned short PictID;
-   unsigned long Value;
+   uint32_t Value;
    unsigned char Danger;
    unsigned char Volume;
    unsigned char Effect;
@@ -981,18 +981,18 @@ typedef struct _Tool *Tool;
 #define Object_CompleteLoot_Size         sizeof(struct _CompleteLoot)
 struct _CompleteLoot
 {
-   unsigned long Bild;
-   unsigned long Gold;
-   unsigned long Geld;
-   unsigned long Juwelen;
-   unsigned long Delikates;
-   unsigned long Statue;
-   unsigned long Kuriositaet;
-   unsigned long HistKunst;
-   unsigned long GebrauchsArt;
-   unsigned long Vase;
-   unsigned long TotalWeight;
-   unsigned long TotalVolume;
+   uint32_t Bild;
+   uint32_t Gold;
+   uint32_t Geld;
+   uint32_t Juwelen;
+   uint32_t Delikates;
+   uint32_t Statue;
+   uint32_t Kuriositaet;
+   uint32_t HistKunst;
+   uint32_t GebrauchsArt;
+   uint32_t Vase;
+   uint32_t TotalWeight;
+   uint32_t TotalVolume;
 
 };
 typedef struct _CompleteLoot *CompleteLoot;
@@ -1002,7 +1002,7 @@ typedef struct _CompleteLoot *CompleteLoot;
 struct _Ability
 {
    TCenum(AbilityE) Name;
-   unsigned long Use;
+   uint32_t Use;
 };
 typedef struct _Ability *Ability;
 
@@ -1026,16 +1026,16 @@ typedef struct _Environment *Environment;
 #define Object_Player_Size         sizeof(struct _Player)
 struct _Player
 {
-   unsigned long Money;
-   unsigned long StolenMoney;
-   unsigned long MyStolenMoney;
+   uint32_t Money;
+   uint32_t StolenMoney;
+   uint32_t MyStolenMoney;
    unsigned char NrOfBurglaries;
    unsigned char JobOfferCount;
    unsigned char MattsPart;
-   unsigned long CurrScene;
-   unsigned long CurrDay;
-   unsigned long CurrMinute;
-   unsigned long CurrLocation;
+   uint32_t CurrScene;
+   uint32_t CurrDay;
+   uint32_t CurrMinute;
+   uint32_t CurrLocation;
 };
 typedef struct _Player *Player;
 
@@ -1062,8 +1062,8 @@ struct _LSObject
    unsigned char uch_Size;
    unsigned char uch_Visible;
    unsigned char uch_Chained;
-   unsigned long ul_Status;
-   unsigned long Type;
+   uint32_t ul_Status;
+   uint32_t Type;
 };
 typedef struct _LSObject *LSObject;
 
@@ -1073,7 +1073,7 @@ struct _Loot
 {
    TCenum(LootE) Type;
    TCenum(LootNameE) Name;
-   unsigned long Volume;
+   uint32_t Volume;
    unsigned short Weight;
    unsigned short PictID;
 
@@ -1212,13 +1212,13 @@ typedef struct _LSRoom *LSRoom;
 #define Object_Building_Size         sizeof(struct _Building)
 struct _Building
 {
-   unsigned long LocationNr;
+   uint32_t LocationNr;
    unsigned short PoliceTime;
    unsigned short GTime;
    unsigned char Exactlyness;
    unsigned char GRate;
    unsigned char Strike;
-   unsigned long Values;
+   uint32_t Values;
    TCenum(RouteE) EscapeRoute;
    unsigned char EscapeRouteLength;
    unsigned char RadioGuarding;
@@ -1255,7 +1255,7 @@ struct _LSArea
    unsigned short us_PlanFloorCollID;
    unsigned short us_Width;
    unsigned short us_Height;
-   unsigned long ul_ObjectBaseNr;
+   uint32_t ul_ObjectBaseNr;
    unsigned char uch_Darkness;
    unsigned short us_StartX0;
    unsigned short us_StartX1;
@@ -1306,7 +1306,7 @@ typedef enum {  //27 overlaps
     _Location_Pooly   
 } DoubleAssignValueE;
 
-ulong getValue(DoubleAssignValueE val);
+uint32_t getValue(DoubleAssignValueE val);
 
 #define Ability_Kampf        getValue(_Ability_Kampf)
 #define Location_Cars_Vans_Office        getValue(_Location_Cars_Vans_Office)

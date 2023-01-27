@@ -81,7 +81,7 @@ LIST *plLoadTools(FILE *fh)
 		{
 			if ((toolsNr - canGet) > 1)
 			{
-				extList = txtGoKeyAndInsert(PLAN_TXT, "SYSTEM_TOOLS_MISSING_2", (ulong)(toolsNr - canGet));
+				extList = txtGoKeyAndInsert(PLAN_TXT, "SYSTEM_TOOLS_MISSING_2", (uint32_t)(toolsNr - canGet));
 			}
 			else if (toolsNr - canGet)
 			{
@@ -100,7 +100,7 @@ LIST *plLoadTools(FILE *fh)
 	return(l);
 }
 
-ubyte plOpen(ulong objId, ubyte mode, FILE **fh)
+ubyte plOpen(uint32_t objId, ubyte mode, FILE **fh)
 {
 	if (GamePlayMode & GP_GUARD_DESIGN)
 	{
@@ -112,7 +112,7 @@ ubyte plOpen(ulong objId, ubyte mode, FILE **fh)
 		LIST *PlanList;
 		ubyte i;
 		FILE *pllFh;
-		ulong pllData = 0L;
+		uint32_t pllData = 0L;
 		char  pllPath[TXT_KEY_LENGTH],
 				name1[TXT_KEY_LENGTH],
 				name2[TXT_KEY_LENGTH],
@@ -215,7 +215,7 @@ ubyte plOpen(ulong objId, ubyte mode, FILE **fh)
 	return 0;
 }
 
-void plSave(ulong objId)
+void plSave(uint32_t objId)
 {
 	FILE *fh = NULL;
 
@@ -240,7 +240,7 @@ void plSave(ulong objId)
    }
 }
 
-void plSaveChanged(ulong objId)
+void plSaveChanged(uint32_t objId)
 {
    if (PlanChanged)
    {
@@ -264,7 +264,7 @@ void plSaveChanged(ulong objId)
 	}
 }
 
-void plLoad(ulong objId)
+void plLoad(uint32_t objId)
 {
 	FILE *fh = NULL;
 	ubyte ret;

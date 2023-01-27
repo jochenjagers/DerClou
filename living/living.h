@@ -63,19 +63,19 @@
 
 extern void livInit(uword us_VisLScapeX,uword us_VisLScapeY,
 						  uword us_VisLScapeWidth,uword us_VisLScapeHeight,
-						  uword us_TotalLScapeWidth,uword us_TotalLScapeHeight,ubyte uch_FrameCount, ulong ul_StartArea);
+						  uword us_TotalLScapeWidth,uword us_TotalLScapeHeight,ubyte uch_FrameCount, uint32_t ul_StartArea);
 
 extern void  livDone(void);
 
 extern void  livSetAllInvisible(void);
 
 extern void  livSetPos(char *uch_Name,uword XPos,uword YPos);
-extern void  livSetPlayMode(ulong playMode);
-extern void  livSetActivAreaId(ulong areaId);
+extern void  livSetPlayMode(uint32_t playMode);
+extern void  livSetActivAreaId(uint32_t areaId);
 extern void  livRefreshAll(void);
 
-extern void  livLivesInArea(char *uch_Name, ulong areaId);
-extern ulong livWhereIs(char *uch_Name);
+extern void  livLivesInArea(char *uch_Name, uint32_t areaId);
+extern uint32_t livWhereIs(char *uch_Name);
 
 extern uword livGetXPos(char *uch_Name);
 extern uword livGetYPos(char *uch_Name);

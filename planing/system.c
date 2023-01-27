@@ -14,28 +14,28 @@
 #include "planing/system.h"
 #include "port/port.h"
 
-ulong sysUsedMem = 0L;
+uint32_t sysUsedMem = 0L;
 
-ulong sizeofAction [] = {
+uint32_t sizeofAction [] = {
 	0L, /* first index is not used yet */
-	(ulong)sizeof(struct ActionGo),
+	(uint32_t)sizeof(struct ActionGo),
 	0L,
-	(ulong)sizeof(struct ActionSignal),
-	(ulong)sizeof(struct ActionWaitSignal),
-	(ulong)sizeof(struct ActionUse),
-	(ulong)sizeof(struct ActionTake),
-	(ulong)sizeof(struct ActionDrop),
-	(ulong)sizeof(struct ActionOpen),
-	(ulong)sizeof(struct ActionClose),
-	(ulong)sizeof(struct ActionControl)
+	(uint32_t)sizeof(struct ActionSignal),
+	(uint32_t)sizeof(struct ActionWaitSignal),
+	(uint32_t)sizeof(struct ActionUse),
+	(uint32_t)sizeof(struct ActionTake),
+	(uint32_t)sizeof(struct ActionDrop),
+	(uint32_t)sizeof(struct ActionOpen),
+	(uint32_t)sizeof(struct ActionClose),
+	(uint32_t)sizeof(struct ActionControl)
 };
 
-ulong plGetUsedMem(void)
+uint32_t plGetUsedMem(void)
 	{
 	return sysUsedMem;
 	}
 
-struct Handler *FindHandler(struct System *sys, ulong id)
+struct Handler *FindHandler(struct System *sys, uint32_t id)
 {
    struct Handler *h;
 
@@ -83,7 +83,7 @@ void CloseSystem(struct System *sys)
    }
 }
 
-void SetActivHandler(struct System *sys, ulong id)
+void SetActivHandler(struct System *sys, uint32_t id)
 {
    struct Handler *h;
 
@@ -159,7 +159,7 @@ LIST *LoadSystem(FILE *fh, struct System *sys)
 		else
 		{
 			if ((handlerNr - knowsSomebody) > 1)
-				extList = txtGoKeyAndInsert(PLAN_TXT, "SYSTEM_GUYS_MISSING_2", (ulong)(handlerNr - knowsSomebody));
+				extList = txtGoKeyAndInsert(PLAN_TXT, "SYSTEM_GUYS_MISSING_2", (uint32_t)(handlerNr - knowsSomebody));
 			else if (handlerNr - knowsSomebody)
 				extList = txtGoKey(PLAN_TXT, "SYSTEM_GUYS_MISSING_4");
 		}
@@ -176,7 +176,7 @@ LIST *LoadSystem(FILE *fh, struct System *sys)
 	return l;
 }
 
-struct Handler *InitHandler(struct System *sys, ulong id, ulong flags)
+struct Handler *InitHandler(struct System *sys, uint32_t id, uint32_t flags)
 {
    struct Handler *h = NULL;
 
@@ -203,7 +203,7 @@ struct Handler *InitHandler(struct System *sys, ulong id, ulong flags)
    return h;
 }
 
-void CloseHandler(struct System *sys, ulong id)
+void CloseHandler(struct System *sys, uint32_t id)
 {
    struct Handler *h;
 
@@ -219,7 +219,7 @@ void CloseHandler(struct System *sys, ulong id)
    }
 }
 
-struct Handler *ClearHandler(struct System *sys, ulong id)
+struct Handler *ClearHandler(struct System *sys, uint32_t id)
 {
    struct Handler *h;
 
@@ -257,7 +257,7 @@ ubyte IsHandlerCleared(struct System *sys)
    return 0;
 }
 
-void SaveHandler(FILE *fh, struct System *sys, ulong id)
+void SaveHandler(FILE *fh, struct System *sys, uint32_t id)
 {
    struct Handler *h;
    struct Action  *a;
@@ -273,7 +273,7 @@ void SaveHandler(FILE *fh, struct System *sys, ulong id)
 			switch (a->Type)
 			{
 				case ACTION_GO:
-					fprintf(fh, "%d\n", (ulong)ActionData(a, struct ActionGo *)->Direction);
+					fprintf(fh, "%d\n", (uint32_t)ActionData(a, struct ActionGo *)->Direction);
 				break;
 
 				case ACTION_USE:
@@ -295,11 +295,11 @@ void SaveHandler(FILE *fh, struct System *sys, ulong id)
    }
 }
 
-ubyte LoadHandler(FILE *fh, struct System *sys, ulong id)
+ubyte LoadHandler(FILE *fh, struct System *sys, uint32_t id)
 {
 	struct Action  *a;
-	ulong value;
-	ulong time;
+	uint32_t value;
+	uint32_t time;
 	char buffer[32];
 
 	if (fh && sys && (FindHandler(sys, id))) {
@@ -368,7 +368,7 @@ ubyte LoadHandler(FILE *fh, struct System *sys, ulong id)
 	return 0;
 }
 
-struct Action *InitAction(struct System *sys, uword type, ulong data1, ulong data2, ulong time)
+struct Action *InitAction(struct System *sys, uword type, uint32_t data1, uint32_t data2, uint32_t time)
 {
    struct Handler *h;
    struct Action  *a = NULL;
@@ -646,7 +646,7 @@ void IgnoreAction(struct System *sys)
    }
 }
 
-struct plSignal *InitSignal(struct System *sys, ulong sender, ulong receiver)
+struct plSignal *InitSignal(struct System *sys, uint32_t sender, uint32_t receiver)
 {
    struct plSignal *s = NULL;
 
@@ -671,7 +671,7 @@ void CloseSignal(struct plSignal *s)
    }
 }
 
-struct plSignal *IsSignal(struct System *sys, ulong sender, ulong receiver)
+struct plSignal *IsSignal(struct System *sys, uint32_t sender, uint32_t receiver)
 {
    struct plSignal *s;
 
@@ -687,7 +687,7 @@ struct plSignal *IsSignal(struct System *sys, ulong sender, ulong receiver)
    return NULL;
 }
 
-ulong CurrentTimer(struct System *sys)
+uint32_t CurrentTimer(struct System *sys)
 {
    struct Handler *h;
 
@@ -697,7 +697,7 @@ ulong CurrentTimer(struct System *sys)
    return 0L;
 }
 
-void IncCurrentTimer(struct System *sys, ulong time, ubyte alsoTime)
+void IncCurrentTimer(struct System *sys, uint32_t time, ubyte alsoTime)
 {
    struct Handler *h;
 
@@ -716,11 +716,11 @@ void IncCurrentTimer(struct System *sys, ulong time, ubyte alsoTime)
    }
 }
 
-ulong GetMaxTimer(struct System *sys)
+uint32_t GetMaxTimer(struct System *sys)
 {
    struct Handler *h;
    struct Action  *a;
-   ulong		   time = 0;
+   uint32_t		   time = 0;
 
    if (sys && (h = (struct Handler *)sys->ActivHandler))
    {

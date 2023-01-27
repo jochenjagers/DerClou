@@ -74,18 +74,18 @@ typedef struct MXR_Mixer	MXR_Mixer;
 typedef struct MXR_Input	MXR_Input;
 
 typedef struct {
-	unsigned long	nSamplesPerSec;		/* 22050, 44100 etc. */
-	unsigned long	nBitsPerChannel;	/* 8 or 16 */
-	unsigned long	nNumChannels;		/* 1 or 2 */
-	unsigned long	nSampleSize;		/* (nNumChannels * nBitsPerChannel / 8) */
+	uint32_t	nSamplesPerSec;		/* 22050, 44100 etc. */
+	uint32_t	nBitsPerChannel;	/* 8 or 16 */
+	uint32_t	nNumChannels;		/* 1 or 2 */
+	uint32_t	nSampleSize;		/* (nNumChannels * nBitsPerChannel / 8) */
 } MXR_Format;
 
-typedef unsigned long (*MXR_ProcessInputFunc)(MXR_Input *, void *, unsigned long);
+typedef uint32_t (*MXR_ProcessInputFunc)(MXR_Input *, void *, uint32_t);
 typedef void (*MXR_DestroyInputFunc)(MXR_Input *);
 
 struct MXR_Input {
 	MXR_Format				fmt;
-	unsigned long			nVolume;
+	uint32_t			nVolume;
 
 	MXR_ProcessInputFunc	pProcess;
 	MXR_DestroyInputFunc	pDestroy;
@@ -98,10 +98,10 @@ struct MXR_Input {
 extern MXR_Mixer *MXR_CreateMixer(const MXR_Format *pFormat);
 extern void MXR_DestroyMixer(MXR_Mixer *pMixer);
 
-extern void MXR_SetInput(MXR_Mixer *pMixer, long nInput, MXR_Input *pInput);
+extern void MXR_SetInput(MXR_Mixer *pMixer, int32_t nInput, MXR_Input *pInput);
 
 extern unsigned char MXR_SetOutputVolume(MXR_Mixer *pMixer, unsigned char nVolume);
-extern unsigned char MXR_SetInputVolume(MXR_Mixer *pMixer, long nInput, unsigned char nVolume);
+extern unsigned char MXR_SetInputVolume(MXR_Mixer *pMixer, int32_t nInput, unsigned char nVolume);
 
 extern MXR_Input *MXR_CreateInputVOC(const char *pszFileName);
 extern MXR_Input *MXR_CreateInputWAV(const char *pszFileName);

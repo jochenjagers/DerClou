@@ -68,20 +68,20 @@
 #define PLANING_CORRECT_TIME      3
 
 
-ulong plGetNextLoot(void);
+uint32_t plGetNextLoot(void);
 
-ubyte plLivingsPosAtCar(ulong bldId);
-ubyte plAllInCar(ulong bldId);
-ubyte plIsStair(ulong objId);
+ubyte plLivingsPosAtCar(uint32_t bldId);
+ubyte plAllInCar(uint32_t bldId);
+ubyte plIsStair(uint32_t objId);
 
 void  plCorrectOpened(LSObject obj, ubyte open);
-ubyte plIgnoreLock(ulong objId);
+ubyte plIgnoreLock(uint32_t objId);
 
-void plMove(ulong current, ubyte direction);
-void plWork(ulong current);
+void plMove(uint32_t current, ubyte direction);
+void plWork(uint32_t current);
 
-LIST *plGetObjectsList(ulong current, ubyte addLootBags);
-void  plInsertGuard(LIST *list, ulong current, ulong guard);
-ubyte plObjectInReach(ulong current, ulong objId);
+LIST *plGetObjectsList(uint32_t current, ubyte addLootBags);
+void  plInsertGuard(LIST *list, uint32_t current, uint32_t guard);
+ubyte plObjectInReach(uint32_t current, uint32_t objId);
 
 #endif

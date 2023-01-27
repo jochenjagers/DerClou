@@ -69,25 +69,25 @@ extern void tcPlaySound(void);
 extern void tcPlayStreetSound(void);
 extern void tcPersonGreetsMatt(void);
 
-extern ulong StdHandle(ulong choice);
+extern uint32_t StdHandle(uint32_t choice);
 
 extern void SetFunc(struct Scene *sc,void (*init)(void),void (*done)(void));
 extern void PrintStatus(char *text);
 extern void InitTaxiLocations(void);
 extern void	LinkScenes(void);
 
-extern void tcGetLastName(char *Name, char *dest, ulong maxLength);
-extern void tcCutName(char *Name, char Sign, ulong maxLength);
+extern void tcGetLastName(char *Name, char *dest, uint32_t maxLength);
+extern void tcCutName(char *Name, char Sign, uint32_t maxLength);
 
 extern ubyte tcLoadTheClou(void);
 extern void tcSaveTheClou(int bAutoSave);
-extern ulong tcBurglary(ulong buildingID);
+extern uint32_t tcBurglary(uint32_t buildingID);
 
 extern ubyte tcLoadChangesInScenes(char *fileName);
 extern ubyte tcSaveChangesInScenes(char *fileName);
 
-extern void tcRefreshLocationInTitle(ulong locNr);
-extern void ShowTime(ulong delay);
+extern void tcRefreshLocationInTitle(uint32_t locNr);
+extern void ShowTime(uint32_t delay);
 extern void RefreshAfterDiskRequester(void);
 
 extern ubyte tcLoadIt(char activ);

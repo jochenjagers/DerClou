@@ -13,15 +13,15 @@
 /******************************************************************************/
 
 typedef struct {
-	unsigned long	dwChunkID;
-	unsigned long	dwChunkSize;
+	uint32_t	dwChunkID;
+	uint32_t	dwChunkSize;
 } WAVChunk;
 
 typedef struct {
 	unsigned short	wFormatTag;
 	unsigned short	wChannels;
-	unsigned long	dwSamplesPerSec;
-	unsigned long	dwAvgBytesPerSec;
+	uint32_t	dwSamplesPerSec;
+	uint32_t	dwAvgBytesPerSec;
 	unsigned short	wBlockAlign;
 	unsigned short	wBitsPerSample;
 } WAVFmtChunk;
@@ -29,11 +29,11 @@ typedef struct {
 typedef struct {
 	FILE *			pFile;
 	WAVFmtChunk		fmt;
-	unsigned long	dwNumSamples;
-	unsigned long	dwDataOffset;
-	unsigned long	dwDataSize;
-	unsigned long	dwSampleSize;
-	unsigned long	dwPosition;
+	uint32_t	dwNumSamples;
+	uint32_t	dwDataOffset;
+	uint32_t	dwDataSize;
+	uint32_t	dwSampleSize;
+	uint32_t	dwPosition;
 } WAVFile;
 
 #define makefourcc(ch0,ch1,ch2,ch3) \
@@ -42,7 +42,7 @@ typedef struct {
 
 /******************************************************************************/
 
-static long WAVOpen(WAVFile *wav, const char *pszFileName)
+static int32_t WAVOpen(WAVFile *wav, const char *pszFileName)
 {
 	WAVChunk chk;
 
@@ -53,7 +53,7 @@ static long WAVOpen(WAVFile *wav, const char *pszFileName)
 
 	if (fread(&chk, 1, sizeof(WAVChunk), wav->pFile) != sizeof(WAVChunk)) goto Lgetout;
 	if (chk.dwChunkID != makefourcc('R','I','F','F')) goto Lgetout;
-	if (fread(&chk.dwChunkID, 1, sizeof(long), wav->pFile) != sizeof(long)) goto Lgetout;
+	if (fread(&chk.dwChunkID, 1, sizeof(int32_t), wav->pFile) != sizeof(int32_t)) goto Lgetout;
 	if (chk.dwChunkID != makefourcc('W','A','V','E')) goto Lgetout;
 	if (fread(&chk, 1, sizeof(WAVChunk), wav->pFile) != sizeof(WAVChunk)) goto Lgetout;
 	if (chk.dwChunkID != makefourcc('f','m','t',' ')) goto Lgetout;
@@ -88,9 +88,9 @@ typedef struct {
 	WAVFile		wavFile;
 } MXR_InputWAV;
 
-static unsigned long MXR_ProcessInputWAV(MXR_InputWAV *pInput, void *pStream, unsigned long nNumSamples)
+static uint32_t MXR_ProcessInputWAV(MXR_InputWAV *pInput, void *pStream, uint32_t nNumSamples)
 {
-	long nSamplesRemain, nSamplesRead;
+	int32_t nSamplesRemain, nSamplesRead;
 	nSamplesRemain = (pInput->wavFile.dwDataSize - pInput->wavFile.dwPosition) / pInput->mxrInput.fmt.nSampleSize;
 	if (nNumSamples > nSamplesRemain) {
 		nNumSamples = nSamplesRemain;

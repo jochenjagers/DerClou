@@ -17,15 +17,15 @@ struct StoryHeader
 {
 	ubyte StoryName[20];
 
-	ulong EventCount;	/* Zaehler mit der höchsten EventNr */
-	ulong SceneCount;
+	uint32_t EventCount;	/* Zaehler mit der höchsten EventNr */
+	uint32_t SceneCount;
 
-	ulong AmountOfScenes;
-	ulong AmountOfEvents;
+	uint32_t AmountOfScenes;
+	uint32_t AmountOfEvents;
 
-	ulong StartZeit;
-	ulong StartOrt;
-	ulong StartSzene;
+	uint32_t StartZeit;
+	uint32_t StartOrt;
+	uint32_t StartSzene;
 };
 
 struct NewStory
@@ -37,40 +37,40 @@ struct NewStory
 	struct List *scenes;	/* Liste von SceneNodes */
 	struct List *events;
 
-	ulong StartZeit;
-	ulong StartOrt;
+	uint32_t StartZeit;
+	uint32_t StartOrt;
 };
 
 struct NewScene
 {
-	ulong	EventNr;
+	uint32_t	EventNr;
 	ubyte	SceneName[20];
 
-	long	Tag;				   /* der Tag an dem sie eintritt */
-	long	MinZeitPunkt;		/* zeitlicher Bereich in dem 	*/
-	long	MaxZeitPunkt;		/* sie eintritt 			*/
-	long	Ort;					/* der erfüllt sein muß 		*/
+	int32_t	Tag;				   /* der Tag an dem sie eintritt */
+	int32_t	MinZeitPunkt;		/* zeitlicher Bereich in dem 	*/
+	int32_t	MaxZeitPunkt;		/* sie eintritt 			*/
+	int32_t	Ort;					/* der erfüllt sein muß 		*/
 
-	ulong	AnzahlderEvents;
-	ulong	AnzahlderN_Events;
+	uint32_t	AnzahlderEvents;
+	uint32_t	AnzahlderN_Events;
 
-	ulong	*events;				/* Nr. der Events, die erfüllt sein müssen */
-	ulong	*n_events;			/* Nr. der Events, die nicht erfüllt sein müssen */
+	uint32_t	*events;				/* Nr. der Events, die erfüllt sein müssen */
+	uint32_t	*n_events;			/* Nr. der Events, die nicht erfüllt sein müssen */
 
-	ulong	AnzahlderNachfolger;
-	ulong	*nachfolger;		/* Nr. der NachfolgerEvents */
+	uint32_t	AnzahlderNachfolger;
+	uint32_t	*nachfolger;		/* Nr. der NachfolgerEvents */
 
-	ulong	Moeglichkeiten;	/* siehe defines oben 			*/
-	ulong	Dauer;			   /* Dauer dieser Szene in Minuten	*/
+	uint32_t	Moeglichkeiten;	/* siehe defines oben 			*/
+	uint32_t	Dauer;			   /* Dauer dieser Szene in Minuten	*/
 	uword	Anzahl;			   /* wie oft sie geschehen kann		*/
 	uword	Geschehen;		   /* wie oft sie SCHON geschehen ist */
 	ubyte	Possibility;		/* mit der sie eintritt 0-255	*/
 
 	ubyte	Padding[3];		/* Alignment */
 
-	ulong Sample;           /* Nummer des Samples */
-	ulong Anim;             /* Nummer der Animation */
-	long  NewOrt;           /* Ort der Scene */
+	uint32_t Sample;           /* Nummer des Samples */
+	uint32_t Anim;             /* Nummer der Animation */
+	int32_t  NewOrt;           /* Ort der Scene */
 };
 
 struct SceneNode
@@ -81,7 +81,7 @@ struct SceneNode
 
 struct NewEvent
 {
-	ulong EventNr;
+	uint32_t EventNr;
 	ubyte EventName[20];
 };
 
@@ -94,8 +94,8 @@ struct EventNode
 
 /* Prototypes */
 /* Story */
-extern void NewStory    (ubyte *name, ulong StartZeit, ulong StartOrt);
-extern void ChangeStory (ulong StartZeit, ulong StartOrt);
+extern void NewStory    (ubyte *name, uint32_t StartZeit, uint32_t StartOrt);
+extern void ChangeStory (uint32_t StartZeit, uint32_t StartOrt);
 extern void RemoveStory (void);
 extern void WriteStory  (ubyte *filename);
 extern void ReadStory   (ubyte *filename);
@@ -112,7 +112,7 @@ extern void RemoveEvent     (ubyte *name);
 extern void RemoveAllEvents (void);
 
 /* Specials */
-char *GetName (ulong EventNr);
+char *GetName (uint32_t EventNr);
 
 
 extern struct NewStory *story;

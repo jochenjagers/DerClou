@@ -40,6 +40,6 @@
 extern void tcJobOffer(Person p);
 extern void tcMyJobAnswer(Person p);
 extern void tcPrisonAnswer(Person p);
-extern void tcAbilityAnswer(ulong personID);
+extern void tcAbilityAnswer(uint32_t personID);
 
 #endif

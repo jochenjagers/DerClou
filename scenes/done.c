@@ -5,6 +5,7 @@
    Based on the original by neo Software GmbH
 */
 #include "scenes/scenes.h"
+#include <stdint.h>
 
 void DoneTaxi(void)
 {
@@ -13,7 +14,7 @@ void DoneTaxi(void)
 	char name[TXT_KEY_LENGTH], exp[TXT_KEY_LENGTH];
 	LIST *locs = (LIST*)CreateList(0L);
 	struct ObjectNode *n, *newNode;
-	ulong locNr;
+	uint32_t locNr;
 	Location loc;
 
 	knowsSet(Person_Matt_Stuvysunt, Person_Dan_Stanford);
@@ -26,7 +27,7 @@ void DoneTaxi(void)
 
 		sprintf(name ,"*%s", NODE_NAME(GetNthNode(film->loc_names, locNr)));
 
-		newNode = (struct ObjectNode *) CreateNode (locs,(ulong) (sizeof (struct ObjectNode)), name);
+		newNode = (struct ObjectNode *) CreateNode (locs,(uint32_t) (sizeof (struct ObjectNode)), name);
 		newNode->nr = locNr + 1;     /* because of ChoiceOk */
 	}
 
@@ -40,13 +41,13 @@ void DoneTaxi(void)
 		i = j;
 
 		locNr = OL_NR(GetNthNode(locs, i)) - 1;
-		SceneArgs.ReturnValue = (ulong) ((struct Scene *)GetLocScene(locNr)->EventNr);
+		SceneArgs.ReturnValue = (intptr_t) ((struct Scene *)GetLocScene(locNr)->EventNr);
 	}
 	else
 	    {
 		Say(BUSINESS_TXT,0,MATT_PICTID,"LOVELY_TAXI");
 
-		SceneArgs.ReturnValue = (ulong) ((struct Scene *)GetLocScene(GetOldLocation)->EventNr);
+		SceneArgs.ReturnValue = (intptr_t) ((struct Scene *)GetLocScene(GetOldLocation)->EventNr);
 	}
 
 	SceneArgs.Ueberschrieben=1;
@@ -59,7 +60,7 @@ void DoneTaxi(void)
 void DoneInsideHouse(void)
 {
 	LIST  *menu = txtGoKey(MENU_TXT, "Mainmenu");
-	ulong  choice, buildingID, areaID;
+	uint32_t  choice, buildingID, areaID;
 	ubyte  activ=0, perc;
 	NODE  *node;
 
@@ -104,7 +105,7 @@ void DoneInsideHouse(void)
 			inpTurnFunctionKey(1);
 			inpTurnESC(1);
 
-			choice=(ulong) 1L << activ;
+			choice=(uint32_t) 1L << activ;
 
 			switch(choice)
 			{
@@ -117,7 +118,7 @@ void DoneInsideHouse(void)
 				break;
 			case GO:
 				if (!(areaID = tcGoInsideOfHouse(buildingID)))
-					SceneArgs.ReturnValue = (ulong) (((struct TCEventNode *)(LIST_HEAD((GetCurrentScene()->std_succ))))->EventNr);
+					SceneArgs.ReturnValue = (uint32_t) (((struct TCEventNode *)(LIST_HEAD((GetCurrentScene()->std_succ))))->EventNr);
 				else
 				    {
 					lsSetRelations(areaID);
@@ -148,7 +149,7 @@ void DoneInsideHouse(void)
 void DoneTools(void)
 {
 	ubyte     activ=0;
-	ulong     choice=0;
+	uint32_t     choice=0;
 	LIST      *menu= txtGoKey (MENU_TXT, "Mainmenu");
 
 	SceneArgs.Ueberschrieben=1;
@@ -165,7 +166,7 @@ void DoneTools(void)
 		activ=Menu(menu, SceneArgs.Moeglichkeiten, (ubyte)(activ), NULL,0L);
 		inpTurnESC(1);
 
-		choice=(ulong) 1L << (activ);
+		choice=(uint32_t) 1L << (activ);
 
 		if (choice == BUSINESS_TALK)
 		{
@@ -189,7 +190,7 @@ void DoneTools(void)
 void DoneDealer(void)
 {
 	ubyte activ  = 0;
-	ulong choice = 0;
+	uint32_t choice = 0;
 	LIST  *menu  = txtGoKey (MENU_TXT, "Mainmenu");
 
 	SceneArgs.Ueberschrieben=1;
@@ -211,7 +212,7 @@ void DoneDealer(void)
 		inpTurnESC(1);
 		inpTurnFunctionKey(1);
 
-		choice = (ulong) 1L << (activ);
+		choice = (uint32_t) 1L << (activ);
 
 		if (choice == BUSINESS_TALK)
 			tcDealerDlg();
@@ -233,7 +234,7 @@ void DoneParking(void)
 	LIST *bubble = txtGoKey(BUSINESS_TXT,"PARKING");
 	LIST *menu   = txtGoKey (MENU_TXT, "Mainmenu");
 	ubyte activ=0, choice=0;
-	ulong carID;
+	uint32_t carID;
 	Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
 	SceneArgs.Ueberschrieben=1;
@@ -301,7 +302,7 @@ void DoneGarage(void)
 {
 	LIST *menu = txtGoKey (MENU_TXT, "Mainmenu");
 	ubyte activ=0;
-	ulong choice, carID;
+	uint32_t choice, carID;
 	Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
 	SceneArgs.Ueberschrieben=1;
@@ -317,7 +318,7 @@ void DoneGarage(void)
 		inpTurnESC(1);
 		inpTurnFunctionKey(1);
 
-		choice=(ulong) 1L << (activ);
+		choice=(uint32_t) 1L << (activ);
 
 		if (choice == BUSINESS_TALK)
 		{

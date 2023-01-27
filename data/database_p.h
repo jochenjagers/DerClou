@@ -22,8 +22,8 @@
 extern LIST *objHash[OBJ_HASH_SIZE];
 extern char decodeStr[11];
 
-extern ulong ObjectListType;
-extern ulong ObjectListFlags;
+extern uint32_t ObjectListType;
+extern uint32_t ObjectListFlags;
 
 
 // private prototypes - RELATION
@@ -32,11 +32,11 @@ char *dbDecode(KEY key);
 KEY dbEncode(char *key);
 
 // private prototypes - OBJECT
-struct dbObject *dbFindRealObject(ulong realNr, ulong offset, ulong size);
+struct dbObject *dbFindRealObject(uint32_t realNr, uint32_t offset, uint32_t size);
 
 //
-void  dbcheckSize(ulong objSize, ulong structSize);
-ulong dbGetObjLoadSize(ulong structType);
-ulong dbGetObjSaveSize(struct dbObjectHeader *objHd);
+void  dbcheckSize(uint32_t objSize, uint32_t structSize);
+uint32_t dbGetObjLoadSize(uint32_t structType);
+uint32_t dbGetObjSaveSize(struct dbObjectHeader *objHd);
 
 #endif

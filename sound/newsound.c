@@ -38,7 +38,7 @@ void sndDone(void)
 {
 }
 
-void sndPlaySound(char *name, ulong mode)
+void sndPlaySound(char *name, uint32_t mode)
 {
 	char path[256];
 

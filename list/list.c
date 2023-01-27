@@ -184,10 +184,10 @@ void *GetNode(void *list, char *name)
 	return(NULL);
 }
 
-void *GetNthNode(void *list, ulong n)
+void *GetNthNode(void *list, uint32_t n)
 {
 	NODE *node;
-	ulong i = 0;
+	uint32_t i = 0;
 
 	for (node = LIST_HEAD(list); NODE_SUCC(node); node = NODE_SUCC(node))
 	{
@@ -197,27 +197,27 @@ void *GetNthNode(void *list, ulong n)
 	return(NULL);
 }
 
-ulong GetNrOfNodes(void *list)
+uint32_t GetNrOfNodes(void *list)
 {
 	NODE *node = NULL;
-	ulong i = 0;
+	uint32_t i = 0;
 
 	for (i = 0, node = LIST_HEAD(list); NODE_SUCC(node); i++, node = NODE_SUCC(node));
 
 	return i;
 }
 
-ulong GetNodeNrByAddr(void *list, void *node)
+uint32_t GetNodeNrByAddr(void *list, void *node)
 {
 	NODE *s;
-	ulong i;
+	uint32_t i;
 
 	for (s = LIST_HEAD(list), i = 0; NODE_SUCC(s) && (s != node); s = NODE_SUCC(s), i++);
 
 	return i;
 }
 
-ulong GetNodeNr(void *list, char *name)
+uint32_t GetNodeNr(void *list, char *name)
 {
 	return GetNodeNrByAddr(list, GetNode(list, name));
 }
@@ -267,10 +267,10 @@ void ReplaceNode(void *list, char *name, void *newNode)
 	ReplaceNodeByAddr(list, GetNode(list, name), newNode);
 }
 
-ulong ReadList(void *list, uword size, char *fileName, uword diskId)
+uint32_t ReadList(void *list, uword size, char *fileName, uword diskId)
 {
 	FILE *fh;
-	ulong i = 0;
+	uint32_t i = 0;
 	char buffer[256];
 
 	if (fh = dskOpen(fileName, "r", diskId))

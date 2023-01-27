@@ -6,7 +6,7 @@
 */
 #include "scenes/scenes.h"
 
-ulong    CurrAreaId;
+uint32_t    CurrAreaId;
 LSObject CurrLSO;  /* for FadeObjectInside */
 
 static void FadeInsideObject(void)
@@ -15,10 +15,10 @@ static void FadeInsideObject(void)
 	lsFadeRasterObject(CurrAreaId, CurrLSO, (status++) % 2);
 }
 
-ulong tcGoInsideOfHouse(ulong buildingID)
+uint32_t tcGoInsideOfHouse(uint32_t buildingID)
 	{
 	LIST  *menu = txtGoKey(MENU_TXT, "INSIDE_MENU"), *areas;
-	ulong count, i, areaID = 0;
+	uint32_t count, i, areaID = 0;
 
 	consistsOfAll(buildingID, OLF_PRIVATE_LIST|OLF_INCLUDE_NAME, Object_LSArea);
 	areas = ObjectListPrivate;
@@ -35,7 +35,7 @@ ulong tcGoInsideOfHouse(ulong buildingID)
 
 		inpTurnFunctionKey(0);
 		inpTurnESC(0);
-		i = (ulong) Menu(menu, (1L << count) - 1, 0, 0L, 0L);
+		i = (uint32_t) Menu(menu, (1L << count) - 1, 0, 0L, 0L);
 		inpTurnESC(1);
 		inpTurnFunctionKey(1);
 
@@ -54,11 +54,11 @@ ulong tcGoInsideOfHouse(ulong buildingID)
 	return(areaID);
 	}
 
-void tcInsideOfHouse(ulong buildingID, ulong areaID, ubyte perc)
+void tcInsideOfHouse(uint32_t buildingID, uint32_t areaID, ubyte perc)
 {
 	LIST *objects;
 	NODE *node, *n;
-	ulong action, count;
+	uint32_t action, count;
 	char name[TXT_KEY_LENGTH];
 	char alarm[TXT_KEY_LENGTH], power[TXT_KEY_LENGTH];
 	LSObject lso;
@@ -167,7 +167,7 @@ void tcInsideOfHouse(ulong buildingID, ulong areaID, ubyte perc)
 	inpSetWaitTicks (0);
 }
 
-void tcShowObjectData(ulong areaID, NODE *node, ubyte perc)
+void tcShowObjectData(uint32_t areaID, NODE *node, ubyte perc)
 {
 	NODE *n;
 

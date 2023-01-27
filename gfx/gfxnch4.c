@@ -17,7 +17,7 @@ So to plot a pixel at position (5,7), plane 1 is selected, and the offset is (32
 
 static int ScrX = 0, ScrY = 0;
 
-ulong gfxNCH4GetCurrScrollOffset(void)
+uint32_t gfxNCH4GetCurrScrollOffset(void)
 {
 	return(GFX_NCH4_SCROLLOFFSET + ScrX + (ScrY * 640));
 }
@@ -154,8 +154,8 @@ void gfxNCH4PutMCGAToNCH4(void *sp, void *dp, uword us_SourceX, uword us_SourceY
 
 	dw <<= 2;
 
-	sbm += (ulong)us_SourceX + (ulong)us_SourceY * (ulong)sw;
-	dbm += (ulong)us_DestX + (ulong)us_DestY * (ulong)dw;
+	sbm += (uint32_t)us_SourceX + (uint32_t)us_SourceY * (uint32_t)sw;
+	dbm += (uint32_t)us_DestX + (uint32_t)us_DestY * (uint32_t)dw;
 
 	while (us_Height--)
 	{
@@ -179,8 +179,8 @@ void gfxNCH4PutMCGAToNCH4Mask(void *sp, void *dp, uword us_SourceX, uword us_Sou
 
 	dw <<= 2;
 
-	sbm += (ulong)us_SourceX + (ulong)us_SourceY * (ulong)sw;
-	dbm += (ulong)us_DestX + (ulong)us_DestY * (ulong)dw;
+	sbm += (uint32_t)us_SourceX + (uint32_t)us_SourceY * (uint32_t)sw;
+	dbm += (uint32_t)us_DestX + (uint32_t)us_DestY * (uint32_t)dw;
 
 	while (us_Height--)
 	{
@@ -204,8 +204,8 @@ void gfxNCH4OLMCGAToNCH4Mask(void *sp, void *dp, uword us_SourceX, uword us_Sour
 
 	dw <<= 2;
 
-	sbm += (ulong)us_SourceX + (ulong)us_SourceY * (ulong)sw;
-	dbm += (ulong)us_DestX + (ulong)us_DestY * (ulong)dw;
+	sbm += (uint32_t)us_SourceX + (uint32_t)us_SourceY * (uint32_t)sw;
+	dbm += (uint32_t)us_DestX + (uint32_t)us_DestY * (uint32_t)dw;
 
 	while (us_Height--)
 	{
@@ -229,8 +229,8 @@ void gfxNCH4OLMCGAToNCH4(void *sp, void *dp, uword us_SourceX, uword us_SourceY,
 
 	dw <<= 2;
 
-	sbm += (ulong)us_SourceX + (ulong)us_SourceY * (ulong)sw;
-	dbm += (ulong)us_DestX + (ulong)us_DestY * (ulong)dw;
+	sbm += (uint32_t)us_SourceX + (uint32_t)us_SourceY * (uint32_t)sw;
+	dbm += (uint32_t)us_DestX + (uint32_t)us_DestY * (uint32_t)dw;
 
 	while (us_Height--)
 	{
@@ -254,8 +254,8 @@ void gfxNCH4OrMCGAToNCH4(void *sp, void *dp, uword us_SourceX, uword us_SourceY,
 
 	dw <<= 2;
 
-	sbm += (ulong)us_SourceX + (ulong)us_SourceY * (ulong)sw;
-	dbm += (ulong)us_DestX + (ulong)us_DestY * (ulong)dw;
+	sbm += (uint32_t)us_SourceX + (uint32_t)us_SourceY * (uint32_t)sw;
+	dbm += (uint32_t)us_DestX + (uint32_t)us_DestY * (uint32_t)dw;
 
 	while (us_Height--)
 	{
@@ -279,8 +279,8 @@ void gfxNCH4AndMCGAToNCH4(void *sp, void *dp, uword us_SourceX, uword us_SourceY
 
 	dw <<= 2;
 
-	sbm += (ulong)us_SourceX + (ulong)us_SourceY * (ulong)sw;
-	dbm += (ulong)us_DestX + (ulong)us_DestY * (ulong)dw;
+	sbm += (uint32_t)us_SourceX + (uint32_t)us_SourceY * (uint32_t)sw;
+	dbm += (uint32_t)us_DestX + (uint32_t)us_DestY * (uint32_t)dw;
 
 	while (us_Height--)
 	{
@@ -304,8 +304,8 @@ void gfxNCH4PutNCH4ToMCGA(void *sp, void *dp, uword us_SourceX, uword us_SourceY
 
 	sw <<= 2;
 
-	sbm += (ulong)us_SourceX + (ulong)us_SourceY * (ulong)sw;
-	dbm += (ulong)us_DestX + (ulong)us_DestY * (ulong)dw;
+	sbm += (uint32_t)us_SourceX + (uint32_t)us_SourceY * (uint32_t)sw;
+	dbm += (uint32_t)us_DestX + (uint32_t)us_DestY * (uint32_t)dw;
 
 	while (us_Height--)
 	{
