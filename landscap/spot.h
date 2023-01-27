@@ -10,27 +10,27 @@
 #include "theclou.h"
 
 #ifndef MODULE_LIST
-#include "list\list.h"
+#include "list/list.h"
 #endif
 
 #ifndef MODULE_TEXT
-#include "text\text.h"
+#include "text/text.h"
 #endif
 
 #ifndef MODULE_GFX
-#include "gfx\gfx.h"
+#include "gfx/gfx.h"
 #endif
 
 #ifndef MODULE_MEMORY
-#include "memory\memory.h"
+#include "memory/memory.h"
 #endif
 
 #ifndef MODULE_DISK
-#include "disk\disk.h"
+#include "disk/disk.h"
 #endif
 
 #ifndef MODULE_LANDSCAP
-#include "landscap\landscap.h"
+#include "landscap/landscap.h"
 #endif
 
 #define LS_SPOT_NAME					((ubyte*)"s")

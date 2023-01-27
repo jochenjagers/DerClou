@@ -6,9 +6,9 @@
 */
 
 // includes
-#include "data\database.h"
-#include "data\database_p.h"
-#include "port\port.h"
+#include "data/database.h"
+#include "data/database_p.h"
+#include "port/port.h"
 
 // public declaration
 LIST *ObjectList           = NULL;

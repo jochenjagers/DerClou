@@ -4,7 +4,7 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "random\random.h"
+#include "random/random.h"
 
 void rndInit(void)
 {

@@ -8,8 +8,8 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "list\list.h"
-#include "port\port.h"
+#include "list/list.h"
+#include "port/port.h"
 
 void *CreateList(uword size)
 {

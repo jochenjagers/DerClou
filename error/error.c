@@ -4,8 +4,8 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "error\error.h"
-#include "text\text.h"
+#include "error/error.h"
+#include "text/text.h"
 
 #define ERR_EXIT_ERROR      20L
 #define ERR_EXIT_SHUTDOWN   30L

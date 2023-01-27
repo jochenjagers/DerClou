@@ -5,14 +5,14 @@
    Based on the original by neo Software GmbH
 */
 #include "SDL.h"
-#include "gfx\gfx.h"
+#include "gfx/gfx.h"
 
-#include "memory\memory.h"
-#include "base\base.h"
-#include "text\text.h"
+#include "memory/memory.h"
+#include "base/base.h"
+#include "text/text.h"
 
-#include "gfx\filter.h"
-#include "port\port.h"
+#include "gfx/filter.h"
+#include "port/port.h"
 
 /************************************************/
 

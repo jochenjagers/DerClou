@@ -4,8 +4,8 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "planing\io.h"
-#include "port\port.h"
+#include "planing/io.h"
+#include "port/port.h"
 
 struct IOData
 {

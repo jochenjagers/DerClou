@@ -4,8 +4,8 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "landscap\landscap.h"
-#include "landscap\landscap_p.h"
+#include "landscap/landscap.h"
+#include "landscap/landscap_p.h"
 
 static void lsInitObjects(void);
 

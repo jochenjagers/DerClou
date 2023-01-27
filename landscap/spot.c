@@ -4,9 +4,9 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "landscap\spot.h"
+#include "landscap/spot.h"
 
-#include "port\port.h"
+#include "port/port.h"
 
 #define LS_SPOT_BITMAP_WIDTH 		(96)
 #define LS_SPOT_BITMAP_HEIGHT		(LS_SPOT_LARGE_SIZE)

@@ -4,7 +4,7 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "planing\main.h"
+#include "planing/main.h"
 
 
 struct System *plSys = NULL;

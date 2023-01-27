@@ -4,7 +4,7 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "anim\sysanim.h"
+#include "anim/sysanim.h"
 
 #define	PIC_MODE_POS		1
 #define	PIC_P_SEC_POS		2

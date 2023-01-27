@@ -10,7 +10,7 @@
 #include "theclou.h"
 
 #ifndef MODULE_MEMORY
-#include "memory\memory.h"
+#include "memory/memory.h"
 #endif
 
 /*****************

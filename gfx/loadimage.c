@@ -5,11 +5,11 @@
    Based on the original by neo Software GmbH
 */
 #include "SDL.h"
-#include "gfx\gfx.h"
-#include "memory\memory.h"
+#include "gfx/gfx.h"
+#include "memory/memory.h"
 //#include "base\base.h"
 //#include "text\text.h"
-#include "disk\disk.h"
+#include "disk/disk.h"
 
 typedef struct {
 	uword width;		

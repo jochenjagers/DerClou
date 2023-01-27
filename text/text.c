@@ -6,13 +6,13 @@
 */
 
 // public header(s)
-#include "text\text.h"
+#include "text/text.h"
 
 // private header(s)
-#include "text\text_e.h"
-#include "text\text_p.h"
+#include "text/text_e.h"
+#include "text/text_p.h"
 
-#include "port\port.h"
+#include "port/port.h"
 
 // private globals declaration
 char   *txtLanguageMark[TXT_LANG_LAST + 1] = {

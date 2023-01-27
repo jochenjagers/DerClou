@@ -10,11 +10,11 @@
 #include "theclou.h"
 
 #ifndef MODULE_GFX
-#include "gfx\gfx.h"
+#include "gfx/gfx.h"
 #endif
 
 #ifndef MODULE_ANIM
-#include "anim\sysanim.h"
+#include "anim/sysanim.h"
 #endif
 
 #define INP_TICKS_PER_SECOND	60	// 2014-07-04

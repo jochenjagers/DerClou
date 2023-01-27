@@ -4,8 +4,8 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "present\interac.h"
-#include "present\interac_p.h"
+#include "present/interac.h"
+#include "present/interac_p.h"
 
 extern void PlayFromCDROM(void);
 

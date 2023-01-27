@@ -4,8 +4,8 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "gfx\filter.h"
-#include "gfx\gfx.h"
+#include "gfx/filter.h"
+#include "gfx/gfx.h"
 #include <string.h>
 
 unsigned char *gfxFilter_x4_Buffer = NULL;

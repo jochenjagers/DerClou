@@ -4,7 +4,7 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "landscap\raster.h"
+#include "landscap/raster.h"
 
 static uword lsGetRasterXSize(ulong areaID);
 static uword lsGetRasterYSize(ulong areaID);

@@ -10,11 +10,11 @@
 #include "theclou.h"
 
 #ifndef MODULE_DIALOG
-#include "dialog\dialog.h"
+#include "dialog/dialog.h"
 #endif
 
 #ifndef MODULE_LANDSCAP
-#include "landscap\landscap.h"
+#include "landscap/landscap.h"
 #endif
 
 #define LS_RASTER_DISP_WIDTH       320

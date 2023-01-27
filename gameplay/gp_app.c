@@ -4,7 +4,7 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "gameplay\gp_app.h"
+#include "gameplay/gp_app.h"
 
 // 2018-09-26 LucyG: in-game time was too fast
 #define GP_TICKS_PER_MINUTE		10

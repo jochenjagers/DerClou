@@ -5,12 +5,12 @@
    Based on the original by neo Software GmbH
 */
 #include "SDL.h"
-#include "base\base.h"
-#include "intro\intro.h"
-#include "intro\iffanim.h"
-#include "disk\disk.h"
-#include "gfx\gfx.h"
-#include "inphdl\inphdl.h"
+#include "base/base.h"
+#include "intro/intro.h"
+#include "intro/iffanim.h"
+#include "disk/disk.h"
+#include "gfx/gfx.h"
+#include "inphdl/inphdl.h"
 
 #define NUM_ANIM_FILES	5
 static const char *anim_files[NUM_ANIM_FILES] = {

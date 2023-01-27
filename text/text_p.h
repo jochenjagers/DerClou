@@ -9,9 +9,9 @@
 
 // includes
 #include "theclou.h"
-#include "disk\disk.h"
-#include "list\list.h"
-#include "base\base.h"
+#include "disk/disk.h"
+#include "list/list.h"
+#include "base/base.h"
 
 
 // private defines

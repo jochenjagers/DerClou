@@ -4,11 +4,11 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "gameplay\gp.h"
-#include "gameplay\gp_app.h"
-#include "organisa\organisa.h"
+#include "gameplay/gp.h"
+#include "gameplay/gp_app.h"
+#include "organisa/organisa.h"
 
-#include "port\port.h"
+#include "port/port.h"
 
 void tcSaveTheClou(int bAutoSave)
 {

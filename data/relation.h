@@ -26,15 +26,15 @@
 #include "theclou.h"
 
 #ifndef MODULE_ERROR
-#include "error\error.h"
+#include "error/error.h"
 #endif
 
 #ifndef MODULE_MEMORY
-#include "memory\memory.h"
+#include "memory/memory.h"
 #endif
 
 #ifndef MODULE_DISK
-#include "disk\disk.h"
+#include "disk/disk.h"
 #endif
 
 #define RELATION           unsigned long

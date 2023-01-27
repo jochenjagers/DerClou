@@ -9,7 +9,7 @@
 
 #include "SDL.h"
 
-#include "cdrom\cdrom.h"
+#include "cdrom/cdrom.h"
 
 SDL_CD *CDROM_Struct = NULL;
 

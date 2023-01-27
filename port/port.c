@@ -8,7 +8,7 @@
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 #include "SDL_endian.h"
 #endif
-#include "port\port.h"
+#include "port/port.h"
 
 /**
  * Convert little to native endian word.

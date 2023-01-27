@@ -4,9 +4,9 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "dialog\dialog.h"
-#include "dialog\talkappl.h"
-#include "sound\mxr.h"
+#include "dialog/dialog.h"
+#include "dialog/talkappl.h"
+#include "sound/mxr.h"
 
 #define DLG_NO_SPEECH	((ulong) -1)
 ulong	StartFrame = DLG_NO_SPEECH;

@@ -14,11 +14,11 @@
 #endif
 
 #ifndef MODULE_LIST
-#include "list\list.h"
+#include "list/list.h"
 #endif
 
 #ifndef MODULE_RANDOM
-#include "random\random.h"
+#include "random/random.h"
 #endif
 
 #define   tcDerivation(min,max)          (CalcRandomNr(min,max))

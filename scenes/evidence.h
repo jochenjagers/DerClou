@@ -10,43 +10,43 @@
 #include "theclou.h"
 
 #ifndef MODULE_LIST
-#include "list\list.h"
+#include "list/list.h"
 #endif
 
 #ifndef MODULE_TEXT
-#include "text\text.h"
+#include "text/text.h"
 #endif
 
 #ifndef MODULE_DIALOG
-#include "dialog\dialog.h"
+#include "dialog/dialog.h"
 #endif
 
 #ifndef MODULE_INTERAC
-#include "present\interac.h"
+#include "present/interac.h"
 #endif
 
 #ifndef MODULE_PRESENT
-#include "present\present.h"
+#include "present/present.h"
 #endif
 
 #ifndef MODULE_TCDATA
-#include "data\tcdata.h"
+#include "data/tcdata.h"
 #endif
 
 #ifndef MODULE_RELATION
-#include "data\relation.h"
+#include "data/relation.h"
 #endif
 
 #ifndef MODULE_DATABASE
-#include "data\database.h"
+#include "data/database.h"
 #endif
 
 #ifndef MODULE_DATACALC
-#include "data\datacalc.h"
+#include "data/datacalc.h"
 #endif
 
 #ifndef MODULE_DATAAPPL
-#include "data\dataappl.h"
+#include "data/dataappl.h"
 #endif
 
 #define FAHN_NOT_ESCAPED      1

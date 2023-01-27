@@ -4,10 +4,10 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "living\living.h"
-#include "living\living_p.h"
+#include "living/living.h"
+#include "living/living_p.h"
 
-#include "port\port.h"
+#include "port/port.h"
 
 void livInit(uword us_VisLScapeX,uword us_VisLScapeY,
 				 uword us_VisLScapeWidth,uword us_VisLScapeHeight,

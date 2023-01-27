@@ -4,8 +4,8 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "disk\disk.h"
-#include "disk\disk_e.h"
+#include "disk/disk.h"
+#include "disk/disk_e.h"
 
 static char RootPathName[256];
 

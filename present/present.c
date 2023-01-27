@@ -4,13 +4,13 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "present\present.h"
-#include "present\present_p.h"
+#include "present/present.h"
+#include "present/present_p.h"
 
 struct PresentControl PresentControl = {
 	NULL, 0, 0};
 
-#include "present\presenta.c"
+#include "present/presenta.c"
 
 void DrawPresent (LIST *present, ubyte firstLine, struct RastPort *rp, ubyte max)
 {

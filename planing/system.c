@@ -11,8 +11,8 @@
 
 #define SYS_MAX_MEMORY_SIZE	  1024L*25L
 
-#include "planing\system.h"
-#include "port\port.h"
+#include "planing/system.h"
+#include "port/port.h"
 
 ulong sysUsedMem = 0L;
 

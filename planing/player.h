@@ -11,43 +11,43 @@
 #include "theclou.h"
 
 #ifndef MODULE_MEMORY
-#include "memory\memory.h"
+#include "memory/memory.h"
 #endif
 
 #ifndef MODULE_ERROR
-#include "error\error.h"
+#include "error/error.h"
 #endif
 
 #ifndef MODULE_DISK
-#include "disk\disk.h"
+#include "disk/disk.h"
 #endif
 
 #ifndef MODULE_LIST
-#include "list\list.h"
+#include "list/list.h"
 #endif
 
 #ifndef MODULE_DATABASE
-#include "data\database.h"
+#include "data/database.h"
 #endif
 
 #ifndef MODULE_RELATION
-#include "data\relation.h"
+#include "data/relation.h"
 #endif
 
 #ifndef MODULE_TCDATA
-#include "data\tcdata.h"
+#include "data/tcdata.h"
 #endif
 
 #ifndef MODULE_TEXT
-#include "text\text.h"
+#include "text/text.h"
 #endif
 
 #ifndef MODULE_LANDSCAP
-#include "landscap\landscap.h"
+#include "landscap/landscap.h"
 #endif
 
 #ifndef MODULE_PLANING_PLANER
-#include "planing\planer.h"
+#include "planing/planer.h"
 #endif
 
 long plPlayer(ulong objId , ulong actionTime, ubyte (*actionFunc)(ulong, ulong));

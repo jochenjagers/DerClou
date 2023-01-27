@@ -10,39 +10,39 @@
 #include "theclou.h"
 
 #ifndef MODULE_LIST
-#include "list\list.h"
+#include "list/list.h"
 #endif
 
 #ifndef MODULE_TEXT
-#include "text\text.h"
+#include "text/text.h"
 #endif
 
 #ifndef MODULE_RELATION
-#include "data\relation.h"
+#include "data/relation.h"
 #endif
 
 #ifndef MODULE_DATABASE
-#include "data\database.h"
+#include "data/database.h"
 #endif
 
 #ifndef MODULE_DATACALC
-#include "data\datacalc.h"
+#include "data/datacalc.h"
 #endif
 
 #ifndef MODULE_TCDATA
-#include "data\tcdata.h"
+#include "data/tcdata.h"
 #endif
 
 #ifndef MODULE_EVIDENCE
-#include "scenes\evidence.h"
+#include "scenes/evidence.h"
 #endif
 
 #ifndef MODULE_LIVING
-#include "living\living.h"
+#include "living/living.h"
 #endif
 
 #ifndef MODULE_LANDSCAP
-#include "landscap\landscap.h"
+#include "landscap/landscap.h"
 #endif
 
 extern ubyte tcSpendMoney(long money,ubyte breakAnim);

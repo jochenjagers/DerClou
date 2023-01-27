@@ -10,43 +10,43 @@
 #include "theclou.h"
 
 #ifndef MODULE_BASE
-#include "base\base.h"
+#include "base/base.h"
 #endif
 
 #ifndef MODULE_MEMORY
-#include "memory\memory.h"
+#include "memory/memory.h"
 #endif
 
 #ifndef MODULE_LIST
-#include "list\list.h"
+#include "list/list.h"
 #endif
 
 #ifndef MODULE_DISK
-#include "disk\disk.h"
+#include "disk/disk.h"
 #endif
 
 #ifndef MODULE_GFX
-#include "gfx\gfx.h"
+#include "gfx/gfx.h"
 #endif
 
 #ifndef MODULE_ANIM
-#include "anim\sysanim.h"
+#include "anim/sysanim.h"
 #endif
 
 #ifndef MODULE_STORY
-#include "story\story.h"
+#include "story/story.h"
 #endif
 
 #ifndef MODULE_DATAAPPL
-#include "data\dataappl.h"
+#include "data/dataappl.h"
 #endif
 
 #ifndef MODULE_RANDOM
-#include "random\random.h"
+#include "random/random.h"
 #endif
 
 #ifndef MODULE_INTERAC
-#include "present\interac.h"
+#include "present/interac.h"
 #endif
 
 

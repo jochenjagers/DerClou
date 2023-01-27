@@ -4,7 +4,7 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "data\datacalc.h"
+#include "data/datacalc.h"
 
 long Round(long v,long p)     /* p...Stellen ! */
      {

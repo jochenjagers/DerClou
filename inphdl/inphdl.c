@@ -5,13 +5,13 @@
    Based on the original by neo Software GmbH
 */
 #include "SDL.h"
-#include "inphdl\inphdl.h"
+#include "inphdl/inphdl.h"
 
-#include "inphdl\arrow1x_xpm.c"
-#include "inphdl\arrow2x_xpm.c"
+#include "inphdl/arrow1x_xpm.c"
+#include "inphdl/arrow2x_xpm.c"
 
-#include "sound\newsound.h"
-#include "sound\fx.h"
+#include "sound/newsound.h"
+#include "sound/fx.h"
 
 static SDL_Cursor *cursor[2];
 

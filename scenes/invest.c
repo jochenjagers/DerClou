@@ -4,7 +4,7 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "scenes\scenes.h"
+#include "scenes/scenes.h"
 
 ulong tcShowPatrol(LIST *bubble_l, char *c_time, char *patr, ubyte first, Building bui, ulong raise)
 	{

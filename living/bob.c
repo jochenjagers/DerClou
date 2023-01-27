@@ -4,9 +4,9 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "living\bob.h"
-#include "memory\memory.h"
-#include "gfx\gfx.h"
+#include "living/bob.h"
+#include "memory/memory.h"
+#include "gfx/gfx.h"
 
 #define MaxBob 		32
 

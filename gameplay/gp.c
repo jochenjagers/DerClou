@@ -4,9 +4,9 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "gameplay\gp.h"
-#include "gameplay\gamefunc.h"
-#include "port\port.h"
+#include "gameplay/gp.h"
+#include "gameplay/gamefunc.h"
+#include "port/port.h"
 
 void InitLocations(void);
 void FreeLocations(void);

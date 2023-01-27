@@ -10,7 +10,7 @@
 #include "theclou.h"
 
 #ifndef MODULE_ERROR
-#include "error\error.h"
+#include "error/error.h"
 #endif
 
 extern void BobSet(uword bobID, uword xPos, uword yPos, uword xOffset, uword yOffset);

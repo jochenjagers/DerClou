@@ -4,8 +4,8 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "data\relation.h"
-#include "port\port.h"
+#include "data/relation.h"
+#include "port/port.h"
 
 static RELATION            nrOfRelations    = 1;
 static struct relationDef *relationsDefBase = NULL;

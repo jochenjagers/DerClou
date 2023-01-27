@@ -10,39 +10,39 @@
 #include "theclou.h"
 
 #ifndef MODULE_LIST
-#include "list\list.h"
+#include "list/list.h"
 #endif
 
 #ifndef MODULE_TEXT
-#include "text\text.h"
+#include "text/text.h"
 #endif
 
 #ifndef MODULE_INTERAC
-#include "present\interac.h"
+#include "present/interac.h"
 #endif
 
 #ifndef MODULE_TCDATA
-#include "data\tcdata.h"
+#include "data/tcdata.h"
 #endif
 
 #ifndef MODULE_RELATION
-#include "data\relation.h"
+#include "data/relation.h"
 #endif
 
 #ifndef MODULE_DATABASE
-#include "data\database.h"
+#include "data/database.h"
 #endif
 
 #ifndef MODULE_GAMEPLAY
-#include "gameplay\gp.h"
+#include "gameplay/gp.h"
 #endif
 
 #ifndef MODULE_SOUND
-#include "sound\newsound.h"
+#include "sound/newsound.h"
 #endif
 
 #ifndef MODULE_CDROM
-#include "cdrom\cdrom.h"
+#include "cdrom/cdrom.h"
 #endif
 void PlayFromCDROM(void);
 

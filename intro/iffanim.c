@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "error\error.h"
-#include "memory\memory.h"
+#include "error/error.h"
+#include "memory/memory.h"
 
 #ifndef FALSE
 #define FALSE 0

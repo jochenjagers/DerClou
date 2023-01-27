@@ -4,7 +4,7 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "gfx\gfx.h"
+#include "gfx/gfx.h"
 
 void gfxMCGABlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY,
 				 struct RastPort *drp, uword us_DestX, uword us_DestY,

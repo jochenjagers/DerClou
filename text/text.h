@@ -16,15 +16,15 @@
 #include "theclou.h"
 
 #ifndef MODULE_ERROR
-#include "error\error.h"
+#include "error/error.h"
 #endif
 
 #ifndef MODULE_LIST
-#include "list\list.h"
+#include "list/list.h"
 #endif
 
 #ifndef MODULE_MEMORY
-#include "memory\memory.h"
+#include "memory/memory.h"
 #endif
 
 

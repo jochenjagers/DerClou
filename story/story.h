@@ -10,79 +10,79 @@
 #include "theclou.h"
 
 #ifndef MODULE_LIST
-#include "list\list.h"
+#include "list/list.h"
 #endif
 
 #ifndef MODULE_TEXT
-#include "text\text.h"
+#include "text/text.h"
 #endif
 
 #ifndef MODULE_INTERAC
-#include "present\interac.h"
+#include "present/interac.h"
 #endif
 
 #ifndef MODULE_PRESENT
-#include "present\present.h"
+#include "present/present.h"
 #endif
 
 #ifndef MODULE_DIALOG
-#include "dialog\dialog.h"
+#include "dialog/dialog.h"
 #endif
 
 #ifndef MODULE_RELATION
-#include "data\relation.h"
+#include "data/relation.h"
 #endif
 
 #ifndef MODULE_DATABASE
-#include "data\database.h"
+#include "data/database.h"
 #endif
 
 #ifndef MODULE_DATACALC
-#include "data\datacalc.h"
+#include "data/datacalc.h"
 #endif
 
 #ifndef MODULE_DATAAPPL
-#include "data\dataappl.h"
+#include "data/dataappl.h"
 #endif
 
 #ifndef MODULE_TCDATA
-#include "data\tcdata.h"
+#include "data/tcdata.h"
 #endif
 
 #ifndef MODULE_SCENES
-#include "scenes\scenes.h"
+#include "scenes/scenes.h"
 #endif
 
 #ifndef MODULE_GAMEPLAY
-#include "gameplay\gp.h"
+#include "gameplay/gp.h"
 #endif
 
 #ifndef MODULE_GAMEPLAY_APP
-#include "gameplay\gp_app.h"
+#include "gameplay/gp_app.h"
 #endif
 
 #ifndef MODULE_GFX
-#include "gfx\gfx.h"
+#include "gfx/gfx.h"
 #endif
 
 #ifndef MODULE_ORGANISATION
-#include "organisa\organisa.h"
+#include "organisa/organisa.h"
 #endif
 
 #ifndef MODULE_PLANING_PLANER
-#include "planing\planer.h"
+#include "planing/planer.h"
 #endif
 
 #ifndef MODULE_PLANING_PLAYER
-#include "planing\player.h"
+#include "planing/player.h"
 #endif
 
 #ifndef MODULE_LANDSCAP
-#include "landscap\landscap.h"
+#include "landscap/landscap.h"
 #endif
 
 #ifndef MODULE_FX
-#include "sound\fx.h"
+#include "sound/fx.h"
 #endif
 
 #define tcLAST_BURGLARY_LEFT_CTRL_OBJ   440221L

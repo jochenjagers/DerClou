@@ -4,7 +4,7 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "planing\guards.h"
+#include "planing/guards.h"
 
 void grdDo(FILE *fh, struct System *sys, LIST *PersonsList, ulong BurglarsNr, ulong PersonsNr, ubyte grdAction)
 {

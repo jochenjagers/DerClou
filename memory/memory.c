@@ -8,7 +8,7 @@
 #include <windows.h>
 #endif
 #include <stdlib.h>
-#include "memory\memory.h"
+#include "memory/memory.h"
 
 #define ERR_MEMORY_NO_MEM 1
 

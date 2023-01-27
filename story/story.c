@@ -4,7 +4,7 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "story\story.h"
+#include "story/story.h"
 
 ubyte tcDoLastBurglarySpot(ulong ul_Time, ulong ul_BuildingId);
 

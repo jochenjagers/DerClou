@@ -19,15 +19,15 @@
 #include "theclou.h"
 
 #ifndef MODULE_TEXT
-#include "text\text.h"
+#include "text/text.h"
 #endif
 
 #ifndef MODULE_GFX
-#include "gfx\gfx.h"
+#include "gfx/gfx.h"
 #endif
 
 #ifndef MODULE_RANDOM
-#include "random\random.h"
+#include "random/random.h"
 #endif
 
 /* global functions */

@@ -4,7 +4,7 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "scenes\evidence.h"
+#include "scenes/evidence.h"
 
 ulong tcPersonWanted(ulong persId);
 ulong tcPersonQuestioning(Person person);

@@ -4,7 +4,7 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "organisa\organisa.h"
+#include "organisa/organisa.h"
 
 ulong tcChooseDestBuilding(ulong);
 ulong tcChooseEscapeCar(ulong);
@@ -39,7 +39,7 @@ void tcDisplayTools(ulong personNr,ulong displayData);
 
 struct Organisation Organisation;
 
-#include "organisa\display.c"
+#include "organisa/display.c"
 
 void tcResetOrganisation(void)
 	{

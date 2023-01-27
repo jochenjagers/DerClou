@@ -15,7 +15,7 @@
 #include "theclou.h"
 
 #ifndef MODULE_DISK
-#include "disk\disk.h"
+#include "disk/disk.h"
 #endif
 
 #define LOG_FILENAME	"clou.log"

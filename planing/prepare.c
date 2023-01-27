@@ -4,7 +4,7 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "planing\prepare.h"
+#include "planing/prepare.h"
 
 
 LIST *PersonsList  = NULL;

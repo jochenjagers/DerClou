@@ -5,11 +5,11 @@
    Based on the original by neo Software GmbH
 */
 #include "SDL.h"
-#include "base\base.h"
-#include "intro\intro.h"
+#include "base/base.h"
+#include "intro/intro.h"
 
 // cheat function
-#include "base\fullenv.c"
+#include "base/fullenv.c"
 
 Configuration_t Config;
 
