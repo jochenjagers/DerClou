@@ -89,9 +89,9 @@
 #define STD_BUFFER1_SIZE  ((long)61 * 1024)      /* weniger geht nicht! (Bild + CMAP)*/
 
 extern char prgname[255];
-
 extern void *StdBuffer1;
 
+extern int SDL_main(int argc, char **argv);
 extern void tcClearStdBuffer(void *p_Buffer);
 extern void tcSetPermanentColors(void);
 

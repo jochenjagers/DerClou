@@ -13,6 +13,8 @@
 #include "SDL.h"
 #include "SDL_main.h"
 
+#include "base/base.h"
+
 /* Set a variable to tell if the stdio redirect has been enabled. */
 static int stdioRedirectEnabled = 0;
 
