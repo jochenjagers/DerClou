@@ -6,6 +6,7 @@
 */
 #include "disk/disk.h"
 #include "disk/disk_e.h"
+#include <ctype.h>
 
 static char RootPathName[256];
 
@@ -77,6 +78,13 @@ long dskLoad(const char *puch_Pathname, void *p_MemDest)
 void dskBuildPathName(const char *puch_Directory, const char *puch_Filename, char *puch_Result)
 {
 	sprintf(puch_Result, "%s"DIR_SEPARATOR"%s"DIR_SEPARATOR"%s", RootPathName, puch_Directory, puch_Filename);
+	// convert all chars after RootPathName to upper case as all data file names are upper case
+	char* cur = &puch_Result[strlen(RootPathName)];
+	while(*cur != '\0')
+	{
+		*cur = toupper(*cur);
+		++cur;
+	}
 }
 
 long dskFileLength (const char *puch_Pathname)
