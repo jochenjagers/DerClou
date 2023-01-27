@@ -4,12 +4,18 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#define ORG_DISP_GUY_Y 60
-#define ORG_DISP_ABILITIES_Y 75
-#define ORG_DISP_GUY_WIDTH 80
-#define ORG_DISP_LINE 10
+enum
+{
+    ORG_DISP_GUY_Y = 60,
+    ORG_DISP_ABILITIES_Y = 75,
+    ORG_DISP_GUY_WIDTH = 80,
+    ORG_DISP_LINE = 10
+};
 
-#define ORG_PICT_ID 3
+enum
+{
+    ORG_PICT_ID = 3
+};
 
 void tcInitDisplayOrganisation(void)
 {
@@ -45,7 +51,7 @@ void tcDisplayOrganisation(void)
 void tcDisplayCommon(void)
 {
     LIST *texts;
-    char line[TXT_KEY_LENGTH], name[TXT_KEY_LENGTH];
+    char line[TXT_KEY_LENGTH] = {0}, name[TXT_KEY_LENGTH] = {0};
     Building building;
 
     texts = txtGoKey(BUSINESS_TXT, "PLAN_COMMON_DATA");
@@ -183,7 +189,7 @@ void tcDisplayPerson(uint32_t displayMode)
 {
     uint32_t objNr, i;
     NODE *node;
-    char line[TXT_KEY_LENGTH];
+    char line[TXT_KEY_LENGTH]={0};
     LIST *guys;
 
     joined_byAll(Person_Matt_Stuvysunt, OLF_INCLUDE_NAME | OLF_PRIVATE_LIST, Object_Person);
@@ -217,7 +223,7 @@ void tcDisplayAbilities(uint32_t personNr, uint32_t displayData)
     LIST *abilities;
     NODE *node;
     uint32_t i, abiNr, ability;
-    char line[TXT_KEY_LENGTH];
+    char line[TXT_KEY_LENGTH]={0};
 
     hasAll(personNr, OLF_PRIVATE_LIST | OLF_INCLUDE_NAME, Object_Ability);
     abilities = ObjectListPrivate;

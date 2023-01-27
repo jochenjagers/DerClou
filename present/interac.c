@@ -5,6 +5,7 @@
    Based on the original by neo Software GmbH
 */
 #include "present/interac.h"
+#include <stdint.h>
 
 #include "present/interac_p.h"
 
@@ -36,7 +37,7 @@ ubyte ChoiceOk(ubyte choice, ubyte xit, LIST *l)
 
 void DrawMenu(LIST *menu, ubyte nr, int32_t mode)
 {
-    ubyte i;
+    ubyte i = 0;
     char *m1 = 0, *m2 = 0;
     int32_t x = 8, lastx = 0;
 
@@ -98,8 +99,8 @@ char SearchActiv(word delta, ubyte activ, uint32_t possibility, ubyte ub_max)
 
 char SearchMouseActiv(uint32_t possibility, ubyte ub_max) /* MOD : 14.12.93 hg */
 {
-    char activ;
-    uword x, y;
+    int32_t activ = 0;
+    uword x = 0, y = 0;
 
     inpGetMouseXY(m_wrp, &x, &y);
 
@@ -124,7 +125,7 @@ char SearchMouseActiv(uint32_t possibility, ubyte ub_max) /* MOD : 14.12.93 hg *
 
 void RefreshMenu(void)
 {
-    ubyte ub_max, i;
+    ubyte ub_max = 0, i = 0;
 
     if (refreshMenu)
     {
@@ -141,14 +142,14 @@ void RefreshMenu(void)
 
 ubyte Menu(LIST *menu, uint32_t possibility, ubyte activ, void (*func)(ubyte), uint32_t waitTime)
 {
-    ubyte i;
-    int32_t action;
-    char nextActiv;
-    ubyte ub_max;
+    ubyte i = 0;
+    int32_t action = 0;
+    char nextActiv = 0;
+    ubyte ub_max = 0;
     char ende = FALSE;
-    uword x;
-    NODE *n;
-    uword l1, l2;
+    uword x = 0;
+    NODE *n = NULL;
+    uword l1 = 0, l2 = 0;
 
     if (menu && !LIST_EMPTY(menu))
     {
@@ -241,7 +242,7 @@ ubyte Menu(LIST *menu, uint32_t possibility, ubyte activ, void (*func)(ubyte), u
                         nextActiv = SearchActiv(-i, activ, possibility, ub_max);
                         i++;
 
-                        if (i = 255 && nextActiv == (char)-1)
+                        if ((i = 255 && nextActiv == (char)-1))
                         {
                             nextActiv = activ;
                             break;
@@ -257,7 +258,7 @@ ubyte Menu(LIST *menu, uint32_t possibility, ubyte activ, void (*func)(ubyte), u
                         nextActiv = SearchActiv(i, activ, possibility, ub_max);
                         i++;
 
-                        if (i = 255 && nextActiv == (char)-1)
+                        if ((i = 255 && nextActiv == (char)-1))
                         {
                             nextActiv = activ;
                             break;
@@ -286,7 +287,7 @@ ubyte Menu(LIST *menu, uint32_t possibility, ubyte activ, void (*func)(ubyte), u
                             nextActiv = SearchActiv(-i, activ, possibility, ub_max);
                             i++;
 
-                            if (i = 255 && nextActiv == (char)-1)
+                            if ((i = 255 && nextActiv == (char)-1))
                             {
                                 nextActiv = activ;
                                 break;
@@ -302,7 +303,7 @@ ubyte Menu(LIST *menu, uint32_t possibility, ubyte activ, void (*func)(ubyte), u
                             nextActiv = SearchActiv(i, activ, possibility, ub_max);
                             i++;
 
-                            if (i = 255 && nextActiv == (char)-1)
+                            if ((i = 255 && nextActiv == (char)-1))
                             {
                                 nextActiv = activ;
                                 break;
@@ -350,7 +351,7 @@ ubyte Menu(LIST *menu, uint32_t possibility, ubyte activ, void (*func)(ubyte), u
 
 void DrawBubble(LIST *bubble, ubyte firstLine, ubyte activ, struct RastPort *rp, uint32_t ul_max)
 {
-    int i, j;
+    int i = 0, j = 0;
     char *line = NULL;
 
     gfxSetPens(&RefreshRP, 224, 224, 224);
@@ -415,10 +416,10 @@ ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), uint32_t waitTime)
 {
     ubyte firstVis = 0;
     ubyte ende = FALSE;
-    uint32_t action;
+    uint32_t action = 0;
     int32_t l_max = GetNrOfNodes(bubble);
-    uword x, y;
-    ubyte newactiv;
+    uword x = 0, y = 0;
+    ubyte newactiv = 0;
 
     SuspendAnim();
 

@@ -21,13 +21,13 @@ void plSaveTools(FILE *fh)
 {
     if (fh)
     {
-        struct ObjectNode *n;
+        struct ObjectNode *n = NULL;
         hasAll(Person_Matt_Stuvysunt, OLF_NORMAL, Object_Tool);
 
         fprintf(fh, PLANING_PLAN_TOOL_BEGIN_ID "\n");
         for (n = (struct ObjectNode *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (struct ObjectNode *)NODE_SUCC(n))
         {
-            fprintf(fh, "%ld\n", OL_NR(n));
+            fprintf(fh, "%u\n", OL_NR(n));
         }
         fprintf(fh, PLANING_PLAN_TOOL_END_ID "\n");
     }
@@ -73,7 +73,7 @@ LIST *plLoadTools(FILE *fh)
     else
     {
         LIST *extList = NULL;
-        NODE *n;
+        NODE *n = NULL;
         if (canGet == 2)
         {
             extList = txtGoKey(PLAN_TXT, "SYSTEM_TOOLS_MISSING_3");
@@ -109,12 +109,12 @@ ubyte plOpen(uint32_t objId, ubyte mode, FILE **fh)
     }
     else
     {
-        LIST *PlanList;
-        ubyte i;
-        FILE *pllFh;
+        LIST *PlanList = NULL;
+        ubyte i = 0;
+        FILE *pllFh = NULL;
         uint32_t pllData = 0L;
         char pllPath[TXT_KEY_LENGTH], name1[TXT_KEY_LENGTH], name2[TXT_KEY_LENGTH], expan[TXT_KEY_LENGTH];
-        struct IOData *ioData;
+        struct IOData *ioData = NULL;
 
         dbGetObjectName(lsGetActivAreaID(), name1);
         name1[strlen(name1) - 1] = '\0';  // remove number
@@ -124,7 +124,7 @@ ubyte plOpen(uint32_t objId, ubyte mode, FILE **fh)
 
         dskBuildPathName(DATADISK_DIRECTORY, name2, pllPath);
 
-        if (pllFh = dskOpen(pllPath, "r", PLANING_PLAN_DISK))
+        if ((pllFh = dskOpen(pllPath, "r", PLANING_PLAN_DISK)))
         {
             dskGets(name2, TXT_KEY_LENGTH - 1, pllFh);
             pllData = atol(name2);
@@ -183,9 +183,9 @@ ubyte plOpen(uint32_t objId, ubyte mode, FILE **fh)
                     {
                         pllData |= 1L << i;
 
-                        if (pllFh = dskOpen(pllPath, "w", PLANING_PLAN_DISK))
+                        if ((pllFh = dskOpen(pllPath, "w", PLANING_PLAN_DISK)))
                         {
-                            fprintf(pllFh, "%ld", pllData);
+                            fprintf(pllFh, "%u", pllData);
                             dskClose(pllFh);
                         }
                     }
@@ -224,7 +224,7 @@ void plSave(uint32_t objId)
         }
         else
         {
-            ubyte i;
+            ubyte i = 0;
 
             SaveSystem(fh, plSys);
             plSaveTools(fh);
@@ -262,7 +262,7 @@ void plSaveChanged(uint32_t objId)
 void plLoad(uint32_t objId)
 {
     FILE *fh = NULL;
-    ubyte ret;
+    ubyte ret = 0;
 
     if (objId == Building_Starford_Kaserne)
     {
@@ -283,10 +283,10 @@ void plLoad(uint32_t objId)
         else
         {
             LIST *l = NULL;
-            ubyte i;
+            ubyte i = 0;
             ubyte goon = 1;
 
-            if (l = LoadSystem(fh, plSys))
+            if ((l = LoadSystem(fh, plSys)))
             {
                 inpTurnESC(0);
                 Bubble(l, 0, NULL, 0L);
@@ -297,7 +297,7 @@ void plLoad(uint32_t objId)
                 l = NULL;
             }
 
-            if (l = plLoadTools(fh))
+            if ((l = plLoadTools(fh)))
             {
                 inpTurnESC(0);
                 Bubble(l, 0, NULL, 0L);

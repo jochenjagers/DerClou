@@ -29,10 +29,10 @@ void gfxNCH4PrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword u
     uword CharsPerLine = rp->p_Font->pSurface->w / rp->p_Font->us_Width;
     uword Length = strlen(puch_Text);
 
-    ubyte *DestPtr1;
-    ubyte *FontPtr1;
-    uword t, h1, h2, i, j;
-    ubyte c;
+    ubyte *DestPtr1 = NULL;
+    ubyte *FontPtr1 = NULL;
+    uword t = 0, h1 = 0, h2 = 0, i = 0, j = 0;
+    ubyte c = 0;
 
     for (t = 0; t < Length; t++)
     {
@@ -61,9 +61,9 @@ void gfxNCH4PrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword u
 
 void gfxNCH4RectFill(struct RastPort *rp, uword us_SX, uword us_SY, uword us_EX, uword us_EY)
 {
-    uword us_W, us_H;
-    ubyte *bm;
-    uword i, j;
+    uword us_W = 0, us_H = 0;
+    ubyte *bm = NULL;
+    uword i = 0, j = 0;
 
     if (!((us_SY >= rp->us_Height) && (us_EY >= rp->us_Height)) || ((us_SX >= rp->us_Width) && (us_EX >= rp->us_Width)))
     {
@@ -138,7 +138,7 @@ void gfxNCH4Init() { gfxNCH4SetViewPort(0, 0); }
 void gfxNCH4PutMCGAToNCH4(void *sp, void *dp, uword us_SourceX, uword us_SourceY, uword us_DestX, uword us_DestY,
                           uword us_Width, uword us_Height, uword sw, uword dw)
 {
-    unsigned int x;
+    unsigned int x = 0;
     ubyte *sbm = (ubyte *)sp;
     ubyte *dbm = (ubyte *)dp;
 
@@ -162,7 +162,7 @@ void gfxNCH4PutMCGAToNCH4(void *sp, void *dp, uword us_SourceX, uword us_SourceY
 void gfxNCH4PutMCGAToNCH4Mask(void *sp, void *dp, uword us_SourceX, uword us_SourceY, uword us_DestX, uword us_DestY,
                               uword us_Width, uword us_Height, uword sw, uword dw)
 {
-    unsigned int x;
+    unsigned int x = 0;
     ubyte *sbm = (ubyte *)sp;
     ubyte *dbm = (ubyte *)dp;
 
@@ -186,7 +186,7 @@ void gfxNCH4PutMCGAToNCH4Mask(void *sp, void *dp, uword us_SourceX, uword us_Sou
 void gfxNCH4OLMCGAToNCH4Mask(void *sp, void *dp, uword us_SourceX, uword us_SourceY, uword us_DestX, uword us_DestY,
                              uword us_Width, uword us_Height, uword sw, uword dw)
 {
-    unsigned int x;
+    unsigned int x = 0;
     ubyte *sbm = (ubyte *)sp;
     ubyte *dbm = (ubyte *)dp;
 
@@ -210,7 +210,7 @@ void gfxNCH4OLMCGAToNCH4Mask(void *sp, void *dp, uword us_SourceX, uword us_Sour
 void gfxNCH4OLMCGAToNCH4(void *sp, void *dp, uword us_SourceX, uword us_SourceY, uword us_DestX, uword us_DestY,
                          uword us_Width, uword us_Height, uword sw, uword dw)
 {
-    unsigned int x;
+    unsigned int x = 0;
     ubyte *sbm = (ubyte *)sp;
     ubyte *dbm = (ubyte *)dp;
 
@@ -234,7 +234,7 @@ void gfxNCH4OLMCGAToNCH4(void *sp, void *dp, uword us_SourceX, uword us_SourceY,
 void gfxNCH4OrMCGAToNCH4(void *sp, void *dp, uword us_SourceX, uword us_SourceY, uword us_DestX, uword us_DestY,
                          uword us_Width, uword us_Height, uword sw, uword dw)
 {
-    unsigned int x;
+    unsigned int x = 0;
     ubyte *sbm = (ubyte *)sp;
     ubyte *dbm = (ubyte *)dp;
 
@@ -258,7 +258,7 @@ void gfxNCH4OrMCGAToNCH4(void *sp, void *dp, uword us_SourceX, uword us_SourceY,
 void gfxNCH4AndMCGAToNCH4(void *sp, void *dp, uword us_SourceX, uword us_SourceY, uword us_DestX, uword us_DestY,
                           uword us_Width, uword us_Height, uword sw, uword dw)
 {
-    unsigned int x;
+    unsigned int x = 0;
     ubyte *sbm = (ubyte *)sp;
     ubyte *dbm = (ubyte *)dp;
 
@@ -282,7 +282,7 @@ void gfxNCH4AndMCGAToNCH4(void *sp, void *dp, uword us_SourceX, uword us_SourceY
 void gfxNCH4PutNCH4ToMCGA(void *sp, void *dp, uword us_SourceX, uword us_SourceY, uword us_DestX, uword us_DestY,
                           uword us_Width, uword us_Height, uword sw, uword dw)
 {
-    unsigned int x;
+    unsigned int x = 0;
     ubyte *sbm = (ubyte *)sp;
     ubyte *dbm = (ubyte *)dp;
 

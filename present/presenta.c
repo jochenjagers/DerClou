@@ -7,9 +7,9 @@
 void InitEvidencePresent(uint32_t nr, LIST *presentationData, LIST *texts)
 {
     Evidence e = (Evidence)dbGetObject(nr);
-    char data[TXT_KEY_LENGTH];
+    char data[TXT_KEY_LENGTH] = {0};
 
-    dbGetObjectName(e->pers, data);
+    dbGetObjectName(e->pers, &data[0]);
 
     AddPresentLine(presentationData, PRESENT_AS_TEXT, (intptr_t)data, 0L, texts, 0);
     AddPresentLine(presentationData, PRESENT_AS_BAR, (intptr_t)e->Recognition, 255L, texts, 1);
@@ -48,13 +48,13 @@ void InitLootPresent(uint32_t nr, LIST *presentationData, LIST *texts)
 void InitOneLootPresent(uint32_t nr, LIST *presentationData, LIST *texts)
 {
     Loot loot = (Loot)dbGetObject(nr);
-    char data[TXT_KEY_LENGTH];
+    char data[TXT_KEY_LENGTH] = {0};
     uint32_t value;
 
     if (loot->Name == Kein_Name)
-        dbGetObjectName(nr, data);
+        dbGetObjectName(nr, &data[0]);
     else
-        txtGetNthString(OBJECTS_ENUM_TXT, "enum_LootNameE", loot->Name, data);
+        txtGetNthString(OBJECTS_ENUM_TXT, "enum_LootNameE", loot->Name, &data[0]);
 
     AddPresentLine(presentationData, PRESENT_AS_TEXT, (intptr_t)data, 0L, texts, 4);
 
@@ -70,10 +70,10 @@ void InitOneLootPresent(uint32_t nr, LIST *presentationData, LIST *texts)
 void InitObjectPresent(uint32_t nr, LIST *presentationData, LIST *texts)
 {
     LSObject lso = (LSObject)dbGetObject(nr);
-    char data[TXT_KEY_LENGTH];
+    char data[TXT_KEY_LENGTH] = {0};
     LIST *l;
 
-    dbGetObjectName(lso->Type, data);
+    dbGetObjectName(lso->Type, &data[0]);
 
     AddPresentLine(presentationData, PRESENT_AS_TEXT, (intptr_t)data, 0L, texts, 0);
 
@@ -95,7 +95,7 @@ void InitObjectPresent(uint32_t nr, LIST *presentationData, LIST *texts)
 
 void InitToolPresent(uint32_t nr, LIST *presentationData, LIST *texts)
 {
-    char data[TXT_KEY_LENGTH], i;
+    char data[TXT_KEY_LENGTH] = {0}, i;
     Tool obj;
     NODE *n;
     LIST *tools = txtGoKey(OBJECTS_ENUM_TXT, "enum_ItemE");
@@ -103,7 +103,7 @@ void InitToolPresent(uint32_t nr, LIST *presentationData, LIST *texts)
 
     obj = (Tool)dbGetObject(nr);
 
-    dbGetObjectName(nr, data);
+    dbGetObjectName(nr, &data[0]);
 
     AddPresentLine(presentationData, PRESENT_AS_TEXT, (intptr_t)data, 0L, texts, 0);
     AddPresentLine(presentationData, PRESENT_AS_NUMBER, (intptr_t)tcGetToolTraderOffer(obj), 0L, texts, 1);
@@ -146,7 +146,7 @@ void InitToolPresent(uint32_t nr, LIST *presentationData, LIST *texts)
         uint32_t time = breakGet(nr, itemNr);
         Item item = (Item)OL_DATA(n);
 
-        sprintf(data, "%0.2ld:%0.2ld", time / 60, time % 60);
+        sprintf(&data[0], "%02u:%02u", time / 60, time % 60);
 
         AddPresentLine(presentationData, PRESENT_AS_TEXT, (intptr_t)data, 0L, tools, (uword)item->Type);
     }
@@ -157,19 +157,19 @@ void InitToolPresent(uint32_t nr, LIST *presentationData, LIST *texts)
 
 void InitBuildingPresent(uint32_t nr, LIST *presentationData, LIST *texts)
 {
-    char data[TXT_KEY_LENGTH];
+    char data[TXT_KEY_LENGTH] = {0};
     Building obj;
 
     obj = (Building)dbGetObject(nr);
 
-    dbGetObjectName(nr, data);
+    dbGetObjectName(nr, &data[0]);
     AddPresentLine(presentationData, PRESENT_AS_TEXT, (intptr_t)data, 0L, texts, 0);
 
-    BuildTime((uint32_t)tcGetBuildPoliceT(obj), txtGetLanguage(), data);
+    BuildTime((uint32_t)tcGetBuildPoliceT(obj), txtGetLanguage(), &data[0]);
     AddPresentLine(presentationData, PRESENT_AS_TEXT, (intptr_t)data, 0L, texts, 1);
     AddPresentLine(presentationData, PRESENT_AS_NUMBER, (intptr_t)tcGetBuildValues(obj), 255L, texts, 2);
 
-    txtGetNthString(OBJECTS_ENUM_TXT, "enum_RouteE", (uint32_t)obj->EscapeRoute, data);
+    txtGetNthString(OBJECTS_ENUM_TXT, "enum_RouteE", (uint32_t)obj->EscapeRoute, &data[0]);
     AddPresentLine(presentationData, PRESENT_AS_TEXT, (intptr_t)data, 0L, texts, 3);
 
     AddPresentLine(presentationData, PRESENT_AS_BAR, (intptr_t)obj->Exactlyness, 255L, texts, 4);
@@ -193,7 +193,7 @@ void InitPlayerPresent(uint32_t nr, LIST *presentationData, LIST *texts)
 
 void InitPersonPresent(uint32_t nr, LIST *presentationData, LIST *texts)
 {
-    char data[TXT_KEY_LENGTH], i;
+    char data[TXT_KEY_LENGTH] = {0}, i;
     LIST *abilities = NULL;
     NODE *node;
     uint32_t abiNr;
@@ -202,13 +202,13 @@ void InitPersonPresent(uint32_t nr, LIST *presentationData, LIST *texts)
 
     obj = (Person)dbGetObject(nr);
 
-    dbGetObjectName(nr, data);
+    dbGetObjectName(nr, &data[0]);
     AddPresentLine(presentationData, PRESENT_AS_TEXT, (intptr_t)data, 0L, texts, 0);
 
-    txtGetNthString(OBJECTS_ENUM_TXT, "enum_JobE", (uint32_t)obj->Job, data);
+    txtGetNthString(OBJECTS_ENUM_TXT, "enum_JobE", (uint32_t)obj->Job, &data[0]);
     AddPresentLine(presentationData, PRESENT_AS_TEXT, (intptr_t)data, 0L, texts, 1);
 
-    txtGetNthString(OBJECTS_ENUM_TXT, "enum_SexE", (uint32_t)obj->Sex, data);
+    txtGetNthString(OBJECTS_ENUM_TXT, "enum_SexE", (uint32_t)obj->Sex, &data[0]);
     AddPresentLine(presentationData, PRESENT_AS_TEXT, (intptr_t)data, 0L, texts, 2);
 
     AddPresentLine(presentationData, PRESENT_AS_NUMBER, (intptr_t)obj->Age, 0L, texts, 3);
@@ -238,7 +238,7 @@ void InitPersonPresent(uint32_t nr, LIST *presentationData, LIST *texts)
             abiNr = ((struct ObjectNode *)GetNthNode(abilities, (uint32_t)i))->nr;
             abi = (Ability)dbGetObject(abiNr);
 
-            txtGetNthString(OBJECTS_ENUM_TXT, "enum_AbilityE", (uint32_t)abi->Name, data);
+            txtGetNthString(OBJECTS_ENUM_TXT, "enum_AbilityE", (uint32_t)abi->Name, &data[0]);
             CreateNode(texts, 0L, data);
 
             AddPresentLine(presentationData, PRESENT_AS_BAR, (intptr_t)hasGet(nr, abiNr), 255L, texts, 17 + i);
@@ -250,7 +250,7 @@ void InitPersonPresent(uint32_t nr, LIST *presentationData, LIST *texts)
 
 void InitCarPresent(uint32_t nr, LIST *presentationData, LIST *texts)
 {
-    char data[TXT_KEY_LENGTH];
+    char data[TXT_KEY_LENGTH] = {0};
     Car obj;
 
     obj = (Car)dbGetObject(nr);

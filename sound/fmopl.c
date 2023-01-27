@@ -83,39 +83,60 @@ typedef int32_t INT32;         /* signed 32bit   */
 #define MINOUT (-128)
 #endif
 
-#define FREQ_SH 16  /* 16.16 fixed point (frequency calculations) */
-#define EG_SH 16    /* 16.16 fixed point (EG timing)              */
-#define LFO_SH 24   /*  8.24 fixed point (LFO calculations)       */
-#define TIMER_SH 16 /* 16.16 fixed point (timers calculations)    */
+enum
+{
+    FREQ_SH = 16, /* 16.16 fixed point (frequency calculations) */
+    EG_SH = 16,   /* 16.16 fixed point (EG timing)              */
+    LFO_SH = 24,  /*  8.24 fixed point (LFO calculations)       */
+    TIMER_SH = 16 /* 16.16 fixed point (timers calculations)    */
+};
 
 #define FREQ_MASK ((1 << FREQ_SH) - 1)
 
 /* envelope output entries */
-#define ENV_BITS 10
+enum
+{
+    ENV_BITS = 10
+};
 #define ENV_LEN (1 << ENV_BITS)
 #define ENV_STEP (128.0 / ENV_LEN)
 
 #define MAX_ATT_INDEX ((1 << (ENV_BITS - 1)) - 1) /*511*/
-#define MIN_ATT_INDEX (0)
+enum
+{
+    MIN_ATT_INDEX = (0)
+};
 
 /* sinwave entries */
-#define SIN_BITS 10
+enum
+{
+    SIN_BITS = 10
+};
 #define SIN_LEN (1 << SIN_BITS)
 #define SIN_MASK (SIN_LEN - 1)
 
-#define TL_RES_LEN (256) /* 8 bits addressing (real chip) */
+enum
+{
+    TL_RES_LEN = (256) /* 8 bits addressing (real chip) */
+};
 
 /* register number to channel number , slot offset */
-#define SLOT1 0
-#define SLOT2 1
+enum
+{
+    SLOT1 = 0,
+    SLOT2 = 1
+};
 
 /* Envelope Generator phases */
 
-#define EG_ATT 4
-#define EG_DEC 3
-#define EG_SUS 2
-#define EG_REL 1
-#define EG_OFF 0
+enum
+{
+    EG_ATT = 4,
+    EG_DEC = 3,
+    EG_SUS = 2,
+    EG_REL = 1,
+    EG_OFF = 0
+};
 
 /* save output as raw 16-bit sample */
 
@@ -148,13 +169,19 @@ static FILE *sample[1];
 FILE *cymfile = NULL;
 #endif
 
-#define OPL_TYPE_WAVESEL 0x01  /* waveform select		*/
-#define OPL_TYPE_ADPCM 0x02    /* DELTA-T ADPCM unit	*/
-#define OPL_TYPE_KEYBOARD 0x04 /* keyboard interface	*/
-#define OPL_TYPE_IO 0x08       /* I/O port			*/
+enum
+{
+    OPL_TYPE_WAVESEL = 0x01,  /* waveform select		*/
+    OPL_TYPE_ADPCM = 0x02,    /* DELTA-T ADPCM unit	*/
+    OPL_TYPE_KEYBOARD = 0x04, /* keyboard interface	*/
+    OPL_TYPE_IO = 0x08        /* I/O port			*/
+};
 
 /* ---------- Generic interface section ---------- */
-#define OPL_TYPE_YM3526 (0)
+enum
+{
+    OPL_TYPE_YM3526 = (0)
+};
 #define OPL_TYPE_YM3812 (OPL_TYPE_WAVESEL)
 #define OPL_TYPE_Y8950 (OPL_TYPE_ADPCM | OPL_TYPE_KEYBOARD | OPL_TYPE_IO)
 
@@ -617,7 +644,10 @@ static unsigned int sin_tab[SIN_LEN * 4];
         When AM = 0 data is divided by 4 before being used (loosing precision is important)
 */
 
-#define LFO_AM_TAB_ELEMENTS 210U
+enum
+{
+    LFO_AM_TAB_ELEMENTS = 210U
+};
 
 static const UINT8 lfo_am_table[LFO_AM_TAB_ELEMENTS] = {
     0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  2,  2,  2,  2,  3,  3,  3,  3,  4,  4,  4,  4,  5,  5,  5,  5,
@@ -736,7 +766,7 @@ INLINE void OPL_STATUSMASK_SET(FM_OPL *OPL, int flag)
 /* advance LFO to next sample */
 INLINE void advance_lfo(FM_OPL *OPL)
 {
-    UINT8 tmp;
+    UINT8 tmp = 0;
 
     /* LFO */
     OPL->lfo_am_cnt += OPL->lfo_am_inc;
@@ -757,9 +787,9 @@ INLINE void advance_lfo(FM_OPL *OPL)
 /* advance to next sample */
 INLINE void advance(FM_OPL *OPL)
 {
-    OPL_CH *CH;
-    OPL_SLOT *op;
-    int i;
+    OPL_CH *CH = NULL;
+    OPL_SLOT *op = NULL;
+    int i = 0;
 
     OPL->eg_timer += OPL->eg_timer_add;
 
@@ -852,7 +882,7 @@ INLINE void advance(FM_OPL *OPL)
         /* Phase Generator */
         if (op->vib)
         {
-            UINT8 block;
+            UINT8 block = 0;
             unsigned int block_fnum = CH->block_fnum;
 
             unsigned int fnum_lfo = (block_fnum & 0x0380) >> 7;
@@ -915,7 +945,7 @@ INLINE void advance(FM_OPL *OPL)
 
 INLINE signed int op_calc(UINT32 phase, unsigned int env, signed int pm, unsigned int wave_tab)
 {
-    UINT32 p;
+    UINT32 p = 0;
 
     p = (env << 4) + sin_tab[wave_tab + ((((signed int)((phase & ~FREQ_MASK) + (pm << 16))) >> FREQ_SH) & SIN_MASK)];
 
@@ -925,8 +955,8 @@ INLINE signed int op_calc(UINT32 phase, unsigned int env, signed int pm, unsigne
 
 INLINE signed int op_calc1(UINT32 phase, unsigned int env, signed int pm, unsigned int wave_tab)
 {
-    UINT32 p;
-    INT32 i;
+    UINT32 p = 0;
+    INT32 i = 0;
 
     i = (phase & ~FREQ_MASK) + pm;
 
@@ -945,9 +975,9 @@ INLINE signed int op_calc1(UINT32 phase, unsigned int env, signed int pm, unsign
 /* calculate output */
 INLINE void OPL_CALC_CH(OPL_CH *CH)
 {
-    OPL_SLOT *SLOT;
-    unsigned int env;
-    signed int out;
+    OPL_SLOT *SLOT = NULL;
+    unsigned int env = 0;
+    signed int out = 0;
 
     phase_modulation = 0;
 
@@ -1009,9 +1039,9 @@ number   number    BLK/FNUM2 FNUM    Drum  Hat   Drum  Tom  Cymbal
 
 INLINE void OPL_CALC_RH(OPL_CH *CH, unsigned int noise)
 {
-    OPL_SLOT *SLOT;
-    signed int out;
-    unsigned int env;
+    OPL_SLOT *SLOT = NULL;
+    signed int out = 0;
+    unsigned int env = 0;
 
     /* Bass Drum (verified on real YM3812):
       - depends on the channel 6 'connect' register:
@@ -1160,9 +1190,9 @@ INLINE void OPL_CALC_RH(OPL_CH *CH, unsigned int noise)
 /* generic table initialize */
 static int init_tables(void)
 {
-    signed int i, x;
-    signed int n;
-    double o, m;
+    signed int i = 0, x = 0;
+    signed int n = 0;
+    double o = NAN, m = NAN;
 
     for (x = 0; x < TL_RES_LEN; x++)
     {
@@ -1271,7 +1301,7 @@ static void OPLCloseTable(void)
 
 static void OPL_initalize(FM_OPL *OPL)
 {
-    int i;
+    int i = 0;
 
     /* frequency base */
 #if 1
@@ -1361,7 +1391,7 @@ INLINE void FM_KEYOFF(OPL_SLOT *SLOT, UINT32 key_clr)
 /* update phase increment counter of operator (also update the EG rates if necessary) */
 INLINE void CALC_FCSLOT(OPL_CH *CH, OPL_SLOT *SLOT)
 {
-    int ksr;
+    int ksr = 0;
 
     /* (frequency) phase increment counter */
     SLOT->Incr = CH->fc * SLOT->mul;
@@ -1456,9 +1486,9 @@ INLINE void set_sl_rr(FM_OPL *OPL, int slot, int v)
 /* write a value v to register r on OPL chip */
 static void OPLWriteReg(FM_OPL *OPL, int r, int v)
 {
-    OPL_CH *CH;
-    int slot;
-    unsigned block_fnum;
+    OPL_CH *CH = NULL;
+    int slot = 0;
+    unsigned block_fnum = 0;
 
     /* adjust bus to 8 bits */
     r &= 0xff;
@@ -1776,8 +1806,8 @@ static void OPL_UnLockTable(void)
 
 static void OPLResetChip(FM_OPL *OPL)
 {
-    int c, s;
-    int i;
+    int c = 0, s = 0;
+    int i = 0;
 
     OPL->eg_timer = 0;
     OPL->eg_cnt = 0;
@@ -1824,9 +1854,9 @@ static void OPLResetChip(FM_OPL *OPL)
 /* 'rate'  is sampling rate  */
 static FM_OPL *OPLCreate(int type, int clock, int rate)
 {
-    char *ptr;
-    FM_OPL *OPL;
-    int state_size;
+    char *ptr = NULL;
+    FM_OPL *OPL = NULL;
+    int state_size = 0;
 
     if (OPL_LockTable() == -1) return NULL;
 
@@ -1972,7 +2002,7 @@ static int OPLTimerOver(FM_OPL *OPL, int c)
         /* CSM mode key,TL controll */
         if (OPL->mode & 0x80)
         { /* CSM mode total level latch and auto key on */
-            int ch;
+            int ch = 0;
             if (OPL->UpdateHandler) OPL->UpdateHandler(OPL->UpdateParam, 0);
             for (ch = 0; ch < 9; ch++) CSMKeyControll(&OPL->P_CH[ch]);
         }
@@ -1991,7 +2021,7 @@ static int YM3812NumChips = 0;            /* number of chips */
 
 int YM3812Init(int num, int clock, int rate)
 {
-    int i;
+    int i = 0;
 
     if (YM3812NumChips) return -1; /* duplicate init. */
 
@@ -2014,7 +2044,7 @@ int YM3812Init(int num, int clock, int rate)
 
 void YM3812Shutdown(void)
 {
-    int i;
+    int i = 0;
 
     for (i = 0; i < YM3812NumChips; i++)
     {
@@ -2060,7 +2090,7 @@ void YM3812UpdateOne(int which, INT16 *buffer, int length)
     FM_OPL *OPL = OPL_YM3812[which];
     UINT8 rhythm = OPL->rhythm & 0x20;
     OPLSAMPLE *buf = buffer;
-    int i;
+    int i = 0;
 
     if ((void *)OPL != cur_chip)
     {
@@ -2073,7 +2103,7 @@ void YM3812UpdateOne(int which, INT16 *buffer, int length)
     }
     for (i = 0; i < length; i++)
     {
-        int lt;
+        int lt = 0;
 
         output[0] = 0;
 

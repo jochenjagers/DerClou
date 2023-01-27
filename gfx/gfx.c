@@ -6,6 +6,7 @@
 */
 #include "gfx/gfx.h"
 
+#include <math.h>
 #include <stdint.h>
 
 #include "SDL.h"
@@ -19,12 +20,18 @@
 
 /************************************************/
 
-#define GFX_NCH4_BUFFER_SIZE (320 * 200) /* 320*200 = 64000 Bytes gross */
+enum
+{
+    GFX_NCH4_BUFFER_SIZE = (320 * 200) /* 320*200 = 64000 Bytes gross */
+};
 
 #define GFX_BUBBLE_FONT_NAME ((char *)"bubble.fnt")
 #define GFX_MENU_FONT_NAME ((char *)"menu.fnt")
 
-#define GFX_CMAP_OFFSET 61440  // -> Maximalgroesse 320 * 192
+enum
+{
+    GFX_CMAP_OFFSET = 61440  // -> Maximalgroesse 320 * 192
+};
 
 struct PrintRect
 {
@@ -142,7 +149,7 @@ static ubyte *NCH4Buffer = NULL;
 
 static void SetWindowIcon(char *icon)
 {
-    unsigned int colorkey;
+    unsigned int colorkey = 0;
     SDL_Surface *image = NULL;
 
     image = SDL_LoadBMP(icon);
@@ -190,9 +197,8 @@ void gfxScreenshotShadow(void)
 
 void gfxSetDarkness(ubyte value)
 {
-    ubyte *dp;
-    int h, i;
-    static ubyte ScrDark;
+    ubyte *dp = NULL;
+    int h = 0, i = 0;
 
     dp = (ubyte *)l_wrp->p_BitMap;
 
@@ -224,8 +230,6 @@ void gfxSetDarkness(ubyte value)
             } while (--i);
         } while (--h);
     }
-
-    ScrDark = value;
 
     bGfxInvalidate = 1;
 }
@@ -345,8 +349,8 @@ void gfxDoneSDL(void)
 
 void gfxUpdateSDL(struct RastPort *rp)
 {
-    ubyte *src, *dst;
-    int32_t dstpitch;
+    ubyte *src = NULL, *dst = NULL;
+    int32_t dstpitch = 0;
 
     if ((rp != &RefreshRP) && (rp != &PrepareRP))
     {
@@ -544,8 +548,8 @@ static void gfxInitCollList(void)
 {
     char pathname[TXT_KEY_LENGTH];
     LIST *tempList = (LIST *)CreateList(0);
-    NODE *n;
-    struct Collection *coll;
+    NODE *n = NULL;
+    struct Collection *coll = NULL;
 
     CollectionList = (LIST *)CreateList(0);
 
@@ -584,8 +588,8 @@ static void gfxInitPictList(void)
 {
     char pathname[TXT_KEY_LENGTH];
     LIST *tempList = (LIST *)CreateList(0);
-    NODE *n;
-    struct Picture *pict;
+    NODE *n = NULL;
+    struct Picture *pict = NULL;
 
     PictureList = (LIST *)CreateList(0);
 
@@ -716,9 +720,9 @@ void gfxDraw(struct RastPort *rp, uword us_X, uword us_Y)
     /* LucyG 2017-10-29 : this never worked at all! */
     /* Hell, it's a simple line drawing function :D */
 
-    int sx, sy, dx, dy, i;
-    ubyte col;
-    ubyte *bm;
+    int sx = 0, sy = 0, dx = 0, dy = 0, i = 0;
+    ubyte col = 0;
+    ubyte *bm = NULL;
 
     if (!rp)
     {
@@ -771,7 +775,7 @@ void gfxDraw(struct RastPort *rp, uword us_X, uword us_Y)
 
 ubyte gfxReadPixel(struct RastPort *rp, uword us_X, uword us_Y)
 {
-    ubyte col;
+    ubyte col = 0;
 
     if (!rp)
     {
@@ -856,7 +860,7 @@ void gfxSetFont(struct RastPort *rp, struct Font *font)
 /* calculates the length of a text in pixels */
 int32_t gfxTextLength(struct RastPort *rp, char *puch_Text, uword us_CharCount)
 {
-    int32_t length;
+    int32_t length = 0;
     if (!rp)
     {
         Log("%s: RastPort is NULL", __func__);
@@ -883,7 +887,7 @@ struct Picture *gfxGetPicture(uword us_PictId)
 // The Collection must be prepared one step before (with gfxPrepareColl)
 void gfxGetColorTable(uword us_CollId, ubyte *puch_ColorTable)
 {
-    int32_t i;
+    int32_t i = 0;
     ubyte *p = (ubyte *)((intptr_t)StdBuffer1 + (intptr_t)GFX_CMAP_OFFSET);
 
     for (i = 0; i < GFX_COLORTABLE_SIZE; i++) puch_ColorTable[i] = p[i];
@@ -891,10 +895,10 @@ void gfxGetColorTable(uword us_CollId, ubyte *puch_ColorTable)
 
 void gfxSetColorTable_hack(SDL_Surface *pSurface)
 {
-    int32_t i;
+    int32_t i = 0;
     ubyte *p = (ubyte *)((intptr_t)StdBuffer1 + (intptr_t)GFX_CMAP_OFFSET);
 
-    SDL_Color *pc;
+    SDL_Color *pc = NULL;
     for (i = 0; i < 256; i++)
     {
         pc = &pSurface->format->palette->colors[i];
@@ -948,13 +952,13 @@ struct RastPort *gfxPrepareColl(uword us_CollId)
             dskBuildPathName(PICTURE_DIRECTORY, (char *)coll->puch_Filename, Result);
 
             /* load collection */
-            SDL_Surface *pSurface;
+            SDL_Surface *pSurface = NULL;
             pSurface = gfxLoadImage(Result);
 
             gfxSetColorTable_hack(pSurface);
 
             /* Collection in den PrepareRP kopieren */
-            int w, h;
+            int w = 0, h = 0;
             if (pSurface->w > PrepareRP.us_Width)
             {
                 w = PrepareRP.us_Width;
@@ -1023,7 +1027,7 @@ void gfxCopyCollFromXMS(uword us_CollId, void *p_Buffer)
 
 void gfxCopyCollToXMS(uword us_CollId, struct XMSRastPort *rp)
 {
-    struct Collection *oldColl;
+    struct Collection *oldColl = NULL;
     struct Collection *coll = gfxGetCollection(us_CollId);
     if (!coll)
     {
@@ -1091,7 +1095,7 @@ void gfxPrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword us_Y)
 
 void gfxPrint(struct RastPort *rp, char *puch_Text, uword us_Y, uint32_t ul_Mode)
 {
-    uword x, y, l;
+    uword x = 0, y = 0, l = 0;
 
     if (!rp)
     {
@@ -1280,7 +1284,7 @@ void wfd(void)
 
 void gfxClearArea(struct RastPort *rp)
 {
-    ubyte uch_APen, uch_BPen, uch_OPen;
+    ubyte uch_APen = 0, uch_BPen = 0, uch_OPen = 0;
 
     if (!rp)
     {
@@ -1310,7 +1314,7 @@ void gfxSetRGB(struct RastPort *rp, ubyte uch_ColNr, ubyte uch_Red, ubyte uch_Gr
 
 void gfxSetPalette24(struct RastPort *rp, ubyte uch_ColStart, ubyte uch_ColEnd, ubyte *p_ColorTable24)
 {
-    int i, i3, i4;
+    int i = 0, i3 = 0, i4 = 0;
     for (i = uch_ColStart; i < uch_ColEnd; i++)
     {
         i3 = i * 3;
@@ -1327,7 +1331,7 @@ void gfxSetPalette24(struct RastPort *rp, ubyte uch_ColStart, ubyte uch_ColEnd, 
 
 void gfxSetPalette32(struct RastPort *rp, ubyte uch_ColStart, ubyte uch_ColEnd, ubyte *p_ColorTable32)
 {
-    int i, i4;
+    int i = 0, i4 = 0;
     for (i = uch_ColStart; i < uch_ColEnd; i++)
     {
         i4 = i << 2;
@@ -1349,7 +1353,7 @@ void gfxSetColorRange(ubyte uch_ColorStart, ubyte uch_ColorEnd)
 
 void gfxGetColorTableFromReg(ubyte *puch_Colortable)
 {
-    int i, i3, i4;
+    int i = 0, i3 = 0, i4 = 0;
     for (i = 0; i < 256; i++)
     {
         i3 = i * 3;
@@ -1366,9 +1370,9 @@ void gfxChangeColors(struct RastPort *rp, int32_t l_Delay, uint32_t ul_Mode, uby
 {
     ubyte cols[768];
     ubyte cols2[768];
-    uword st, en, st3, en3;
-    uword i;
-    float e, f;
+    uword st = 0, en = 0, st3 = 0, en3 = 0;
+    uword i = 0;
+    float e = NAN, f = NAN;
 
     if (rp)
     {
@@ -1437,12 +1441,12 @@ void gfxChangeColors(struct RastPort *rp, int32_t l_Delay, uint32_t ul_Mode, uby
 
 void gfxShow(uword us_PictId, uint32_t ul_Mode, int32_t l_Delay, int32_t l_XPos, int32_t l_YPos)
 {
-    struct Picture *pict;
-    struct Collection *coll;
-    struct RastPort *destRP;
-    ubyte *colorTable;
-    int32_t destX;
-    int32_t destY;
+    struct Picture *pict = NULL;
+    struct Collection *coll = NULL;
+    struct RastPort *destRP = NULL;
+    ubyte *colorTable = NULL;
+    int32_t destX = 0;
+    int32_t destY = 0;
 
     pict = gfxGetPicture(us_PictId);
     if (!pict)

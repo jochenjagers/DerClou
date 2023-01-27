@@ -49,7 +49,7 @@ void InitStory(char *story_filename)
 
 void CloseStory(void)
 {
-    int32_t i;
+    int32_t i = 0;
 
     if (film)
     {
@@ -96,7 +96,7 @@ void InitLocations(void)
 
 void PatchStory(void)
 {
-    struct TCEventNode *node;
+    struct TCEventNode *node = NULL;
 
     if (!(GamePlayMode & GP_DEMO))
     {
@@ -133,7 +133,7 @@ void PatchStory(void)
 
 uint32_t PlayStory(void)
 {
-    struct Scene *curr, *next;
+    struct Scene *curr = NULL, *next = NULL;
     struct Scene *story_scene = 0;
     ubyte interr_allowed = 1, first = 1;
 
@@ -205,7 +205,7 @@ uint32_t PlayStory(void)
 
         if (interr_allowed && (!(GamePlayMode & GP_STORY_OFF)))
         {
-            if (story_scene = GetStoryScene(curr))
+            if ((story_scene = GetStoryScene(curr)))
             {
                 interr_allowed = 0;
             }
@@ -263,7 +263,7 @@ uint32_t PlayStory(void)
 
 struct Scene *GetStoryScene(struct Scene *curr)
 {
-    uint32_t i, j;
+    uint32_t i = 0, j = 0;
 
     for (i = 0; i < film->AmountOfScenes; i++)
     {
@@ -286,7 +286,7 @@ struct Scene *GetStoryScene(struct Scene *curr)
 
 struct Scene *GetScene(uint32_t EventNr)
 {
-    int32_t i;
+    int32_t i = 0;
     struct Scene *sc = NULL;
 
     for (i = 0; i < film->AmountOfScenes; i++)
@@ -297,9 +297,9 @@ struct Scene *GetScene(uint32_t EventNr)
 
 int32_t GetEventCount(uint32_t EventNr)
 {
-    struct Scene *sc;
+    struct Scene *sc = NULL;
 
-    if (sc = GetScene(EventNr))
+    if ((sc = GetScene(EventNr)))
         return ((int32_t)(sc->Geschehen));
     else
         return 0;
@@ -307,17 +307,17 @@ int32_t GetEventCount(uint32_t EventNr)
 
 void EventDidHappen(uint32_t EventNr)
 {
-    struct Scene *sc;
+    struct Scene *sc = NULL;
     uint32_t max = CAN_ALWAYS_HAPPEN;
 
-    if (sc = GetScene(EventNr))
+    if ((sc = GetScene(EventNr)))
         if (sc->Geschehen < max) sc->Geschehen += 1;
 }
 
 int32_t CheckConditions(struct Scene *scene)
 {
-    struct Bedingungen *bed;
-    NODE *node;
+    struct Bedingungen *bed = NULL;
+    NODE *node = NULL;
 
     if (scene->LocationNr != -1L) return (1L);
 
@@ -367,12 +367,12 @@ void PrepareStory(char *filename)
  * revised : 2014-07-01 - templer
  */
 {
-    int32_t i, j;
-    struct Scene *scene;
+    int32_t i = 0, j = 0;
+    struct Scene *scene = NULL;
     struct StoryHeader SH;
     struct NewScene NS;
-    struct TCEventNode *node;
-    FILE *file;
+    struct TCEventNode *node = NULL;
+    FILE *file = NULL;
     char pathname[TXT_KEY_LENGTH];
 
     dskBuildPathName(DATA_DIRECTORY, filename, pathname);
@@ -468,9 +468,9 @@ void PrepareStory(char *filename)
 
 void InitConditions(struct Scene *scene, struct NewScene *ns)
 {
-    struct Bedingungen *bed;
-    struct TCEventNode *node;
-    int32_t i;
+    struct Bedingungen *bed = NULL;
+    struct TCEventNode *node = NULL;
+    int32_t i = 0;
 
     bed = (struct Bedingungen *)MemAlloc(sizeof(struct Bedingungen));
 
@@ -527,7 +527,7 @@ void FreeConditions(struct Scene *scene)
 void LoadSceneforStory(struct NewScene *dest, FILE *file)
 {
     uint32_t *event_nrs = NULL;
-    uint32_t i, tmp;
+    uint32_t i = 0, tmp = 0;
 
     /* struct NewScene is byte-aligned
   and needs some padding... */
@@ -622,8 +622,8 @@ void LoadSceneforStory(struct NewScene *dest, FILE *file)
 
 void AddVTime(uint32_t add)
 {
-    uint32_t time;
-    uint32_t tag;
+    uint32_t time = 0;
+    uint32_t tag = 0;
 
     time = GetMinute + add;
 
@@ -660,8 +660,8 @@ struct Scene *GetCurrentScene(void)
 
 struct Scene *GetLocScene(uint32_t locNr)
 {
-    int32_t i;
-    struct Scene *sc;
+    int32_t i = 0;
+    struct Scene *sc = NULL;
 
     for (i = 0; i < film->AmountOfScenes; i++)
         if (((sc = &film->gameplay[i])->LocationNr) == locNr) return (sc);
@@ -673,9 +673,9 @@ struct Scene *GetLocScene(uint32_t locNr)
 void FormatDigit(uint32_t digit, char *s)
 {
     if (digit < 10)
-        sprintf(s, "0%ld", digit);
+        sprintf(s, "0%u", digit);
     else
-        sprintf(s, "%ld", digit);
+        sprintf(s, "%u", digit);
 }
 
 char *BuildTime(uint32_t min, char language, char *time)
@@ -696,7 +696,7 @@ char *BuildTime(uint32_t min, char language, char *time)
 char *BuildDate(uint32_t days, char language, char *date)
 {
     ubyte days_per_month[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    uint32_t i, p_year, year, month, day;
+    uint32_t i = 0, p_year = 0, year = 0, month = 0, day = 0;
     char s[TXT_KEY_LENGTH];
 
     for (i = 0, p_year = 0; i < 12; i++) p_year += days_per_month[i];
@@ -742,7 +742,7 @@ char *BuildDate(uint32_t days, char language, char *date)
 
 char *GetCurrLocName(void)
 {
-    int32_t index;
+    int32_t index = 0;
 
     index = GetCurrentScene()->LocationNr;
 

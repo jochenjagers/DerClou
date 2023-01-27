@@ -29,13 +29,13 @@ uint32_t tcShowPatrol(LIST *bubble_l, char *c_time, char *patr, ubyte first, Bui
 
 void Investigate(char *location)
 {
-    NODE *n, *nextMsg;
-    LIST *origin, *bubble_l;
+    NODE *n = NULL, *nextMsg = NULL;
+    LIST *origin = NULL, *bubble_l = NULL;
     char patr[TXT_KEY_LENGTH], line[TXT_KEY_LENGTH];
     char c_time[10];
-    uint32_t minutes = 0, guarding = 0, choice = 0, count = 0, buiID = 0, first = 0, raise;
-    Building bui;
-    uint32_t patrolCount;
+    uint32_t minutes = 0, guarding = 0, choice = 0, count = 0, buiID = 0, first = 0, raise = 0;
+    Building bui = NULL;
+    uint32_t patrolCount = 0;
 
     buiID = GetObjNrOfBuilding(GetLocation);
     bui = (Building)dbGetObject(buiID);

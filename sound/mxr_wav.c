@@ -96,7 +96,7 @@ typedef struct
 
 static uint32_t MXR_ProcessInputWAV(MXR_InputWAV *pInput, void *pStream, uint32_t nNumSamples)
 {
-    int32_t nSamplesRemain, nSamplesRead;
+    int32_t nSamplesRemain = 0, nSamplesRead = 0;
     nSamplesRemain = (pInput->wavFile.dwDataSize - pInput->wavFile.dwPosition) / pInput->mxrInput.fmt.nSampleSize;
     if (nNumSamples > nSamplesRemain)
     {
@@ -125,7 +125,7 @@ static void MXR_DestroyInputWAV(MXR_InputWAV *pInput)
 
 MXR_Input *MXR_CreateInputWAV(const char *pszFileName)
 {
-    MXR_InputWAV *pInput;
+    MXR_InputWAV *pInput = NULL;
     pInput = (MXR_InputWAV *)MXR_MemAlloc(sizeof(MXR_InputWAV));
     if (!pInput)
     {

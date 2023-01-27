@@ -15,7 +15,7 @@ static void lsInitObjects(void);
 
 void lsInitLandScape(uint32_t bID, ubyte mode) /* initialisiert das Landschaftsmodul */
 {
-    int32_t i;
+    int32_t i = 0;
 
     if (!ls) ls = (struct LandScape *)MemAlloc(sizeof(struct LandScape));
 
@@ -131,9 +131,9 @@ void lsSetRelations(uint32_t areaID)
 
 static void lsInitObjects(void)
 {
-    uint32_t areaCount = 0, i;
-    LIST *areas;
-    NODE *n;
+    uint32_t areaCount = 0, i = 0;
+    LIST *areas = NULL;
+    NODE *n = NULL;
 
     /* alle Relationen erzeugen */
     consistsOfAll(ls->ul_BuildingID, OLF_PRIVATE_LIST, Object_LSArea);
@@ -210,13 +210,13 @@ void lsInitObjectDB(uint32_t bld, uint32_t areaID)
 
 // lädt im Gegensatz zur Amigaversion alle Bodendaten gleichzeitig
 // in den Speicher
-static void lsInitFloorSquares(void)
+void lsInitFloorSquares(void)
 {
-    uint32_t count;
-    int32_t i;
+    uint32_t count = 0;
+    int32_t i = 0;
     char fileName[TXT_KEY_LENGTH], areaName[TXT_KEY_LENGTH];
-    NODE *n;
-    LIST *areas;
+    NODE *n = NULL;
+    LIST *areas = NULL;
 
     for (i = 0; i < 3; i++) ls->p_AllFloors[i] = NULL;
 
@@ -244,11 +244,11 @@ static void lsInitFloorSquares(void)
     RemoveList(areas);
 }
 
-static void lsLoadAllSpots(void)
+void lsLoadAllSpots(void)
 {
     char fileName[TXT_KEY_LENGTH];
-    LIST *areas;
-    NODE *n;
+    LIST *areas = NULL;
+    NODE *n = NULL;
 
     consistsOfAll(ls->ul_BuildingID, OLF_PRIVATE_LIST | OLF_INCLUDE_NAME, Object_LSArea);
     areas = ObjectListPrivate;
@@ -266,9 +266,9 @@ static void lsLoadAllSpots(void)
     RemoveList(areas);
 }
 
-static void lsSetCurrFloorSquares(uint32_t areaId)
+void lsSetCurrFloorSquares(uint32_t areaId)
 {
-    int32_t i;
+    int32_t i = 0;
 
     for (i = 0; i < 3; i++)
         if (areaId == ls->ul_FloorAreaId[i]) ls->p_CurrFloor = ls->p_AllFloors[i];
@@ -281,7 +281,7 @@ static void lsSetCurrFloorSquares(uint32_t areaId)
 // gibt alle Bodendaten wieder frei
 static void lsDoneFloorSquares(void)
 {
-    uint32_t count, i, size;
+    uint32_t count = 0, i = 0, size = 0;
 
     for (i = 0; i < 3; i++)
     {
@@ -316,12 +316,12 @@ void lsDoneObjectDB(uint32_t areaID)
 
 void lsDoneLandScape(void)
 {
-    NODE *n;
-    int32_t areaCount = 0, i;
+    NODE *n = NULL;
+    int32_t areaCount = 0, i = 0;
 
     if (ls)
     {
-        LIST *areas;
+        LIST *areas = NULL;
 
         consistsOfAll(ls->ul_BuildingID, OLF_PRIVATE_LIST, Object_LSArea);
         areas = ObjectListPrivate;

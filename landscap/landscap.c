@@ -38,7 +38,7 @@ static void lsSafeRectFill(word x, word y, word x1, word y1)
 
 void lsSetVisibleWindow(uword x, uword y)
 {
-    word halfX, halfY, wX, wY;
+    word halfX = 0, halfY = 0, wX = 0, wY = 0;
 
     halfX = LS_VISIBLE_X_SIZE / 2;
     halfY = LS_VISIBLE_Y_SIZE / 2;
@@ -65,7 +65,7 @@ static void lsShowRooms(void)
     if (GamePlayMode & GP_SHOW_ROOMS)
     {
         LIST *rooms = lsGetRoomsOfArea(ls->ul_AreaID);
-        NODE *room;
+        NODE *room = NULL;
 
         for (room = LIST_HEAD(rooms); NODE_SUCC(room); room = NODE_SUCC(room))
         {
@@ -83,11 +83,11 @@ static void lsShowRooms(void)
 
 void lsBuildScrollWindow(void)
 {
-    int32_t i, j;
-    NODE *node;
+    int32_t i = 0, j = 0;
+    NODE *node = NULL;
     LSArea area = (LSArea)dbGetObject(ls->ul_AreaID);
     ubyte colortable[768];
-    LSObject lso;
+    LSObject lso = NULL;
 
     gfxSetColorRange(0, 127);
     gfxChangeColors(NULL, 0, GFX_FADE_OUT, 0);
@@ -219,7 +219,7 @@ void lsSetDarkness(ubyte value)  // entweder
 
 void lsTurnObject(LSObject lso, ubyte status, ubyte Collis)
 {
-    uword floorIndex;
+    uword floorIndex = 0;
 
     floorIndex = lsGetFloorIndex(lso->us_DestX, lso->us_DestY);
 
@@ -232,7 +232,7 @@ void lsTurnObject(LSObject lso, ubyte status, ubyte Collis)
 
 ubyte lsIsInside(LSObject lso, uword x, uword y, uword x1, uword y1)
 {
-    uword lsoX, lsoY, lsoX1, lsoY1;
+    uword lsoX = 0, lsoY = 0, lsoX1 = 0, lsoY1 = 0;
 
     lsCalcExactSize(lso, &lsoX, &lsoY, &lsoX1, &lsoY1);
 
@@ -274,7 +274,7 @@ void lsSetObjectState(uint32_t objID, ubyte bitNr, ubyte value)
 
 word lsSortByXCoord(struct ObjectNode *n1, struct ObjectNode *n2)
 {
-    LSObject lso1, lso2;
+    LSObject lso1 = NULL, lso2 = NULL;
 
     lso1 = (LSObject)OL_DATA(n1);
     lso2 = (LSObject)OL_DATA(n2);
@@ -287,7 +287,7 @@ word lsSortByXCoord(struct ObjectNode *n1, struct ObjectNode *n2)
 
 word lsSortByYCoord(struct ObjectNode *n1, struct ObjectNode *n2)
 {
-    LSObject lso1, lso2;
+    LSObject lso1 = NULL, lso2 = NULL;
 
     lso1 = (LSObject)OL_DATA(n1);
     lso2 = (LSObject)OL_DATA(n2);
@@ -300,8 +300,8 @@ word lsSortByYCoord(struct ObjectNode *n1, struct ObjectNode *n2)
 
 static void lsSortObjectList(LIST **l)
 {
-    LSObject lso1, lso2;
-    NODE *node, *node1, *next;
+    LSObject lso1 = NULL, lso2 = NULL;
+    NODE *node = NULL, *node1 = NULL, *next = NULL;
     ubyte lastNode = 0;
 
     if (!(LIST_EMPTY((*l))))
@@ -385,8 +385,8 @@ void lsRemLootBag(uint32_t bagId)
 
 void lsRefreshAllLootBags(void)
 {
-    uint32_t i;
-    LSObject lso;
+    uint32_t i = 0;
+    LSObject lso = NULL;
 
     livPrepareAnims();  // copy sprite anim to StdBuffer1
 
@@ -405,8 +405,8 @@ void lsRefreshAllLootBags(void)
 void lsGuyInsideSpot(uword *us_XPos, uword *us_YPos, uint32_t *areaId)
 {
     LIST *spots = lsGetSpotList();
-    struct Spot *s;
-    int32_t i;
+    struct Spot *s = NULL;
+    int32_t i = 0;
 
     for (s = (struct Spot *)LIST_HEAD(spots); NODE_SUCC(s); s = (struct Spot *)NODE_SUCC(s))
     {
@@ -436,7 +436,7 @@ void lsGuyInsideSpot(uword *us_XPos, uword *us_YPos, uint32_t *areaId)
 
 void lsWalkThroughWindow(LSObject lso, uword us_LivXPos, uword us_LivYPos, uword *us_XPos, uword *us_YPos)
 {
-    word deltaX, deltaY;
+    word deltaX = 0, deltaY = 0;
 
     (*us_XPos) = us_LivXPos;
     (*us_YPos) = us_LivYPos;
@@ -461,9 +461,9 @@ void lsWalkThroughWindow(LSObject lso, uword us_LivXPos, uword us_LivYPos, uword
    so they need to patch at runtime here*/
 void lsPatchObjects(void)
 {
-    NODE *n;
-    LSObject lso;
-    Item item;
+    NODE *n = NULL;
+    LSObject lso = NULL;
+    Item item = NULL;
 
     ((Item)dbGetObject(Item_Fenster))->OffsetFact = 16;
 
@@ -561,8 +561,8 @@ void lsCalcExactSize(LSObject lso, uword *x0, uword *y0, uword *x1, uword *y1)
 static void lsInitDoorRefresh(uint32_t ObjId)
 {
     LSObject lso = (LSObject)dbGetObject(ObjId);
-    uword width, height, destX, destY;
-    struct LSDoorRefreshNode *drn;
+    uword width = 0, height = 0, destX = 0, destY = 0;
+    struct LSDoorRefreshNode *drn = NULL;
     ubyte found = 0;
 
     for (drn = (struct LSDoorRefreshNode *)LIST_HEAD(ls->p_DoorRefreshList); NODE_SUCC(drn);
@@ -607,8 +607,8 @@ static void lsInitDoorRefresh(uint32_t ObjId)
 void lsDoDoorRefresh(LSObject lso)
 // restauriert aus einem XMS Buffer den Hintergrund einer Tür
 {
-    struct LSDoorRefreshNode *drn;
-    uword width, height;
+    struct LSDoorRefreshNode *drn = NULL;
+    uword width = 0, height = 0;
 
     lsPrepareFromXMSRastPort(&LS_DOOR_REFRESH_XMS_RP);
 

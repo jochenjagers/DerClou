@@ -31,11 +31,11 @@ struct relationDef *FindRelation(RELATION id)
 
 RELATION AddRelation(RELATION id)
 {
-    struct relationDef *rd;
+    struct relationDef *rd = NULL;
 
     if (!FindRelation(id))
     {
-        if (rd = (struct relationDef *)MemAlloc(sizeof(struct relationDef)))
+        if ((rd = (struct relationDef *)MemAlloc(sizeof(struct relationDef))))
         {
             rd->rd_next = relationsDefBase;
             relationsDefBase = rd;
@@ -54,9 +54,9 @@ RELATION AddRelation(RELATION id)
 
 RELATION CloneRelation(RELATION id, RELATION cloneId)
 {
-    struct relationDef *rd;
+    struct relationDef *rd = NULL;
 
-    if (rd = FindRelation(id))
+    if ((rd = FindRelation(id)))
     {
         if (AddRelation(cloneId) || FindRelation(cloneId))
         {
@@ -129,7 +129,7 @@ RELATION SetP(KEY leftKey, RELATION id, KEY rightKey, PARAMETER parameter)
             r = r->r_next;
         }
 
-        if (r = (struct relation *)MemAlloc(sizeof(struct relation)))
+        if ((r = (struct relation *)MemAlloc(sizeof(struct relation))))
         {
             r->r_next = rd->rd_relationsTable;
             rd->rd_relationsTable = r;
@@ -292,14 +292,14 @@ void UnSetAll(KEY key, void (*UseKey)(KEY))
 int SaveRelations(char *file, uint32_t offset, uint32_t size, uword disk_id)
 {
     struct relationDef *rd = relationsDefBase;
-    struct relation *r;
-    FILE *fh;
+    struct relation *r = NULL;
+    FILE *fh = NULL;
     char left[256];
     char right[256];
 
     if (rd && DecodeKey)
     {
-        if (fh = dskOpen(file, "w", disk_id))
+        if ((fh = dskOpen(file, "w", disk_id)))
         {
             fprintf(fh, "%s\n", REL_FILE_MARK);
 
@@ -315,15 +315,15 @@ int SaveRelations(char *file, uint32_t offset, uint32_t size, uword disk_id)
 
                     fprintf(fh, "%s\n", REL_TABLE_MARK);
 
-                    fprintf(fh, "%ld\n", rd->rd_id);
+                    fprintf(fh, "%u\n", rd->rd_id);
 
-                    if (r = rd->rd_relationsTable)
+                    if ((r = rd->rd_relationsTable))
                     {
                         while (r)
                         {
                             strcpy(left, DecodeKey(r->r_leftKey));
                             strcpy(right, DecodeKey(r->r_rightKey));
-                            fprintf(fh, "%s\n%s\n%ld\n", left, right, r->r_parameter);
+                            fprintf(fh, "%s\n%s\n%u\n", left, right, r->r_parameter);
                             r = r->r_next;
                         }
                     }
@@ -343,12 +343,12 @@ int SaveRelations(char *file, uint32_t offset, uint32_t size, uword disk_id)
 
 int LoadRelations(char *file, uword disk_id)
 {
-    RELATION rd;
-    PARAMETER parameter;
+    RELATION rd = 0;
+    PARAMETER parameter = 0;
     char buffer[256];
     char left[256];
     char right[256];
-    ubyte goOn;
+    ubyte goOn = 0;
     int size = 255;
     FILE *fh = NULL;
 
@@ -358,7 +358,7 @@ int LoadRelations(char *file, uword disk_id)
 
     if (EncodeKey)
     {
-        if (fh = dskOpen(file, "r", disk_id))
+        if ((fh = dskOpen(file, "r", disk_id)))
         {
             dskGets(buffer, size, fh);
 
@@ -433,7 +433,7 @@ int LoadRelations(char *file, uword disk_id)
 
 void RemRelations(uint32_t offset, uint32_t size)
 {
-    struct relationDef *rd = relationsDefBase, *help;
+    struct relationDef *rd = relationsDefBase, *help = NULL;
 
     while (rd)
     {

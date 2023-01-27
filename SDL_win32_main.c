@@ -20,103 +20,6 @@ static int stdioRedirectEnabled = 0;
 static char stdoutPath[NAME_MAX];
 static char stderrPath[NAME_MAX];
 
-static void UnEscapeQuotes(char *arg)
-{
-    char *last = NULL;
-
-    while (*arg)
-    {
-        if (*arg == '"' && *last == '\\')
-        {
-            char *c_curr = arg;
-            char *c_last = last;
-
-            while (*c_curr)
-            {
-                *c_last = *c_curr;
-                c_last = c_curr;
-                c_curr++;
-            }
-            *c_last = '\0';
-        }
-        last = arg;
-        arg++;
-    }
-}
-
-/* Parse a command line buffer into arguments */
-static int ParseCommandLine(char *cmdline, char **argv)
-{
-    char *bufp;
-    char *lastp = NULL;
-    int argc, last_argc;
-
-    argc = last_argc = 0;
-    for (bufp = cmdline; *bufp;)
-    {
-        /* Skip leading whitespace */
-        while (isspace(*bufp))
-        {
-            ++bufp;
-        }
-        /* Skip over argument */
-        if (*bufp == '"')
-        {
-            ++bufp;
-            if (*bufp)
-            {
-                if (argv)
-                {
-                    argv[argc] = bufp;
-                }
-                ++argc;
-            }
-            /* Skip over word */
-            while (*bufp && (*bufp != '"' || (lastp && *lastp == '\\')))
-            {
-                lastp = bufp;
-                ++bufp;
-            }
-        }
-        else
-        {
-            if (*bufp)
-            {
-                if (argv)
-                {
-                    argv[argc] = bufp;
-                }
-                ++argc;
-            }
-            /* Skip over word */
-            while (*bufp && !isspace(*bufp))
-            {
-                ++bufp;
-            }
-        }
-        if (*bufp)
-        {
-            if (argv)
-            {
-                *bufp = '\0';
-            }
-            ++bufp;
-        }
-
-        /* Strip out \ from \" sequences */
-        if (argv && last_argc != argc)
-        {
-            UnEscapeQuotes(argv[last_argc]);
-        }
-        last_argc = argc;
-    }
-    if (argv)
-    {
-        argv[argc] = NULL;
-    }
-    return (argc);
-}
-
 /* SDL_Quit() shouldn't be used with atexit() directly because
    calling conventions may differ... */
 static void cleanup(void) { SDL_Quit(); }
@@ -124,8 +27,8 @@ static void cleanup(void) { SDL_Quit(); }
 /* Remove the output files if there was no output written */
 static void cleanup_output(void)
 {
-    FILE *file;
-    int empty;
+    FILE *file = NULL;
+    int empty = 0;
 
     /* Flush the output in case anything is queued */
     fclose(stdout);
@@ -169,12 +72,12 @@ static void cleanup_output(void)
 /* This is where execution begins [console apps] */
 int main(int argc, char *argv[])
 {
-    int status;
+    int status = 0;
 
     /* Load SDL dynamic link library */
     if (SDL_Init(SDL_INIT_NOPARACHUTE) < 0)
     {
-        printf("WinMain() error", SDL_GetError());
+        printf("WinMain() error: %s", SDL_GetError());
         return (1);
     }
     atexit(cleanup_output);

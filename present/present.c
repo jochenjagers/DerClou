@@ -14,8 +14,8 @@ struct PresentControl PresentControl = {NULL, 0, 0};
 
 void DrawPresent(LIST *present, ubyte firstLine, struct RastPort *rp, ubyte max)
 {
-    int i, j, k;
-    struct presentationInfo *p;
+    int i = 0, j = 0, k = 0;
+    struct presentationInfo *p = NULL;
     char txt[70], s[10];
 
     gfxSetPens(&RefreshRP, 224, 224, 224);
@@ -42,7 +42,7 @@ void DrawPresent(LIST *present, ubyte firstLine, struct RastPort *rp, ubyte max)
         switch (p->presentHow)
         {
             case PRESENT_AS_TEXT:
-                if (p->extendedText)
+                if (p->extendedText[0])
                 {
                     for (k = 0; k < (57 - strlen(NODE_NAME(p)) - strlen(p->extendedText)); k++) strcat(txt, " ");
 
@@ -59,7 +59,7 @@ void DrawPresent(LIST *present, ubyte firstLine, struct RastPort *rp, ubyte max)
                 gfxSetPens(&RefreshRP, 249, 252, 253);
 
                 gfxSetRect(206, 316 - 206);
-                sprintf(s, "%ld %%", (p->extendedNr * 100) / (p->maxNr));  // 2017-10-28 LucyG : %%
+                sprintf(s, "%u %%", (p->extendedNr * 100) / (p->maxNr));  // 2017-10-28 LucyG : %%
 
                 gfxPrint(&RefreshRP, s, j, GFX_PRINT_CENTER);
                 break;
@@ -80,14 +80,14 @@ void DrawPresent(LIST *present, ubyte firstLine, struct RastPort *rp, ubyte max)
 
 ubyte Present(uint32_t nr, const char *presentationText, void (*initPresentation)(uint32_t, LIST *, LIST *))
 {
-    ubyte firstVis;
-    ubyte maxNr;
-    ubyte exitLoop;
-    uint32_t action;
-    LIST *presentationData, *list;
-    Person obj;
-    Evidence e;
-    uword y;
+    ubyte firstVis = 0;
+    ubyte maxNr = 0;
+    ubyte exitLoop = 0;
+    uint32_t action = 0;
+    LIST *presentationData = NULL, *list = NULL;
+    Person obj = NULL;
+    Evidence e = NULL;
+    uword y = 0;
 
     presentationData = (LIST *)CreateList(0);
 
@@ -206,7 +206,7 @@ ubyte Present(uint32_t nr, const char *presentationText, void (*initPresentation
 void AddPresentLine(LIST *l, ubyte presentHow, intptr_t data, uint32_t maxNr, LIST *texts, uword textNr)
 {
     char *name = NULL;
-    struct presentationInfo *p;
+    struct presentationInfo *p = NULL;
 
     if (textNr != ((uword)-1))
     {

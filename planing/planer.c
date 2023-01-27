@@ -7,55 +7,76 @@
 #include "planing/planer.h"
 
 // Menu ids - planing
-#define PLANING_START 0
-#define PLANING_NOTE 1
-#define PLANING_SAVE 2
-#define PLANING_LOAD 3
-#define PLANING_CLEAR 4
-#define PLANING_LOOK 5
-#define PLANING_RETURN 6
+enum
+{
+    PLANING_START = 0,
+    PLANING_NOTE = 1,
+    PLANING_SAVE = 2,
+    PLANING_LOAD = 3,
+    PLANING_CLEAR = 4,
+    PLANING_LOOK = 5,
+    PLANING_RETURN = 6
+};
 
-#define PLANING_PERSON_WALK 0
-#define PLANING_ACTION_USE 1
-#define PLANING_ACTION_OPEN 2
-#define PLANING_ACTION_CLOSE 3
-#define PLANING_ACTION_TAKE 4
-#define PLANING_ACTION_DROP 5
-#define PLANING_ACTION_WAIT 6
-#define PLANING_ACTION_RADIO 7
-#define PLANING_PERSON_CHANGE 8
-#define PLANING_ACTION_RETURN 9
+enum
+{
+    PLANING_PERSON_WALK = 0,
+    PLANING_ACTION_USE = 1,
+    PLANING_ACTION_OPEN = 2,
+    PLANING_ACTION_CLOSE = 3,
+    PLANING_ACTION_TAKE = 4,
+    PLANING_ACTION_DROP = 5,
+    PLANING_ACTION_WAIT = 6,
+    PLANING_ACTION_RADIO = 7,
+    PLANING_PERSON_CHANGE = 8,
+    PLANING_ACTION_RETURN = 9
+};
 
-#define PLANING_WAIT 0
-#define PLANING_WAIT_RADIO 1
-#define PLANING_WAIT_RETURN 2
+enum
+{
+    PLANING_WAIT = 0,
+    PLANING_WAIT_RADIO = 1,
+    PLANING_WAIT_RETURN = 2
+};
 
 // Menu ids - notebook
-#define PLANING_NOTE_TARGET 0
-#define PLANING_NOTE_TEAM 1
-#define PLANING_NOTE_CAR 2
-#define PLANING_NOTE_TOOLS 3
-#define PLANING_NOTE_LOOTS 4
+enum
+{
+    PLANING_NOTE_TARGET = 0,
+    PLANING_NOTE_TEAM = 1,
+    PLANING_NOTE_CAR = 2,
+    PLANING_NOTE_TOOLS = 3,
+    PLANING_NOTE_LOOTS = 4
+};
 
 // Menu ids - look
-#define PLANING_LOOK_PLAN 0
-#define PLANING_LOOK_PERSON_CHANGE 1
-#define PLANING_LOOK_RETURN 2
+enum
+{
+    PLANING_LOOK_PLAN = 0,
+    PLANING_LOOK_PERSON_CHANGE = 1,
+    PLANING_LOOK_RETURN = 2
+};
 
 // Menu ids - leveldesigner
-#define PLANING_LD_MOVE 0
-#define PLANING_LD_REFRESH 1
-#define PLANING_LD_OK 2
-#define PLANING_LD_CANCEL 3
+enum
+{
+    PLANING_LD_MOVE = 0,
+    PLANING_LD_REFRESH = 1,
+    PLANING_LD_OK = 2,
+    PLANING_LD_CANCEL = 3
+};
 
 // Std time defines
-#define PLANING_TIME_TAKE 3
-#define PLANING_TIME_DROP 3
-#define PLANING_TIME_RADIO 5
-#define PLANING_TIME_CONTROL 5
-#define PLANING_TIME_FIGHT 5
-#define PLANING_TIME_THROUGH_WINDOW 6
-#define PLANING_TIME_USE_STAIRS 8
+enum
+{
+    PLANING_TIME_TAKE = 3,
+    PLANING_TIME_DROP = 3,
+    PLANING_TIME_RADIO = 5,
+    PLANING_TIME_CONTROL = 5,
+    PLANING_TIME_FIGHT = 5,
+    PLANING_TIME_THROUGH_WINDOW = 6,
+    PLANING_TIME_USE_STAIRS = 8
+};
 
 ubyte AnimCounter = 0;
 ubyte PlanChanged = 0;
@@ -86,8 +107,8 @@ static ubyte plRemLastAction(void)
 static void plActionGo(void)
 {
     uint32_t choice = 0L;
-    ubyte direction;
-    ubyte collision;
+    ubyte direction = 0;
+    ubyte collision = 0;
     struct Action *action = CurrentAction(plSys);
 
     plMessage("WALK", PLANING_MSG_REFRESH);
@@ -128,7 +149,7 @@ static void plActionGo(void)
                 {
                     if (!action || (action->Type != ACTION_GO))
                     {
-                        if (action = InitAction(plSys, ACTION_GO, (uint32_t)direction, 0L, 0L))
+                        if ((action = InitAction(plSys, ACTION_GO, (uint32_t)direction, 0L, 0L)))
                             PlanChanged = 1;
                         else
                         {
@@ -146,7 +167,7 @@ static void plActionGo(void)
                     }
                     else
                     {
-                        if (action = InitAction(plSys, ACTION_GO, direction, 0L, 1L))
+                        if ((action = InitAction(plSys, ACTION_GO, direction, 0L, 1L)))
                         {
                             PlanChanged = 1;
                         }
@@ -181,7 +202,7 @@ static void plActionWait(void)
 {
     LIST *menu = txtGoKey(PLAN_TXT, "MENU_4");
     ubyte activ = 0;
-    uint32_t choice1 = 0L, choice2 = 0L, bitset;
+    uint32_t choice1 = 0L, choice2 = 0L, bitset = 0;
 
     while (activ != PLANING_WAIT_RETURN)
     {
@@ -285,7 +306,7 @@ static void plActionWait(void)
 
                     if (BurglarsNr > 2)
                     {
-                        NODE *node, *help;
+                        NODE *node = NULL, *help = NULL;
 
                         plMessage("RADIO_2", PLANING_MSG_REFRESH);
                         SetPictID(((Person)dbGetObject(OL_NR(GetNthNode(BurglarsList, CurrentPerson))))->PictID);
@@ -342,7 +363,7 @@ static void plLevelDesigner(LSObject lso)
 {
     LIST *menu = txtGoKey(PLAN_TXT, "MENU_8");
     ubyte ende = 0, activ = 0;
-    uint32_t bitset;
+    uint32_t bitset = 0;
     uword originX = lso->us_DestX, originY = lso->us_DestY;
     uint32_t area = lsGetActivAreaID();
 
@@ -433,7 +454,7 @@ static void plLevelDesigner(LSObject lso)
 static void plActionOpenClose(uword what)
 {
     LIST *actionList = plGetObjectsList(CurrentPerson, 0);
-    uint32_t choice1 = 0L, state;
+    uint32_t choice1 = 0L, state = 0;
     char exp[TXT_KEY_LENGTH];
 
     if (LIST_EMPTY(actionList))
@@ -518,7 +539,7 @@ static void plActionOpenClose(uword what)
 static void plActionTake(void)
 {
     LIST *actionList = plGetObjectsList(CurrentPerson, 1);
-    uint32_t choice = 0L, choice1 = 0L, choice2 = 0L, state;
+    uint32_t choice = 0L, choice1 = 0L, choice2 = 0L, state = 0;
     char exp[TXT_KEY_LENGTH];
 
     if (LIST_EMPTY(actionList))
@@ -526,7 +547,7 @@ static void plActionTake(void)
     else
     {
         LIST *takeableList = (LIST *)CreateList(0L);
-        struct ObjectNode *n, *h, *h2;
+        struct ObjectNode *n = NULL, *h = NULL, *h2 = NULL;
 
         for (n = (struct ObjectNode *)LIST_HEAD(actionList); NODE_SUCC(n); n = (struct ObjectNode *)NODE_SUCC(n))
         {
@@ -581,8 +602,8 @@ static void plActionTake(void)
                 uint32_t volumePerson =
                     tcVolumePersCanCarry((Person)dbGetObject(OL_NR(GetNthNode(BurglarsList, CurrentPerson))));
 
-                uint32_t weightLoot;
-                uint32_t volumeLoot;
+                uint32_t weightLoot = 0;
+                uint32_t volumeLoot = 0;
 
                 choice1 = OL_NR(GetNthNode(takeableList, choice));
                 choice2 = OL_TYPE(GetNthNode(takeableList, choice));
@@ -679,7 +700,7 @@ static char *plSetUseString(uint32_t nr, uint32_t type, void *data)
 
     if (break(((LSObject)dbGetObject(UseObject))->Type, nr))
     {
-        sprintf(useString, "%ld %s",
+        sprintf(useString, "%u %s",
                 tcGuyUsesTool(OL_NR(GetNthNode(PersonsList, CurrentPerson)), (Building)dbGetObject(Planing_BldId), nr,
                               ((LSObject)dbGetObject(UseObject))->Type),
                 txtSeconds);
@@ -696,9 +717,10 @@ static char *plSetUseString(uint32_t nr, uint32_t type, void *data)
 
 static ubyte plCheckAbilities(uint32_t persId, uint32_t checkToolId)
 {
-    NODE *n;
+    NODE *n = NULL;
     LIST *
-        requires;
+        requires
+    = NULL;
     ubyte ret = 1;
 
     toolRequiresAll(checkToolId, OLF_PRIVATE_LIST, Object_Ability);
@@ -727,8 +749,8 @@ static ubyte plCheckAbilities(uint32_t persId, uint32_t checkToolId)
 
 static ubyte plCheckRequiredTools(uint32_t checkToolId)
 {
-    LIST *trl;
-    NODE *n, *h;
+    LIST *trl = NULL;
+    NODE *n = NULL, *h = NULL;
     ubyte ret = 1;
 
     toolRequiresAll(checkToolId, OLF_PRIVATE_LIST, Object_Tool);
@@ -765,7 +787,7 @@ static void plCorrectToolsList(uint32_t flags)
     // ein Wächter niedergedögelt wurde
     if (PersonsNr > BurglarsNr)
     {
-        ubyte i;
+        ubyte i = 0;
 
         for (i = BurglarsNr; i < PersonsNr; i++)
         {
@@ -788,8 +810,8 @@ static void plCorrectToolsList(uint32_t flags)
 static void plActionUse(void)
 {
     LIST *actionList = plGetObjectsList(CurrentPerson, 0);
-    uint32_t choice1 = 0L, choice2 = 0L, state;
-    ubyte i;
+    uint32_t choice1 = 0L, choice2 = 0L, state = 0;
+    ubyte i = 0;
     char exp[TXT_KEY_LENGTH];
 
     if (CurrentPerson < BurglarsNr)
@@ -1053,7 +1075,7 @@ static void plActionUse(void)
                                     {
                                         if (has(Person_Matt_Stuvysunt, Tool_Strickleiter))
                                         {
-                                            uword xpos, ypos;
+                                            uword xpos = 0, ypos = 0;
 
                                             if (InitAction(plSys, ACTION_USE, choice1, 0L,
                                                            PLANING_TIME_THROUGH_WINDOW * PLANING_CORRECT_TIME))
@@ -1131,7 +1153,7 @@ static void plAction(void)
 {
     LIST *menu = NULL;
     ubyte activ = 0;
-    uint32_t choice1 = 0L, choice2 = 0L, bitset;
+    uint32_t choice1 = 0L, choice2 = 0L, bitset = 0;
     char exp[TXT_KEY_LENGTH];
 
     if (CurrentPerson < BurglarsNr)
@@ -1267,15 +1289,15 @@ static void plAction(void)
 
                     if (ChoiceOk(choice1, GET_OUT, ObjectList))
                     {
-                        uint32_t weightLoot;
-                        uint32_t volumeLoot;
+                        uint32_t weightLoot = 0;
+                        uint32_t volumeLoot = 0;
 
                         choice1 = OL_NR(GetNthNode(ObjectList, choice1));
 
                         weightLoot = ((Loot)dbGetObject(choice1))->Weight;
                         volumeLoot = ((Loot)dbGetObject(choice1))->Volume;
 
-                        if (choice2 = plGetNextLoot())
+                        if ((choice2 = plGetNextLoot()))
                         {
                             if (InitAction(plSys, ACTION_DROP, choice2, choice1,
                                            PLANING_TIME_DROP * PLANING_CORRECT_TIME))
@@ -1315,7 +1337,7 @@ static void plAction(void)
                 {
                     if (BurglarsNr > 2)
                     {
-                        NODE *node, *help;
+                        NODE *node = NULL, *help = NULL;
 
                         plMessage("RADIO_1", PLANING_MSG_REFRESH);
                         SetPictID(((Person)dbGetObject(OL_NR(GetNthNode(BurglarsList, CurrentPerson))))->PictID);
@@ -1368,7 +1390,7 @@ static void plAction(void)
 
 static void plNoteBook(void)
 {
-    LIST *l, *bubble = txtGoKey(PLAN_TXT, "MENU_6");
+    LIST *l = NULL, *bubble = txtGoKey(PLAN_TXT, "MENU_6");
     uint32_t choice1 = 0, choice2 = 0;
     char exp[TXT_KEY_LENGTH];
 
@@ -1446,9 +1468,9 @@ static void plNoteBook(void)
 static void plLook(void)
 {
     LIST *menu = txtGoKey(PLAN_TXT, "MENU_7");
-    ubyte activ = 0, choice;
-    uint32_t timer = 0L, maxTimer = GetMaxTimer(plSys), realCurrentPerson = CurrentPerson, choice1;
-    uint32_t bitset;
+    ubyte activ = 0, choice = 0;
+    uint32_t timer = 0L, maxTimer = GetMaxTimer(plSys), realCurrentPerson = CurrentPerson, choice1 = 0;
+    uint32_t bitset = 0;
 
     plMessage("PERSON_NOTES", PLANING_MSG_REFRESH);
     plSync(PLANING_ANIMATE_NO, timer, maxTimer, 0);
@@ -1591,7 +1613,7 @@ void plPlaner(uint32_t objId)
 {
     LIST *menu = txtGoKey(PLAN_TXT, "MENU_1");
     ubyte activ = 0;
-    uint32_t bitset;
+    uint32_t bitset = 0;
 
     plPrepareSys(0L, objId,
                  PLANING_INIT_PERSONSLIST | PLANING_HANDLER_ADD | PLANING_HANDLER_OPEN | PLANING_GUARDS_LOAD |

@@ -65,11 +65,11 @@ FILE *dskOpen(const char *puch_Pathname, const char *puch_Mode, uword us_DiskId)
 int32_t dskLoad(const char *puch_Pathname, void *p_MemDest)
 {
     FILE *p_File = NULL;
-    int32_t ul_SizeOfFile;
+    int32_t ul_SizeOfFile = 0;
 
-    if (ul_SizeOfFile = dskFileLength(puch_Pathname))
+    if ((ul_SizeOfFile = dskFileLength(puch_Pathname)))
     {
-        if (p_File = dskOpen(puch_Pathname, "rb", 0))
+        if ((p_File = dskOpen(puch_Pathname, "rb", 0)))
         {
             dskRead(p_File, p_MemDest, ul_SizeOfFile);
             dskClose(p_File);
@@ -86,7 +86,7 @@ void dskBuildPathName(const char *puch_Directory, const char *puch_Filename, cha
     char *cur = &puch_Result[strlen(RootPathName)];
     while (*cur != '\0')
     {
-        *cur = toupper(*cur);
+        *cur = (char)toupper(*cur);
         ++cur;
     }
 }
@@ -94,12 +94,12 @@ void dskBuildPathName(const char *puch_Directory, const char *puch_Filename, cha
 int32_t dskFileLength(const char *puch_Pathname)
 {
     int32_t l_Size = 0;
-    FILE *file;
+    FILE *file = NULL;
 
-    if (file = fopen(puch_Pathname, "rb"))
+    if ((file = fopen(puch_Pathname, "rb")))
     {
         fseek(file, 0, SEEK_END);
-        l_Size = ftell(file);
+        l_Size = (int32_t)ftell(file);
         fclose(file);
     }
 
@@ -121,7 +121,7 @@ void dskWrite(FILE *p_File, void *p_MemSource, uint32_t ul_Size)
 
 void dskRead(FILE *p_File, void *p_MemDest, uint32_t ul_Size)
 {
-    uint32_t ul_Read;
+    uint32_t ul_Read = 0;
     ul_Read = fread(p_MemDest, 1, ul_Size, p_File);
     if (ul_Read != ul_Size)
     {
@@ -141,14 +141,14 @@ int dskIsEOF(FILE *p_File)
 // fgets() has this CR/LF problem
 char *dskGets(char *text, int n, FILE *file)
 {
-    char *p;
+    char *p = NULL;
     if (fgets(text, n, file))
     {
-        if (p = strrchr(text, 13))
+        if ((p = strrchr(text, 13)))
         {
             *p = '\0';
         }
-        if (p = strrchr(text, 10))
+        if ((p = strrchr(text, 10)))
         {
             *p = '\0';
         }

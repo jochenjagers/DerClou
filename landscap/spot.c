@@ -8,7 +8,10 @@
 
 #include "port/port.h"
 
-#define LS_SPOT_BITMAP_WIDTH (96)
+enum
+{
+    LS_SPOT_BITMAP_WIDTH = (96)
+};
 #define LS_SPOT_BITMAP_HEIGHT (LS_SPOT_LARGE_SIZE)
 
 #define LS_SPOT_BITMAP_SIZE (LS_SPOT_BITMAP_WIDTH * LS_SPOT_BITMAP_HEIGHT)
@@ -47,7 +50,7 @@ void lsInitSpots(struct RastPort *rp)
 
 static void lsFreeAllSpots(void)
 {
-    struct Spot *spot;
+    struct Spot *spot = NULL;
 
     for (spot = (struct Spot *)LIST_HEAD(sc->p_spots); NODE_SUCC(spot); spot = (struct Spot *)NODE_SUCC(spot))
     {
@@ -79,7 +82,7 @@ static int32_t lsIsSpotVisible(struct Spot *spot) { return 1; }
 /* zeigt alle Spots, die sich bewegen */
 void lsMoveAllSpots(uint32_t time)
 {
-    struct Spot *spot;
+    struct Spot *spot = NULL;
 
     for (spot = (struct Spot *)LIST_HEAD(sc->p_spots); NODE_SUCC(spot); spot = (struct Spot *)NODE_SUCC(spot))
     {
@@ -101,7 +104,7 @@ void lsMoveAllSpots(uint32_t time)
 
 void lsShowAllSpots(uint32_t time, uint32_t mode)
 {
-    struct Spot *spot;
+    struct Spot *spot = NULL;
 
     for (spot = (struct Spot *)LIST_HEAD(sc->p_spots); NODE_SUCC(spot); spot = (struct Spot *)NODE_SUCC(spot))
     {
@@ -128,8 +131,8 @@ void lsShowAllSpots(uint32_t time, uint32_t mode)
 
 static void lsShowSpot(struct Spot *s, uint32_t time) /* zum Abspielen! */
 {
-    struct SpotPosition *pos;
-    uint32_t count;
+    struct SpotPosition *pos = NULL;
+    uint32_t count = 0;
 
     if (!(time % s->us_Speed))
     { /* nur alle x Sekunden Bewegung */
@@ -283,13 +286,13 @@ static void lsGetAreaForSpot(struct Spot *spot)
 
 static struct Spot *lsAddSpot(uword us_Size, uword us_Speed, uint32_t ul_CtrlObjId)
 {
-    struct Spot *spot;
-    uint32_t SpotNr;
+    struct Spot *spot = NULL;
+    uint32_t SpotNr = 0;
     char line[TXT_KEY_LENGTH];
 
     SpotNr = GetNrOfNodes(sc->p_spots);
 
-    sprintf(line, "*%s%ld", LS_SPOT_NAME, SpotNr);
+    sprintf(line, "*%s%u", LS_SPOT_NAME, SpotNr);
 
     spot = (struct Spot *)CreateNode(sc->p_spots, sizeof(struct Spot), line);
 
@@ -314,7 +317,7 @@ static struct Spot *lsAddSpot(uword us_Size, uword us_Speed, uint32_t ul_CtrlObj
 
 void lsSetSpotStatus(uint32_t CtrlObjId, ubyte uch_Status)
 {
-    struct Spot *s;
+    struct Spot *s = NULL;
 
     for (s = (struct Spot *)LIST_HEAD(sc->p_spots); NODE_SUCC(s); s = (struct Spot *)NODE_SUCC(s))
     {
@@ -327,7 +330,7 @@ void lsSetSpotStatus(uint32_t CtrlObjId, ubyte uch_Status)
 
 static void lsAddSpotPosition(struct Spot *spot, uword us_XPos, uword us_YPos)
 {
-    struct SpotPosition *pos;
+    struct SpotPosition *pos = NULL;
 
     pos = (struct SpotPosition *)CreateNode(spot->p_positions, (int32_t)sizeof(struct SpotPosition), NULL);
 
@@ -340,8 +343,8 @@ static void lsAddSpotPosition(struct Spot *spot, uword us_XPos, uword us_YPos)
 static void lsLoadSpotBitMap(struct SpotControl *spc)
 {
     char Result[TXT_KEY_LENGTH];
-    int32_t i, j;
-    ubyte *d;
+    int32_t i = 0, j = 0;
+    ubyte *d = NULL;
 
     // Dateiname erstellen
     dskBuildPathName(PICTURE_DIRECTORY, LS_SPOT_FILENAME, Result);
@@ -375,12 +378,12 @@ static void lsLoadSpotBitMap(struct SpotControl *spc)
 
 void lsLoadSpots(uint32_t bldId, char *uch_FileName)
 {
-    FILE *file;
+    FILE *file = NULL;
     char filename[TXT_KEY_LENGTH], buffer[TXT_KEY_LENGTH];
-    uword SpotCount, i, j;
-    uint32_t CtrlObjId;
-    struct Spot *spot;
-    uword Size, Speed, Count, XPos, YPos;
+    uword SpotCount = 0, i = 0, j = 0;
+    uint32_t CtrlObjId = 0;
+    struct Spot *spot = NULL;
+    uword Size = 0, Speed = 0, Count = 0, XPos = 0, YPos = 0;
 
     dskBuildPathName(DATA_DIRECTORY, uch_FileName, filename);
 
@@ -427,7 +430,7 @@ LIST *lsGetSpotList(void) { return (sc->p_spots); }
 static void lsBlitSpot(uword us_Size, uword us_XPos, uword us_YPos, ubyte visible)
 {
     uint32_t sourceX = 0;
-    void *Src, *Dest;
+    void *Src = NULL, *Dest = NULL;
 
     switch (us_Size)
     {

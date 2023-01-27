@@ -9,7 +9,7 @@
 void gfxMCGABlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY, struct RastPort *drp, uword us_DestX,
                  uword us_DestY, uword us_Width, uword us_Height, uint32_t ul_BlitMode)
 {
-    unsigned int x;
+    unsigned int x = 0;
     ubyte *sbm = (ubyte *)srp->p_BitMap;
     ubyte *dbm = (ubyte *)drp->p_BitMap;
 
@@ -52,10 +52,10 @@ void gfxMCGAPrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword u
     uword CharsPerLine = rp->p_Font->pSurface->w / rp->p_Font->us_Width;
     uword Length = strlen(puch_Text);
 
-    ubyte *DestPtr1;
-    ubyte *FontPtr1;
-    uword t, h1, h2, i, j;
-    ubyte c;
+    ubyte *DestPtr1 = NULL;
+    ubyte *FontPtr1 = NULL;
+    uword t = 0, h1 = 0, h2 = 0, i = 0, j = 0;
+    ubyte c = 0;
 
     for (t = 0; t < Length; t++)
     {
@@ -90,7 +90,7 @@ void gfxMCGARectFill(struct RastPort *rp, uword us_X, uword us_Y, uword us_X1, u
     // us_X += rp->us_LeftEdge;
     // us_Y += rp->us_TopEdge;
     ubyte *bm = &((ubyte *)rp->p_BitMap)[us_X + us_Y * rp->us_Width];
-    uword i, j;
+    uword i = 0, j = 0;
     for (j = 0; j < us_H; j++)
     {
         for (i = 0; i < us_W; i++)

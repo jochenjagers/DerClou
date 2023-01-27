@@ -51,7 +51,7 @@ void livDone(void)
 
         if (sc->p_Livings)
         {
-            NODE *node;
+            NODE *node = NULL;
 
             for (node = (NODE *)LIST_HEAD(sc->p_Livings); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
                 livRem((struct Living *)node);
@@ -62,7 +62,7 @@ void livDone(void)
 
         if (sc->p_Template)
         {
-            NODE *node;
+            NODE *node = NULL;
 
             for (node = (NODE *)LIST_HEAD(sc->p_Template); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
                 livRemTemplate((struct AnimTemplate *)node);
@@ -93,7 +93,7 @@ void livRefreshAll(void) { livDoAnims(0, 0); }
 
 void livSetAllInvisible(void)
 {
-    struct Living *liv;
+    struct Living *liv = NULL;
 
     if (sc)
     {
@@ -169,7 +169,7 @@ void livTurn(char *puch_Name, ubyte uch_Status)
 
 void livStopAll(void)
 {
-    struct Living *liv;
+    struct Living *liv = NULL;
 
     for (liv = (struct Living *)LIST_HEAD(sc->p_Livings); NODE_SUCC(liv); liv = (struct Living *)NODE_SUCC(liv))
     {
@@ -203,7 +203,7 @@ void livPrepareAnims(void)
 
 void livDoAnims(ubyte uch_Play, ubyte uch_Move)
 {
-    struct Living *liv;
+    struct Living *liv = NULL;
 
     livPrepareAnims();  // copy sprite anim to StdBuffer1
 
@@ -313,7 +313,7 @@ ubyte livCanWalk(char *puch_Name)
 
     if (liv)
     {
-        ubyte direction;
+        ubyte direction = 0;
 
         switch (liv->uch_Action)
         {
@@ -352,8 +352,8 @@ static void livAdd(char *uch_Name, char *uch_TemplateName, ubyte uch_XSize, ubyt
                    word s_YSpeed)
 
 {
-    struct Living *liv;
-    struct AnimTemplate *tlt;
+    struct Living *liv = NULL;
+    struct AnimTemplate *tlt = NULL;
 
     liv = (struct Living *)CreateNode(sc->p_Livings, (int32_t)sizeof(struct Living), uch_Name);
 
@@ -386,10 +386,10 @@ static void livRem(struct Living *liv) { BobDone(liv->us_LivingNr); }
 
 static void livLoadTemplates(void)
 {
-    uword cnt, i;
-    char *line;
+    uword cnt = 0, i = 0;
+    char *line = NULL;
     LIST *l = (LIST *)CreateList(0);
-    struct AnimTemplate *tlt;
+    struct AnimTemplate *tlt = NULL;
     char pathname[TXT_KEY_LENGTH];
 
     dskBuildPathName(TEXT_DIRECTORY, LIV_ANIM_TEMPLATE_LIST, pathname);
@@ -421,8 +421,8 @@ static void livRemTemplate(struct AnimTemplate *tlt)
 
 static void livLoadLivings(void)
 {
-    uword cnt, i;
-    char *line;
+    uword cnt = 0, i = 0;
+    char *line = NULL;
     LIST *l = (LIST *)CreateList(0);
     char pathname[TXT_KEY_LENGTH];
 
@@ -450,8 +450,8 @@ static void livHide(struct Living *liv) { BobInVis(liv->us_LivingNr); }
 
 static void livShow(struct Living *liv)
 {
-    uword frameNr, action;
-    uword srcX, srcY, offset;
+    uword frameNr = 0, action = 0;
+    uword srcX = 0, srcY = 0, offset = 0;
     struct AnimTemplate *tlt = liv->p_OriginTemplate;
 
     // Scheiss Ausnahme, weil von marx kein ANM_STAND gezeichnet wurde
@@ -503,7 +503,7 @@ static void livLoadData(void)
 
 static ubyte livIsVisible(struct Living *liv)
 {
-    uword left, right, up, down;
+    uword left = 0, right = 0, up = 0, down = 0;
     ubyte visible = 0;
 
     left = liv->us_XPos;

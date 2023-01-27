@@ -8,7 +8,10 @@
 
 #include <stdlib.h>
 
-#define ERR_MEMORY_NO_MEM 1
+enum
+{
+    ERR_MEMORY_NO_MEM = 1
+};
 
 static int32_t l_MemAllocated = 0;
 static int32_t l_MemMaxAllocated = 0;
@@ -94,7 +97,7 @@ void *MemAlloc(uint32_t size)
     void *mem = NULL;
     if (size)
     {
-        if (mem = calloc(1, size))
+        if ((mem = calloc(1, size)))
         {
             l_MemAllocated += (int32_t)size;
             if (l_MemMaxAllocated < l_MemAllocated)

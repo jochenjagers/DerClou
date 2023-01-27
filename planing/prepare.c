@@ -42,7 +42,7 @@ void plCloseHandler(NODE *n) { CloseHandler(plSys, OL_NR(n)); }
 // Preparation & Unpreparation functions
 void plPrepareData(void)
 {
-    ubyte i;
+    ubyte i = 0;
 
     for (i = 0; i < PLANING_NR_LOOTS; i++) Planing_Loot[i] = 0;
 
@@ -56,7 +56,7 @@ void plPrepareData(void)
 void plPrepareSprite(uint32_t livNr, uint32_t areaId)
 {
     LSArea activArea = (LSArea)dbGetObject(areaId);
-    uword xpos, ypos;
+    uword xpos = 0, ypos = 0;
 
     livLivesInArea(Planing_Name[livNr], areaId);
 
@@ -130,7 +130,7 @@ void plPrepareGfx(uint32_t objId, ubyte landscapMode, ubyte prepareMode)
 
     if (prepareMode & PLANING_GFX_SPRITES)
     {
-        uint32_t i;
+        uint32_t i = 0;
 
         for (i = 0; i < PersonsNr; i++)
         {
@@ -149,7 +149,7 @@ void plPrepareGfx(uint32_t objId, ubyte landscapMode, ubyte prepareMode)
 
 void plUnprepareGfx(void)
 {
-    ubyte i;
+    ubyte i = 0;
 
     gfxShow(CurrentBackground, GFX_NO_REFRESH | GFX_FADE_OUT, 5, -1, -1);
 
@@ -164,9 +164,9 @@ void plUnprepareGfx(void)
 
 void plPrepareRel(void)
 {
-    LIST *areas;
-    NODE *n;
-    LSArea area;
+    LIST *areas = NULL;
+    NODE *n = NULL;
+    LSArea area = NULL;
 
     consistsOfAll(Planing_BldId, OLF_PRIVATE_LIST, Object_LSArea);
     areas = ObjectListPrivate;
@@ -192,7 +192,7 @@ void plUnprepareRel(void)
 
 void plPrepareNames(void)
 {
-    ubyte i;
+    ubyte i = 0;
 
     for (i = 0; i < PersonsNr; i++)
     {

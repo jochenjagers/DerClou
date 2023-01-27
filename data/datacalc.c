@@ -8,7 +8,7 @@
 
 int32_t Round(int32_t v, int32_t p) /* p...Stellen ! */
 {
-    int32_t i, z;
+    int32_t i = 0, z = 0;
 
     for (i = 0, z = 1; i < p; i++, z *= 10)
         ;

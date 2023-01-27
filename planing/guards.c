@@ -8,8 +8,8 @@
 
 void grdDo(FILE *fh, struct System *sys, LIST *PersonsList, uint32_t BurglarsNr, uint32_t PersonsNr, ubyte grdAction)
 {
-    ubyte i;
-    struct ObjectNode *n;
+    ubyte i = 0;
+    struct ObjectNode *n = NULL;
 
     for (i = BurglarsNr; i < PersonsNr; i++)
     {
@@ -40,7 +40,7 @@ ubyte grdInit(FILE **fh, char *mode, uint32_t bldId, uint32_t areaId)
 
     dskBuildPathName(GUARD_DIRECTORY, bldName, fileName);
 
-    if (*fh = dskOpen(fileName, mode, 0))
+    if ((*fh = dskOpen(fileName, mode, 0)))
     {
         return 1;
     }
@@ -51,7 +51,7 @@ void grdDone(FILE *fh) { dskClose(fh); }
 
 ubyte grdAddToList(uint32_t bldId, LIST *l)
 {
-    struct ObjectNode *n;
+    struct ObjectNode *n = NULL;
 
     isGuardedbyAll(bldId, OLF_INCLUDE_NAME | OLF_INSERT_STAR, Object_Police);
 
@@ -68,16 +68,16 @@ ubyte grdAddToList(uint32_t bldId, LIST *l)
 
 ubyte grdDraw(struct RastPort *rp, uint32_t bldId, uint32_t areaId)
 {
-    FILE *fh;
+    FILE *fh = NULL;
     ubyte ret = 0;
-    LIST *GuardsList;
-    struct System *grdSys;
-    uint32_t GuardsNr, i;
-    uword xpos, ypos;
-    struct Handler *h;
-    struct Action *action;
-    struct ObjectNode *n;
-    LSArea area;
+    LIST *GuardsList = NULL;
+    struct System *grdSys = NULL;
+    uint32_t GuardsNr = 0, i = 0;
+    uword xpos = 0, ypos = 0;
+    struct Handler *h = NULL;
+    struct Action *action = NULL;
+    struct ObjectNode *n = NULL;
+    LSArea area = NULL;
 
     GuardsList = (LIST *)CreateList(0L);
 

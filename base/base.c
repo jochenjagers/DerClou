@@ -26,7 +26,7 @@ char bCDRom = 0;      // default = 0
 
 void tcClearStdBuffer(void *p_Buffer)
 {
-    int32_t i;
+    int32_t i = 0;
     char *p = (char *)p_Buffer;
     for (i = 0; i < STD_BUFFER1_SIZE; i++) p[i] = 0;
 }
@@ -78,11 +78,11 @@ static ubyte detectLanguage(void)
     {
         char fileName[TXT_KEY_LENGTH];
         char fileWithPath[TXT_KEY_LENGTH];
-        FILE *p_File;
+        FILE *p_File = NULL;
 
         sprintf(fileName, "tcmaine%c.txt", languageMark[count]);
         dskBuildPathName(TEXT_DIRECTORY, fileName, fileWithPath);
-        if (p_File = fopen(fileWithPath, "r"))
+        if ((p_File = fopen(fileWithPath, "r")))
         {
             fclose(p_File);
             return (ubyte)count;
@@ -181,7 +181,6 @@ static void InitData(void)
     char BuildData[TXT_KEY_LENGTH] = {0};
     char MainRel[TXT_KEY_LENGTH] = {0};
     char BuildRel[TXT_KEY_LENGTH] = {0};
-    char RootPath[TXT_KEY_LENGTH] = {0};
     ubyte result = 0;
 
     dskBuildPathName(DATA_DIRECTORY, MAIN_DATA_NAME GAME_DATA_EXT, MainData);
@@ -260,7 +259,7 @@ void tcSetPermanentColors(void)
 static ubyte StartupMenu(void)
 {
     LIST *menu = txtGoKey(MENU_TXT, "STARTUP_MENU");
-    uint32_t activ;
+    uint32_t activ = 0;
     char line[TXT_KEY_LENGTH] = COSP_TITLE " v" COSP_VERSION;
     ubyte ret = 0;
 
@@ -377,14 +376,14 @@ static void tcDo(void)
 // remove tabs and spaces
 static char *trimstr(char *str)
 {
-    char *p;
+    char *p = NULL;
 
     str += strspn(str, " \t");
-    while (p = strrchr(str, ' '))
+    while ((p = strrchr(str, ' ')))
     {
         *p = '\0';
     }
-    while (p = strrchr(str, '\t'))
+    while ((p = strrchr(str, '\t')))
     {
         *p = '\0';
     }
@@ -393,8 +392,8 @@ static char *trimstr(char *str)
 
 static void loadConfig(const char *rootPath)
 {
-    char config_file[256], line[256], *pParam, *pValue, *p;
-    FILE *file;
+    char config_file[256], line[256], *pParam = NULL, *pValue = NULL, *p = NULL;
+    FILE *file = NULL;
 
     // set defaults
     Config.gfxScreenWidth = 320;
@@ -419,16 +418,16 @@ static void loadConfig(const char *rootPath)
     {
         line[sizeof(line) - 1] = '\0';  // just to be safe
 
-        if (p = strchr(line, ';'))
+        if ((p = strchr(line, ';')))
         {
             *p = '\0';
         }
-        if (p = strchr(line, '#'))
+        if ((p = strchr(line, '#')))
         {
             *p = '\0';
         }
 
-        if (pValue = strchr(line, '='))
+        if ((pValue = strchr(line, '=')))
         {
             *pValue++ = '\0';
             pValue = trimstr(pValue);
@@ -522,8 +521,8 @@ static void loadConfig(const char *rootPath)
 
 int SDL_main(int argc, char **argv)
 {
-    char result[256], res;
-    int32_t i;
+    char result[256], res = 0;
+    int32_t i = 0;
 
 #ifdef THECLOU_DEBUG_ALLOC
     MemInit();
@@ -586,7 +585,7 @@ int SDL_main(int argc, char **argv)
         Config.VoiceVolume = SND_MAX_VOLUME;
     }
 
-    if (res = tcInit())
+    if ((res = tcInit()))
     {
         if (!Config.NoIntro)
         {

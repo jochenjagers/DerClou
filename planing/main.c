@@ -16,7 +16,7 @@ char txtSeconds[20];
 /* System functions */
 void plInit(void)
 {
-    LIST *l;
+    LIST *l = NULL;
 
     /* Get texts */
     l = txtGoKey(PLAN_TXT, "TXT_TOO_LOUD");

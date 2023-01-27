@@ -17,8 +17,8 @@ void tcSaveTheClou(int bAutoSave)
     char RootPath[TXT_KEY_LENGTH];
     char pathname[TXT_KEY_LENGTH];
     LIST *games = (LIST *)CreateList(0);
-    NODE *game;
-    uword activ;
+    NODE *game = NULL;
+    uword activ = 0;
     Player player = (Player)dbGetObject(Player_Player_1);
 
     /* in welche Datei ?? */
@@ -229,11 +229,11 @@ ubyte tcBackToStartupMenu(void)
 
 ubyte tcLoadTheClou(void)
 {
-    char line[TXT_KEY_LENGTH], loaded;
+    char line[TXT_KEY_LENGTH], loaded = 0;
     LIST *games = (LIST *)CreateList(0);
     LIST *origin = (LIST *)CreateList(0);
-    uint32_t activ;
-    Player player;
+    uint32_t activ = 0;
+    Player player = NULL;
     char pathname1[TXT_KEY_LENGTH];
     char pathname2[TXT_KEY_LENGTH];
 
@@ -269,7 +269,7 @@ ubyte tcLoadTheClou(void)
             RemoveList(games);
             RemoveList(origin);
 
-            if (player = (Player)dbGetObject(Player_Player_1)) /* MOD 04-02 */
+            if ((player = (Player)dbGetObject(Player_Player_1))) /* MOD 04-02 */
             {
                 player->CurrScene = film->act_scene->EventNr;
 
@@ -314,13 +314,13 @@ void tcRefreshAfterLoad(ubyte loaded)
 
 ubyte tcSaveChangesInScenes(char *fileName)
 {
-    int32_t i;
+    int32_t i = 0;
     ubyte back = 0;
-    FILE *file;
+    FILE *file = NULL;
 
-    if (file = dskOpen(fileName, "w", 0))
+    if ((file = dskOpen(fileName, "w", 0)))
     {
-        fprintf(file, "%ld\n", film->EnabledChoices);
+        fprintf(file, "%u\n", film->EnabledChoices);
 
         for (i = 0; i < film->AmountOfScenes; i++)
         {
@@ -337,14 +337,14 @@ ubyte tcSaveChangesInScenes(char *fileName)
 
 ubyte tcLoadChangesInScenes(char *fileName)
 {
-    int32_t i;
+    int32_t i = 0;
     char buffer[TXT_KEY_LENGTH];
     ubyte back = 1;
-    uint32_t eventNr, count;
-    FILE *file;
-    struct Scene *sc;
+    uint32_t eventNr = 0, count = 0;
+    FILE *file = NULL;
+    struct Scene *sc = NULL;
 
-    if (file = dskOpen(fileName, "r", 0))
+    if ((file = dskOpen(fileName, "r", 0)))
     {
         dskGets(buffer, TXT_KEY_LENGTH - 1, file);
         SetEnabledChoices(atol(buffer));
@@ -356,7 +356,7 @@ ubyte tcLoadChangesInScenes(char *fileName)
             dskGets(buffer, TXT_KEY_LENGTH - 1, file);
             count = atol(buffer);
 
-            if (sc = GetScene(eventNr))
+            if ((sc = GetScene(eventNr)))
                 sc->Geschehen = (uword)count;
             else
                 back = 0;

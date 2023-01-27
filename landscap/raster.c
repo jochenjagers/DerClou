@@ -12,10 +12,10 @@ static uword lsGetRasterYSize(uint32_t areaID);
 void lsShowRaster(uint32_t areaID, ubyte perc)
 {
     LSArea area = (LSArea)dbGetObject(areaID);
-    struct ObjectNode *node;
-    int32_t count, i;
-    LIST *objects;
-    LSObject lso;
+    struct ObjectNode *node = NULL;
+    int32_t count = 0, i = 0;
+    LIST *objects = NULL;
+    LSObject lso = NULL;
 
     gfxShow(154, GFX_NO_REFRESH | GFX_ONE_STEP, 0, -1, -1);
 
@@ -71,8 +71,8 @@ void lsShowRaster(uint32_t areaID, ubyte perc)
 
 NODE *lsGetSuccObject(NODE *start)
 {
-    NODE *n;
-    LSObject lso;
+    NODE *n = NULL;
+    LSObject lso = NULL;
 
     n = (NODE *)NODE_SUCC(start);
 
@@ -90,8 +90,8 @@ NODE *lsGetSuccObject(NODE *start)
 
 NODE *lsGetPredObject(NODE *start)
 {
-    NODE *n;
-    LSObject lso;
+    NODE *n = NULL;
+    LSObject lso = NULL;
 
     n = (NODE *)NODE_PRED(start);
 
@@ -109,8 +109,8 @@ NODE *lsGetPredObject(NODE *start)
 
 void lsFadeRasterObject(uint32_t areaID, LSObject lso, ubyte status)
 {
-    uint32_t rasterXSize, rasterYSize, rasterSize, col;
-    uword xStart, yStart, xEnd, yEnd;
+    uint32_t rasterXSize = 0, rasterYSize = 0, rasterSize = 0, col = 0;
+    uword xStart = 0, yStart = 0, xEnd = 0, yEnd = 0;
 
     rasterXSize = lsGetRasterXSize(areaID);
     rasterYSize = lsGetRasterYSize(areaID);
@@ -140,10 +140,10 @@ void lsFadeRasterObject(uint32_t areaID, LSObject lso, ubyte status)
 
 void lsShowAllConnections(uint32_t areaID, NODE *node, ubyte perc)
 {
-    NODE *n;
-    LSObject lso1, lso2;
-    uint32_t relID = 0, col, destX, destY, srcX, srcY;
-    uint32_t rasterXSize, rasterYSize, rasterSize;
+    NODE *n = NULL;
+    LSObject lso1 = NULL, lso2 = NULL;
+    uint32_t relID = 0, col = 0, destX = 0, destY = 0, srcX = 0, srcY = 0;
+    uint32_t rasterXSize = 0, rasterYSize = 0, rasterSize = 0;
     static ubyte Alarm_Power;
 
     lso1 = (LSObject)OL_DATA(node);
@@ -186,7 +186,7 @@ void lsShowAllConnections(uint32_t areaID, NODE *node, ubyte perc)
 
         for (n = (NODE *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
         {
-            uword x0, y0, x1, y1;
+            uword x0 = 0, y0 = 0, x1 = 0, y1 = 0;
 
             gfxSetPens(l_wrp, col, GFX_SAME_PEN, GFX_SAME_PEN);
 

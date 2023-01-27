@@ -13,7 +13,7 @@ static int32_t tcDoTowerBurglary(void);
 
 static void tcSomebodyIsComing(void)
 {
-    ubyte i;
+    ubyte i = 0;
 
     for (i = 0; i < 3; i++)
     {
@@ -24,7 +24,7 @@ static void tcSomebodyIsComing(void)
 
 static void tcSomebodyIsCalling(void)
 {
-    ubyte i;
+    ubyte i = 0;
 
     for (i = 0; i < CalcRandomNr(1, 4); i++)
     {
@@ -81,7 +81,7 @@ void tcDoneHotelReception(void)
 {
     Person rig = (Person)dbGetObject(Person_Ben_Riggley);
     Environment env = (Environment)dbGetObject(Environment_TheClou);
-    ubyte choice, evaluation;
+    ubyte choice = 0, evaluation = 0;
 
     knowsSet(Person_Matt_Stuvysunt, Person_Ben_Riggley);
 
@@ -202,8 +202,8 @@ void tcDoneGludoMoney(void)
 {
     Person Gludo = (Person)dbGetObject(Person_John_Gludo);
     Environment env = (Environment)dbGetObject(Environment_TheClou);
-    ubyte choice;
-    int32_t money;
+    ubyte choice = 0;
+    int32_t money = 0;
 
     knowsSet(Person_Matt_Stuvysunt, Person_John_Gludo);
 
@@ -252,7 +252,7 @@ void tcDoneGludoMoney(void)
 void tcDoneDanner(void)
 {
     Person Jim = (Person)dbGetObject(Person_Jim_Danner);
-    ubyte choice;
+    ubyte choice = 0;
 
     if (tcGetPlayerMoney < tcCOSTS_FOR_HOTEL)
     {
@@ -300,7 +300,7 @@ void tcDoneDanner(void)
 void tcDoneMeetBriggs(void)
 {
     Person Briggs = (Person)dbGetObject(Person_Herbert_Briggs);
-    ubyte choice;
+    ubyte choice = 0;
 
     knowsSet(Person_Matt_Stuvysunt, Person_Herbert_Briggs);
 
@@ -423,7 +423,7 @@ void tcDoneAfterMeetingBriggs(void)
 
 void tcDoneCallFromPooly(void)
 {
-    ubyte choice;
+    ubyte choice = 0;
 
     knowsSet(Person_Matt_Stuvysunt, Person_Eric_Pooly);
 
@@ -489,7 +489,7 @@ int32_t tcIsDeadlock(void)
 
     if (LIST_EMPTY(ObjectList))
     {
-        NODE *n;
+        NODE *n = NULL;
         int32_t money = tcGetPlayerMoney, enough = 0;
 
         /* jetzt zum Geld noch die vorhandene Beute addieren */
@@ -659,7 +659,7 @@ void tcDone2ndBurglary(void)
 void tcCheckForBones(void)
 {
     Person luthm = (Person)dbGetObject(Person_Luthmilla_Nervesaw);
-    int32_t money;
+    int32_t money = 0;
 
     if (has(Person_Matt_Stuvysunt, Loot_Gebeine))
     {
@@ -862,8 +862,8 @@ void tcDone5thBurglary(void)
 
 void tcDoneDealerIsAfraid(void)
 {
-    uint32_t persID;
-    Person pers;
+    uint32_t persID = 0;
+    Person pers = NULL;
 
     switch (GetLocation)
     {
@@ -924,7 +924,7 @@ void tcDoneRaidInWalrus(void)
 
 void tcDoneDartJager(void)
 {
-    ubyte choice;
+    ubyte choice = 0;
     Person Grull = (Person)dbGetObject(Person_Lucas_Grull);
     Environment Env = (Environment)dbGetObject(Environment_TheClou);
 
@@ -1266,8 +1266,8 @@ void tcDone7thBurglary(void)
 
 void tcDoneBirthday(void)
 {
-    LIST *persons;
-    struct ObjectNode *n;
+    LIST *persons = NULL;
+    struct ObjectNode *n = NULL;
 
     StopAnim();
     gfxShow(172, GFX_NO_REFRESH | GFX_OVERLAY, 0, -1, -1);
@@ -1549,7 +1549,7 @@ void tcDoneSouthhamptonSabienUnknown(void)
 static void tcDoneFirstTimeLonelyInSouth(void)
 {
     LIST *menu = txtGoKey(MENU_TXT, "SouthhamptonMenu");
-    uint32_t startTime = 0, actionTime;
+    uint32_t startTime = 0, actionTime = 0;
     ubyte ende = 0, activ = 1;
     Environment Env = (Environment)dbGetObject(Environment_TheClou);
     Person Herb = (Person)dbGetObject(Person_Herbert_Briggs);
@@ -1659,7 +1659,7 @@ void tcDoneSouthhampton(void)
 {
     LIST *menu = txtGoKey(MENU_TXT, "SouthhamptonMenu");
     ubyte activ = 1; /* !! */
-    uint32_t actionTime;
+    uint32_t actionTime = 0;
     Environment Env = (Environment)dbGetObject(Environment_TheClou);
 
     SceneArgs.Ueberschrieben = 1;
@@ -1751,7 +1751,7 @@ void tcDoneSouthhampton(void)
 
 static void tcInitTowerBurglary(void)
 {
-    NODE *node;
+    NODE *node = NULL;
     Car car = (Car)dbGetObject(Car_Cadillac_Club_1952);
     Player player = (Player)dbGetObject(Player_Player_1);
 
@@ -1864,7 +1864,7 @@ static void tcDoneMafia(void)
 
 static int32_t tcDoTowerBurglary(void)
 {
-    int32_t burglary;
+    int32_t burglary = 0;
 
     /* das Organisatorische muß hier wiederholt werden, da */
     /* es sonst zu Fehler kommen kann, da die Organisation */
@@ -2008,7 +2008,7 @@ int32_t tcIsLastBurglaryOk(void)
     word carYPos0 = kaserne->CarYPos - 40;
     word carXPos1 = kaserne->CarXPos + 40;
     word carYPos1 = kaserne->CarYPos + 40;
-    int32_t madeIt = 1, i;
+    int32_t madeIt = 1, i = 0;
     LSObject left = (LSObject)dbGetObject(tcLAST_BURGLARY_LEFT_CTRL_OBJ);
     LSObject right = (LSObject)dbGetObject(tcLAST_BURGLARY_RIGHT_CTRL_OBJ);
 

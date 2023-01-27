@@ -9,7 +9,7 @@
 // loot support
 uint32_t plGetNextLoot(void)
 {
-    ubyte i;
+    ubyte i = 0;
 
     for (i = 0; i < PLANING_NR_LOOTS; i++)
     {
@@ -28,8 +28,8 @@ uint32_t plGetNextLoot(void)
 ubyte plLivingsPosAtCar(uint32_t bldId)
 {
     Building bldObj = (Building)dbGetObject(bldId);
-    uword xpos, ypos, carxpos, carypos;
-    ubyte i, atCar = 1;
+    uword xpos = 0, ypos = 0, carxpos = 0, carypos = 0;
+    ubyte i = 0, atCar = 1;
 
     carxpos = bldObj->CarXPos + 8;
     carypos = bldObj->CarYPos + 8;
@@ -60,7 +60,7 @@ ubyte plLivingsPosAtCar(uint32_t bldId)
 
 ubyte plAllInCar(uint32_t bldId)
 {
-    ubyte maxPerson = 0, i, ret = 1;
+    ubyte maxPerson = 0, i = 0, ret = 1;
     uint32_t maxTimer = 0L, oldTimer = CurrentTimer(plSys), realCurrentPerson = CurrentPerson;
 
     for (i = 0; i < BurglarsNr; i++)
@@ -191,7 +191,7 @@ void plWork(uint32_t current)
 LIST *plGetObjectsList(uint32_t current, ubyte addLootBags)
 {
     LIST *list = NULL;
-    uint32_t areaId = livWhereIs(Planing_Name[current]), oldAreaId;
+    uint32_t areaId = livWhereIs(Planing_Name[current]), oldAreaId = 0;
 
     oldAreaId = lsGetCurrObjectRetrieval();
     lsSetObjectRetrievalList(areaId);
@@ -256,7 +256,7 @@ void plInsertGuard(LIST *list, uint32_t current, uint32_t guard)
 ubyte plObjectInReach(uint32_t current, uint32_t objId)
 {
     LIST *actionList = plGetObjectsList(current, 1);
-    ubyte i, ret = 0;
+    ubyte i = 0, ret = 0;
 
     for (i = BurglarsNr; i < PersonsNr; i++) plInsertGuard(actionList, current, i);
 

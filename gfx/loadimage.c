@@ -70,10 +70,10 @@ static void MakeMCGA(ubyte b, ubyte *pic, ubyte PlSt, int c)
 
 static void ILBMUncompressToSurface(ubyte *pBody, ILBMHeader *hdr, SDL_Surface *pSurface)
 {
-    ubyte *pPlane, *pLine;
-    int x, y, plane, breite;
-    uword a;
-    ubyte o;
+    ubyte *pPlane = NULL, *pLine = NULL;
+    int x = 0, y = 0, plane = 0, breite = 0;
+    uword a = 0;
+    ubyte o = 0;
 
     pLine = (ubyte *)pSurface->pixels;
     for (y = 1; y <= hdr->height; y++)
@@ -114,9 +114,9 @@ static void ILBMUncompressToSurface(ubyte *pBody, ILBMHeader *hdr, SDL_Surface *
 
 static void ILBMCopyToSurface(ubyte *pBody, ILBMHeader *hdr, SDL_Surface *pSurface)
 {
-    ubyte *pPlane, *pLine;
-    int x, y, plane, breite;
-    ubyte o;
+    ubyte *pPlane = NULL, *pLine = NULL;
+    int y = 0, plane = 0, breite = 0;
+    ubyte o = 0;
 
     pLine = (ubyte *)pSurface->pixels;
     for (y = 1; y <= hdr->height; y++)
@@ -229,8 +229,8 @@ static SDL_Surface *gfxLoadILBM(ubyte *pFileBuffer, int32_t ulSizeOfFile, const 
         {
             if (numColors > 256) numColors = 256;
 
-            int c;
-            SDL_Color *pc;
+            int c = 0;
+            SDL_Color *pc = NULL;
             for (c = 0; c < numColors; c++)
             {
                 pc = &pSurface->format->palette->colors[c];
@@ -250,8 +250,8 @@ static SDL_Surface *gfxLoadILBM(ubyte *pFileBuffer, int32_t ulSizeOfFile, const 
 SDL_Surface *gfxLoadImage(const char *puch_Pathname)
 {
     FILE *p_File = NULL;
-    int32_t ul_SizeOfFile;
-    ubyte *p_FileBuffer;
+    int32_t ul_SizeOfFile = 0;
+    ubyte *p_FileBuffer = NULL;
     SDL_Surface *pSurface = NULL;
 
     ul_SizeOfFile = dskFileLength(puch_Pathname);

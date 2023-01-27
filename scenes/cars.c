@@ -46,7 +46,7 @@ void tcBuyCar(void)
 {
     LIST *bubble = NULL;
     ubyte choice = 0, choice1 = 0;
-    Car matts_car;
+    Car matts_car = NULL;
     Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
     while ((choice1 != 2) && (choice != GET_OUT))
@@ -119,7 +119,7 @@ void tcBuyCar(void)
 void tcCarInGarage(uint32_t carID)
 {
     ubyte choice1 = 0;
-    Car matts_car;
+    Car matts_car = NULL;
     Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
     matts_car = (Car)dbGetObject(carID);
@@ -160,9 +160,9 @@ void tcCarInGarage(uint32_t carID)
 
 void tcColorCar(Car car)
 {
-    LIST *colors, *bubble;
-    ubyte choice;
-    uint32_t costs;
+    LIST *colors = NULL, *bubble = NULL;
+    ubyte choice = 0;
+    uint32_t costs = 0;
     Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
     costs = (uint32_t)tcColorCosts(car);
@@ -215,9 +215,9 @@ void tcColorCar(Car car)
 
 void tcSellCar(uint32_t ObjectID)
 {
-    LIST *bubble;
-    uint32_t offer;
-    Car car;
+    LIST *bubble = NULL;
+    uint32_t offer = 0;
+    Car car = NULL;
     Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
     car = (Car)dbGetObject(ObjectID);
@@ -317,7 +317,7 @@ void tcRepairCar(Car car, char *repairWhat)
 
         if (choice & INP_TIME)
         {
-            if (enough = tcSpendMoney(costs, 1))
+            if ((enough = tcSpendMoney(costs, 1)))
             {
                 totalCosts += costs;
 
@@ -368,10 +368,10 @@ void tcRepairCar(Car car, char *repairWhat)
 
 uint32_t tcChooseCar(uint32_t backgroundNr)
 {
-    LIST *bubble;
-    uint32_t carCount, carID = 0L;
-    ubyte choice;
-    Car matts_car;
+    LIST *bubble = NULL;
+    uint32_t carCount = 0, carID = 0L;
+    ubyte choice = 0;
+    Car matts_car = NULL;
 
     hasAll(Person_Matt_Stuvysunt, OLF_PRIVATE_LIST | OLF_INCLUDE_NAME | OLF_INSERT_STAR, Object_Car);
     bubble = ObjectListPrivate;
@@ -419,8 +419,8 @@ uint32_t tcChooseCar(uint32_t backgroundNr)
 void tcCarGeneralOverhoul(Car car)
 {
     Person marc = (Person)dbGetObject(Person_Marc_Smith);
-    LIST *bubble;
-    ubyte choice;
+    LIST *bubble = NULL;
+    ubyte choice = 0;
 
     SetPictID(marc->PictID);
 

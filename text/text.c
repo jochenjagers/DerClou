@@ -21,7 +21,7 @@ char keyBuffer[TXT_KEY_LENGTH];
 // private functions
 static char *txtGetLine(struct Text *txt, ubyte lineNr)
 {
-    ubyte i;
+    ubyte i = 0;
     char *line = NULL;
 
     if (txt && txt->txt_LastMark && lineNr)
@@ -92,10 +92,10 @@ static char *txtGetLine(struct Text *txt, ubyte lineNr)
 void txtInit(ubyte lang)
 {
     char txtListPath[DSK_PATHNAMELENGTH];
-    struct Text *txt;
-    uword i;
+    struct Text *txt = NULL;
+    uword i = 0;
 
-    if (txtBase = (struct TextControl *)MemAlloc(sizeof(struct TextControl)))
+    if ((txtBase = (struct TextControl *)MemAlloc(sizeof(struct TextControl))))
     {
         txtBase->tc_Texts = (LIST *)CreateList(0);
         txtBase->tc_Language = lang;
@@ -126,7 +126,7 @@ void txtDone(void)
 {
     if (txtBase)
     {
-        uword i;
+        uword i = 0;
 
         for (i = 0; i < GetNrOfNodes(txtBase->tc_Texts); i++) txtUnLoad(i);
 
@@ -145,7 +145,7 @@ void txtLoad(uint32_t textId)
         if (!txt->txt_Handle)
         {
             char txtPath[DSK_PATHNAMELENGTH];
-            ubyte *mem;
+            ubyte *mem = NULL;
 
             dskBuildPathName(TEXT_DIRECTORY, NODE_NAME(txt), txtPath);
             strcat(txtPath, txtLanguageMark[txtBase->tc_Language]);
@@ -153,7 +153,7 @@ void txtLoad(uint32_t textId)
 
             txt->txt_Size = dskFileLength(txtPath);
 
-            if (txt->txt_Handle = MemAlloc(txt->txt_Size))
+            if ((txt->txt_Handle = MemAlloc(txt->txt_Size)))
             {
                 dskLoad(txtPath, txt->txt_Handle);  // loading text into buffer
 
@@ -216,7 +216,7 @@ void txtReset(uint32_t textId)
 // public functions - KEY
 char *txtGetKey(uword keyNr, char *key)
 {
-    uword i;
+    uword i = 0;
 
     if (key)
     {
@@ -269,10 +269,10 @@ static LIST *txtGoKeyN(uint32_t textId, char *key)
 {
     LIST *txtList = NULL;
     char *LastMark = NULL;
-    struct Text *txt;
-    ubyte found, i;
+    struct Text *txt = NULL;
+    ubyte found = 0, i = 0;
     char mark[TXT_KEY_LENGTH];
-    char *line;
+    char *line = NULL;
 
     txt = (struct Text *)GetNthNode(txtBase->tc_Texts, textId);
     if (txt)
@@ -309,7 +309,7 @@ static LIST *txtGoKeyN(uint32_t textId, char *key)
                 {
                     i = 1;
                     txtList = (LIST *)CreateList(0);
-                    while (line = txtGetLine(txt, i++))
+                    while ((line = txtGetLine(txt, i++)))
                     {
                         CreateNode(txtList, 0, line);
                     }
@@ -332,10 +332,10 @@ LIST *txtGoKey(uint32_t textId, char *key)
 {
     LIST *txtList = NULL;
     char *LastMark = NULL;
-    struct Text *txt;
-    ubyte found, i;
+    struct Text *txt = NULL;
+    ubyte found = 0, i = 0;
     char mark[TXT_KEY_LENGTH];
-    char *line;
+    char *line = NULL;
 
     txt = (struct Text *)GetNthNode(txtBase->tc_Texts, textId);
     if (txt)
@@ -383,7 +383,7 @@ LIST *txtGoKey(uint32_t textId, char *key)
 
                     txtList = (LIST *)CreateList(0);
 
-                    while (line = txtGetLine(txt, i++))
+                    while ((line = txtGetLine(txt, i++)))
                     {
                         CreateNode(txtList, 0, line);
                     }
@@ -408,7 +408,7 @@ LIST *txtGoKeyAndInsert(uint32_t textId, char *key, ...)
 {
     va_list argument;
     LIST *txtList = (LIST *)CreateList(0L), *originList = NULL;
-    NODE *node;
+    NODE *node = NULL;
 
     va_start(argument, key);
 
@@ -416,7 +416,7 @@ LIST *txtGoKeyAndInsert(uint32_t textId, char *key, ...)
 
     for (node = LIST_HEAD(originList); NODE_SUCC(node); node = NODE_SUCC(node))
     {
-        ubyte i;
+        ubyte i = 0;
         char originLine[256], txtLine[256];
 
         strcpy(originLine, NODE_NAME(node));
@@ -470,7 +470,7 @@ ubyte txtKeyExists(uint32_t textId, char *key)
 
 uint32_t txtCountKey(char *key)
 {
-    uint32_t i = strlen(key), j, k;
+    uint32_t i = strlen(key), j = 0, k = 0;
     for (j = 0, k = 0; j < i; j++)
     {
         if (key[j] == TXT_CHAR_KEY_SEPERATOR) k++;
@@ -482,8 +482,8 @@ uint32_t txtCountKey(char *key)
 char *txtGetNthString(uint32_t textId, char *key, uint32_t nth, char *dest)
 {
     LIST *txtList = txtGoKey(textId, key);
-    char *src;
-    if (src = (char *)GetNthNode(txtList, nth))
+    char *src = NULL;
+    if ((src = (char *)GetNthNode(txtList, nth)))
         strcpy(dest, NODE_NAME(src));
     else
         dest[0] = '\0';
@@ -493,7 +493,7 @@ char *txtGetNthString(uint32_t textId, char *key, uint32_t nth, char *dest)
 
 void txtPutCharacter(LIST *list, uword pos, ubyte c)
 {
-    NODE *node;
+    NODE *node = NULL;
     for (node = LIST_HEAD(list); NODE_SUCC(node); node = NODE_SUCC(node))
     {
         NODE_NAME(node)[pos] = c;
@@ -522,7 +522,7 @@ char *txtGetTemporary(void)
 {
     static ubyte i = 0;
     static char s[16][TXT_KEY_LENGTH];
-    char *r;
+    char *r = NULL;
     r = &s[i][0];
     i = (i + 1) & 15;
     memset(r, 0, TXT_KEY_LENGTH);

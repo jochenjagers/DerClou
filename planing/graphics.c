@@ -44,7 +44,7 @@ void plDisplayTimer(uint32_t time, ubyte doSpotsImmediatly)
 
     if (GamePlayMode & GP_GUARD_DESIGN)
     {
-        sprintf(info, "x:%d, y:%d   %s %0.2ld:%0.2ld:%0.2ld %s", livGetXPos(Planing_Name[CurrentPerson]),
+        sprintf(info, "x:%d, y:%d   %s %02u:%02u:%02u %s", livGetXPos(Planing_Name[CurrentPerson]),
                 livGetYPos(Planing_Name[CurrentPerson]), txtTimer, (uint32_t)(time / 3600),
                 (uint32_t)((time / 60) % 60), (uint32_t)(time % 60), txtSeconds);
 
@@ -57,7 +57,7 @@ void plDisplayTimer(uint32_t time, ubyte doSpotsImmediatly)
     }
     else
     {
-        sprintf(info, "%s %0.2ld:%0.2ld:%0.2ld %s", txtTimer, (uint32_t)(time / 3600), (uint32_t)((time / 60) % 60),
+        sprintf(info, "%s %02u:%02u:%02u %s", txtTimer, (uint32_t)(time / 3600), (uint32_t)((time / 60) % 60),
                 (uint32_t)(time % 60), txtSeconds);
 
         gfxSetPens(m_wrp, 0, 0, 0);
@@ -92,7 +92,7 @@ void plDisplayInfo(void)
 ubyte plSay(char *msg, uint32_t persId)
 {
     LIST *l = txtGoKey(PLAN_TXT, msg);
-    ubyte choice;
+    ubyte choice = 0;
 
     SetPictID(((Person)dbGetObject(OL_NR(GetNthNode(PersonsList, persId))))->PictID);
 
@@ -116,7 +116,7 @@ void plDrawWait(uint32_t sec)
 {
     char time[10];
 
-    sprintf(time, "%0.2ld:%0.2ld", (uint32_t)(sec / 60), (uint32_t)(sec % 60));
+    sprintf(time, "%02u:%02u", (uint32_t)(sec / 60), (uint32_t)(sec % 60));
 
     gfxSetDrMd(m_wrp, GFX_JAM_2);
     gfxSetPens(m_wrp, 248, GFX_SAME_PEN, GFX_SAME_PEN);

@@ -7,8 +7,11 @@
 #include "gameplay/gp_app.h"
 
 // 2018-09-26 LucyG: in-game time was too fast
-#define GP_TICKS_PER_MINUTE 10
-#define GP_TICKS_PER_DAY 30
+enum
+{
+    GP_TICKS_PER_MINUTE = 10,
+    GP_TICKS_PER_DAY = 30
+};
 
 void tcAsTimeGoesBy(uint32_t untilMinute)
 {
@@ -26,7 +29,7 @@ void tcAsTimeGoesBy(uint32_t untilMinute)
 
 void tcAsDaysGoBy(uint32_t day, uint32_t stepSize)
 {
-    uint32_t add;
+    uint32_t add = 0;
 
     while (GetDay < day)
     {
@@ -56,8 +59,8 @@ void tcTheAlmighty(uint32_t time) { tcMovePersons(2, time); }
 
 void tcMovePersons(uint32_t personCount, uint32_t time)
 {
-    uint32_t i, count;
-    uint32_t persID, locID;
+    uint32_t i = 0, count = 0;
+    uint32_t persID = 0, locID = 0;
 
     for (i = 0; i < personCount; i++)
     {
@@ -89,13 +92,13 @@ void tcMovePersons(uint32_t personCount, uint32_t time)
 
 void tcMoveAPerson(uint32_t persID, uint32_t newLocID)
 {
-    uint32_t oldLocID;
+    uint32_t oldLocID = 0;
 
     hasAll(persID, 0, Object_Location); /* wo is er denn ? */
 
     if (!(LIST_EMPTY(ObjectList)))
     {
-        NODE *n;
+        NODE *n = NULL;
 
         for (n = (NODE *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
         {
@@ -113,8 +116,8 @@ void tcMoveAPerson(uint32_t persID, uint32_t newLocID)
 uint32_t tcBurglary(uint32_t buildingID)
 /* wird von 2 Stellen aufgerufen! (story_9)! */
 {
-    uint32_t succNr;
-    int32_t ret;
+    uint32_t succNr = 0;
+    int32_t ret = 0;
     Building b = (Building)dbGetObject(buildingID);
 
     if (buildingID == Building_Seniorenheim)
@@ -173,7 +176,7 @@ uint32_t tcBurglary(uint32_t buildingID)
 void tcRefreshLocationInTitle(uint32_t locNr)
 {
     char date[TXT_KEY_LENGTH], line[TXT_KEY_LENGTH];
-    NODE *node;
+    NODE *node = NULL;
 
     gfxSetPens(m_wrp, 3, GFX_SAME_PEN, GFX_SAME_PEN);
 
@@ -187,9 +190,9 @@ void tcRefreshLocationInTitle(uint32_t locNr)
 
 void StdInit(void)
 {
-    struct Scene *sc;
+    struct Scene *sc = NULL;
     ubyte sameLocation = 0;
-    NODE *node;
+    NODE *node = NULL;
 
     sc = GetCurrentScene();
 
@@ -292,7 +295,7 @@ void tcPlaySound()
 void tcPlayStreetSound()
 {
     static ubyte counter = 0;
-    ubyte noStreetMusic;
+    ubyte noStreetMusic = 0;
 
     if (!(GamePlayMode & GP_MUSIC_OFF))
     {
@@ -374,17 +377,17 @@ void ShowTime(uint32_t delay)
 
 uint32_t StdHandle(uint32_t choice)
 {
-    uint32_t succ_eventnr = 0L, locNr, objNr;
-    struct Scene *scene;
+    uint32_t succ_eventnr = 0L, locNr = 0, objNr = 0;
+    struct Scene *scene = NULL;
     char line[TXT_KEY_LENGTH];
-    Location loc;
+    Location loc = NULL;
 
     scene = GetCurrentScene();
 
     switch (choice)
     {
         case GO:
-            if (succ_eventnr = Go(scene->std_succ))
+            if ((succ_eventnr = Go(scene->std_succ)))
             {
                 locNr = GetScene(succ_eventnr)->LocationNr;
 
@@ -465,12 +468,12 @@ uint32_t StdHandle(uint32_t choice)
                     }
                     else
                     {
-                        uint32_t building;
+                        uint32_t building = 0;
                         gfxChangeColors(l_wrp, 0, GFX_FADE_OUT, 0);
 
                         if (GamePlayMode & GP_NO_MUSIC_IN_PLANING) sndStopSound(0);
 
-                        if (building = tcOrganisation())
+                        if ((building = tcOrganisation()))
                         {
                             AddVTime(27153); /* etwas über 15 Tage ! */
                             succ_eventnr = tcBurglary(building);
@@ -507,7 +510,7 @@ uint32_t StdHandle(uint32_t choice)
 
 void StdDone(void)
 {
-    uint32_t choice;
+    uint32_t choice = 0;
     ubyte activ = 0;
     LIST *menu = txtGoKey(MENU_TXT, "Mainmenu");
 
@@ -780,7 +783,7 @@ ubyte tcPersonIsHere(void)
 void tcPersonGreetsMatt(void)
 {
     static uint32_t upper = 4L;
-    uint32_t locNr;
+    uint32_t locNr = 0;
 
     if (CalcRandomNr(0L, upper) == 1) /* alle upper mal wird Matt gegrüßt ! */
     {
@@ -811,7 +814,7 @@ void tcPersonGreetsMatt(void)
 
 void tcGetLastName(char *Name, char *dest, uint32_t maxLength)
 {
-    int32_t i;
+    int32_t i = 0;
     char lastName[TXT_KEY_LENGTH];
 
     for (i = 0; i < strlen(Name); i++)
@@ -826,7 +829,7 @@ void tcGetLastName(char *Name, char *dest, uint32_t maxLength)
 
 void tcCutName(char *Name, char Sign, uint32_t maxLength)
 {
-    int32_t i, j;
+    int32_t i = 0, j = 0;
     char Source[TXT_KEY_LENGTH];
 
     strcpy(Source, Name);

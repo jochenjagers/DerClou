@@ -30,9 +30,9 @@ struct MXR_Mixer
 
 static void MXR__ConvertU8ToS16(unsigned char *pBuffer, uint32_t nValues)
 {
-    int32_t i;
-    short *pDest;
-    int32_t s;
+    int32_t i = 0;
+    short *pDest = NULL;
+    int32_t s = 0;
 
     pDest = (short *)pBuffer;
     for (i = (int32_t)nValues - 1; i >= 0; --i)
@@ -48,9 +48,9 @@ static void MXR__ConvertU8ToS16(unsigned char *pBuffer, uint32_t nValues)
 
 static void MXR__ConvertS16ToU8(short *pBuffer, uint32_t nValues)
 {
-    uint32_t i;
-    unsigned char *pDest;
-    int32_t s;
+    uint32_t i = 0;
+    unsigned char *pDest = NULL;
+    int32_t s = 0;
 
     pDest = (unsigned char *)pBuffer;
     for (i = 0; i < nValues; i++)
@@ -67,10 +67,10 @@ static void MXR__ConvertS16ToU8(short *pBuffer, uint32_t nValues)
 static void MXR__ResampleAndMixS16MonoToMono(MXR_Mixer *pMixer, short *pStream, uint32_t nStreamSamples,
                                              MXR_Input *pInput, uint32_t nInputSamples)
 {
-    int32_t s, s2;
-    int32_t rem;
-    uint32_t i, ixSamples, j, j2;
-    short *pBuffer;
+    int32_t s = 0, s2 = 0;
+    int32_t rem = 0;
+    uint32_t i = 0, ixSamples = 0, j = 0, j2 = 0;
+    short *pBuffer = NULL;
 
     pBuffer = (short *)pMixer->buffer;
 
@@ -111,10 +111,10 @@ static void MXR__ResampleAndMixS16MonoToMono(MXR_Mixer *pMixer, short *pStream, 
 static void MXR__ResampleAndMixS16MonoToStereo(MXR_Mixer *pMixer, short *pStream, uint32_t nStreamSamples,
                                                MXR_Input *pInput, uint32_t nInputSamples)
 {
-    int32_t s, s2;
-    int32_t rem;
-    uint32_t i, i2, ixSamples, j, j2;
-    short *pBuffer;
+    int32_t s = 0, s2 = 0;
+    int32_t rem = 0;
+    uint32_t i = 0, i2 = 0, ixSamples = 0, j = 0, j2 = 0;
+    short *pBuffer = NULL;
 
     pBuffer = (short *)pMixer->buffer;
 
@@ -163,10 +163,10 @@ static void MXR__ResampleAndMixS16MonoToStereo(MXR_Mixer *pMixer, short *pStream
 static void MXR__ResampleAndMixS16StereoToMono(MXR_Mixer *pMixer, short *pStream, uint32_t nStreamSamples,
                                                MXR_Input *pInput, uint32_t nInputSamples)
 {
-    int32_t s, s2, l, r;
-    int32_t rem;
-    uint32_t i, i2, ixSamples, j, j2, jx, j2x;
-    short *pBuffer;
+    int32_t s = 0, s2 = 0, l = 0, r = 0;
+    int32_t rem = 0;
+    uint32_t i = 0, i2 = 0, ixSamples = 0, j = 0, j2 = 0, jx = 0, j2x = 0;
+    short *pBuffer = NULL;
 
     pBuffer = (short *)pMixer->buffer;
 
@@ -218,10 +218,10 @@ static void MXR__ResampleAndMixS16StereoToMono(MXR_Mixer *pMixer, short *pStream
 static void MXR__ResampleAndMixS16StereoToStereo(MXR_Mixer *pMixer, short *pStream, uint32_t nStreamSamples,
                                                  MXR_Input *pInput, uint32_t nInputSamples)
 {
-    int32_t s, s2;
-    int32_t rem;
-    uint32_t i, i2, ixSamples, j, j2, jx, j2x;
-    short *pBuffer;
+    int32_t s = 0, s2 = 0;
+    int32_t rem = 0;
+    uint32_t i = 0, i2 = 0, ixSamples = 0, j = 0, j2 = 0, jx = 0, j2x = 0;
+    short *pBuffer = NULL;
 
     pBuffer = (short *)pMixer->buffer;
 
@@ -310,9 +310,9 @@ typedef void (*SDL_AudioCallbackFunc)(void *, unsigned char *, int);
 
 static void MXR_ProcessMixer(MXR_Mixer *pMixer, unsigned char *pStream, int nStreamSize)
 {
-    int i;
-    MXR_Input *pInput;
-    uint32_t nStreamSamples, nInputSamples;
+    int i = 0;
+    MXR_Input *pInput = NULL;
+    uint32_t nStreamSamples = 0, nInputSamples = 0;
 
     nStreamSamples = nStreamSize / pMixer->fmt.nSampleSize; /* should(!) be MXR_BUFFER_SAMPLES */
 
@@ -425,9 +425,9 @@ static void MXR_ProcessMixer(MXR_Mixer *pMixer, unsigned char *pStream, int nStr
 
 MXR_Mixer *MXR_CreateMixer(const MXR_Format *pFormat)
 {
-    MXR_Mixer *pMixer;
+    MXR_Mixer *pMixer = NULL;
     SDL_AudioSpec spec;
-    int i;
+    int i = 0;
 
     pMixer = (MXR_Mixer *)MXR_MemAlloc(sizeof(MXR_Mixer));
     if (!pMixer)
@@ -485,7 +485,7 @@ MXR_Mixer *MXR_CreateMixer(const MXR_Format *pFormat)
 
 void MXR_DestroyMixer(MXR_Mixer *pMixer)
 {
-    int i;
+    int i = 0;
 
     SDL_CloseAudio();
 
@@ -515,7 +515,7 @@ void MXR_DestroyMixer(MXR_Mixer *pMixer)
 
 void MXR_SetInput(MXR_Mixer *pMixer, int32_t nInput, MXR_Input *pInput)
 {
-    MXR_Input *pOldInput;
+    MXR_Input *pOldInput = NULL;
 
     SDL_LockAudio();
 
@@ -534,7 +534,7 @@ void MXR_SetInput(MXR_Mixer *pMixer, int32_t nInput, MXR_Input *pInput)
 
 unsigned char MXR_SetOutputVolume(MXR_Mixer *pMixer, unsigned char nVolume)
 {
-    unsigned char nOldVolume;
+    unsigned char nOldVolume = 0;
 
     SDL_LockAudio();
 

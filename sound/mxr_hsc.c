@@ -194,7 +194,7 @@ static void hsc_set_voice(HSC_File *pHSC, int channel, voice_type vt)
 
 static void hsc_process_row(HSC_File *pHSC)
 {
-    int i, channel, cur_pattern, note, effect;
+    int i = 0, channel = 0, cur_pattern = 0, note = 0, effect = 0;
 
     int pat_break = FALSE;  // bool
 
@@ -432,10 +432,10 @@ static void hscReset(HSC_File *pHSC)
 
 static int32_t HSCOpen(HSC_File *pHSC, const char *pszFileName)
 {
-    int i, line, channel, num_pattern;
-    int32_t hsc_size;
-    ubyte *hsc_data, *hsc_file;
-    FILE *pFile;
+    int i = 0, line = 0, channel = 0, num_pattern = 0;
+    int32_t hsc_size = 0;
+    ubyte *hsc_data = NULL, *hsc_file = NULL;
+    FILE *pFile = NULL;
 
     hscReset(pHSC);
 
@@ -544,8 +544,8 @@ typedef struct
 
 static uint32_t MXR_ProcessInputHSC(MXR_InputHSC *pInput, void *pStream, uint32_t nNumSamples)
 {
-    short *out;
-    int32_t nSamples, nWrite, i;
+    short *out = NULL;
+    int32_t nSamples = 0, nWrite = 0, i = 0;
     out = (short *)pStream;
     nSamples = nNumSamples;
     while (nSamples > 0)
@@ -582,7 +582,7 @@ static void MXR_DestroyInputHSC(MXR_InputHSC *pInput) { MXR_MemFree(pInput, size
 
 MXR_Input *MXR_CreateInputHSC(const char *pszFileName)
 {
-    MXR_InputHSC *pInput;
+    MXR_InputHSC *pInput = NULL;
     pInput = (MXR_InputHSC *)MXR_MemAlloc(sizeof(MXR_InputHSC));
     if (!pInput)
     {

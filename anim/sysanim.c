@@ -6,25 +6,34 @@
 */
 #include "anim/sysanim.h"
 
-#define PIC_MODE_POS 1
-#define PIC_P_SEC_POS 2
-#define PIC_1_ID_POS 3
-#define ANIM_COLL_ID_POS 4
-#define PIC_COUNT_POS 5
-#define PHASE_WIDTH_POS 6
-#define PHASE_HEIGHT_POS 7
-#define PHASE_OFFSET_POS 8
-#define X_DEST_OFFSET_POS 9
-#define Y_DEST_OFFSET_POS 10
-#define PLAY_MODE_POS 11
+enum
+{
+    PIC_MODE_POS = 1,
+    PIC_P_SEC_POS = 2,
+    PIC_1_ID_POS = 3,
+    ANIM_COLL_ID_POS = 4,
+    PIC_COUNT_POS = 5,
+    PHASE_WIDTH_POS = 6,
+    PHASE_HEIGHT_POS = 7,
+    PHASE_OFFSET_POS = 8,
+    X_DEST_OFFSET_POS = 9,
+    Y_DEST_OFFSET_POS = 10,
+    PLAY_MODE_POS = 11
+};
 
 /* Defines für Playmode */
-#define PM_NORMAL 1
-#define PM_PING_PONG 2
-#define PM_SYNCHRON 4
+enum
+{
+    PM_NORMAL = 1,
+    PM_PING_PONG = 2,
+    PM_SYNCHRON = 4
+};
 
 /* Defines für AnimPic Aufbau */
-#define Y_OFFSET 0 /* 1 Pixel zwischen 2 Reihen */
+enum
+{
+    Y_OFFSET = 0 /* 1 Pixel zwischen 2 Reihen */
+};
 
 struct AnimHandler
 {
@@ -65,7 +74,10 @@ static char RunningAnimLine[TXT_KEY_LENGTH];
 #define ANIM_FRAME_XMS_RP AnimRPInXMS
 #define ANIM_FRAME_RP PrepareRP
 
-#define ANIM_STATE_SUSPENDED 1 << 0
+enum
+{
+    ANIM_STATE_SUSPENDED = (1 << 0)
+};
 
 void LoadAnim(char *AnimID);
 
@@ -79,7 +91,7 @@ static void PrepareAnim(char *AnimID);
 void InitAnimHandler(void)
 {
     Handler.RunningAnimID = (ubyte *)RunningAnimLine;
-    strcpy((char *)Handler.RunningAnimID, "");
+    strncpy((char *)Handler.RunningAnimID, "", sizeof(RunningAnimLine));
 }
 
 void CloseAnimHandler(void) { StopAnim(); }
@@ -97,7 +109,7 @@ void ContinueAnim(void) { Handler.AnimatorState &= (0xff - ANIM_STATE_SUSPENDED)
 static void PrepareAnim(char *AnimID)
 {
     char pict_list[TXT_KEY_LENGTH] = {0};
-    struct Collection *coll;
+    struct Collection *coll = NULL;
 
     GetAnim(AnimID, pict_list);
 
@@ -136,7 +148,7 @@ static void PrepareAnim(char *AnimID)
 void PlayAnim(char *AnimID, word how_often, uint32_t mode)
 {
     char pict_list[TXT_KEY_LENGTH] = {0};
-    uword pict_id = 0, rate;
+    uword pict_id = 0, rate = 0;
 
     GetAnim(AnimID, pict_list);
 
@@ -193,7 +205,7 @@ void PlayAnim(char *AnimID, word how_often, uint32_t mode)
 void StopAnim(void)
 {
     char pict_list[TXT_KEY_LENGTH] = {0};
-    struct Picture *pict;
+    struct Picture *pict = NULL;
 
     if (Handler.RunningAnimID) /* es laeuft eine Anim */
     {
@@ -210,8 +222,7 @@ void StopAnim(void)
             }
             else
             {
-                Log("%s|%s: gfxGetPicture(PIC_1_ID_POS, %s) = NULL", __FILE__, __func__,
-                    pict_list ? pict_list : "NULL");
+                Log("%s|%s: gfxGetPicture(PIC_1_ID_POS, %s) = NULL", __FILE__, __func__, pict_list);
             }
 
             /* der Vollstaendigkeit wegen die Bilder "unpreparen" */
@@ -232,7 +243,7 @@ void StopAnim(void)
 
 static void GetAnim(char *AnimID, char *Dest)
 {
-    int32_t i;
+    int32_t i = 0;
     char ID[TXT_KEY_LENGTH] = {0};
 
     strcpy(ID, (char *)AnimID);
@@ -251,7 +262,7 @@ void animator(void)
 {
     int32_t destX = Handler.destX;
     int32_t destY = Handler.destY;
-    uword sourceX, sourceY;
+    uword sourceX = 0, sourceY = 0;
 
     if (!(Handler.AnimatorState & ANIM_STATE_SUSPENDED))
     {

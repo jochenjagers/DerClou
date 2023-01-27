@@ -20,7 +20,7 @@ void *CreateList(uword size)
 
     if (size >= sizeof(LIST))
     {
-        if (list = (LIST *)MemAlloc(size))
+        if ((list = (LIST *)MemAlloc(size)))
         {
             LIST_HEAD(list) = (NODE *)&LIST_TAIL(list);
             LIST_TAIL(list) = NULL;
@@ -102,7 +102,7 @@ void *CreateNode(void *list, uword size, char *name)
 
     if (size >= sizeof(NODE))
     {
-        if (node = (NODE *)MemAlloc(size + len))
+        if ((node = (NODE *)MemAlloc(size + len)))
         {
             NODE_SUCC(node) = NULL;
             NODE_PRED(node) = NULL;
@@ -129,11 +129,11 @@ void *CreateNode(void *list, uword size, char *name)
 
 void RemoveNode(void *list, char *name)
 {
-    NODE *node;
+    NODE *node = NULL;
 
     if (name)
     {
-        if (node = (NODE *)GetNode(list, name))
+        if ((node = (NODE *)GetNode(list, name)))
         {
             RemNode(node);
             FreeNode(node);
@@ -143,14 +143,14 @@ void RemoveNode(void *list, char *name)
     {
         if (!LIST_EMPTY(list))
         {
-            while (node = (NODE *)RemTailNode(list)) FreeNode(node);
+            while ((node = (NODE *)RemTailNode(list))) FreeNode(node);
         }
     }
 }
 
 void FreeNode(void *node)
 {
-    uword size;
+    uword size = 0;
     size = NODE_SIZE(node);
 
     if (NODE_NAME(node)) size += strlen(NODE_NAME(node)) + 1;
@@ -160,7 +160,7 @@ void FreeNode(void *node)
 
 void *GetNode(void *list, char *name)
 {
-    NODE *node;
+    NODE *node = NULL;
 
     for (node = LIST_HEAD(list); NODE_SUCC(node); node = NODE_SUCC(node))
     {
@@ -174,7 +174,7 @@ void *GetNode(void *list, char *name)
 
 void *GetNthNode(void *list, uint32_t n)
 {
-    NODE *node;
+    NODE *node = NULL;
     uint32_t i = 0;
 
     for (node = LIST_HEAD(list); NODE_SUCC(node); node = NODE_SUCC(node))
@@ -198,8 +198,8 @@ uint32_t GetNrOfNodes(void *list)
 
 uint32_t GetNodeNrByAddr(void *list, void *node)
 {
-    NODE *s;
-    uint32_t i;
+    NODE *s = NULL;
+    uint32_t i = 0;
 
     for (s = LIST_HEAD(list), i = 0; NODE_SUCC(s) && (s != node); s = NODE_SUCC(s), i++)
         ;
@@ -211,7 +211,7 @@ uint32_t GetNodeNr(void *list, char *name) { return GetNodeNrByAddr(list, GetNod
 
 void foreach (void *list, void (*processNode)(void *))
 {
-    NODE *node;
+    NODE *node = NULL;
 
     for (node = LIST_HEAD(list); NODE_SUCC(node); node = NODE_SUCC(node)) processNode(node);
 }
@@ -235,9 +235,9 @@ void *UnLink(void *list, char *name, void **predNode) { return UnLinkByAddr(list
 
 void ReplaceNodeByAddr(void *list, void *node, void *newNode)
 {
-    void *predNode;
+    void *predNode = NULL;
 
-    if (node = UnLinkByAddr(list, node, &predNode))
+    if ((node = UnLinkByAddr(list, node, &predNode)))
     {
         Link(list, newNode, predNode);
         FreeNode(node);
@@ -248,11 +248,11 @@ void ReplaceNode(void *list, char *name, void *newNode) { ReplaceNodeByAddr(list
 
 uint32_t ReadList(void *list, uword size, char *fileName, uword diskId)
 {
-    FILE *fh;
+    FILE *fh = NULL;
     uint32_t i = 0;
     char buffer[256];
 
-    if (fh = dskOpen(fileName, "r", diskId))
+    if ((fh = dskOpen(fileName, "r", diskId)))
     {
         while (dskGets(buffer, 255, fh))
         {
@@ -281,7 +281,7 @@ void WriteList(void *list, char *fileName, uword diskId)
     FILE *fh = NULL;
     NODE *node = NULL;
 
-    if (fh = dskOpen(fileName, "w", diskId))
+    if ((fh = dskOpen(fileName, "w", diskId)))
     {
         for (node = LIST_HEAD(list); NODE_SUCC(node); node = NODE_SUCC(node)) fprintf(fh, "%s\n", NODE_NAME(node));
 

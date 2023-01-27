@@ -9,13 +9,22 @@
 static int32_t tcGetWeightOfNerves(int32_t teamMood);
 static int32_t tcIsConnectedWithEnabledAlarm(uint32_t lsoId);
 
-#define tcESCAPE_MOOD 30 /* ab hier flüchtet einer ! */
-#define tcWALK_LOUDNESS 20
-#define tcPATROL_ALARM 5 /* ab 5 % veränderte Objekte schlägt Patrolie Alarm */
+enum
+{
+    tcESCAPE_MOOD = 30, /* ab hier flüchtet einer ! */
+    tcWALK_LOUDNESS = 20,
+    tcPATROL_ALARM = 5 /* ab 5 % veränderte Objekte schlägt Patrolie Alarm */
+};
 
-#define tcPIXEL_PER_SECCOND 4
+enum
+{
+    tcPIXEL_PER_SECCOND = 4
+};
 
-#define tcX_HOTSPOT 8
+enum
+{
+    tcX_HOTSPOT = 8
+};
 
 ubyte TeamMood = 127;
 
@@ -51,9 +60,9 @@ void tcCalcCallValue(uint32_t callNr, uint32_t timer, uint32_t persId)
 {
     int32_t callCount = Search.CallCount;
     int32_t callWeight = ChangeAbs(255, callCount * (-30), 0, 255);
-    int32_t perfect = tcIsPlanPerfect(timer), situation;
-    int32_t good = -15, nerves;
-    Person guy;
+    int32_t perfect = tcIsPlanPerfect(timer), situation = 0;
+    int32_t good = -15, nerves = 0;
+    Person guy = NULL;
 
     if (persId)
     {
@@ -96,7 +105,7 @@ void tcCalcCallValue(uint32_t callNr, uint32_t timer, uint32_t persId)
 /* vernachlässigt Stockwerke und Personen */
 int32_t tcCalcEscapeTime()
 {
-    int32_t time = 0, i;
+    int32_t time = 0, i = 0;
     Building build = (Building)dbGetObject(Search.BuildingId);
 
     for (i = 0; i < 4; i++)
@@ -161,7 +170,7 @@ int32_t tcGuyCanEscape(Person p)
 
 int32_t tcGuyTellsAll(Person p)
 {
-    int32_t v;
+    int32_t v = 0;
 
     v = (512 - p->Loyality - p->Known) / 2;
 
@@ -181,9 +190,9 @@ int32_t tcGetCarTraderOffer(Car car)
 
 uint32_t GetObjNrOfLocation(uint32_t LocNr)
 {
-    struct dbObject *obj;
-    Location loc;
-    short objHashValue;
+    struct dbObject *obj = NULL;
+    Location loc = NULL;
+    short objHashValue = 0;
 
     for (objHashValue = 0; objHashValue < OBJ_HASH_SIZE; objHashValue++)
     {
@@ -204,9 +213,9 @@ uint32_t GetObjNrOfLocation(uint32_t LocNr)
 
 uint32_t GetObjNrOfBuilding(uint32_t LocNr)
 {
-    struct dbObject *obj;
-    Building bui;
-    short objHashValue;
+    struct dbObject *obj = NULL;
+    Building bui = NULL;
+    short objHashValue = 0;
 
     for (objHashValue = 0; objHashValue < OBJ_HASH_SIZE; objHashValue++)
     {
@@ -229,8 +238,8 @@ uint32_t tcGetPersOffer(Person person, ubyte persCount)
 {
     uint32_t persCapability = 1, mattCapability = 1;
     uint32_t persID = dbGetObjectNr(person);
-    uint32_t assesment, offer, i;
-    Person Pers;
+    uint32_t assesment = 0, offer = 0, i = 0;
+    Person Pers = NULL;
 
     Pers = (Person)dbGetObject(persID);
 
@@ -268,9 +277,9 @@ uint32_t tcGetPersOffer(Person person, ubyte persCount)
 
 void tcPersonLearns(uint32_t pId)
 {
-    struct ObjectNode *n;
+    struct ObjectNode *n = NULL;
     Person pers = (Person)dbGetObject(pId);
-    int32_t ability, count, growth;
+    int32_t ability = 0, count = 0, growth = 0;
 
     /* Abilites */
     hasAll(pId, OLF_NORMAL, Object_Ability);
@@ -310,7 +319,7 @@ void tcPersonLearns(uint32_t pId)
 
 uint32_t tcGetBuildValues(Building bui)
 {
-    uint32_t v, x;
+    uint32_t v = 0, x = 0;
 
     x = (255 - bui->Exactlyness) / 3;
 
@@ -327,7 +336,7 @@ uint32_t tcGetBuildValues(Building bui)
 
 int32_t tcGetTeamMood(uint32_t *guyId, uint32_t timer) /* ptr auf 4 uint32_ts */
 {
-    int32_t team = 0, mood = 0, i;
+    int32_t team = 0, mood = 0, i = 0;
 
     /* Summe aus Einzelstimmungen */
     for (i = 0; (i < 4) && (guyId[i]); i++)
@@ -411,7 +420,7 @@ static int32_t tcIsPlanPerfect(uint32_t timer)
 int32_t tcGetTrail(Person p, ubyte which)
 {
     int32_t nerves = tcGetWeightOfNerves(TeamMood) / 7;
-    int32_t trail;
+    int32_t trail = 0;
 
     switch (which)
     {
@@ -506,7 +515,7 @@ uint32_t tcGuyUsesTool(uint32_t persId, Building b, uint32_t toolId, uint32_t it
  * diese Funktion darf keine Zufälligkeit enthalten -> Sync!!
  */
 {
-    uint32_t origin, time;
+    uint32_t origin = 0, time = 0;
     Person p = (Person)dbGetObject(persId);
 
     origin = time = breakGet(itemId, toolId);
@@ -651,7 +660,7 @@ int32_t tcGetWalkLoudness(void)
 
 int32_t tcGetTotalLoudness(int32_t loudp0, int32_t loudp1, int32_t loudp2, int32_t loudp3)
 {
-    int32_t total;
+    int32_t total = 0;
 
     total = max(loudp0, loudp1);
     total = max(total, loudp2);
@@ -780,7 +789,7 @@ int32_t tcAlarmByMicro(uword us_XPos, uword us_YPos, int32_t loudness)
 int32_t tcWatchDogWarning(uint32_t persId)
 {
     int32_t watch = hasGet(persId, Ability_Aufpassen);
-    int32_t random;
+    int32_t random = 0;
 
     random = CalcRandomNr(0, 200) + /* Joe soll nicht gleich in der ersten */
              CalcRandomNr(0, 200) + /* Sekunde etwas bemerken!             */
@@ -812,7 +821,7 @@ int32_t tcWrongWatchDogWarning(uint32_t persId)
 int32_t tcIsCarRecognised(Car car, int32_t time)
 {
     int32_t strike = tcGetCarStrike(car);
-    int32_t weight;
+    int32_t weight = 0;
 
     /* Zeit spielt eine Rolle ! */
     /* nach einer Viertelstunde mit Alarm, ist Strike == 255 */
@@ -829,7 +838,7 @@ int32_t tcIsCarRecognised(Car car, int32_t time)
 static int32_t tcGetGuyState(uint32_t persId)
 {
     Person p = (Person)dbGetObject(persId);
-    int32_t state;
+    int32_t state = 0;
 
     state = tcGetPersHealth(p);
     state = CalcValue(state, 0, 255, p->Stamina, 50);
@@ -840,8 +849,8 @@ static int32_t tcGetGuyState(uint32_t persId)
 
 int32_t tcCalcMattsPart(void)
 {
-    LIST *guys;
-    NODE *node;
+    LIST *guys = NULL;
+    NODE *node = NULL;
     int32_t count = 0, part = 0;
 
     joined_byAll(Person_Matt_Stuvysunt, OLF_INCLUDE_NAME | OLF_PRIVATE_LIST, Object_Person);
@@ -876,7 +885,7 @@ void tcRefreshTimeClock(uint32_t buildId, uint32_t timerId)
 
 int32_t tcCheckTimeClocks(uint32_t buildId)
 {
-    NODE *n;
+    NODE *n = NULL;
     int32_t alarm = 0;
 
     /* alle Stechuhren holen */
@@ -903,9 +912,9 @@ int32_t tcCheckTimeClocks(uint32_t buildId)
 
 static int32_t tcInsideSameRoom(LIST *roomsList, word polX, word polY, word livX, word livY)
 {
-    NODE *node;
+    NODE *node = NULL;
     int32_t detected = 0;
-    LSRoom room;
+    LSRoom room = NULL;
 
     for (node = (NODE *)LIST_HEAD(roomsList); NODE_SUCC(node) && detected == 0; node = (NODE *)NODE_SUCC(node))
     {
@@ -964,8 +973,8 @@ int32_t tcAlarmByTouch(uint32_t lsoId)
 
 int32_t tcAlarmByPowerLoss(uint32_t powerId)
 {
-    LIST *friendlyList;
-    NODE *n;
+    LIST *friendlyList = NULL;
+    NODE *n = NULL;
 
     /* alle Objekte, mit denen diese Stromversorgung verbunden ist */
 
@@ -993,7 +1002,7 @@ int32_t tcAlarmByPowerLoss(uint32_t powerId)
 
 static int32_t tcIsConnectedWithEnabledAlarm(uint32_t lsoId)
 {
-    NODE *n;
+    NODE *n = NULL;
 
     /* alle Alarmanlagen, mit denen dieser Gegenstand verbunden ist */
 
@@ -1018,7 +1027,7 @@ void tcInsertGuard(LIST *list, LIST *roomsList, uword x, uword y, uword width, u
                    ubyte livId, uint32_t areaId)
 {
     char name[TXT_KEY_LENGTH] = {0};
-    uword gx, gy;
+    uword gx = 0, gy = 0;
     uint32_t guardedArea = isGuardedbyGet(lsGetCurrBuildingID(), guardId);
 
     sprintf((char *)name, "Police_%d", livId);

@@ -16,7 +16,7 @@ int32_t lsIsLSObjectInActivArea(LSObject lso)
 
 void lsSetObjectRetrievalList(uint32_t ul_AreaId)
 {
-    int32_t i;
+    int32_t i = 0;
 
     for (i = 0; i < 3; i++)
         if (ul_AreaId == ls->ul_ObjectRetrievalAreaId[i]) ls->p_ObjectRetrieval = ls->p_ObjectRetrievalLists[i];
@@ -24,7 +24,7 @@ void lsSetObjectRetrievalList(uint32_t ul_AreaId)
 
 uint32_t lsGetCurrObjectRetrieval(void)
 {
-    int32_t i;
+    int32_t i = 0;
 
     for (i = 0; i < 3; i++)
         if (ls->p_ObjectRetrieval == ls->p_ObjectRetrievalLists[i]) return ls->ul_ObjectRetrievalAreaId[i];
@@ -132,7 +132,7 @@ uword lsGetObjectCount(void) { return ((uword)GetNrOfNodes(ls->p_ObjectRetrieval
 
 ubyte lsGetLoudness(uword x, uword y)
 {
-    word floorIndex = lsGetFloorIndex(x, y), i, j, k;
+    word floorIndex = lsGetFloorIndex(x, y), i = 0, j = 0, k = 0;
 
     /* Ursprünglich wurde loudness hier mit MaxVolume initialisiert    */
     /* dadurch waren in der Anzeige der Loudness auch die Nachbarn     */
@@ -175,7 +175,7 @@ uint32_t lsGetObjectState(uint32_t objID)
 
 uint32_t lsGetStartArea(void)
 {
-    uint32_t areaID; /* attention, planing has to be changed to! */
+    uint32_t areaID = 0; /* attention, planing has to be changed to! */
 
     startsWithAll(ls->ul_BuildingID, OLF_NORMAL, Object_LSArea);
 
@@ -186,7 +186,7 @@ uint32_t lsGetStartArea(void)
 
 uword lsGetFloorIndex(uword x, uword y)
 {
-    uword fpl, row, line;
+    uword fpl = 0, row = 0, line = 0;
 
     fpl = LS_FLOORS_PER_LINE;
 
@@ -207,9 +207,9 @@ static void lsExtendGetList(LIST *list, uint32_t nr, uint32_t type, void *data)
 
 LIST *lsGetObjectsByList(uword x, uword y, uword width, uword height, ubyte showInvisible, ubyte addLootBags)
 {
-    struct ObjectNode *node;
+    struct ObjectNode *node = NULL;
     LIST *list = (LIST *)CreateList(0);
-    uint32_t i;
+    uint32_t i = 0;
 
     /* diverse Objekte eintragen */
     for (node = (struct ObjectNode *)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC((NODE *)node);
@@ -247,7 +247,7 @@ LIST *lsGetRoomsOfArea(uint32_t ul_AreaId)
 {
     LSArea area = (LSArea)dbGetObject(ul_AreaId);
     uint32_t roomRelId = area->ul_ObjectBaseNr + REL_HAS_ROOM_OFFSET;
-    NODE *room;
+    NODE *room = NULL;
 
     SetObjectListAttr(OLF_PRIVATE_LIST, Object_LSRoom);
     AskAll(area, roomRelId, BuildObjectList);

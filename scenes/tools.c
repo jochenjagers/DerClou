@@ -20,12 +20,12 @@ char *tcShowPriceOfTool(uint32_t nr, uint32_t type, void *data)
 
 ubyte tcBuyTool(ubyte choice)
 {
-    LIST *tools;
-    NODE *node;
-    uint32_t toolID, price, count;
+    LIST *tools = NULL;
+    NODE *node = NULL;
+    uint32_t toolID = 0, price = 0, count = 0;
     Person mary = (Person)dbGetObject(Person_Mary_Bolton);
-    Tool tool;
-    ubyte oldChoice;
+    Tool tool = NULL;
+    ubyte oldChoice = 0;
     char exp[TXT_KEY_LENGTH];
 
     ObjectListSuccString = tcShowPriceOfTool;
@@ -82,9 +82,9 @@ ubyte tcBuyTool(ubyte choice)
 
 ubyte tcDescTool(ubyte choice)
 {
-    LIST *tools, *desc;
+    LIST *tools = NULL, *desc = NULL;
     char line[TXT_KEY_LENGTH];
-    ubyte oldChoice;
+    ubyte oldChoice = 0;
     char exp[TXT_KEY_LENGTH];
     Person mary = (Person)dbGetObject(Person_Mary_Bolton);
 
@@ -131,10 +131,10 @@ ubyte tcDescTool(ubyte choice)
 
 ubyte tcShowTool(ubyte choice)
 {
-    LIST *tools;
-    NODE *node;
-    uint32_t toolID;
-    ubyte oldChoice;
+    LIST *tools = NULL;
+    NODE *node = NULL;
+    uint32_t toolID = 0;
+    ubyte oldChoice = 0;
     char exp[TXT_KEY_LENGTH];
 
     ObjectListSuccString = tcShowPriceOfTool;
@@ -176,12 +176,12 @@ ubyte tcShowTool(ubyte choice)
 
 void tcSellTool()
 {
-    LIST *bubble, *tools;
-    NODE *node;
-    uint32_t toolID, price;
+    LIST *bubble = NULL, *tools = NULL;
+    NODE *node = NULL;
+    uint32_t toolID = 0, price = 0;
     ubyte choice = 0;
-    Tool tool;
-    Person mary;
+    Tool tool = NULL;
+    Person mary = NULL;
 
     mary = (Person)dbGetObject(Person_Mary_Bolton);
 

@@ -81,5 +81,5 @@ add_executable(DerClou ${SOURCE_FILES})
 
 target_include_directories(DerClou PUBLIC ${CMAKE_SOURCE_DIR}
                                           ${SDL12_INCLUDE_DIRS})
-target_compile_options(DerClou PUBLIC ${SDL12_CFLAGS_OTHER})
+target_compile_options(DerClou PUBLIC ${SDL12_CFLAGS_OTHER} -Wall -Wno-format-overflow)
 target_link_libraries(DerClou ${SDL12_LIBRARIES} m)

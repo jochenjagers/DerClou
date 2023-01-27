@@ -10,7 +10,7 @@ void tcDealerDlg(void)
 {
     uint32_t locNr = GetObjNrOfLocation(GetLocation);
     Person dealer = NULL;
-    ubyte dealerNr, choice = 0;
+    ubyte dealerNr = 0, choice = 0;
 
     if (locNr == Location_Parker)
     {
@@ -75,7 +75,7 @@ void tcDealerDlg(void)
 // 2014-06-29 LucyG : increase price variation for less predictable gameplay
 static int32_t moreRandom(int32_t v)
 {
-    int32_t r;
+    int32_t r = 0;
     r = CalcRandomNr(0, (v / 4) + 1);
     r -= (v / 8);
     v += r;
@@ -110,8 +110,9 @@ void tcDealerSays(Person dealer, ubyte textNr, int32_t perc)
     LIST *specialLoot = txtGoKey(OBJECTS_ENUM_TXT, "enum_LootNameE");
     LIST *dealerText = txtGoKey(BUSINESS_TXT, "DEALER_OFFER");
     LIST *dealerOffer = (LIST *)CreateList(0);
-    char line[TXT_KEY_LENGTH], symp, i;
-    struct ObjectNode *n;
+    char line[TXT_KEY_LENGTH], symp = 0;
+    int i = 0;
+    struct ObjectNode *n = NULL;
     Person others[3];
     Player player = (Player)dbGetObject(Player_Player_1);
 
@@ -137,7 +138,7 @@ void tcDealerSays(Person dealer, ubyte textNr, int32_t perc)
         for (n = (struct ObjectNode *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (struct ObjectNode *)NODE_SUCC(n))
         {
             Loot loot = (Loot)OL_DATA(n);
-            uint32_t price = hasGet(Person_Matt_Stuvysunt, OL_NR(n)), offer;
+            uint32_t price = hasGet(Person_Matt_Stuvysunt, OL_NR(n)), offer = 0;
 
             offer = tcGetDealerOffer(price, perc);
             offer = max(offer, 1);
@@ -174,7 +175,7 @@ void tcDealerSays(Person dealer, ubyte textNr, int32_t perc)
 
                 if (!(Say(BUSINESS_TXT, 0, MATT_PICTID, "DEALER_ANSWER")))
                 {
-                    int32_t mattsMoney;
+                    int32_t mattsMoney = 0;
 
                     hasUnSet(Person_Matt_Stuvysunt, OL_NR(n));
 
@@ -206,13 +207,13 @@ void tcDealerSays(Person dealer, ubyte textNr, int32_t perc)
 
 LIST *tcMakeLootList(uint32_t containerID, uint32_t relID)
 {
-    NODE *n;
-    Loot loot;
+    NODE *n = NULL;
+    Loot loot = NULL;
     CompleteLoot comp = (CompleteLoot)dbGetObject(CompleteLoot_LastLoot);
     char data[TXT_KEY_LENGTH];
-    uint32_t value;
+    uint32_t value = 0;
     LIST *out = (LIST *)CreateList(0);
-    LIST *loots;
+    LIST *loots = NULL;
     LIST *lootE = txtGoKey(OBJECTS_ENUM_TXT, "enum_LootE");
     LIST *lootNameE = txtGoKey(OBJECTS_ENUM_TXT, "enum_LootNameE");
 
@@ -286,13 +287,13 @@ LIST *tcMakeLootList(uint32_t containerID, uint32_t relID)
 
                 CreateNode(out, 0L, data);
 
-                sprintf(data, "%ld", value);
+                sprintf(data, "%u", value);
                 CreateNode(out, 0L, data);
 
-                sprintf(data, "%ld", loot->Volume);
+                sprintf(data, "%u", loot->Volume);
                 CreateNode(out, 0L, data);
 
-                sprintf(data, "%ld", loot->Weight);
+                sprintf(data, "%hu", loot->Weight);
                 CreateNode(out, 0L, data);
             }
         }

@@ -19,9 +19,9 @@ void PrintStatus(char *text)
 
 uint32_t ShowTheClouRequester(int32_t error_class)
 {
-    LIST *menu;
+    LIST *menu = NULL;
     uint32_t answer = 0;
-    ubyte choices;
+    ubyte choices = 0;
     Player player = (Player)dbGetObject(Player_Player_1);  // MOD hg, 29-04-94
 
     inpTurnESC(0);

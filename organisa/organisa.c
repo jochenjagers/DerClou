@@ -58,7 +58,7 @@ void tcOrganisationSetBuilding(void)
 
 void tcOrganisationSetCar(void)
 {
-    Car car;
+    Car car = NULL;
 
     hasAll(Person_Matt_Stuvysunt, OLF_NORMAL, Object_Car);
 
@@ -81,7 +81,7 @@ ubyte tcMakeCarOk(void)
 
         while (GetNrOfNodes(ObjectList) > Organisation.PlacesInCar)
         {
-            ubyte choice;
+            ubyte choice = 0;
 
             dbRemObjectNode(ObjectList, Person_Matt_Stuvysunt);
 
@@ -134,7 +134,7 @@ uint32_t tcOrganisation(void)
 
     if (!LIST_EMPTY(ObjectList))
     {
-        Car car;
+        Car car = NULL;
 
         Organisation.CarID = OL_NR(LIST_HEAD(ObjectList));
 
@@ -285,10 +285,10 @@ ubyte tcCheckOrganisation(void)
 
 uint32_t tcChooseDriver(uint32_t persID)
 {
-    LIST *list;
-    ubyte choice;
+    LIST *list = NULL;
+    ubyte choice = 0;
     Person matt = (Person)dbGetObject(Person_Matt_Stuvysunt);
-    uint32_t newPersID;
+    uint32_t newPersID = 0;
 
     joined_byAll(Person_Matt_Stuvysunt, OLF_INCLUDE_NAME | OLF_INSERT_STAR | OLF_PRIVATE_LIST, Object_Person);
     list = ObjectListPrivate;
@@ -335,8 +335,8 @@ uint32_t tcChooseDriver(uint32_t persID)
 
 uint32_t tcChooseDestBuilding(uint32_t objID)
 {
-    LIST *list;
-    ubyte choice;
+    LIST *list = NULL;
+    ubyte choice = 0;
     char exp[TXT_KEY_LENGTH];
 
     hasAll(Person_Matt_Stuvysunt, OLF_INCLUDE_NAME | OLF_INSERT_STAR | OLF_PRIVATE_LIST, Object_Building);
@@ -363,10 +363,10 @@ uint32_t tcChooseDestBuilding(uint32_t objID)
 
 uint32_t tcChooseEscapeCar(uint32_t objID)
 {
-    LIST *l1, *l2;
-    ubyte choice;
+    LIST *l1 = NULL, *l2 = NULL;
+    ubyte choice = 0;
     Person matt = (Person)dbGetObject(Person_Matt_Stuvysunt);
-    uint32_t newObjID;
+    uint32_t newObjID = 0;
 
     hasAll(Person_Matt_Stuvysunt, OLF_INCLUDE_NAME | OLF_INSERT_STAR | OLF_PRIVATE_LIST, Object_Car);
     l1 = ObjectListPrivate;
@@ -376,7 +376,7 @@ uint32_t tcChooseEscapeCar(uint32_t objID)
 
     if (!LIST_EMPTY(l1))
     {
-        Car car;
+        Car car = NULL;
         char exp[TXT_KEY_LENGTH];
 
         txtGetFirstLine(BUSINESS_TXT, "NO_CHOICE", exp);
@@ -420,7 +420,7 @@ uint32_t tcChooseEscapeCar(uint32_t objID)
 
 void tcChooseGuys(void)
 {
-    LIST *list;
+    LIST *list = NULL;
     Person matt = (Person)dbGetObject(Person_Matt_Stuvysunt);
 
     joinAll(Person_Matt_Stuvysunt, OLF_INCLUDE_NAME | OLF_INSERT_STAR | OLF_PRIVATE_LIST, Object_Person);
@@ -472,10 +472,10 @@ void tcChooseGuys(void)
 
 void tcAddGuyToParty(void)
 {
-    LIST *l1, *l2;
-    struct ObjectNode *n;
-    uint32_t persID;
-    ubyte choice;
+    LIST *l1 = NULL, *l2 = NULL;
+    struct ObjectNode *n = NULL;
+    uint32_t persID = 0;
+    ubyte choice = 0;
 
     joinAll(Person_Matt_Stuvysunt, OLF_INCLUDE_NAME | OLF_INSERT_STAR | OLF_PRIVATE_LIST, Object_Person);
     l1 = ObjectListPrivate;
@@ -523,7 +523,7 @@ void tcAddGuyToParty(void)
 
 void tcRemGuyFromParty(void)
 {
-    LIST *list;
+    LIST *list = NULL;
     Person matt = (Person)dbGetObject(Person_Matt_Stuvysunt);
 
     joined_byAll(Person_Matt_Stuvysunt, OLF_INCLUDE_NAME | OLF_INSERT_STAR | OLF_PRIVATE_LIST, Object_Person);
@@ -538,8 +538,8 @@ void tcRemGuyFromParty(void)
     }
     else
     {
-        ubyte choice;
-        uint32_t persID;
+        ubyte choice = 0;
+        uint32_t persID = 0;
         char exp[TXT_KEY_LENGTH];
 
         txtGetFirstLine(BUSINESS_TXT, "NO_CHOICE", exp);

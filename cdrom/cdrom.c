@@ -207,8 +207,8 @@ void CDROM_StopAudioTrack(void)
 int CDROM_SetGameCDDrive(void)
 {
     int num = SDL_CDNumDrives();
-    int i;
-    SDL_CD *cdrom;
+    int i = 0;
+    SDL_CD *cdrom = NULL;
 
     CDROM_DriveNr = -1;
 

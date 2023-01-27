@@ -13,7 +13,7 @@ struct Search Search;
 
 ubyte tcCarFound(Car car, uint32_t time)
 {
-    int32_t i = 0, hours;
+    int32_t i = 0, hours = 0;
     Person john = (Person)dbGetObject(Person_John_Gludo);
     Person miles = (Person)dbGetObject(Person_Miles_Chickenwing);
     ubyte found = 0;
@@ -85,7 +85,7 @@ uint32_t tcIsThereATraitor(void)
     Person matt = (Person)dbGetObject(Person_Matt_Stuvysunt);
     ubyte symp = 255;
     uint32_t traitorId = 0, caught = 0;
-    NODE *n;
+    NODE *n = NULL;
 
     if (player->JobOfferCount > 50 + CalcRandomNr(0, 20)) /* ein Verrat?! */
     {
@@ -116,18 +116,18 @@ uint32_t tcIsThereATraitor(void)
 
 uint32_t tcStartEvidence(void)
 {
-    int32_t MyEvidence[4][7], guarded, radio;
-    uint32_t totalEvidence[7], i, j, shownEvidence[4], Recognition[4], caught = 0;
-    ubyte guyReady, guyNr, evidenceNr, guyCount;
+    int32_t MyEvidence[4][7], guarded = 0, radio = 0;
+    uint32_t totalEvidence[7], i = 0, j = 0, shownEvidence[4], Recognition[4], caught = 0;
+    ubyte guyReady = 0, guyNr = 0, evidenceNr = 0, guyCount = 0;
     char line[TXT_KEY_LENGTH];
     ubyte shown = 0;
     Person p[4];
     Evidence evidence = (Evidence)dbGetObject(Evidence_Evidence_1); /* just for presentation */
-    struct ObjectNode *n;
-    LIST *guys, *spuren;
-    int32_t div;
-    int32_t newStrike;
-    Car car;
+    struct ObjectNode *n = NULL;
+    LIST *guys = NULL, *spuren = NULL;
+    int32_t div = 0;
+    int32_t newStrike = 0;
+    Car car = NULL;
 
     if ((!(Search.EscapeBits & FAHN_ALARM)) && (!(Search.EscapeBits & FAHN_QUIET_ALARM)))
         Say(BUSINESS_TXT, 0, ((Person)dbGetObject(Person_John_Gludo))->PictID, "A_BURGLARY_SIR");
@@ -334,8 +334,8 @@ uint32_t tcStartEvidence(void)
 
 void tcForgetGuys(void)
 {
-    LIST *guys;
-    NODE *node;
+    LIST *guys = NULL;
+    NODE *node = NULL;
 
     joined_byAll(Person_Matt_Stuvysunt, OLF_PRIVATE_LIST, Object_Person);
     guys = ObjectListPrivate;
@@ -359,10 +359,10 @@ void tcForgetGuys(void)
 
 uint32_t tcPersonWanted(uint32_t persId)
 {
-    uint32_t hours, i = 0, caught = 0;
+    uint32_t hours = 0, i = 0, caught = 0;
     Person john = (Person)dbGetObject(Person_John_Gludo);
     Person miles = (Person)dbGetObject(Person_Miles_Chickenwing);
-    LIST *bubble;
+    LIST *bubble = NULL;
     LIST *jobs = txtGoKey(OBJECTS_ENUM_TXT, "enum_JobE");
     char line[TXT_KEY_LENGTH], name[TXT_KEY_LENGTH];
 
@@ -495,7 +495,7 @@ int32_t tcEscapeByCar(uint32_t escBits, int32_t timeLeft)
 {
     Person gludo = (Person)dbGetObject(Person_John_Gludo);
     Person miles = (Person)dbGetObject(Person_Miles_Chickenwing);
-    ubyte escapeSucc;
+    ubyte escapeSucc = 0;
 
     if (timeLeft > 0)
         escapeSucc = FAHN_ESCAPED;
@@ -565,9 +565,10 @@ int32_t tcCalcCarEscape(int32_t timeLeft)
     ubyte kmhWeight[4] = {32, 44, 60, 67};
     ubyte psWeight[4] = {68, 56, 40, 33};
     ubyte driverWeight[4] = {50, 40, 25, 20};
-    ubyte policeSpeed[4] = {90, 95, 103, 107}, paint, colortable[GFX_COLORTABLE_SIZE];
+    ubyte policeSpeed[4] = {90, 95, 103, 107}, paint = 0, colortable[GFX_COLORTABLE_SIZE];
     char line[TXT_KEY_LENGTH];
-    int32_t kmh, ps, i, j, YardsInFront, length, wayType, unrealSpeed, x, xOldMatt = -1, xOldPoli = -1;
+    int32_t kmh = 0, ps = 0, i = 0, j = 0, YardsInFront = 0, length = 0, wayType = 0, unrealSpeed = 0, x = 0,
+            xOldMatt = -1, xOldPoli = -1;
     Car car = (Car)dbGetObject(Organisation.CarID);
     Building build = (Building)dbGetObject(Organisation.BuildingID);
     int32_t result = FAHN_ESCAPED;

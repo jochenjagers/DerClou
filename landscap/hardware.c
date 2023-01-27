@@ -22,7 +22,7 @@ void lsShowEscapeCar(void)
 
 static void lsSetAlarmPict(LSObject lso)
 {
-    uword x0, x1, y0, y1, destx, desty;
+    uword x0 = 0, x1 = 0, y0 = 0, y1 = 0, destx = 0, desty = 0;
 
     lsCalcExactSize(lso, &x0, &y0, &x1, &y1);
 
@@ -40,7 +40,7 @@ static void lsSetAlarmPict(LSObject lso)
 // zeichnet alle sichtbaren Türen in einem bestimmten Bereich neu
 static void lsRefreshClosedDoors(uword us_X0, uword us_Y0, uword us_X1, uword us_Y1)
 {
-    NODE *node;
+    NODE *node = NULL;
 
     ls->uch_ShowObjectMask = 0x40;
 
@@ -66,7 +66,7 @@ static void lsRefreshClosedDoors(uword us_X0, uword us_Y0, uword us_X1, uword us
 // eines dummy Objektes die Funktion lsPrepareFromXMS aufgerufen
 void lsRefreshStatue(LSObject lso)
 {
-    uword srcX, srcY, destX, destY, size;
+    uword srcX = 0, srcY = 0, destX = 0, destY = 0, size = 0;
 
     ls->uch_ShowObjectMask = 0x40;
 
@@ -87,7 +87,7 @@ void lsRefreshStatue(LSObject lso)
 
 void lsFastRefresh(LSObject lso)
 {
-    uword x0, x1, y0, y1;
+    uword x0 = 0, x1 = 0, y0 = 0, y1 = 0;
 
     ls->uch_ShowObjectMask = 0x40;  // Bit 6 ignorieren
 
@@ -99,7 +99,7 @@ void lsFastRefresh(LSObject lso)
         case Item_Mauertor:
             if (lso->ul_Status & (1 << Const_tcOPEN_CLOSE_BIT))
             {
-                word x0, y0;
+                word x0 = 0, y0 = 0;
 
                 lsDoDoorRefresh(lso);
 
@@ -248,7 +248,7 @@ static void lsPrepareFromXMSBySize(ubyte uch_Size)
 static void lsBlitOneObject(uword offsetFact, word destx, word desty, uword size)
 {
     uword srcWidth = 288;  // Quellbildschirm ist für gewöhnlich 288 breit
-    uword srcX, srcY, perRow;
+    uword srcX = 0, srcY = 0, perRow = 0;
 
     // die 32er Objekte befinden sich auf einem Bildschirm, der
     // 320 Pixel breit ist
@@ -269,7 +269,7 @@ int32_t lsShowOneObject(LSObject lso, word destx, word desty, uint32_t ul_Mode)
 {
     Item item = (Item)dbGetObject(lso->Type);
     int32_t show = 0;
-    uword offsetFact;
+    uword offsetFact = 0;
 
     switch (lso->Type)
     {
@@ -321,7 +321,7 @@ int32_t lsShowOneObject(LSObject lso, word destx, word desty, uint32_t ul_Mode)
 
 void lsBlitFloor(uword floorIndex, uword destx, uword desty)
 {
-    uword srcX;
+    uword srcX = 0;
 
     lsPrepareFromXMSRastPort(&LS_FLOOR_XMS_RP);
 

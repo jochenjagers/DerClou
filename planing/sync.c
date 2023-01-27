@@ -147,18 +147,18 @@ uword plYMoveSync(uint32_t id, uword ypos, ubyte animate, ubyte direction, uword
 
 void plSync(ubyte animate, uint32_t targetTime, uint32_t times, ubyte direction)
 {
-    struct Action *action;
-    struct Action *a;
-    struct Handler *h;
-    uword dir;
-    Police pol;
-    uword xpos, ypos;
-    ubyte i;
-    uint32_t seconds, lastAreaId = 0;
-    uint32_t state;
-    uint32_t weightLoot;
-    uint32_t volumeLoot;
-    uint32_t newValue, oldValue;
+    struct Action *action = NULL;
+    struct Action *a = NULL;
+    struct Handler *h = NULL;
+    uword dir = 0;
+    Police pol = NULL;
+    uword xpos = 0, ypos = 0;
+    ubyte i = 0;
+    uint32_t seconds = 0, lastAreaId = 0;
+    uint32_t state = 0;
+    uint32_t weightLoot = 0;
+    uint32_t volumeLoot = 0;
+    uint32_t newValue = 0, oldValue = 0;
 
     for (seconds = 0; seconds < times; seconds++)
     {

@@ -9,7 +9,10 @@
 #include "gfx/gfx.h"
 #include "memory/memory.h"
 
-#define MaxBob 32
+enum
+{
+    MaxBob = 32
+};
 
 struct ObjStruct
 {
@@ -27,7 +30,7 @@ struct ObjStruct
 
 void BobInitLists(void)
 {
-    uword t;
+    uword t = 0;
     for (t = 0; t < MaxBob; t++)
     {
         Bob[t].x = -1;
@@ -73,7 +76,7 @@ uword BobInit(void *BitMap, uword Width, uword Height)
 
 static void BobCheckVis(uword ID)
 {
-    uword s, t;
+    uword s = 0, t = 0;
 
     for (t = ID; t < MaxBob; t++)
     {
@@ -146,7 +149,7 @@ static void BobCheckVis(uword ID)
 
 static void BobRefresh(uword ID)
 {
-    int t;  // MUSS signed sein!
+    int t = 0;  // MUSS signed sein!
 
     BobCheckVis(ID);
 

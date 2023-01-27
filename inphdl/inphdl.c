@@ -36,10 +36,10 @@ struct IHandler IHandler;
 
 static SDL_Cursor *init_system_cursor(char *image[])
 {
-    int i, row, col;
+    int i = 0, row = 0, col = 0;
     Uint8 data[4 * 32];
     Uint8 mask[4 * 32];
-    int hot_x, hot_y;
+    int hot_x = 0, hot_y = 0;
 
     i = -1;
     for (row = 0; row < 32; ++row)
@@ -132,7 +132,7 @@ static SDL_Joystick *inpJoystick = NULL;
 
 static void inpInitJoystick(void)
 {
-    int numJoys, i;
+    int numJoys = 0, i = 0;
 
     inpJoystick = NULL;
     if (!Config.UseJoystick)
@@ -205,8 +205,8 @@ static void inpDoPseudoMultiTasking(void)
 {
     // 2014-06-30 LucyG : rewritten
     static uint32_t timePrev = 0;
-    uint32_t timeNow;
-    uint32_t timePassed;
+    uint32_t timeNow = 0;
+    uint32_t timePassed = 0;
     timeNow = SDL_GetTicks();
     if (!timePrev)
     {
@@ -237,7 +237,7 @@ void inpCloseAllInputDevs(void)
 void inpDelay(int32_t l_Ticks)
 {
     // 2014-07-03 LucyG : rewritten
-    uint32_t timePrev;
+    uint32_t timePrev = 0;
     timePrev = SDL_GetTicks();
     l_Ticks = INP_TICKS_TO_MS(l_Ticks);
     while ((SDL_GetTicks() - timePrev) < l_Ticks)
@@ -390,6 +390,9 @@ int32_t inpWaitFor(int32_t l_Mask)
                             }
                         }
                         break;
+                        default:
+                            // nothing to do
+                            break;
                     }
                     break;
                 case SDL_MOUSEMOTION:

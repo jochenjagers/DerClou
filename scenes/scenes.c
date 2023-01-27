@@ -14,7 +14,7 @@ uword CurrentBackground = BGD_LONDON;
 
 static ubyte tcDisplayInfoAboutPerson(uint32_t objID)
 {
-    LIST *bubble;
+    LIST *bubble = NULL;
     char name[TXT_KEY_LENGTH];
     ubyte ret = 0;
 
@@ -42,16 +42,16 @@ static ubyte tcDisplayInfoAboutPerson(uint32_t objID)
 
 void AddTaxiLocation(uint32_t locNr)
 {
-    uint32_t objNr;
+    uint32_t objNr = 0;
 
-    if (objNr = GetObjNrOfLocation(locNr)) taxiSet(Person_Matt_Stuvysunt, objNr);
+    if ((objNr = GetObjNrOfLocation(locNr))) taxiSet(Person_Matt_Stuvysunt, objNr);
 }
 
 void RemTaxiLocation(uint32_t locNr)
 {
-    uint32_t objNr;
+    uint32_t objNr = 0;
 
-    if (objNr = GetObjNrOfLocation(locNr)) taxiUnSet(Person_Matt_Stuvysunt, objNr);
+    if ((objNr = GetObjNrOfLocation(locNr))) taxiUnSet(Person_Matt_Stuvysunt, objNr);
 }
 
 /***************************************************
@@ -65,10 +65,10 @@ void RemTaxiLocation(uint32_t locNr)
 
 uint32_t Go(LIST *succ)
 {
-    struct TCEventNode *node;
-    struct Scene *sc;
-    uint32_t prob, succ_eventnr;
-    NODE *location;
+    struct TCEventNode *node = NULL;
+    struct Scene *sc = NULL;
+    uint32_t prob = 0, succ_eventnr = 0;
+    NODE *location = NULL;
     char line[255];
 
     inpTurnFunctionKey(0);
@@ -120,10 +120,10 @@ uint32_t Go(LIST *succ)
 
 void Information(void)
 {
-    LIST *bubble, *list;
+    LIST *bubble = NULL, *list = NULL;
     ubyte choice = 0, choice1 = 0, ret = 0;
     char enough[TXT_KEY_LENGTH];
-    uint32_t objID;
+    uint32_t objID = 0;
 
     inpTurnESC(1);
 
@@ -252,10 +252,10 @@ void Information(void)
 
 void Look(uint32_t locNr)
 {
-    LIST *menu, *bubble;
+    LIST *menu = NULL, *bubble = NULL;
     ubyte choice = 0, choice1 = 0;
     char enough[TXT_KEY_LENGTH];
-    uint32_t objID;
+    uint32_t objID = 0;
 
     inpTurnESC(1);
 
@@ -328,7 +328,7 @@ uint32_t tcTelefon(void)
     if (!(LIST_EMPTY(ObjectList)))
     {
         ubyte choice = 0;
-        uint32_t persID;
+        uint32_t persID = 0;
 
         txtGetFirstLine(BUSINESS_TXT, "DONT_CONNECT_ME", connect);
         ExpandObjectList(ObjectList, connect);

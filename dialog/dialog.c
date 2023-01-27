@@ -25,11 +25,11 @@ struct DynDlgNode
 
 LIST *PrepareQuestions(LIST *keyWords, uint32_t talkBits, ubyte textID)
 {
-    LIST *stdQuestionList, *questionList, *preparedList;
-    NODE *n, *n2;
+    LIST *stdQuestionList = NULL, *questionList = NULL, *preparedList = NULL;
+    NODE *n = NULL, *n2 = NULL;
     char question[TXT_KEY_LENGTH] = {0};
-    uint32_t r, i;
-    char *name;
+    uint32_t r = 0, i = 0;
+    char *name = NULL;
 
     preparedList = (LIST *)CreateList(0);
     stdQuestionList = txtGoKey(BUSINESS_TXT, "STD_QUEST");
@@ -38,7 +38,7 @@ LIST *PrepareQuestions(LIST *keyWords, uint32_t talkBits, ubyte textID)
     for (n = (NODE *)LIST_HEAD(keyWords); NODE_SUCC((NODE *)n); n = (NODE *)NODE_SUCC(n))
     {
         r = CalcRandomNr(0L, 6L);
-        if (n2 = (NODE *)GetNthNode(questionList, r))
+        if ((n2 = (NODE *)GetNthNode(questionList, r)))
         {
             name = NODE_NAME(n2);
             sprintf(question, name, NODE_NAME((NODE *)n));
@@ -54,7 +54,7 @@ LIST *PrepareQuestions(LIST *keyWords, uint32_t talkBits, ubyte textID)
     {
         if (talkBits & (1 << i))
         {
-            if (n2 = (NODE *)GetNthNode(stdQuestionList, i))
+            if ((n2 = (NODE *)GetNthNode(stdQuestionList, i)))
             {
                 name = NODE_NAME(n2);
                 strcpy(question, name);
@@ -78,16 +78,16 @@ LIST *PrepareQuestions(LIST *keyWords, uint32_t talkBits, ubyte textID)
 
 LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 {
-    LIST *keyWords;
-    NODE *n, *keyNode;
+    LIST *keyWords = NULL;
+    NODE *n = NULL, *keyNode = NULL;
     char line[TXT_KEY_LENGTH] = {0};
     char key[TXT_KEY_LENGTH] = {0};
     char keyWord[TXT_KEY_LENGTH] = {0};
-    ubyte line_pos, mem_pos, key_pos;
-    char *mem;
-    ubyte snr[10], snr1[10], nr, nr1;
-    uint32_t i;
-    uint32_t sl;
+    ubyte line_pos = 0, mem_pos = 0, key_pos = 0;
+    char *mem = NULL;
+    ubyte snr[10], snr1[10], nr = 0, nr1 = 0;
+    uint32_t i = 0;
+    uint32_t sl = 0;
 
     keyWords = (LIST *)CreateList(0);
 
@@ -164,12 +164,12 @@ void DynamicTalk(uint32_t Person1ID, uint32_t Person2ID, ubyte TalkMode)
     char *Extension[4] = {"_UNKNOWN", "_KNOWN", "_FRIENDLY", "_BUSINESS"};
     char *Standard = "STANDARD";
     ubyte known = 0;
-    Person p1, p2;
+    Person p1 = NULL, p2 = NULL;
     char key[TXT_KEY_LENGTH] = {0};
     char name[TXT_KEY_LENGTH] = {0};
-    ubyte choice = 0, uch_Max = 1, i, uch_Quit, stdcount = 0, j, gencount = 0, textID;
-    LIST *origin = NULL, *questions = NULL, *bubble, *keyWords;
-    struct DynDlgNode *n;
+    ubyte choice = 0, uch_Max = 1, i = 0, uch_Quit = 0, stdcount = 0, j = 0, gencount = 0, textID = 0;
+    LIST *origin = NULL, *questions = NULL, *bubble = NULL, *keyWords = NULL;
+    struct DynDlgNode *n = NULL;
 
     p1 = (Person)dbGetObject(Person1ID);
     p2 = (Person)dbGetObject(Person2ID);
@@ -253,7 +253,7 @@ void DynamicTalk(uint32_t Person1ID, uint32_t Person2ID, ubyte TalkMode)
 
         if (choice < gencount)
         {
-            if (n = (struct DynDlgNode *)GetNthNode(keyWords, (uint32_t)choice))
+            if ((n = (struct DynDlgNode *)GetNthNode(keyWords, (uint32_t)choice)))
             {
                 strcpy(key, name);
                 strcat(key, "_");
@@ -326,8 +326,8 @@ void PlayFromCDROM(void)
 
 ubyte Say(uint32_t TextID, ubyte activ, uword person, char *text)
 {
-    LIST *bubble;
-    ubyte choice;
+    LIST *bubble = NULL;
+    ubyte choice = 0;
     char keys[TXT_KEY_LENGTH] = {0};
     char wavName[256];
 
@@ -412,14 +412,14 @@ ubyte Say(uint32_t TextID, ubyte activ, uword person, char *text)
 
 uint32_t Talk(void)
 {
-    uint32_t succ_event_nr = 0L, locNr, personID;
-    LIST *bubble;
-    ubyte choice;
+    uint32_t succ_event_nr = 0L, locNr = 0, personID = 0;
+    LIST *bubble = NULL;
+    ubyte choice = 0;
     char helloFriends[TXT_KEY_LENGTH] = {0};
 
     inpTurnESC(0);
 
-    if (locNr = GetObjNrOfLocation(GetLocation))
+    if ((locNr = GetObjNrOfLocation(GetLocation)))
     {
         hasAll(locNr, OLF_PRIVATE_LIST | OLF_INCLUDE_NAME | OLF_INSERT_STAR, Object_Person);
         bubble = ObjectListPrivate;

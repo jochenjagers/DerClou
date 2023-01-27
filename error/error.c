@@ -26,10 +26,10 @@ struct ErrorHandler ErrorHandler;
 void Log(const char *s, ...)
 {
     static char log_buffer[1024];
-    FILE *file;
+    FILE *file = NULL;
     if (s)
     {
-        if (file = fopen(LOG_FILENAME, "a"))
+        if ((file = fopen(LOG_FILENAME, "a")))
         {
             va_list ap;
             va_start(ap, s);

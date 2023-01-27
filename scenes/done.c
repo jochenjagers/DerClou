@@ -11,12 +11,12 @@
 void DoneTaxi(void)
 {
     static ubyte i = 0;
-    ubyte j;
+    ubyte j = 0;
     char name[TXT_KEY_LENGTH], exp[TXT_KEY_LENGTH];
     LIST *locs = (LIST *)CreateList(0L);
-    struct ObjectNode *n, *newNode;
-    uint32_t locNr;
-    Location loc;
+    struct ObjectNode *n = NULL, *newNode = NULL;
+    uint32_t locNr = 0;
+    Location loc = NULL;
 
     knowsSet(Person_Matt_Stuvysunt, Person_Dan_Stanford);
     taxiAll(Person_Matt_Stuvysunt, OLF_NORMAL, Object_Location);
@@ -61,9 +61,9 @@ void DoneTaxi(void)
 void DoneInsideHouse(void)
 {
     LIST *menu = txtGoKey(MENU_TXT, "Mainmenu");
-    uint32_t choice, buildingID, areaID;
-    ubyte activ = 0, perc;
-    NODE *node;
+    uint32_t choice = 0, buildingID = 0, areaID = 0;
+    ubyte activ = 0, perc = 0;
+    NODE *node = NULL;
 
     SceneArgs.ReturnValue = 0;
     SceneArgs.Ueberschrieben = 1;
@@ -236,7 +236,7 @@ void DoneParking(void)
     LIST *bubble = txtGoKey(BUSINESS_TXT, "PARKING");
     LIST *menu = txtGoKey(MENU_TXT, "Mainmenu");
     ubyte activ = 0, choice = 0;
-    uint32_t carID;
+    uint32_t carID = 0;
     Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
     SceneArgs.Ueberschrieben = 1;
@@ -268,7 +268,7 @@ void DoneParking(void)
                         choice = 2;
                         break;
                     case 1:
-                        if (carID = tcChooseCar(27))
+                        if ((carID = tcChooseCar(27)))
                         {
                             tcSellCar(carID);
                             AddVTime(11);
@@ -304,7 +304,7 @@ void DoneGarage(void)
 {
     LIST *menu = txtGoKey(MENU_TXT, "Mainmenu");
     ubyte activ = 0;
-    uint32_t choice, carID;
+    uint32_t choice = 0, carID = 0;
     Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
     SceneArgs.Ueberschrieben = 1;
@@ -324,7 +324,7 @@ void DoneGarage(void)
 
         if (choice == BUSINESS_TALK)
         {
-            if (carID = tcChooseCar(26))
+            if ((carID = tcChooseCar(26)))
             {
                 tcCarInGarage(carID);
                 AddVTime(9);

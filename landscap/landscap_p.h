@@ -150,9 +150,9 @@ struct LSDoorRefreshNode  // für jede Tür existiert eine Node
 
 extern struct LandScape *ls;
 
-static void lsInitFloorSquares(void);
-static void lsLoadAllSpots(void);
-static void lsSetCurrFloorSquares(uint32_t areaId);
+extern void lsInitFloorSquares(void);
+extern void lsLoadAllSpots(void);
+extern void lsSetCurrFloorSquares(uint32_t areaId);
 
 extern void lsPrepareFromXMSRastPort(struct XMSRastPort *rp);
 extern void lsPrepareToXMSRastPort(struct XMSRastPort *rp);

@@ -13,18 +13,27 @@
 #include "inphdl/inphdl.h"
 #include "intro/iffanim.h"
 
-#define NUM_ANIM_FILES 5
+enum
+{
+    NUM_ANIM_FILES = 5
+};
 static const char *anim_files[NUM_ANIM_FILES] = {"AN1_1.ANM", "AN2_4.ANM", "AN3_11.ANM", "AN4_11.ANM", "AN5_11.ANM"};
 static const int anim_delays[NUM_ANIM_FILES] = {
     /* speed of animation expressed as delay between frames */
     /* in ticks (1 tick = 1/60 second) */
     60, 17, 7, 7, 7};
-#define NUM_ANIM_SYNC 6
+enum
+{
+    NUM_ANIM_SYNC = 6
+};
 static const int anim_sync[NUM_ANIM_SYNC * 2] = {
     /* anim #, frame # */
     /* when to play the church bell sound */
     0, 1, 0, 5, 1, 2, 1, 27, 1, 39, 1, 53};
-#define NUM_CD_TRACKS 24
+enum
+{
+    NUM_CD_TRACKS = 24
+};
 static const int anim_cdframes[NUM_CD_TRACKS * 6] = {
     2, 100, 0, 3,  0, 0,      2, 143, 0, 4,  0,      0,      3, 5,   0, 23, 0,      0,       3, 74,  0, 8,  0, 0,
     3, 90,  0, 24, 0, 0,      3, 118, 0, 9,  0,      0,      3, 137, 0, 14, 0,      0,       3, 177, 0, 19, 0, 0,
@@ -35,14 +44,14 @@ static const int anim_cdframes[NUM_CD_TRACKS * 6] = {
 
 static int Anim_Play(IffAnim *anim, int nfile, int delayticks)
 {
-    ubyte *cmap, *frame;
-    ubyte *dst;
-    int q;
-    int a;
-    int action;
-    int numframes, nframe;
+    ubyte *cmap = NULL, *frame = NULL;
+    ubyte *dst = NULL;
+    int q = 0;
+    int a = 0;
+    int action = 0;
+    int numframes = 0, nframe = 0;
 
-    int ntrack;
+    int ntrack = 0;
     char wavPath[256];
     char wavName[16];
 
@@ -176,8 +185,8 @@ static int Anim_Play(IffAnim *anim, int nfile, int delayticks)
 void tcIntro(void)
 {
     char anim_path[DSK_PATHNAMELENGTH];
-    int n_file, bContinue;
-    IffAnim *iff_anim;
+    int n_file = 0, bContinue = 0;
+    IffAnim *iff_anim = NULL;
 
     inpTurnESC(1);
     gfxSetVideoMode(GFX_VIDEO_MCGA);
