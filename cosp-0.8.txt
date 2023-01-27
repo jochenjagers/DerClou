@@ -1,4 +1,4 @@
-Der Clou! Open Source Project V0.7b (2018-10-08)
+Der Clou! Open Source Project V0.8 (2019-11-26)
 
 http://sourceforge.net/projects/cosp
 
@@ -31,6 +31,21 @@ license contained in the included 'mame.txt' file.
 ================================================================================
   CHANGES/FIXES
 ================================================================================
+
+v0.8 (2019-11-26)
+- WARNING! This release may be broken! If you experience any problems, use v0.7b
+
+- new: converted most image buffers to SDL surfaces as the
+  starting point to a cleanup of the whole graphics subsystem (continues...)
+- new: added gfxLoadImage() to load an ILBM file into an SDL_Surface,
+  may easily be extended to support other formats
+- new: new Modfiles directory allows to override game files
+
+  If you want to modify "Pictures\Bahnhof", put your new version
+  into "Modfiles\Pictures\Bahnhof". The game will always look
+  there first. Please don't overwrite any of the original files,
+  so you can always reverse to the original state if something
+  breaks.
 
 v0.7b (2018-10-08)
 - fix: don't fade music volume when there's no voice (reported by MvGulik)

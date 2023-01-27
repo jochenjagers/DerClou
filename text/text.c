@@ -37,7 +37,7 @@ static char *txtGetLine(struct Text *txt, ubyte lineNr)
 				break;
 			}
 
-			if (*line == TXT_CHAR_EOF) // < ((char *)TXT_BUFFER_WORK + txt->txt_Size))
+			if (*line == TXT_CHAR_EOF)
 			{
 				line = NULL;
 				break;
@@ -79,7 +79,7 @@ static char *txtGetLine(struct Text *txt, ubyte lineNr)
 			line = NULL;
 		}
 
-		if (line >= ((char *)TXT_BUFFER_WORK + txt->txt_Size))
+		if (line >= ((char *)txt->txt_Handle + txt->txt_Size))
 			line = NULL;
 	}
 
@@ -100,7 +100,7 @@ void txtInit(ubyte lang)
 
 		dskBuildPathName(TEXT_DIRECTORY, TXT_LIST, txtListPath);
 
-		if (ReadList(txtBase->tc_Texts, sizeof(struct Text), txtListPath, TXT_DISK_ID))
+		if (ReadList(txtBase->tc_Texts, sizeof(struct Text), txtListPath, 0))
 		{
 			for (i = 0; i < GetNrOfNodes(txtBase->tc_Texts); i++)
 			{
@@ -152,20 +152,17 @@ void txtLoad (ulong textId)
 
 			txt->txt_Size = dskFileLength(txtPath);
 
-			// loading text into buffer
-			dskLoad(txtPath, TXT_BUFFER_LOAD, TXT_DISK_ID);
-
-			// correcting text
-			for (mem = (ubyte*) TXT_BUFFER_LOAD; mem < ((ubyte *)TXT_BUFFER_LOAD + txt->txt_Size); mem++)
-			{
-				*mem ^= TXT_XOR_VALUE;
-				if (*mem == 10 || *mem == 13) *mem = TXT_CHAR_EOS;
-			}
-
-			// save text into xms
 			if (txt->txt_Handle = MemAlloc(txt->txt_Size)) {
-				//xmsCopyUp(txt->txt_Handle, 0, TXT_BUFFER_LOAD, txt->txt_Size);
-                memcpy(txt->txt_Handle, TXT_BUFFER_LOAD, txt->txt_Size);
+
+				dskLoad(txtPath, txt->txt_Handle);		// loading text into buffer
+
+				// correcting text
+				for (mem = (ubyte*) txt->txt_Handle; mem < ((ubyte *)txt->txt_Handle + txt->txt_Size); mem++)
+				{
+					*mem ^= TXT_XOR_VALUE;
+					if (*mem == 10 || *mem == 13) *mem = TXT_CHAR_EOS;
+				}
+
 			} else {
 			    NewErrorMsg(No_Mem, __FILE__, __func__, ERR_TXT_NO_XMS);
             }
@@ -196,9 +193,7 @@ void txtPrepare(ulong textId)
 
 	if (txt)
 	{
-		//xmsCopyDown(txt->txt_Handle, 0, TXT_BUFFER_WORK, txt->txt_Size);
-        memcpy(TXT_BUFFER_WORK, txt->txt_Handle, txt->txt_Size);
-		txt->txt_LastMark = (char*) TXT_BUFFER_WORK;
+		txt->txt_LastMark = (char *)txt->txt_Handle;
 	}
 }
 
@@ -215,7 +210,7 @@ void txtReset(ulong textId)
 	struct Text *txt = (struct Text*)GetNthNode(txtBase->tc_Texts, textId);
 
 	if (txt)
-		txt->txt_LastMark = (char*)TXT_BUFFER_WORK;
+		txt->txt_LastMark = (char *)txt->txt_Handle;
 }
 
 // public functions - KEY
@@ -291,7 +286,7 @@ static LIST *txtGoKeyN(ulong textId, char *key)
 			txt->txt_LastMark = LastMark + 1;
 		}
 
-		for (; txt->txt_LastMark < ((char *)TXT_BUFFER_WORK + txt->txt_Size); txt->txt_LastMark++) {
+		for (; txt->txt_LastMark < ((char *)txt->txt_Handle + txt->txt_Size); txt->txt_LastMark++) {
 			if (*txt->txt_LastMark == TXT_CHAR_MARK) {
 				found = 1;
 				if (key) {
@@ -356,7 +351,7 @@ LIST *txtGoKey(ulong textId, char *key)
 			txt->txt_LastMark = LastMark + 1;
 		}
 
-		for (; txt->txt_LastMark < ((char *)TXT_BUFFER_WORK + txt->txt_Size); txt->txt_LastMark++)
+		for (; txt->txt_LastMark < ((char *)txt->txt_Handle + txt->txt_Size); txt->txt_LastMark++)
 		{
 			if (*txt->txt_LastMark == TXT_CHAR_MARK)
 			{
@@ -444,7 +439,7 @@ ubyte txtKeyExists(ulong textId, char *key)
 		txtPrepare(textId);
 
 		// after txtPrepare txt_LastMark points to TXT_BUFFER_PREPARE in every case
-		for (; txt->txt_LastMark < ((char *)TXT_BUFFER_WORK + txt->txt_Size); txt->txt_LastMark++)
+		for (; txt->txt_LastMark < ((char *)txt->txt_Handle + txt->txt_Size); txt->txt_LastMark++)
 		{
 			if (*txt->txt_LastMark == TXT_CHAR_MARK)
 			{

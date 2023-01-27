@@ -44,12 +44,10 @@ LIST *PrepareQuestions(LIST *keyWords, ulong talkBits, ubyte textID)
 			sprintf(question, name, NODE_NAME((NODE*)n));
 			CreateNode(preparedList, 0L, question);
 		}
-		#ifdef THECLOU_DEBUG
 		else
 		{
 			Log("GetNthNode(questionList, %d) = NULL", r);
 		}
-		#endif
 	}
 
 	for (i = 0; i < 32; i++)
@@ -62,12 +60,10 @@ LIST *PrepareQuestions(LIST *keyWords, ulong talkBits, ubyte textID)
 				strcpy(question, name);
 				CreateNode(preparedList, 0L, question);
 			}
-			#ifdef THECLOU_DEBUG
 			else
 			{
 				Log("GetNthNode(stdQuestionList, %d) = NULL", i);
 			}
-			#endif
 		}
 	}
 
@@ -266,12 +262,10 @@ void DynamicTalk(ulong Person1ID, ulong Person2ID, ubyte TalkMode)
 					p2->Known = n->KnownAfter;
 				}
 			}
-			#ifdef THECLOU_DEBUG
 			else
 			{
 				Log("GetNthNode(keyWords, %d) = NULL", choice);
 			}
-			#endif
 		}
 
 		if (choice >= gencount && choice < uch_Quit)

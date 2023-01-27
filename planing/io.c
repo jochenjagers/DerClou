@@ -125,7 +125,7 @@ ubyte plOpen(ulong objId, ubyte mode, FILE **fh)
 		// MOD 25-04-94 HG - new paths on pc
 		sprintf(name2, "%s%s",name1,PLANING_PLAN_LIST_EXTENSION);
 
-		dskBuildPathName(DATADISK, name2, pllPath);
+		dskBuildPathName(DATADISK_DIRECTORY, name2, pllPath);
 
 		if (pllFh = dskOpen(pllPath, "r", PLANING_PLAN_DISK))
 		{
@@ -178,7 +178,7 @@ ubyte plOpen(ulong objId, ubyte mode, FILE **fh)
 
 					sprintf(name2,"%s%d%s",name1, i+1, PLANING_PLAN_EXTENSION);
 
-					dskBuildPathName(DATADISK, name2, name1);
+					dskBuildPathName(DATADISK_DIRECTORY, name2, name1);
 
 					*fh = dskOpen(name1, Planing_Open[mode], PLANING_PLAN_DISK);
 

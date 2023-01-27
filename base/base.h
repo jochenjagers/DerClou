@@ -86,19 +86,11 @@
 #include "cdrom\cdrom.h"
 #endif
 
-/*
- * Verwendungszweck:
- * StdBuffer0: geladenes Bild
- *
- * StdBuffer1: entpacktes Bild
- */
-
-#define STD_BUFFER0_SIZE  ((long)320 * 140)
 #define STD_BUFFER1_SIZE  ((long)61 * 1024)      /* weniger geht nicht! (Bild + CMAP)*/
 
 extern char prgname[255];
 
-extern void *StdBuffer0, *StdBuffer1;
+extern void *StdBuffer1;
 
 extern void tcClearStdBuffer(void *p_Buffer);
 extern void tcSetPermanentColors(void);

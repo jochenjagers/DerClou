@@ -13,21 +13,18 @@
 
 #define LS_SPOT_BITMAP_SIZE		(LS_SPOT_BITMAP_WIDTH * LS_SPOT_BITMAP_HEIGHT)
 
-#define LS_SPOT_LOAD_BUFFER		StdBuffer0
-#define LS_SPOT_DECR_BUFFER		StdBuffer1
-
 #define LS_SPOT_FILENAME			((const char*)"Spot")
-
-static void lsShowSpot(struct Spot *s, ulong time);
-static void lsLoadSpotBitMap(void *p_BitMap);
-static void lsHideSpot(struct Spot *s);
-static void lsBlitSpot(uword us_Size, uword us_XPos, uword us_YPos, ubyte visible);
 
 struct SpotControl {
 	LIST *				p_spots;
 	struct RastPort *	p_SpotRP;      /* Zielrastport */
-	void *				p_SourceData;
+	SDL_Surface *		pSurface;
 };
+
+static void lsShowSpot(struct Spot *s, ulong time);
+static void lsLoadSpotBitMap(struct SpotControl *spc);
+static void lsHideSpot(struct Spot *s);
+static void lsBlitSpot(uword us_Size, uword us_XPos, uword us_YPos, ubyte visible);
 
 static struct SpotControl *sc = NULL;
 
@@ -41,9 +38,9 @@ void lsInitSpots(struct RastPort *rp)
 
 	sc->p_spots      = (LIST *)CreateList(0);
 	sc->p_SpotRP     = rp;
-	sc->p_SourceData = MemAlloc(LS_SPOT_BITMAP_SIZE);
+	sc->pSurface = NULL;
 
-	lsLoadSpotBitMap(sc->p_SourceData);
+	lsLoadSpotBitMap(sc);
 }
 
 static void lsFreeAllSpots(void)
@@ -63,8 +60,8 @@ void lsDoneSpots(void)
 
 		RemoveList(sc->p_spots);
 
-		if (sc->p_SourceData) {
-			MemFree(sc->p_SourceData, LS_SPOT_BITMAP_SIZE);
+		if (sc->pSurface) {
+			SDL_FreeSurface(sc->pSurface);
 		}
 
 		MemFree(sc, sizeof(struct SpotControl));
@@ -289,45 +286,36 @@ static void lsAddSpotPosition(struct Spot *spot, uword us_XPos, uword us_YPos)
 	spot->us_PosCount++;
 	}
 
-static void lsLoadSpotBitMap(void *p_BitMap)
-	{
+static void lsLoadSpotBitMap(struct SpotControl *spc)
+{
 	char Result[TXT_KEY_LENGTH];
 	long  i,j;
-	ubyte *s, *d;
+	ubyte *d;
 
 	// Dateiname erstellen
 	dskBuildPathName(PICTURE_DIRECTORY, LS_SPOT_FILENAME, Result);
 
-	// Collection laden
-	dskLoad(Result, LS_SPOT_LOAD_BUFFER, 0);
-
-	tcClearStdBuffer(LS_SPOT_DECR_BUFFER);
-
-	// Collection entpacken
-	// der Decr Buffer entspricht dem PrepareRP
-	gfxILBMToRAW((ubyte*)LS_SPOT_LOAD_BUFFER, (ubyte*)LS_SPOT_DECR_BUFFER);
-
-	// und jetzt in den richtigen Buffer kopieren
-	d = (ubyte*)p_BitMap;
-	s = (ubyte*)LS_SPOT_DECR_BUFFER;
-
-	for (j = 0; j < LS_SPOT_BITMAP_HEIGHT; j++)
-		{
-		for (i = 0; i < 96; i++)
-			{
-			if (*s == 63)
-				*s = 64;
-
-			if (*s == 255)
-				*s = 0;
-
-			*d++ = *s++;
-			}
-
-		for (i = 96; i < 320; i++)	// modulo
-			s++;
-		}
+	spc->pSurface = gfxLoadImage(Result);
+	if (!spc->pSurface) {
+		Log("lsLoadSpotBitMap: pSurface=NULL");
+		return;
 	}
+
+	/* what the hack? */
+	d = (ubyte*)spc->pSurface->pixels;
+	for (j = 0; j < LS_SPOT_BITMAP_HEIGHT; j++) {
+		for (i = 0; i < LS_SPOT_BITMAP_WIDTH; i++) {
+			if (*d == 63) {
+				*d = 64;
+			}
+			if (*d == 255) {
+				*d = 0;
+			}
+			d++;
+		}
+		d += spc->pSurface->pitch - LS_SPOT_BITMAP_WIDTH;
+	}
+}
 
 void lsLoadSpots(ulong bldId, char *uch_FileName)
 	{
@@ -402,7 +390,7 @@ static void lsBlitSpot(uword us_Size, uword us_XPos, uword us_YPos, ubyte visibl
 		}
 
 
-	Src  = sc->p_SourceData;
+	Src  = sc->pSurface->pixels;
 	Dest = l_wrp->p_BitMap;
 
 	if (visible)

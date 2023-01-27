@@ -12,7 +12,7 @@
 void livInit(uword us_VisLScapeX,uword us_VisLScapeY,
 				 uword us_VisLScapeWidth,uword us_VisLScapeHeight,
 				 uword us_TotalLScapeWidth,uword us_TotalLScapeHeight,ubyte uch_FrameCount, ulong ul_StartArea)
-	{
+{
 	sc = (struct SpriteControl*)MemAlloc(sizeof(struct SpriteControl));
 
 	sc->p_Livings  = (LIST*)CreateList(0);
@@ -31,7 +31,7 @@ void livInit(uword us_VisLScapeX,uword us_VisLScapeY,
 
 	sc->uch_FrameCount = uch_FrameCount;
 
-	sc->p_MemHandle = MemAlloc(STD_BUFFER1_SIZE);
+	sc->pSurface = NULL;
 
 	livLoadTemplates();		// jetzt alle Animphasen (Bilder) laden
 
@@ -44,8 +44,10 @@ void livDone(void)
 	{
 	if (sc)
 		{
-		if (sc->p_MemHandle)
-			MemFree(sc->p_MemHandle, STD_BUFFER1_SIZE);
+		if (sc->pSurface) {
+			SDL_FreeSurface(sc->pSurface);
+			sc->pSurface = NULL;
+		}
 
 		if (sc->p_Livings)
 			{
@@ -200,16 +202,19 @@ void livCorrectViewDirection(struct Living *liv)
 	}
 
 void livPrepareAnims(void)
-	{
-	//xmsCopyDown(sc->p_MemHandle, 0, LIV_DECR_BUFFER, STD_BUFFER1_SIZE);
-    memcpy(LIV_DECR_BUFFER, sc->p_MemHandle, STD_BUFFER1_SIZE);
+{
+	if (!sc->pSurface) {
+		Log("livPrepareAnims pSurface=NULL");
+		return;
 	}
+    memcpy(StdBuffer1, sc->pSurface->pixels, sc->pSurface->w * sc->pSurface->h);		/* blit from sc->pSurface to StdBuffer1 */
+}
 
 void livDoAnims(ubyte uch_Play, ubyte uch_Move)
 	{
 	struct Living *liv;
 
-	livPrepareAnims();
+	livPrepareAnims();	// copy sprite anim to StdBuffer1
 
 	lsDoScroll();
 
@@ -225,12 +230,12 @@ void livDoAnims(ubyte uch_Play, ubyte uch_Move)
 				}
 
 			/*
-			 * die View Direction muá hier gesetzt werden und NICHT
+			 * die View Direction muss hier gesetzt werden und NICHT
 			 * in AnimateLiving, da die Aktion in AnimateLiving nicht
-			 * stattfinden muá, die ViewDirection zwischenzeitlich
-			 * aber eine falschen Wert annimt, was z.B. im Planing
-			 * zu Fehler fhrt!
-			 * muá in jedem Fall geschehen, auch wenn Maxi unsichtbar ist
+			 * stattfinden muss, die ViewDirection zwischenzeitlich
+			 * aber eine falschen Wert annimmt, was z.B. im Planing
+			 * zu Fehler fuehrt!
+			 * muss in jedem Fall geschehen, auch wenn Maxi unsichtbar ist
 			 */
 
 			livCorrectViewDirection(liv);
@@ -239,7 +244,7 @@ void livDoAnims(ubyte uch_Play, ubyte uch_Move)
 				{
 				livShow(liv);
 
-				// Action != ANM_STAND -> Scheiá Ausnahme, weil von Marx
+				// Action != ANM_STAND -> Scheiss Ausnahme, weil von Marx
 				// keine Stand Anim gezeichnet wurde
 				if ((uch_Play) && (liv->uch_Action != ANM_STAND))
 					liv->ch_CurrFrameNr += (char) sc->ch_PlayDirection;
@@ -494,14 +499,20 @@ static void livLoadData(void)
 
 	dskBuildPathName(PICTURE_DIRECTORY,LIV_COLL_NAME,filename);
 
-	dskLoad(filename, LIV_LOAD_BUFFER, 0);
+	tcClearStdBuffer(StdBuffer1);
 
-	tcClearStdBuffer(LIV_DECR_BUFFER);
+	if (sc->pSurface) {
+		SDL_FreeSurface(sc->pSurface);
+	}
+	sc->pSurface = gfxLoadImage(filename);
+	if (!sc->pSurface) {
+		Log("livLoadData failed to load: %s", filename);
+		return;
+	}
 
-	gfxILBMToRAW((ubyte*)LIV_LOAD_BUFFER, (ubyte*)LIV_DECR_BUFFER);
+	gfxSetColorTable_hack(sc->pSurface);	/* damit im StdBuffer1 die Palette liegt */
 
-	//xmsCopyUp(sc->p_MemHandle, 0, LIV_DECR_BUFFER, STD_BUFFER1_SIZE);
-    memcpy(sc->p_MemHandle, LIV_DECR_BUFFER, STD_BUFFER1_SIZE);
+	livPrepareAnims();	/* 2019-11-26 damit im StdBuffer1 auch das Bild liegt (evtl. unnoetig?) */
 }
 
 static ubyte livIsVisible(struct Living *liv)

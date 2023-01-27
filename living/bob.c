@@ -47,9 +47,7 @@ uword BobInit(void *BitMap, uword Width, uword Height)
 
 	if (ID == MaxBob)
 	{
-		#ifdef THECLOU_DEBUG
 		Log("Too many bobs! Increase 'MaxBob'.");
-		#endif
 		return(-1);
 	}
 
@@ -254,8 +252,5 @@ void BobSet(uword ID, uword x, uword y , uword xs, uword ys)
 
 void BobSetDarkness(ubyte b)
 {
-
-	#ifdef THECLOU_DEBUG
 	Log("%s|%s(%d) not implemented", __FILE__, __func__, b);
-	#endif
 }

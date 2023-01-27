@@ -19,11 +19,6 @@
 #endif
 
 #define LOG_FILENAME	"clou.log"
-#ifdef THECLOU_DEBUG
-#define DEBUG_FN()	Log("%s|%s",__FILE__,__func__)
-#else
-#define DEBUG_FN()
-#endif
 void Log(const char *s, ...);
 
 #define ERROR_MODULE_BASE		3

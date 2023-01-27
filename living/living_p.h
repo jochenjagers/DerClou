@@ -4,12 +4,9 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#define LIV_LOAD_BUFFER			StdBuffer0 // muá ein StdBuffer sein -> sonst ClearBuffer in .c „ndern
-#define LIV_DECR_BUFFER			StdBuffer1
+#define LIV_TEMPLATE_BUFFER		StdBuffer1 // auch LS_LOOTBAG_BUFFER aendern!!!
 
-#define LIV_TEMPLATE_BUFFER	StdBuffer1 // auch LS_LOOTBAG_BUFFER „ndern!!!
-
-#define LIV_NO_FRAME				((uword) -1)
+#define LIV_NO_FRAME			((uword) -1)
 
 #define LIV_COLL_WIDTH			308  // ein Frame ist 14 * 14
 
@@ -34,7 +31,7 @@ struct SpriteControl
 	uword		us_TotalLScapeWidth;
 	uword		us_TotalLScapeHeight;
 
-	void*		p_MemHandle;
+	SDL_Surface *	pSurface;
 
 	ubyte		uch_FirstFrame;
 	ubyte    uch_LastFrame;

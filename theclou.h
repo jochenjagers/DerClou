@@ -8,7 +8,7 @@
 #define THECLOU_MODULE
 
 #define __COSP__
-#define COSP_VERSION	"0.7b"
+#define COSP_VERSION	"0.8"
 #define COSP_TITLE		"Der Clou! Open Source Project"
 
 typedef struct {
@@ -61,10 +61,6 @@ typedef unsigned long	ulong;
 // ADDITIONAL VERSION DEFINES
 extern char bProfidisk;
 extern char bCDRom;
-
-// SPECIALS DEFINES
-#define THECLOU_JOYSTICK_DISABLED
-#define THECLOU_DEBUG
 
 /*
  * Textdateien, die auch als Daten verwendet werden
@@ -131,13 +127,13 @@ extern char bCDRom;
 
 #define PICTURE_DIRECTORY	"pictures"
 #define TEXT_DIRECTORY		"texts"
-#define INCLUDE_DIRECTORY	"Include"
 #define DATA_DIRECTORY		"data"
 #define SOUND_DIRECTORY 	"sounds"
 #define SAMPLES_DIRECTORY	"samples"
 #define AUDIO_DIRECTORY		"audio"
+#define MODFILES_DIRECTORY	"modfiles"
 
-#define DATADISK			"datadisk"
+#define DATADISK_DIRECTORY	"datadisk"
 
 #define BUILD_DATA_NAME 	"tcbuild"
 #define MAIN_DATA_NAME		"tcmain"

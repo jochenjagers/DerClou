@@ -15,12 +15,8 @@
 
 
 // private defines
-#define TXT_DISK_ID     0
 #define TXT_LIST        "TEXTS.LST"
 #define TXT_SUFFIX      ".TXT"
-
-#define TXT_BUFFER_LOAD    StdBuffer0
-#define TXT_BUFFER_WORK    StdBuffer1
 
 #define TXT_CHAR_EOL            13
 #define TXT_CHAR_EOS            '\0'

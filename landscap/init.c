@@ -246,8 +246,7 @@ static void lsInitFloorSquares(void)
 
 		dskBuildPathName(DATA_DIRECTORY,areaName,fileName);
 
-
-		dskLoad(fileName, ls->p_AllFloors[i], 0);
+		dskLoad(fileName, ls->p_AllFloors[i]);	// read FLOOR_DATA_EXTENSION file
 		}
 
 	RemoveList(areas);

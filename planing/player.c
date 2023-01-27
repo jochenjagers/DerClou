@@ -13,10 +13,6 @@
 #define PLANING_PLAYER_RADIO_ONE       2
 #define PLANING_PLAYER_ESCAPE          3
 
-#ifdef THECLOU_DEBUG
-#define PLANING_PLAYER_DEBUG           4
-#endif
-
 // Player defines
 #define PLANING_EXHAUST_MAX         240
 #define PLANING_MOOD_MIN            40

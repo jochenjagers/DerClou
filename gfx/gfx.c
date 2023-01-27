@@ -7,19 +7,113 @@
 #include "SDL.h"
 #include "gfx\gfx.h"
 
-#ifndef MODULE_MEMORY
 #include "memory\memory.h"
-#endif
-#ifndef MODULE_BASE
 #include "base\base.h"
-#endif
-#ifndef MODULE_TEXT
 #include "text\text.h"
-#endif
 
-#include "gfx\gfx_p.h"
 #include "gfx\filter.h"
 #include "port\port.h"
+
+/************************************************/
+
+/************************************************/
+
+#define GFX_NCH4_BUFFER_SIZE			(320*200)		/* 320*200 = 64000 Bytes gross */
+
+#define GFX_BUBBLE_FONT_NAME			((char*)"bubble.fnt")
+#define GFX_MENU_FONT_NAME				((char*)"menu.fnt")
+
+#define GFX_CMAP_OFFSET					61440	// -> Maximalgroesse 320 * 192
+
+struct PrintRect
+	{
+	uword us_X;
+	uword us_Width;
+	};
+
+struct ColorRange
+	{
+	ubyte uch_Start;
+	ubyte uch_End;
+	};
+
+struct GfxBase
+	{
+	struct RastPort *p_DestRPForShow;
+
+	ubyte	uch_VideoMode;
+	};
+
+struct RastPort LowerRP;
+struct RastPort MenuRP;
+
+struct RastPort NCH4MenuRP;
+struct RastPort NCH4ScrollRP;
+struct RastPort NCH4UpperRP;
+
+struct RastPort RefreshRP;
+/* wird verwendet fr Double Buffering w„hrend der Vorbereitung */
+struct RastPort PrepareRP;
+/* Da man von XMS nur ganze Bl”cke kopieren kann (ohne Modulo)    */
+/* mssen einige Grafiken, bevor sie ins Video RAM kopiert werden */
+/* hier an dieser Stelle gepuffert werden. */
+/* ist als extern definfiert, da Animmodul darauf zugreifen muá */
+
+
+struct XMSRastPort StdRP0InXMS;
+/* wird benutzt fr Objekte, die immer im Speicher sind */
+struct XMSRastPort StdRP1InXMS;
+/* wird benutzt fr Objekte, die immer im Speicher sind */
+struct XMSRastPort RefreshRPInXMS;
+/* Bild, das im Moment gerade gezeigt wird (fr Refresh) */
+struct XMSRastPort AnimRPInXMS;
+/* beinhaltet die Animphasen des gerade aktuellen Bildes */
+/* um Inkonsistenzen zu vermeiden, wird jedesmal, bevor eine */
+/* Animphase gezeigt wird, das gesamte Bild in den PrepareRp */
+/* kopiert, der ben”tigte Ausschnitt wird dann von dort */
+/* ins Video-RAM kopiert */
+/* ist als extern definfiert, da Animmodul darauf zugreifen muá */
+struct XMSRastPort AddRPInXMS;
+/* in diesem Rastport befinden sich diverse zus„tzliche Grafiken */
+/* die in das Bild hinzugefgt werden (Gesichter, Werkzeuge)     */
+/* je nach Situation... 													  */
+/* dieser RP wird je nach Situation ausgewechselt					  */
+struct XMSRastPort LSFloorRPInXMS;
+/* in diesem RastPort befindet sich w„hrend der Planungs-Einbruchs */
+/* phasen das Bild der B”den */
+struct XMSRastPort LSObjectRPInXMS;
+/* in diesem RastPort befinden sich einige Objekte w„hrend der Planung */
+
+static SDL_Surface *pShadowSurface = NULL;		// 640x328 pixels
+static SDL_Surface *pRefreshSurface = NULL;		// 320x140 pixels
+
+struct PrintRect 			GlobalPrintRect;
+struct ColorRange			GlobalColorRange;
+
+struct GfxBase				GfxBase;
+
+LIST	*CollectionList = NULL;
+LIST  *PictureList = NULL;
+
+struct RastPort *l_wrp;
+struct RastPort *m_wrp;
+struct RastPort *u_wrp;
+
+struct Font *bubbleFont;
+struct Font *menuFont;
+
+static void gfxInitXMSRastPort(struct XMSRastPort *rp, uword us_Width, uword us_Height);
+static void gfxDoneXMSRastPort(struct XMSRastPort *rp);
+
+static void gfxInitRastPort(struct RastPort *rp, uword us_LeftEdge, uword us_TopEdge, uword us_Width, uword us_Height, ubyte uch_ColorStart, ubyte uch_ColorEnd, void *BitMap);
+
+static void gfxInitCollList(void);
+static void gfxInitPictList(void);
+
+static struct Font *gfxOpenFont(char *puch_FileName, uword us_Width, uword us_Height, ubyte uch_FirstChar, ubyte uch_LastChar, uword us_TotalWidth, uword us_TotalHeight);
+static void gfxCloseFont(struct Font *font);
+
+/************************************************/
 
 /************************************************/
 
@@ -64,7 +158,7 @@ static void SetWindowIcon(char *icon)
 
 ubyte *gfxGetGfxBoardBase(void)
 {
-	return(GfxBoardBase);
+	return(pShadowSurface->pixels);
 }
 
 void gfxInvalidate(void)
@@ -81,6 +175,17 @@ void gfxScreenshot(void)
 	sprintf(fileName, ".\\screenshot%02d.bmp", screenshotsTaken + 1);
 	if (!SDL_SaveBMP(SurfaceScreen, fileName)) {
 		screenshotsTaken++;
+	}
+}
+
+void gfxScreenshotShadow(void)
+{
+	static int screenshotsShadowTaken = 0;
+	char fileName[256];
+
+	sprintf(fileName, ".\\shadow%02d.bmp", screenshotsShadowTaken + 1);
+	if (!SDL_SaveBMP(pShadowSurface, fileName)) {
+		screenshotsShadowTaken++;
 	}
 }
 
@@ -184,11 +289,14 @@ int gfxInitSDL(void)
 		if (SurfaceScreen)
 		{
 			SDL_WM_SetCaption(TitleStr, TitleStr);
-			GfxBoardBase = (ubyte *)MemAlloc(GFX_BOARD_SIZE);
-			if (GfxBoardBase)
+			pShadowSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 328, 8, 0,0,0,0);
+			if (pShadowSurface)
 			{
-				NCH4Buffer = (ubyte*)MemAlloc(GFX_PAGE_SIZE);
-				return(1);
+				pRefreshSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 140, 8, 0,0,0,0);
+				if (pRefreshSurface) {
+					NCH4Buffer = (ubyte*)MemAlloc(GFX_NCH4_BUFFER_SIZE);
+					return(1);
+				}
 			}
 		}
 	}
@@ -197,12 +305,19 @@ int gfxInitSDL(void)
 
 void gfxDoneSDL(void)
 {
-	SDL_QuitSubSystem(SDL_INIT_VIDEO);
-	if (GfxBoardBase) MemFree(GfxBoardBase, GFX_BOARD_SIZE);
-	if (NCH4Buffer) MemFree(NCH4Buffer, GFX_PAGE_SIZE);
+	if (pRefreshSurface) {
+		SDL_FreeSurface(pRefreshSurface);
+		pRefreshSurface = NULL;
+	}
+	if (pShadowSurface) {
+		SDL_FreeSurface(pShadowSurface);
+		pShadowSurface = NULL;
+	}
+	if (NCH4Buffer) MemFree(NCH4Buffer, GFX_NCH4_BUFFER_SIZE);
 	if (gfxFilter_x4_Buffer) {
 		MemFree(gfxFilter_x4_Buffer, 640*400);
 	}
+	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
 void gfxUpdateSDL(struct RastPort *rp)
@@ -212,7 +327,7 @@ void gfxUpdateSDL(struct RastPort *rp)
 
 	if ((rp != &RefreshRP) && (rp != &PrepareRP))
 	{
-		src = GfxBoardBase;
+		src = gfxGetGfxBoardBase();
 
 		if (GfxBase.uch_VideoMode == GFX_VIDEO_NCH4)
 		{
@@ -223,6 +338,7 @@ void gfxUpdateSDL(struct RastPort *rp)
 
 		if (bGfxPaletteChanged) {
 			SDL_SetPalette(SurfaceScreen, SDL_LOGPAL|SDL_PHYSPAL, (SDL_Color *)gfxPaletteGlobal, 0, 256);
+			SDL_SetPalette(pShadowSurface, SDL_LOGPAL|SDL_PHYSPAL, (SDL_Color *)gfxPaletteGlobal, 0, 256);
 			bGfxPaletteChanged = 0;
 		}
 
@@ -278,14 +394,21 @@ void gfxInit(void)
 	/* der RefreshRP muss den ganzen Bildschirm aufnehmen koennen */
 	gfxInitXMSRastPort(&RefreshRPInXMS, 320, 200);
 
-	gfxInitRastPort(&RefreshRP, 0,   0, 320, 140,   0,   0, GFX_LOAD_BUFFER);
-	gfxInitRastPort(&PrepareRP, 0,   0, 320, 192,   0,   0, GFX_DECR_BUFFER);
-	gfxInitRastPort(&LowerRP  , 0,   0, 320, 140,   0, 191, GfxBoardBase);
-	gfxInitRastPort(&MenuRP   , 0, 140, 320,  50, 191, 255, GfxBoardBase + 320*140);
+	/*
+	#define GFX_NCH4_SCROLLOFFSET 	(640 * 72)  // Speicher , den die fixe Anzeige belegt
 
-	gfxInitRastPort(&NCH4ScrollRP, 0,   0, 640, 256,   0, 191, (void *)((ulong)GfxBoardBase + (ulong)GFX_NCH4_SCROLLOFFSET));
-	gfxInitRastPort(&NCH4MenuRP  , 0, 128, 320,  72, 191, 255, GfxBoardBase);
-	gfxInitRastPort(&NCH4UpperRP, 0,   0, 320,  60,   0, 191, (void *)((ulong)GfxBoardBase + (ulong)GFX_NCH4_SCROLLOFFSET));
+	gfxInitRastPort(struct RastPort *, us_LeftEdge, us_TopEdge, us_Width, us_Height, uch_ColorStart, uch_ColorEnd, BitMap);
+	*/
+
+	gfxInitRastPort(&RefreshRP, 0,   0, 320, 140,   0,   0, pRefreshSurface->pixels);
+	gfxInitRastPort(&PrepareRP, 0,   0, 320, 192,   0,   0, StdBuffer1);
+
+	gfxInitRastPort(&LowerRP  , 0,   0, 320, 140,   0, 191, pShadowSurface->pixels);
+	gfxInitRastPort(&MenuRP   , 0, 140, 320,  50, 191, 255, (ubyte *)pShadowSurface->pixels + 320*140);
+
+	gfxInitRastPort(&NCH4ScrollRP, 0,   0, 640, 256,   0, 191, (ubyte *)pShadowSurface->pixels + GFX_NCH4_SCROLLOFFSET);
+	gfxInitRastPort(&NCH4MenuRP  , 0, 128, 320,  72, 191, 255, pShadowSurface->pixels);
+	gfxInitRastPort(&NCH4UpperRP, 0,   0, 320,  60,   0, 191, (ubyte *)pShadowSurface->pixels + GFX_NCH4_SCROLLOFFSET);	// this one moves
 	// TopEdge von diesem RP muss 0 sein, da der Offset schon bei der Adresse
 	// der BitMap richtig uebergeben wird
 
@@ -352,7 +475,7 @@ void gfxSetVideoMode(ubyte uch_NewMode)
 {
 	GfxBase.uch_VideoMode = uch_NewMode;
 
-	memset(GfxBoardBase, 0, GFX_BOARD_SIZE);
+	SDL_FillRect(pShadowSurface, NULL, 0);
 
 	switch (uch_NewMode)
 	{
@@ -374,7 +497,7 @@ void gfxSetVideoMode(ubyte uch_NewMode)
 			u_wrp->uch_VideoMode = GFX_VIDEO_NCH4;
 			m_wrp->uch_VideoMode = GFX_VIDEO_NCH4;
 			gfxSetRGB(NULL, 0, 0, 64, 48);
-			memset(NCH4Buffer, 0, GFX_PAGE_SIZE);
+			memset(NCH4Buffer, 0, GFX_NCH4_BUFFER_SIZE);
 		break;
 		case GFX_VIDEO_TEXT:
 			/* not available */
@@ -388,7 +511,7 @@ void gfxSetVideoMode(ubyte uch_NewMode)
  */
 void gfxCorrectUpperRPBitmap(void)
 {
-	NCH4UpperRP.p_BitMap = GfxBoardBase + gfxNCH4GetCurrScrollOffset();
+	NCH4UpperRP.p_BitMap = gfxGetGfxBoardBase() + gfxNCH4GetCurrScrollOffset();
 }
 
 /********************************************************************
@@ -472,18 +595,27 @@ static void gfxInitPictList(void)
 
 static void gfxInitXMSRastPort(struct XMSRastPort *rp, uword us_Width, uword us_Height)
 {
+	rp->pSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, us_Width, us_Height, 8, 0,0,0,0);
+	SDL_FillRect(rp->pSurface, NULL, 0);
+	/*
 	rp->us_Width  = us_Width;
 	rp->us_Height = us_Height;
 	rp->p_MemHandle = MemAlloc((ulong)rp->us_Width * (ulong)rp->us_Height);
+	*/
 	rp->us_CollId = GFX_NO_COLL_IN_XMS;
 }
 
 static void gfxDoneXMSRastPort(struct XMSRastPort *rp)
 {
+	if (rp->pSurface) {
+		SDL_FreeSurface(rp->pSurface);
+	}
+	/*
 	if (rp->p_MemHandle) {
 		MemFree(rp->p_MemHandle, (ulong)rp->us_Width * (ulong)rp->us_Height);
 		rp->p_MemHandle = NULL;
 	}
+	*/
 }
 
 static void gfxInitRastPort(struct RastPort *rp, uword us_LeftEdge, uword us_TopEdge, uword us_Width, uword us_Height, ubyte uch_ColorStart, ubyte uch_ColorEnd, void *p_BitMap)
@@ -514,7 +646,6 @@ static struct Font *gfxOpenFont(char *puch_FileName, uword us_Width, uword us_He
 {
 	char Result[TXT_KEY_LENGTH];
 	struct Font *font = (struct Font*)MemAlloc(sizeof(struct Font));
-	long size;
 
 	font->us_Width  = us_Width;
 	font->us_Height = us_Height;
@@ -522,32 +653,20 @@ static struct Font *gfxOpenFont(char *puch_FileName, uword us_Width, uword us_He
 	font->uch_FirstChar = uch_FirstChar;
 	font->uch_LastChar  = uch_LastChar;
 
-	font->us_TotalWidth  = us_TotalWidth;
-	font->us_TotalHeight = us_TotalHeight;
-
-	size = (long) font->us_TotalWidth * font->us_TotalHeight; // MUST NOT ALWAYS AGREE !!!
-
-	font->p_BitMap = MemAlloc(size);
-
 	dskBuildPathName(PICTURE_DIRECTORY, puch_FileName, Result);
-	dskLoad(Result, GFX_LOAD_BUFFER, 0);
 
-	/* clear Buffer with 0! */
-	memset(font->p_BitMap, 0, size);
+	font->pSurface = gfxLoadImage(Result);
 
-	gfxILBMToRAW((ubyte*)GFX_LOAD_BUFFER, (ubyte*)font->p_BitMap);
-
-	return font;
+	return(font);
 }
 
 static void gfxCloseFont(struct Font *font)
 {
 	if (font)
 	{
-		if (font->p_BitMap)
-		{
-			MemFree(font->p_BitMap, font->us_TotalWidth * font->us_TotalHeight);
-			font->p_BitMap = 0;
+		if (font->pSurface) {
+			SDL_FreeSurface(font->pSurface);
+			font->pSurface = NULL;
 		}
 
 		MemFree(font, sizeof(struct Font));
@@ -725,10 +844,24 @@ struct Picture *gfxGetPicture(uword us_PictId)
 void gfxGetColorTable(uword us_CollId, ubyte *puch_ColorTable)
 {
 	long i;
-	ubyte *p = (ubyte *) ((ulong) GFX_DECR_BUFFER + (ulong) GFX_CMAP_OFFSET);
+	ubyte *p = (ubyte *) ((ulong) StdBuffer1 + (ulong) GFX_CMAP_OFFSET);
 
 	for (i = 0; i < GFX_COLORTABLE_SIZE; i++)
 		puch_ColorTable[i] = p[i];
+}
+
+void gfxSetColorTable_hack(SDL_Surface *pSurface)
+{
+	long i;
+	ubyte *p = (ubyte *) ((ulong) StdBuffer1 + (ulong) GFX_CMAP_OFFSET);
+
+	SDL_Color *pc;
+	for (i = 0; i < 256; i++) {
+		pc = &pSurface->format->palette->colors[i];
+		*p++ = pc->r;
+		*p++ = pc->g;
+		*p++ = pc->b;
+	}
 }
 
 static long gfxGetRealDestY(struct RastPort *rp, long destY)
@@ -768,33 +901,43 @@ struct RastPort *gfxPrepareColl(uword us_CollId)
 		if (!coll->p_Prepared)
 		{
 			char Result[TXT_KEY_LENGTH];
-			void *cmap = (void *) ((ulong) GFX_DECR_BUFFER + (ulong) GFX_CMAP_OFFSET);
 
 			/* Dateiname erstellen */
 			dskBuildPathName(PICTURE_DIRECTORY, (char*)coll->puch_Filename, Result);
 
 			/* load collection */
-			dskLoad(Result, GFX_LOAD_BUFFER, DSK_DUMMY_DISK_ID);
+			SDL_Surface *pSurface;
+			pSurface = gfxLoadImage(Result);
 
-			tcClearStdBuffer(GFX_DECR_BUFFER);
-			/* Collection entpacken */
-			/* der Decr Buffer entspricht dem PrepareRP */
-			gfxILBMToRAW((ubyte*)GFX_LOAD_BUFFER, (ubyte*)GFX_DECR_BUFFER);
+			gfxSetColorTable_hack(pSurface);
 
-			gfxGetCMAP((ubyte*)GFX_LOAD_BUFFER, (ubyte*)cmap);
+			/* Collection in den PrepareRP kopieren */
+			int w, h;
+			if (pSurface->w > PrepareRP.us_Width) {
+				w = PrepareRP.us_Width;
+				Log("surface too wide");
+			} else {
+				w = pSurface->w;
+			}
+			if (pSurface->h > PrepareRP.us_Height) {
+				h = PrepareRP.us_Height;
+				Log("surface too high");
+			} else {
+				h = pSurface->h;
+			}
+			memcpy(PrepareRP.p_BitMap, pSurface->pixels, w * h);
 
-			/* coll->p_Prepared wird nicht mit dem PrepareRP initialisert, da */
-			/* es sonst zu Inkonsistenzen kommen koennte. Collections im PrepareRP */
-			/* werden als nicht vorbereitet betrachtet, da der PrepareRP staendig */
-			/* durch andere Bilder berschrieben wird */
-			coll->p_Prepared = 0;
+			SDL_FreeSurface(pSurface);
 		}
 		else
 		{
 			/* vom aktuellen RP(muss XMS sein) in den PrepareRP kopieren */
-			/* coll->p_Prepared darf nicht initialisert werden! */
-			/* siehe oben! */
-			memcpy(PrepareRP.p_BitMap, coll->p_Prepared->p_MemHandle, coll->p_Prepared->us_Width * coll->p_Prepared->us_Height);
+
+			SDL_LockSurface(coll->p_Prepared->pSurface);
+
+			memcpy(PrepareRP.p_BitMap, coll->p_Prepared->pSurface->pixels, coll->p_Prepared->pSurface->w * coll->p_Prepared->pSurface->h);	/* does not respect pitch! */
+
+			SDL_UnlockSurface(coll->p_Prepared->pSurface);
 		}
 	}
 	return &PrepareRP;
@@ -812,21 +955,24 @@ void gfxCopyCollFromXMS(uword us_CollId, void *p_Buffer)
 		Log("gfxCopyCollFromXMS: coll %d is NULL", us_CollId);
 	} else {
 		if (coll->p_Prepared) {
-			memcpy(p_Buffer, coll->p_Prepared->p_MemHandle, coll->p_Prepared->us_Width * coll->p_Prepared->us_Height);
+			//memcpy(p_Buffer, coll->p_Prepared->p_MemHandle, coll->p_Prepared->us_Width * coll->p_Prepared->us_Height);
+
+			SDL_LockSurface(coll->p_Prepared->pSurface);
+
+			memcpy(p_Buffer, coll->p_Prepared->pSurface->pixels, coll->p_Prepared->pSurface->w * coll->p_Prepared->pSurface->h);	/* does not respect pitch! */
+
+			SDL_UnlockSurface(coll->p_Prepared->pSurface);
 		}
 	}
 }
 
 void gfxCopyCollToXMS(uword us_CollId, struct XMSRastPort *rp)
 {
-	long size;
 	struct Collection *oldColl;
 	struct Collection *coll = gfxGetCollection(us_CollId);
 	if (!coll) {
 		Log("gfxCopyCollToXMS: coll %d is NULL", us_CollId);
 	}
-
-	size = rp->us_Width * rp->us_Height;
 
 	// wenn sich in diesem XMS RastPort ein anderes Bild befindet so wird dieses
 	// nun aus dem XMS RastPort "entfernt"
@@ -842,7 +988,13 @@ void gfxCopyCollToXMS(uword us_CollId, struct XMSRastPort *rp)
 
 	gfxPrepareColl(us_CollId);
 
-	memcpy(rp->p_MemHandle, GFX_DECR_BUFFER, size);
+	//memcpy(rp->p_MemHandle, StdBuffer1, size);
+
+	SDL_LockSurface(rp->pSurface);
+
+	memcpy(rp->pSurface->pixels, StdBuffer1, rp->pSurface->w * rp->pSurface->h);	/* does not respect pitch! */
+
+	SDL_UnlockSurface(rp->pSurface);
 
 	// in der neuen Collection wird der XMS RastPort eingetragen
 	if (coll) {
@@ -919,7 +1071,9 @@ void gfxPrint(struct RastPort *rp, char *puch_Text, uword us_Y, ulong ul_Mode)
 /* kopiert aktuelles Bild in den RefreshRPInXMS */
 void gfxPrepareRefresh(void)
 {
-	ubyte *mem = (ubyte*)RefreshRPInXMS.p_MemHandle;
+	SDL_LockSurface(RefreshRPInXMS.pSurface);
+
+	ubyte *mem = (ubyte*)RefreshRPInXMS.pSurface->pixels;
 	if (!mem) {
 		Log("%s: p_MemHandle is NULL", __func__);
 		return;
@@ -928,19 +1082,23 @@ void gfxPrepareRefresh(void)
 	switch (GfxBase.uch_VideoMode)
 	{
 		case GFX_VIDEO_MCGA:
-			memcpy(mem, GfxBoardBase, 320*200);
+			memcpy(mem, gfxGetGfxBoardBase(), 320*200);
 		break;
 		case GFX_VIDEO_NCH4:
-			gfxNCH4PutNCH4ToMCGA(GfxBoardBase + gfxNCH4GetCurrScrollOffset(), mem, 0, 0, 0, 0, 320, 128, 160, 320);
-			gfxNCH4PutNCH4ToMCGA(GfxBoardBase, mem+(320*128), 0, 0, 0, 0, 320, 72, 160, 320);
+			gfxNCH4PutNCH4ToMCGA(gfxGetGfxBoardBase() + gfxNCH4GetCurrScrollOffset(), mem, 0, 0, 0, 0, 320, 128, 160, 320);
+			gfxNCH4PutNCH4ToMCGA(gfxGetGfxBoardBase(), mem+(320*128), 0, 0, 0, 0, 320, 72, 160, 320);
 		break;
 	}
+
+	SDL_UnlockSurface(RefreshRPInXMS.pSurface);
 }
 
 /* kopiert aktuellen Inhalt des RefreshRPInXMS in den Bildschirmspeicher */
 void gfxRefresh(void)
 {
-	ubyte *mem = (ubyte*)RefreshRPInXMS.p_MemHandle;
+	SDL_LockSurface(RefreshRPInXMS.pSurface);
+
+	ubyte *mem = (ubyte*)RefreshRPInXMS.pSurface->pixels;
 	if (!mem) {
 		Log("%s: p_MemHandle is NULL", __func__);
 		return;
@@ -949,14 +1107,16 @@ void gfxRefresh(void)
 	switch (GfxBase.uch_VideoMode)
 	{
 		case GFX_VIDEO_NCH4:
-			gfxNCH4PutMCGAToNCH4(mem, GfxBoardBase + gfxNCH4GetCurrScrollOffset(), 0, 0, 0, 0, 320, 128, 320, 160);
-			gfxNCH4PutMCGAToNCH4(mem+(320*128), GfxBoardBase, 0, 0, 0, 0, 320, 72, 320, 160);
+			gfxNCH4PutMCGAToNCH4(mem, gfxGetGfxBoardBase() + gfxNCH4GetCurrScrollOffset(), 0, 0, 0, 0, 320, 128, 320, 160);
+			gfxNCH4PutMCGAToNCH4(mem+(320*128), gfxGetGfxBoardBase(), 0, 0, 0, 0, 320, 72, 320, 160);
 		break;
 		case GFX_VIDEO_MCGA:
 		default:
-			memcpy(GfxBoardBase, mem, 320*200);
+			memcpy(gfxGetGfxBoardBase(), mem, 320*200);
 		break;
 	}
+
+	SDL_UnlockSurface(RefreshRPInXMS.pSurface);
 
 	gfxUpdateSDL(NULL);
 }
@@ -970,11 +1130,11 @@ void gfxBlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY,
 				 uword us_Width, uword us_Height, ulong ul_BlitMode)
 {
 	if (!srp) {
-		Log("%s: RastPort is NULL", __func__);
+		Log("%s: source RastPort is NULL", __func__);
 		return;
 	}
 	if (!drp) {
-		Log("%s: RastPort is NULL", __func__);
+		Log("%s: dest RastPort is NULL", __func__);
 		return;
 	}
 
@@ -1293,144 +1453,4 @@ void gfxShow(uword us_PictId, ulong ul_Mode, long l_Delay, long l_XPos, long l_Y
 	}
 
 	gfxSetDestRPForShow(NULL);
-}
-
-/*******************************************************************
- * misc
- */
-
-
-long gfxGetILBMSize(struct Collection *coll)
-{
-	uword w = coll->us_TotalWidth;
-	uword h = coll->us_TotalHeight;
-	long size;
-
-	w = ((w + 15) / 16) * 16;	// aufs Word aufrunden
-
-	size = w * h;
-
-	return size;
-}
-
-static void gfxGetCMAP(ubyte *p_Data, ubyte *p_Dest)
-{
-	long i;
-
-	// CMAP Chunk suchen
-	while ((p_Data[0] != 'C') || (p_Data[1] != 'M') || (p_Data[2] != 'A') || (p_Data[3] != 'P')) p_Data++;
-
-	p_Data += 4;	// CMAP Chunk ueberspringen
-	p_Data += 4;	// Size of CMAP Chunk ueberspringen
-
-	for (i = 0; i < GFX_COLORTABLE_SIZE; i++)
-	{
-		p_Dest[i] = p_Data[i];
-	}
-}
-
-static void MakeMCGA(uword b, ubyte *pic, uword PlSt, short c)
-{
-	if ((b & 0x80) && (c > 0)) pic[0] |= PlSt;
-	if ((b & 0x40) && (c > 1)) pic[1] |= PlSt;
-	if ((b & 0x20) && (c > 2)) pic[2] |= PlSt;
-	if ((b & 0x10) && (c > 3)) pic[3] |= PlSt;
-	if ((b & 0x08) && (c > 4)) pic[4] |= PlSt;
-	if ((b & 0x04) && (c > 5)) pic[5] |= PlSt;
-	if ((b & 0x02) && (c > 6)) pic[6] |= PlSt;
-	if ((b & 0x01) && (c > 7)) pic[7] |= PlSt;
-}
-
-void gfxILBMToRAW(ubyte *p_Source, ubyte *p_Dest)
-{
-	uword IFFplanes = 0, IFFwidth = 0, IFFheight = 0;
-	ubyte *fp, *pic, *pic1;
-	int	s, t, b, x;
-	uword a, y;
-	uword flag;
-
-	pic = p_Dest;
-	fp = p_Source;
-
-	fp += 8;
-
-	if ((fp[0] != 'I') || (fp[1] != 'L') || (fp[2] != 'B') || (fp[3] != 'M')) return;
-
-	fp += 12;
-
-	IFFwidth  = (uword)fp[1] + ((uword)fp[0] << 8);
-	IFFheight = ((uword)fp[2] << 8) + (uword)fp[3];
-	IFFplanes = (uword)fp[8];
-	flag = (uword)fp[10];
-
-	if (((long)IFFwidth * (long)IFFheight) > GFX_DECR_BUFFER_SIZE) IFFheight = 192;
-
-	while ((fp[0] != 'B') || (fp[1] != 'O') || (fp[2] != 'D') || (fp[3] != 'Y')) fp++;
-
-	fp += 8;
-
-	if (flag)
-	{
-		pic1 = pic;
-		for (t = 1; t <= IFFheight; t++)
-		{
-			for (s = 1; s <= IFFplanes; s++)
-			{
-				pic = pic1;			/* Anfang der aktuellen Zeile */
-				b = ((IFFwidth + 15) & 0xfff0);
-				do
-				{
-					a = *fp;		/* Kommando (wiederholen oder uebernehmen */
-					fp++;			/* naechstes Zeichen */
-					if (a > 128)	/* Zeichen wiederholen */
-					{
-						a = 257 - a;
-						y = *fp;
-						fp++;
-						for (x = 1; x <= a; x++)
-						{
-							MakeMCGA(y, pic, (1 << (s - 1)), b);
-							pic += 8;
-							b -= 8;
-						}
-					}
-					else			/* Zeichen uebernehmen */
-					{
-						for (x = 0; x <= a; x++)
-						{
-							y = *fp;
-							fp++;
-							MakeMCGA(y, pic, (1 << (s - 1)), b);
-							pic += 8;
-							b -= 8;
-						}
-					}
-				}
-				while (b > 0);
-			}
-			pic1 += 320;
-		}
-	}
-	else
-	{
-		pic1 = pic;
-		for (t = 1; t <= IFFheight; t++)
-		{
-			for (s = 1; s <= IFFplanes; s++)
-			{
-				pic = pic1;			/* Anfang der aktuellen Zeile */
-				b = ((IFFwidth + 15) >> 4) << 4;
-				do
-				{
-					y = *fp;
-					fp++;
-					MakeMCGA(y, pic, (1 << (s - 1)),b);
-					pic += 8;
-					b -= 8;
-				}
-				while (b > 0);
-			}
-			pic1 += 320;
-		}
-	}
 }

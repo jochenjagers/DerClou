@@ -6,6 +6,15 @@
 */
 #include "gfx\gfx.h"
 
+/*
+NCH4 is the unchained mode, also known as Mode X.
+
+In unchained mode, memory exists in four 64K planes. Each plane corresponds to a specific column of video memory:
+plane 0 contains pixels 0, 4, 8, etc.; plane 1 contains pixels 1, 5, 9, etc.; plane 2 contains columns 2, 6, 10, etc.;
+and plane 3 contains columns 3, 7, 11, etc.
+So to plot a pixel at position (5,7), plane 1 is selected, and the offset is (320*7+5)/4 = 561.
+*/
+
 static int ScrX = 0, ScrY = 0;
 
 ulong gfxNCH4GetCurrScrollOffset(void)
@@ -13,11 +22,14 @@ ulong gfxNCH4GetCurrScrollOffset(void)
 	return(GFX_NCH4_SCROLLOFFSET + ScrX + (ScrY * 640));
 }
 
+/* identical to MCGA version, except destination seems to be 640 wide */
 void gfxNCH4PrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword us_Y)
 {
+	SDL_LockSurface(rp->p_Font->pSurface);
+
 	ubyte *DestPtr = &((ubyte*)rp->p_BitMap)[us_X + us_Y * 640];
-	ubyte *FontPtr = (ubyte*)rp->p_Font->p_BitMap;
-	uword CharsPerLine = 320 / rp->p_Font->us_Width;
+	ubyte *FontPtr = (ubyte*)rp->p_Font->pSurface->pixels;
+	uword CharsPerLine = rp->p_Font->pSurface->w / rp->p_Font->us_Width;
 	uword Length = strlen(puch_Text);
 
 	ubyte *DestPtr1;
@@ -28,7 +40,7 @@ void gfxNCH4PrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword u
 	for (t = 0; t < Length; t++)
 	{
 		c = puch_Text[t] - rp->p_Font->uch_FirstChar;
-		h1 = (c / CharsPerLine) * 320 * rp->p_Font->us_Height;
+		h1 = (c / CharsPerLine) * rp->p_Font->pSurface->pitch * rp->p_Font->us_Height;
 		h2 = (c % CharsPerLine) * rp->p_Font->us_Width;
 		FontPtr1 = &FontPtr[h1 + h2];
 		DestPtr1 = &DestPtr[t * rp->p_Font->us_Width];
@@ -43,9 +55,11 @@ void gfxNCH4PrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword u
 					DestPtr1[i] = rp->uch_BackPenAbs;
 			}
 			DestPtr1 += 640;
-			FontPtr1 += 320;
+			FontPtr1 += rp->p_Font->pSurface->pitch;
 		}
 	}
+
+	SDL_UnlockSurface(rp->p_Font->pSurface);
 }
 
 void gfxNCH4RectFill(struct RastPort *rp, uword us_SX, uword us_SY, uword us_EX, uword us_EY)

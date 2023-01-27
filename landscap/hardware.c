@@ -8,14 +8,13 @@
 #include "landscap\landscap_p.h"
 
 static void lsPrepareFromXMSBySize(ubyte uch_Size);
-static void lsPrepareFromXMS(LSObject lso);
 static void lsBlitOneObject(uword offsetFact, word destx, word desty, uword size);
 
 void lsShowEscapeCar(void)
 {
 	Building b = (Building)dbGetObject(ls->ul_BuildingID);
 
-	livPrepareAnims();
+	livPrepareAnims();	// copy sprite anim to StdBuffer1
 
 	BobSet(ls->us_EscapeCarBobId, b->CarXPos, b->CarYPos, LS_ESCAPE_CAR_X_OFFSET, LS_ESCAPE_CAR_Y_OFFSET);
 	BobVis(ls->us_EscapeCarBobId);
@@ -68,15 +67,12 @@ static void lsRefreshClosedDoors(uword us_X0, uword us_Y0, uword us_X1, uword us
 void lsRefreshStatue(LSObject lso)
 {
 	uword srcX, srcY, destX, destY, size;
-	struct _LSObject dummy;	// nur zur Übergabe an lsPrepareFromXMS
 
 	ls->uch_ShowObjectMask = 0x40;
 
 	size = 16;		// stimmt die Gr”áe ??
 
-	dummy.uch_Size = (ubyte) size;
-
-	lsPrepareFromXMS(&dummy);
+	lsPrepareFromXMSBySize(size);
 
 	srcX = 16;		// aus der Grafik entnehmen und hier eintragen!
 	srcY = 0;
@@ -192,6 +188,38 @@ void lsFastRefresh(LSObject lso)
 	ls->uch_ShowObjectMask = 0;	// alle Bits kopieren
 }
 
+// 2019-11-25
+void lsPrepareFromXMSRastPort(struct XMSRastPort *rp)
+{
+	if (rp) {
+		ulong buffer_size = rp->pSurface->w * rp->pSurface->h;			/* temporary solution */
+		if (LS_PREPARE_BUFFER_SIZE > buffer_size) {
+			memset(LS_PREPARE_BUFFER, 0, LS_PREPARE_BUFFER_SIZE);
+		}
+
+		SDL_LockSurface(rp->pSurface);
+        memcpy(LS_PREPARE_BUFFER, rp->pSurface->pixels, buffer_size);
+		SDL_UnlockSurface(rp->pSurface);
+	}
+}
+
+// 2019-11-25
+void lsPrepareToXMSRastPort(struct XMSRastPort *rp)
+{
+	if (rp) {
+		ulong buffer_size = rp->pSurface->w * rp->pSurface->h;			/* temporary solution */
+		if (LS_PREPARE_BUFFER_SIZE < buffer_size) {
+			buffer_size = LS_PREPARE_BUFFER_SIZE;
+		}
+
+		SDL_LockSurface(rp->pSurface);
+        memcpy(rp->pSurface->pixels, LS_PREPARE_BUFFER, buffer_size);
+		SDL_UnlockSurface(rp->pSurface);
+	}
+}
+
+// bringt die Collection, in der sich ein Bild eines lso befindet in den
+// LS_PREPARE_BUFFER
 static void lsPrepareFromXMSBySize(ubyte uch_Size)
 {
 	struct XMSRastPort *rp = NULL;
@@ -203,24 +231,8 @@ static void lsPrepareFromXMSBySize(ubyte uch_Size)
 		case 48: rp = &LS_COLL48_XMS_RP; break;
 	}
 
-	if (rp) {
-		/* 2014-07-06 LucyG */
-		ulong buffer_size = LS_PREPARE_BUFFER_SIZE;
-		if (buffer_size > (rp->us_Width * rp->us_Height)) {
-			buffer_size = (rp->us_Width * rp->us_Height);
-			//Log("Warning: %s|%s: buffer size changed from %d to %d", __FILE__, __func__, LS_PREPARE_BUFFER_SIZE, buffer_size);
-			memset(LS_PREPARE_BUFFER, 0, LS_PREPARE_BUFFER_SIZE);
-		}
-        memcpy(LS_PREPARE_BUFFER, rp->p_MemHandle, buffer_size);
-	}
+	lsPrepareFromXMSRastPort(rp);
 }
-
-// bringt die Collection, in der sich ein Bild eines lso befindet in den
-// LS_PREPARE_BUFFER
-static void lsPrepareFromXMS(LSObject lso)
-	{
-	lsPrepareFromXMSBySize(lso->uch_Size);
-	}
 
 static void lsBlitOneObject(uword offsetFact, word destx, word desty, uword size)
 	{
@@ -284,8 +296,9 @@ long lsShowOneObject(LSObject lso, word destx, word desty, ulong ul_Mode)
 
 			if (show)
 				{
-				if (ul_Mode & LS_SHOW_PREPARE_FROM_XMS)
-					lsPrepareFromXMS(lso);
+				if (ul_Mode & LS_SHOW_PREPARE_FROM_XMS) {
+					lsPrepareFromXMSBySize(lso->uch_Size);
+				}
 
 				offsetFact = item->OffsetFact + (lso->ul_Status & 3);
 
@@ -308,17 +321,9 @@ long lsShowOneObject(LSObject lso, word destx, word desty, ulong ul_Mode)
 
 void lsBlitFloor(uword floorIndex, uword destx, uword desty)
 	{
-	struct XMSRastPort *rp = &LS_FLOOR_XMS_RP;
 	uword srcX;
 
-	/* 2014-07-06 LucyG : got random crashes here! */
-	ulong buffer_size = LS_PREPARE_BUFFER_SIZE;
-	if (buffer_size > (rp->us_Width * rp->us_Height)) {
-		buffer_size = (rp->us_Width * rp->us_Height);
-		//Log("Warning: %s|%s: buffer size changed from %d to %d", __FILE__, __func__, LS_PREPARE_BUFFER_SIZE, buffer_size);
-		memset(LS_PREPARE_BUFFER, 0, LS_PREPARE_BUFFER_SIZE);
-	}
-    memcpy(LS_PREPARE_BUFFER, rp->p_MemHandle, buffer_size);
+	lsPrepareFromXMSRastPort(&LS_FLOOR_XMS_RP);
 
 	srcX = ((ls->p_CurrFloor[floorIndex].uch_FloorType) & 0xf) * LS_FLOOR_X_SIZE;
 

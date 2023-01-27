@@ -154,5 +154,7 @@ static void lsInitFloorSquares(void);
 static void lsLoadAllSpots(void);
 static void lsSetCurrFloorSquares(ulong areaId);
 
+extern void lsPrepareFromXMSRastPort(struct XMSRastPort *rp);
+extern void lsPrepareToXMSRastPort(struct XMSRastPort *rp);
 
 

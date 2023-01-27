@@ -9,6 +9,8 @@
 
 #include "theclou.h"
 
+#include "SDL.h"
+
 #ifndef MODULE_LIST
 #include "list\list.h"
 #endif
@@ -18,6 +20,7 @@ extern int gfxScalingOffsetY;
 extern int gfxScalingFactor;
 
 extern void gfxScreenshot(void);
+extern void gfxScreenshotShadow(void);
 extern ubyte *gfxGetGfxBoardBase(void);
 extern void gfxInvalidate(void);
 extern void gfxSetDarkness(ubyte value);
@@ -50,37 +53,50 @@ extern void gfxSetDarkness(ubyte value);
 #define GFX_NO_COLL_IN_XMS				((uword) -1)
 
 #define GFX_COLORTABLE_SIZE			768	/* 256 Farben * 3 Bytes */
-#define GFX_SIZE_OF_COLLECTION(c) 	(gfxGetILBMSize(c) + GFX_COLORTABLE_SIZE)
 
 #define GFX_VIDEO_MCGA					1
 #define GFX_VIDEO_NCH4					2
 #define GFX_VIDEO_TEXT					3
 
-struct XMSRastPort
+struct Font
 {
-	uword us_Width;
-	uword	us_Height;
-	void* p_MemHandle;
-	uword	us_CollId;	/* Collection, die sich gerade hier befindet! */
+	SDL_Surface *	pSurface;
+
+	uword			us_Width;	/* of one character */
+	uword			us_Height;	/* of one character */
+
+	ubyte			uch_FirstChar;
+	ubyte			uch_LastChar;
 };
 
-struct RastPort	/* change rp definitions in gfx.ph */
+struct XMSRastPort
 {
-	uword	us_LeftEdge;
-	uword	us_TopEdge;
-	uword	us_Width;
-	uword	us_Height;
-	uword us_DrawMode;
-	ubyte	uch_VideoMode;
-	ubyte uch_FrontPenAbs;	 /* entspricht dem Farbregister */
-	ubyte uch_BackPenAbs;	 /* ebenfalls absolut und nicht relativ zum */
-	ubyte uch_OutlinePenAbs; /* Registerstart */
-	uword	us_CursorXPosAbs;
-	uword us_CursorYPosAbs;
-	ubyte	uch_ColorStart;
-	ubyte	uch_ColorEnd;
-	void	      *p_BitMap;
-	struct Font *p_Font;
+	SDL_Surface *	pSurface;
+	/*
+	uword			us_Width;
+	uword			us_Height;
+	void *			p_MemHandle;
+	*/
+	uword			us_CollId;	/* Collection, die sich gerade hier befindet! */
+};
+
+struct RastPort
+{
+	uword			us_LeftEdge;
+	uword			us_TopEdge;
+	uword			us_Width;
+	uword			us_Height;
+	uword			us_DrawMode;
+	ubyte			uch_VideoMode;
+	ubyte			uch_FrontPenAbs;	 /* entspricht dem Farbregister */
+	ubyte			uch_BackPenAbs;	 /* ebenfalls absolut und nicht relativ zum */
+	ubyte			uch_OutlinePenAbs; /* Registerstart */
+	uword			us_CursorXPosAbs;
+	uword			us_CursorYPosAbs;
+	ubyte			uch_ColorStart;
+	ubyte			uch_ColorEnd;
+	void *			p_BitMap;
+	struct Font *	p_Font;
 };
 
 struct Collection
@@ -119,20 +135,6 @@ struct Picture
 
 	uword us_DestX;
 	uword us_DestY;
-};
-
-struct Font
-{
-	void *p_BitMap;
-
-	uword us_Width;      	/* of one character */
-	uword us_Height;			/* of one character */
-
-	uword us_TotalWidth;
-	uword us_TotalHeight;
-
-	ubyte uch_FirstChar;
-	ubyte uch_LastChar;
 };
 
 extern ubyte gfxPaletteGlobal[256*4];
@@ -185,6 +187,8 @@ extern void gfxDraw(struct RastPort *rp, uword us_X, uword us_Y);
 extern void gfxSetDrMd(struct RastPort *rp, uword us_DrawMode);
 extern void gfxSetFont(struct RastPort *rp, struct Font *font);
 
+extern SDL_Surface *gfxLoadImage(const char *puch_Pathname);	// 2019-11-26
+
 extern void gfxPrepareRefresh(void);
 extern void gfxRefresh(void);
 
@@ -209,6 +213,7 @@ extern void gfxCopyCollFromXMS(uword us_CollId, void *p_Buffer);
 
 extern void gfxGetColorTableFromReg(ubyte *puch_Colortable);
 extern void gfxGetColorTable(uword us_CollId, ubyte *puch_ColorTable);
+extern void gfxSetColorTable_hack(SDL_Surface *pSurface);
 
 extern struct RastPort *gfxPrepareColl(uword us_CollId);
 extern void gfxUnPrepareColl(uword us_CollId);

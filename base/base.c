@@ -13,7 +13,6 @@
 
 Configuration_t Config;
 
-void *StdBuffer0 = 0;
 void *StdBuffer1 = 0;
 
 char prgname[255];
@@ -26,16 +25,8 @@ char bCDRom=0; //default = 0
 void tcClearStdBuffer(void *p_Buffer)
 {
 	long i;
-	char *p = (char *) p_Buffer;
-	long size = 0;
-
-	if (p == StdBuffer0)
-		size = STD_BUFFER0_SIZE;
-
-	if (p == StdBuffer1)
-		size = STD_BUFFER1_SIZE;
-
-	for (i = 0; i < size; i++)
+	char *p = (char *)p_Buffer;
+	for (i = 0; i < STD_BUFFER1_SIZE; i++)
 		p[i] = 0;
 }
 
@@ -61,9 +52,6 @@ static void tcDone(void)
 			CDROM_UnInstall();
 		}
 	}
-
-	if (StdBuffer0)
-		MemFree(StdBuffer0, STD_BUFFER0_SIZE);
 
 	if (StdBuffer1)
 		MemFree(StdBuffer1, STD_BUFFER1_SIZE);
@@ -138,11 +126,9 @@ static int tcInit(void)
 {
 	pcErrOpen(ERR_NO_OUTPUT, tcDone, NULL);
 
-	StdBuffer0 = (void *)MemAlloc(STD_BUFFER0_SIZE);
 	StdBuffer1 = (void *)MemAlloc(STD_BUFFER1_SIZE);
 
-
-	if (StdBuffer0 && StdBuffer1)
+	if (StdBuffer1)
 	{
 		gfxInit();
 		inpOpenAllInputDevs();

@@ -312,6 +312,9 @@ long inpWaitFor(long l_Mask)
 						action |= INP_KEYBOARD|INP_FUNCTION_KEY;
 					}
 					switch (sym) {
+						case SDLK_F11: {
+							gfxScreenshotShadow();	// save shadow surface
+						} break;
 						case SDLK_F12: {
 							gfxScreenshot();	// 2014-07-13 LucyG : guess what F12 does
 						} break;

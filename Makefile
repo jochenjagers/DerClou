@@ -46,8 +46,8 @@ organisa\organisa.obj planing\graphics.obj planing\guards.obj planing\io.obj pla
 planing\planer.obj planing\player.obj planing\prepare.obj planing\support.obj planing\sync.obj planing\system.obj \
 present\interac.obj present\present.obj random\random.obj scenes\cars.obj scenes\dealer.obj scenes\done.obj \
 scenes\evidence.obj scenes\inside.obj scenes\invest.obj scenes\scenes.obj scenes\tools.obj \
-story\story.obj text\text.obj \
-port\port.obj intro\intro.obj intro\iffanim.obj gfx\filter.obj cdrom\cdrom.obj SDL_win32_main.obj
+story\story.obj text\text.obj port\port.obj intro\intro.obj intro\iffanim.obj gfx\filter.obj cdrom\cdrom.obj \
+gfx\loadimage.obj SDL_win32_main.obj
 
 #========================================
 # 'Make all' rule

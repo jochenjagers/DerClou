@@ -400,7 +400,7 @@ void lsRefreshAllLootBags(void)
 	ulong i;
 	LSObject lso;
 
-	livPrepareAnims();
+	livPrepareAnims();	// copy sprite anim to StdBuffer1
 
 	for (i = 1; i < 9; i++)
 		{
@@ -582,14 +582,7 @@ static void lsInitDoorRefresh(ulong ObjId)
 
 	if (!found)
 	{
-		/* 2014-07-06 LucyG */
-		ulong buffer_size = LS_PREPARE_BUFFER_SIZE;
-		if (buffer_size > (LS_DOOR_REFRESH_XMS_RP.us_Width * LS_DOOR_REFRESH_XMS_RP.us_Height)) {
-			buffer_size = (LS_DOOR_REFRESH_XMS_RP.us_Width * LS_DOOR_REFRESH_XMS_RP.us_Height);
-			//Log("Warning: %s|%s: buffer size changed from %d to %d", __FILE__, __func__, LS_PREPARE_BUFFER_SIZE, buffer_size);
-			memset(LS_PREPARE_BUFFER, 0, LS_PREPARE_BUFFER_SIZE);
-		}
-        memcpy(LS_PREPARE_BUFFER, LS_DOOR_REFRESH_XMS_RP.p_MemHandle, buffer_size);
+		lsPrepareFromXMSRastPort(&LS_DOOR_REFRESH_XMS_RP);
 
 		width  = lso->uch_Size;
 		height = lso->uch_Size;
@@ -599,7 +592,7 @@ static void lsInitDoorRefresh(ulong ObjId)
 
 		gfxNCH4PutNCH4ToMCGA(l_wrp->p_BitMap, LS_PREPARE_BUFFER, lso->us_DestX, lso->us_DestY, destX, destY, width, height, 160, 320);
 
-        memcpy(LS_DOOR_REFRESH_XMS_RP.p_MemHandle, LS_PREPARE_BUFFER, buffer_size);
+		lsPrepareToXMSRastPort(&LS_DOOR_REFRESH_XMS_RP);
 
 		drn = (struct LSDoorRefreshNode *)
 			CreateNode(ls->p_DoorRefreshList, sizeof(struct LSDoorRefreshNode), 0L);
@@ -628,14 +621,7 @@ void lsDoDoorRefresh(LSObject lso)
 	struct   LSDoorRefreshNode *drn;
 	uword width, height;
 
-	/* 2014-07-06 LucyG */
-	ulong buffer_size = LS_PREPARE_BUFFER_SIZE;
-	if (buffer_size > (LS_DOOR_REFRESH_XMS_RP.us_Width * LS_DOOR_REFRESH_XMS_RP.us_Height)) {
-		buffer_size = (LS_DOOR_REFRESH_XMS_RP.us_Width * LS_DOOR_REFRESH_XMS_RP.us_Height);
-		//Log("Warning: %s|%s: buffer size changed from %d to %d", __FILE__, __func__, LS_PREPARE_BUFFER_SIZE, buffer_size);
-		memset(LS_PREPARE_BUFFER, 0, LS_PREPARE_BUFFER_SIZE);
-	}
-    memcpy(LS_PREPARE_BUFFER, LS_DOOR_REFRESH_XMS_RP.p_MemHandle, buffer_size);
+	lsPrepareFromXMSRastPort(&LS_DOOR_REFRESH_XMS_RP);
 
 	for (drn = (struct LSDoorRefreshNode *) LIST_HEAD(ls->p_DoorRefreshList);
 		  NODE_SUCC(drn); drn = (struct LSDoorRefreshNode *) NODE_SUCC(drn))

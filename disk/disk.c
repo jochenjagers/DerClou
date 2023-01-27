@@ -7,8 +7,7 @@
 #include "disk\disk.h"
 #include "disk\disk_e.h"
 
-char RootPathName[256];
-
+static char RootPathName[256];
 
 void dskSetRootPath(const char *newRootPath)
 {
@@ -21,30 +20,51 @@ char *dskGetRootPath(char *result)
 	return result;
 }
 
+/* 2019-11-22 LucyG  */
+static int dskModfilesPathName(const char *pszPath, char *pszModfilesPath)
+{
+	int rootPathLen = strlen(RootPathName);
+	if (!memcmp(pszPath, RootPathName, rootPathLen)) {
+		rootPathLen++;	// also skip the separator
+		dskBuildPathName(MODFILES_DIRECTORY, &pszPath[rootPathLen], pszModfilesPath);
+		return(1);
+	}
+	return(0);
+}
+
 FILE *dskOpen(const char *puch_Pathname, const char *puch_Mode, uword us_DiskId)
 {
 	FILE *p_File = NULL;
 
-	us_DiskId = 0; /* just to have no warnings */
+	/* 2019-11-22 LucyG : Modfiles support */
+	if (puch_Mode[0] == 'r') {
+		static char szModfilesPath[260];
+		if (dskModfilesPathName(puch_Pathname, szModfilesPath)) {
+			/* try to open modded file */
+			p_File = fopen(szModfilesPath, puch_Mode);
+		}
+	}
 
-	//Log("%s|%s: %s(%s)", __FILE__, __func__, puch_Pathname, puch_Mode);
+	if (!p_File) {
+		/* open original file */
+		p_File = fopen(puch_Pathname, puch_Mode);
+	}
 
-	if (!(p_File = fopen(puch_Pathname, puch_Mode)))
-	{
+	if (!p_File) {
 		NewErrorMsg(Disk_Defect, __FILE__, __func__, ERR_DISK_OPEN_FAILED);
 	}
 
 	return(p_File);
 }
 
-long dskLoad(const char *puch_Pathname, void *p_MemDest, uword us_DiskId)
+long dskLoad(const char *puch_Pathname, void *p_MemDest)
 {
 	FILE *p_File = NULL;
 	long ul_SizeOfFile;
 
 	if (ul_SizeOfFile = dskFileLength(puch_Pathname))
 	{
-		if (p_File = dskOpen(puch_Pathname, "rb", us_DiskId))
+		if (p_File = dskOpen(puch_Pathname, "rb", 0))
 		{
 			dskRead(p_File, p_MemDest, ul_SizeOfFile);
 			dskClose(p_File);

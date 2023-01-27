@@ -46,9 +46,11 @@ void gfxMCGABlit(struct RastPort *srp, uword us_SourceX, uword us_SourceY,
 
 void gfxMCGAPrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword us_Y)
 {
+	SDL_LockSurface(rp->p_Font->pSurface);
+
 	ubyte *DestPtr = &((ubyte*)rp->p_BitMap)[us_X + us_Y * rp->us_Width];
-	ubyte *FontPtr = (ubyte*)rp->p_Font->p_BitMap;
-	uword CharsPerLine = rp->us_Width / rp->p_Font->us_Width;
+	ubyte *FontPtr = (ubyte*)rp->p_Font->pSurface->pixels;
+	uword CharsPerLine = rp->p_Font->pSurface->w / rp->p_Font->us_Width;
 	uword Length = strlen(puch_Text);
 
 	ubyte *DestPtr1;
@@ -59,7 +61,7 @@ void gfxMCGAPrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword u
 	for (t = 0; t < Length; t++)
 	{
 		c = puch_Text[t] - rp->p_Font->uch_FirstChar;
-		h1 = (c / CharsPerLine) * 320 * rp->p_Font->us_Height;
+		h1 = (c / CharsPerLine) * rp->p_Font->pSurface->pitch * rp->p_Font->us_Height;
 		h2 = (c % CharsPerLine) * rp->p_Font->us_Width;
 		FontPtr1 = &FontPtr[h1 + h2];
 		DestPtr1 = &DestPtr[t * rp->p_Font->us_Width];
@@ -74,9 +76,11 @@ void gfxMCGAPrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword u
 					DestPtr1[i] = rp->uch_BackPenAbs;
 			}
 			DestPtr1 += rp->us_Width;
-			FontPtr1 += 320;
+			FontPtr1 += rp->p_Font->pSurface->pitch;
 		}
 	}
+
+	SDL_UnlockSurface(rp->p_Font->pSurface);
 }
 
 void gfxMCGARectFill(struct RastPort *rp, uword us_X, uword us_Y, uword us_X1, uword us_Y1)
