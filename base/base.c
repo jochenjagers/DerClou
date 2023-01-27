@@ -111,15 +111,15 @@ static ubyte detectLanguage(void)
  * must call after txtInit */
 static void detectGameVersionType(void)
 {
-	if (txtKeyExists(THECLOU_TXT, "BITTE_WARTEN_PC_CD_ROM")) // || (txtKeyExists(THECLOU_TXT, "BITTE_WARTEM_PC_CD_ROM"))
-	{
-		bProfidisk = 0;
-		bCDRom = 1; 
-	}
-	else if (txtKeyExists(THECLOU_TXT, "BITTE_WARTEN_PC_CD_ROM_PROFI"))
+	if (txtKeyExists(THECLOU_TXT, "BITTE_WARTEN_PC_CD_ROM_PROFI"))
 	{
 		bProfidisk = 1;
 		bCDRom = 1;
+	}
+	else if (txtKeyExists(THECLOU_TXT, "BITTE_WARTEM_PC_CD_ROM"))	// this typo is supposed to be there!
+	{
+		bProfidisk = 0;
+		bCDRom = 1; 
 	}
 	else if (txtKeyExists(THECLOU_TXT, "BITTE_WARTEN_PC_PROFI"))
 	{
@@ -433,6 +433,7 @@ static void loadConfig(const char *rootPath)
 	Config.NoIntro = 0;
 	Config.MusicVolume = SND_MAX_VOLUME;
 	Config.SfxVolume = SND_MAX_VOLUME;
+	Config.VoiceVolume = SND_MAX_VOLUME;
 	Config.UseJoystick = 0;
 
 	sprintf(config_file, "%s\\%s", rootPath, "cosp.cfg");
@@ -472,6 +473,8 @@ static void loadConfig(const char *rootPath)
 				Config.SfxVolume = atoi(pValue);
 			} else if (!stricmp(pParam, "musicvolume")) {
 				Config.MusicVolume = atoi(pValue);
+			} else if (!stricmp(pParam, "voicevolume")) {
+				Config.VoiceVolume = atoi(pValue);
 			} else if (!stricmp(pParam, "nofontshadow")) {
 				Config.gfxNoFontShadow = atoi(pValue) ? 1 : 0;
 			} else if (!stricmp(pParam, "nointro")) {
@@ -551,6 +554,11 @@ int SDL_main(int argc, char **argv)
 		Config.SfxVolume = 0;
 	} else if (Config.SfxVolume > SND_MAX_VOLUME) {
 		Config.SfxVolume = SND_MAX_VOLUME;
+	}
+	if (Config.VoiceVolume < 0) {
+		Config.VoiceVolume = 0;
+	} else if (Config.VoiceVolume > SND_MAX_VOLUME) {
+		Config.VoiceVolume = SND_MAX_VOLUME;
 	}
 
 	if (res = tcInit()) {

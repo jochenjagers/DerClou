@@ -33,6 +33,8 @@ void InitAudio(void)
 	fmt.nSampleSize = 4;
 	pAudioMixer = MXR_CreateMixer(&fmt);
 
+	MXR_SetOutputVolume(pAudioMixer, SND_MAX_VOLUME);
+
 	currMusicVolume = Config.MusicVolume;
 }
 
@@ -69,6 +71,7 @@ void sndPlayFX(const char *name)
     if (pAudioMixer) {
         dskBuildPathName(SAMPLES_DIRECTORY, name, fileName);
 		MXR_SetInput(pAudioMixer, MXR_INPUT_FX, MXR_CreateInputVOC(fileName));
+		MXR_SetInputVolume(pAudioMixer, MXR_INPUT_FX, Config.SfxVolume);	// 2018-09-25
 		SfxChannelOn = TRUE;
     }
 }

@@ -24,6 +24,8 @@ char currSoundName[256];
 int currMusicVolume = 0;
 int targetMusicVolume = 0;
 
+static char bMuted = 0;
+
 void sndInit(void)
 {
     currSoundName[0] = '\0';
@@ -48,7 +50,9 @@ void sndPlaySound(char *name, ulong mode)
 
 			MXR_SetInput(pAudioMixer, MXR_INPUT_MUSIC, MXR_CreateInputHSC(path));
 
+			currMusicVolume = 0;
 			targetMusicVolume = Config.MusicVolume;
+			MXR_SetInputVolume(pAudioMixer, MXR_INPUT_MUSIC, currMusicVolume);	// 2018-09-25
 		}
 	}
 }
@@ -61,11 +65,22 @@ char *sndGetCurrSoundName(void)
 // 2014-07-17 LucyG : called from inpDoPseudoMultiTasking
 void sndDoFading(void)
 {
+	// 2018-09-25: volume can now be changed any time
+	if (bMuted) {
+		targetMusicVolume = Config.MusicVolume / 4;
+	} else {
+		targetMusicVolume = Config.MusicVolume;
+	}
+
 	if (currMusicVolume < targetMusicVolume) {
 		currMusicVolume++;
 	} else if (currMusicVolume > targetMusicVolume) {
 		currMusicVolume--;
 	}
+
+	MXR_SetInputVolume(pAudioMixer, MXR_INPUT_MUSIC, currMusicVolume);
+	MXR_SetInputVolume(pAudioMixer, MXR_INPUT_FX, Config.SfxVolume);
+	MXR_SetInputVolume(pAudioMixer, MXR_INPUT_VOICE, Config.VoiceVolume);
 }
 
 void sndFading(short int targetVol)
@@ -74,8 +89,10 @@ void sndFading(short int targetVol)
 		/* 2014-07-17 LucyG : this is called from dialog.c (and intro.c)
 		   with targetVol = 16 before and 0 after voice playback */
 		if (!targetVol) {
+			bMuted = 0;
 			targetMusicVolume = Config.MusicVolume;
 		} else {
+			bMuted = 1;
 			targetMusicVolume = Config.MusicVolume / 4;
 		}
     }

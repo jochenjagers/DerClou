@@ -12,8 +12,6 @@
 #include "mxr.h"
 #include "sound/fmopl.h"
 
-#define MXR_DELAY	1
-
 /******************************************************************************/
 
 struct MXR_Mixer {
@@ -22,10 +20,6 @@ struct MXR_Mixer {
 
 	MXR_Input *		pInput[MXR_MAX_INPUTS];
 	unsigned char	buffer[MXR_BUFFER_SAMPLES * 2 * sizeof(short)];	/* (hopefully) the largest required buffer */
-	
-#if MXR_DELAY
-	short			delay_buffer[MXR_BUFFER_SAMPLES * 2];
-#endif
 };
 
 #define ClampValue(v,a,z)	((v) < (a) ? (a) : ((v) > (z) ? (z) : (v)))
@@ -362,14 +356,6 @@ static void MXR_ProcessMixer(MXR_Mixer *pMixer, unsigned char *pStream, int nStr
 			}
 		}
 	}
-#if MXR_DELAY
-	short rem;
-	for (i = 0; i < nStreamSamples * 2; i+=2) {
-		rem = ((short *)pStream)[i];
-		((short *)pStream)[i] = pMixer->delay_buffer[i];
-		pMixer->delay_buffer[i] = rem;
-	}
-#endif
 }
 
 /******************************************************************************/
@@ -489,14 +475,16 @@ unsigned char MXR_SetOutputVolume(MXR_Mixer *pMixer, unsigned char nVolume)
 
 unsigned char MXR_SetInputVolume(MXR_Mixer *pMixer, long nInput, unsigned char nVolume)
 {
-	unsigned char nOldVolume;
+	unsigned char nOldVolume = 0;
 
-	SDL_LockAudio();
+	if (pMixer->pInput[nInput]) {	// 2018-09-25
+		SDL_LockAudio();
 
-	nOldVolume = pMixer->pInput[nInput]->nVolume;
-	pMixer->pInput[nInput]->nVolume = nVolume;
+		nOldVolume = pMixer->pInput[nInput]->nVolume;
+		pMixer->pInput[nInput]->nVolume = nVolume;
 
-	SDL_UnlockAudio();
+		SDL_UnlockAudio();
+	}
 
 	return(nOldVolume);
 }

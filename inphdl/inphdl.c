@@ -11,6 +11,7 @@
 #include "inphdl\arrow2x_xpm.c"
 
 #include "sound\newsound.h"
+#include "sound\fx.h"
 
 static SDL_Cursor *cursor[2];
 
@@ -306,8 +307,46 @@ long inpWaitFor(long l_Mask)
 					if (IHandler.uch_FunctionKeyStatus && (l_Mask & INP_FUNCTION_KEY) && ((sym >= SDLK_F1) && (sym <= SDLK_F11))) {
 						action |= INP_KEYBOARD|INP_FUNCTION_KEY;
 					}
-					if (sym == SDLK_F12) {
-						gfxScreenshot();	// 2014-07-13 LucyG : guess what F12 does
+					switch (sym) {
+						case SDLK_F12: {
+							gfxScreenshot();	// 2014-07-13 LucyG : guess what F12 does
+						} break;
+						case SDLK_INSERT: {
+							Config.MusicVolume += 25;
+							if (Config.MusicVolume > SND_MAX_VOLUME) {
+								Config.MusicVolume = SND_MAX_VOLUME;
+							}
+						} break;
+						case SDLK_DELETE: {
+							Config.MusicVolume -= 25;
+							if (Config.MusicVolume < 0) {
+								Config.MusicVolume = 0;
+							}
+						} break;
+						case SDLK_HOME: {
+							Config.SfxVolume += 25;
+							if (Config.SfxVolume > SND_MAX_VOLUME) {
+								Config.SfxVolume = SND_MAX_VOLUME;
+							}
+						} break;
+						case SDLK_END: {
+							Config.SfxVolume -= 25;
+							if (Config.SfxVolume < 0) {
+								Config.SfxVolume = 0;
+							}
+						} break;
+						case SDLK_PAGEUP: {
+							Config.VoiceVolume += 25;
+							if (Config.VoiceVolume > SND_MAX_VOLUME) {
+								Config.VoiceVolume = SND_MAX_VOLUME;
+							}
+						} break;
+						case SDLK_PAGEDOWN: {
+							Config.VoiceVolume -= 25;
+							if (Config.VoiceVolume < 0) {
+								Config.VoiceVolume = 0;
+							}
+						} break;
 					}
 				break;
 				case SDL_MOUSEMOTION:

@@ -8,7 +8,7 @@
 #define THECLOU_MODULE
 
 #define __COSP__
-#define COSP_VERSION	"0.6"
+#define COSP_VERSION	"0.7"
 #define COSP_TITLE		"Der Clou! Open Source Project"
 
 typedef struct {
@@ -21,6 +21,7 @@ typedef struct {
 
 	int SfxVolume;
 	int MusicVolume;
+	int VoiceVolume;
 	
 	unsigned char UseJoystick;
 } Configuration_t;

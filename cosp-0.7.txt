@@ -1,4 +1,4 @@
-Der Clou! Open Source Project V0.6 (2017-11-16)
+Der Clou! Open Source Project V0.7 (2018-09-25)
 
 http://sourceforge.net/projects/cosp
 
@@ -18,13 +18,12 @@ Contributions:   Baris Elmas (devkid82)
                  Thomas Trummer (LordSkaven)
 Playtesting:     Baris Elmas (devkid82) - first to finish German version
                  Martin Banas (srandista) - first to finish Czech version
-                 Neno - the bug reporter :)
+                 Neno - bug reporter
+                 MvGulik - Linux+Wine bug reporter
 
 IFF ANIM decoder C++ class by Markus Wolf (murkymind.de)
 Ported to C by Oliver Gantert.
 
-Sound playback by Vasco Alexandre da Silva Costa and Jens Granseuer
- ( http://web.ist.utl.pt/~ist62669/theclue )
 HSC music player by Thomas Trummer
 The fmopl YM3812 emulator from MAME is under a no distribution for profit
 license contained in the included 'mame.txt' file.
@@ -32,6 +31,16 @@ license contained in the included 'mame.txt' file.
 ================================================================================
   CHANGES/FIXES
 ================================================================================
+
+v0.7 (2018-09-25)
+- fix: removed the experimental audio delay fake stereo effect
+- fix: volume settings didn't work
+- new: separate volume setting for voice (cosp.cfg)
+- new: volume can now be changed in 10 steps at runtime
+
+  INSERT / DELETE   : music volume
+  HOME / END        : sound fx volume
+  PAGEUP / PAGEDOWN : voice volume
 
 v0.6 (2017-11-16)
 - new: completely rewritten audio player and mixer (LucyG)

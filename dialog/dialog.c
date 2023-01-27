@@ -378,6 +378,7 @@ ubyte Say(ulong TextID,ubyte activ,uword person,char *text)
 			sndFading(16);
 
 			MXR_SetInput(pAudioMixer, MXR_INPUT_VOICE, MXR_CreateInputWAV(wavName));
+			MXR_SetInputVolume(pAudioMixer, MXR_INPUT_VOICE, Config.VoiceVolume);	// 2018-09-25
 			
 			choice = Bubble(bubble,activ,NULL,0L);
 			
