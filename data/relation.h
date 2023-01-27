@@ -37,63 +37,59 @@
 #include "disk/disk.h"
 #endif
 
-#define RELATION           uint32_t
-#define KEY                void *
-#define PARAMETER          uint32_t
-#define COMPARSION         unsigned char
+#define RELATION uint32_t
+#define KEY void *
+#define PARAMETER uint32_t
+#define COMPARSION unsigned char
 
-#define CMP_NO             ((COMPARSION)0)
-#define CMP_EQUAL          ((COMPARSION)(1 << 0))
-#define CMP_NOT_EQUAL      ((COMPARSION)(1 << 1))
-#define CMP_HIGHER         ((COMPARSION)(1 << 2))
-#define CMP_LOWER          ((COMPARSION)(1 << 3))
+#define CMP_NO ((COMPARSION)0)
+#define CMP_EQUAL ((COMPARSION)(1 << 0))
+#define CMP_NOT_EQUAL ((COMPARSION)(1 << 1))
+#define CMP_HIGHER ((COMPARSION)(1 << 2))
+#define CMP_LOWER ((COMPARSION)(1 << 3))
 
-#define REL_FILE_MARK      "RELF"
-#define REL_TABLE_MARK     "RTAB"
+#define REL_FILE_MARK "RELF"
+#define REL_TABLE_MARK "RTAB"
 
-#define NO_PARAMETER       (0xffffffff)
+#define NO_PARAMETER (0xffffffff)
 
-
-#define Set(leftKey,id,rightKey)  SetP (leftKey, id, rightKey, NO_PARAMETER)
-#define Ask(leftKey,id,rightKey)  AskP (leftKey, id, rightKey, NO_PARAMETER, CMP_NO)
-
+#define Set(leftKey, id, rightKey) SetP(leftKey, id, rightKey, NO_PARAMETER)
+#define Ask(leftKey, id, rightKey) AskP(leftKey, id, rightKey, NO_PARAMETER, CMP_NO)
 
 struct relation
 {
-   struct relation *r_next;
+    struct relation *r_next;
 
-   KEY       r_leftKey;
-   KEY       r_rightKey;
-   PARAMETER r_parameter;
+    KEY r_leftKey;
+    KEY r_rightKey;
+    PARAMETER r_parameter;
 };
 
 struct relationDef
 {
-   struct relationDef *rd_next;
+    struct relationDef *rd_next;
 
-   RELATION            rd_id;
-   struct relation    *rd_relationsTable;
+    RELATION rd_id;
+    struct relation *rd_relationsTable;
 };
 
+extern int (*CompareKey)(KEY, KEY);
+extern KEY (*EncodeKey)(char *);
+extern char *(*DecodeKey)(KEY);
 
-extern int   (*CompareKey)(KEY, KEY);
-extern KEY   (*EncodeKey) (char *);
-extern char *(*DecodeKey) (KEY);
+RELATION AddRelation(RELATION);
+RELATION CloneRelation(RELATION, RELATION);
+RELATION RemRelation(RELATION);
 
+RELATION SetP(KEY, RELATION, KEY, PARAMETER);
+RELATION UnSet(KEY, RELATION, KEY);
+PARAMETER GetP(KEY, RELATION, KEY);
+RELATION AskP(KEY, RELATION, KEY, PARAMETER, COMPARSION);
+void AskAll(KEY, RELATION, void (*)(void *));
+void UnSetAll(KEY, void (*)(KEY));
 
-RELATION  AddRelation  (RELATION);
-RELATION  CloneRelation(RELATION, RELATION);
-RELATION  RemRelation  (RELATION);
-
-RELATION  SetP    (KEY, RELATION, KEY, PARAMETER);
-RELATION  UnSet   (KEY, RELATION, KEY);
-PARAMETER GetP    (KEY, RELATION, KEY);
-RELATION  AskP    (KEY, RELATION, KEY, PARAMETER, COMPARSION);
-void      AskAll  (KEY, RELATION, void (*)(void *));
-void      UnSetAll(KEY, void (*)(KEY));
-
-int  SaveRelations(char *, uint32_t, uint32_t, uword disk_id);
-int  LoadRelations(char *, uword disk_id);
-void RemRelations (uint32_t, uint32_t);
+int SaveRelations(char *, uint32_t, uint32_t, uword disk_id);
+int LoadRelations(char *, uword disk_id);
+void RemRelations(uint32_t, uint32_t);
 
 #endif

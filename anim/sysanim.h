@@ -31,11 +31,11 @@
 #endif
 
 /* global functions */
-extern void	InitAnimHandler(void);
-extern void	CloseAnimHandler(void);
+extern void InitAnimHandler(void);
+extern void CloseAnimHandler(void);
 
-extern void	PlayAnim(char *AnimID,word how_often,uint32_t mode);	/* -> docs vom 16.08.92 ! */
-extern void	StopAnim(void);
+extern void PlayAnim(char *AnimID, word how_often, uint32_t mode); /* -> docs vom 16.08.92 ! */
+extern void StopAnim(void);
 
 extern void animator(void);
 
@@ -43,4 +43,3 @@ extern void SuspendAnim(void);
 extern void ContinueAnim(void);
 
 #endif
-

@@ -8,6 +8,7 @@
 #define MODULE_PLANING_MAIN
 
 #include <stdio.h>
+
 #include "theclou.h"
 
 #ifndef MODULE_MEMORY
@@ -50,12 +51,10 @@
 #include "planing/planer.h"
 #endif
 
-
 // Database offset & relations
-#define PLANING_DB_OFFSET              1300000
-#define take_RelId                     PLANING_DB_OFFSET+1
-#define hasLoot_Clone_RelId            PLANING_DB_OFFSET+2
-
+#define PLANING_DB_OFFSET 1300000
+#define take_RelId PLANING_DB_OFFSET + 1
+#define hasLoot_Clone_RelId PLANING_DB_OFFSET + 2
 
 extern struct System *plSys;
 
@@ -63,7 +62,6 @@ extern char txtTooLoud[20];
 extern char txtTimer[20];
 extern char txtWeight[20];
 extern char txtSeconds[20];
-
 
 void plInit(void);
 void plDone(void);

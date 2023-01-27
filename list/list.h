@@ -19,21 +19,21 @@
 
 struct Node
 {
-  struct Node  * Succ;
-  struct Node  * Pred;
-  char  * Name;
-  uword Size;
-  uword	Pad;
+    struct Node *Succ;
+    struct Node *Pred;
+    char *Name;
+    uword Size;
+    uword Pad;
 };
 typedef struct Node NODE;
 
 struct List
 {
-  NODE  * Head;
-  NODE  * Tail;
-  NODE  * TPred;
-  uword Size;
-  uword	Pad;
+    NODE *Head;
+    NODE *Tail;
+    NODE *TPred;
+    uword Size;
+    uword Pad;
 };
 typedef struct List LIST;
 
@@ -41,17 +41,17 @@ typedef struct List LIST;
 **  Macros  **
 *************/
 
-#define NODE_SUCC(node)   ((NODE *)(node))->Succ
-#define NODE_PRED(node)   ((NODE *)(node))->Pred
-#define NODE_NAME(node)   ((NODE *)(node))->Name
-#define NODE_SIZE(node)   ((NODE *)(node))->Size
+#define NODE_SUCC(node) ((NODE *)(node))->Succ
+#define NODE_PRED(node) ((NODE *)(node))->Pred
+#define NODE_NAME(node) ((NODE *)(node))->Name
+#define NODE_SIZE(node) ((NODE *)(node))->Size
 
-#define LIST_HEAD(list)   ((LIST *)(list))->Head
-#define LIST_TAIL(list)   ((LIST *)(list))->Tail
-#define LIST_TPRED(list)  ((LIST *)(list))->TPred
-#define LIST_SIZE(list)   ((LIST *)(list))->Size
+#define LIST_HEAD(list) ((LIST *)(list))->Head
+#define LIST_TAIL(list) ((LIST *)(list))->Tail
+#define LIST_TPRED(list) ((LIST *)(list))->TPred
+#define LIST_SIZE(list) ((LIST *)(list))->Size
 
-#define LIST_EMPTY(list)  (((LIST *)(list))->TPred == (NODE *)list)
+#define LIST_EMPTY(list) (((LIST *)(list))->TPred == (NODE *)list)
 
 /*****************
 **  Prototypes  **
@@ -74,7 +74,7 @@ extern void *GetNthNode(void *list, uint32_t nth);
 extern uint32_t GetNrOfNodes(void *list);
 extern uint32_t GetNodeNrByAddr(void *list, void *node);
 extern uint32_t GetNodeNr(void *list, char *name);
-extern void foreach(void *list, void (*processNode)(void *));
+extern void foreach (void *list, void (*processNode)(void *));
 extern void Link(void *list, void *node, void *predNode);
 extern void *UnLinkByAddr(void *list, void *node, void **predNode);
 extern void *UnLink(void *list, char *name, void **predNode);

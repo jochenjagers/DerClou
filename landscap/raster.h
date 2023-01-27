@@ -17,17 +17,16 @@
 #include "landscap/landscap.h"
 #endif
 
-#define LS_RASTER_DISP_WIDTH       320
-#define LS_RASTER_DISP_HEIGHT      140
+#define LS_RASTER_DISP_WIDTH 320
+#define LS_RASTER_DISP_HEIGHT 140
 
-#define LS_RASTER_X_SIZE           4    /* Raster is used for collision */
-#define LS_RASTER_Y_SIZE           4    /* dedection, in pixel */
+#define LS_RASTER_X_SIZE 4 /* Raster is used for collision */
+#define LS_RASTER_Y_SIZE 4 /* dedection, in pixel */
 
-
-NODE 	  *lsGetSuccObject(NODE *start);
-NODE 	  *lsGetPredObject(NODE *start);
-void  	lsFadeRasterObject(uint32_t areaID, LSObject lso, ubyte status);
-void  	lsShowAllConnections(uint32_t areaID, NODE *node, ubyte perc);
-void  	lsShowRaster(uint32_t areaID, ubyte perc);
+NODE *lsGetSuccObject(NODE *start);
+NODE *lsGetPredObject(NODE *start);
+void lsFadeRasterObject(uint32_t areaID, LSObject lso, ubyte status);
+void lsShowAllConnections(uint32_t areaID, NODE *node, ubyte perc);
+void lsShowRaster(uint32_t areaID, ubyte perc);
 
 #endif

@@ -27,19 +27,16 @@
 #include "memory/memory.h"
 #endif
 
-
 // public defines
-#define TXT_LANG_ENGLISH   0
-#define TXT_LANG_GERMAN    1
-#define TXT_LANG_FRENCH    2
-#define TXT_LANG_SPANISH   3
-#define TXT_LANG_LAST      TXT_LANG_SPANISH
+#define TXT_LANG_ENGLISH 0
+#define TXT_LANG_GERMAN 1
+#define TXT_LANG_FRENCH 2
+#define TXT_LANG_SPANISH 3
+#define TXT_LANG_LAST TXT_LANG_SPANISH
 
-#define TXT_KEY_LENGTH     256
-
+#define TXT_KEY_LENGTH 256
 
 #define txtGetFirstLine(id, key, dest) (txtGetNthString(id, key, 0, dest))
-
 
 // public prototypes - TEXT
 void txtInit(ubyte lang);
@@ -53,7 +50,6 @@ void txtUnPrepare(uint32_t textId);
 
 void txtReset(uint32_t textId);
 
-
 // public prototypes - KEY
 char *txtGetKey(uword keyNr, char *key);
 uint32_t txtGetKeyAsULONG(uword keyNr, char *key);
@@ -63,7 +59,6 @@ LIST *txtGoKeyAndInsert(uint32_t textId, char *key, ...);
 
 ubyte txtKeyExists(uint32_t textId, char *key);
 uint32_t txtCountKey(char *key);
-
 
 // public prototypes - STRING
 char *txtGetString(uint32_t textId, char *key, char *dest);

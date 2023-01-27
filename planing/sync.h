@@ -8,6 +8,7 @@
 #define MODULE_PLANING_SYNC
 
 #include <stdio.h>
+
 #include "theclou.h"
 
 #ifndef MODULE_MEMORY
@@ -51,10 +52,9 @@
 #endif
 
 // Sync modes
-#define PLANING_ANIMATE_NO     (1L<<0)
-#define PLANING_ANIMATE_STD    (1L<<1)
-#define PLANING_ANIMATE_FOCUS  (1L<<2)
-
+#define PLANING_ANIMATE_NO (1L << 0)
+#define PLANING_ANIMATE_STD (1L << 1)
+#define PLANING_ANIMATE_FOCUS (1L << 2)
 
 void plSync(ubyte animate, uint32_t targetTime, uint32_t times, ubyte direction);
 

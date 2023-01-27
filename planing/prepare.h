@@ -8,6 +8,7 @@
 #define MODULE_PLANING_PREPARE
 
 #include <stdio.h>
+
 #include "theclou.h"
 
 #ifndef MODULE_MEMORY
@@ -50,30 +51,29 @@
 #include "planing/planer.h"
 #endif
 
-
 // Gfx prepare modes
-#define PLANING_GFX_LANDSCAPE  1L<<0
-#define PLANING_GFX_SPRITES    1L<<1
-#define PLANING_GFX_BACKGROUND 1L<<2
+#define PLANING_GFX_LANDSCAPE 1L << 0
+#define PLANING_GFX_SPRITES 1L << 1
+#define PLANING_GFX_BACKGROUND 1L << 2
 
 // Sys modes
-#define PLANING_INIT_PERSONSLIST    1L<<0
-#define PLANING_HANDLER_OPEN        1L<<1
-#define PLANING_HANDLER_CLOSE       1L<<2
-#define PLANING_HANDLER_CLEAR       1L<<3
-#define PLANING_HANDLER_SET         1L<<4
-#define PLANING_HANDLER_ADD         1L<<5
-#define PLANING_GUARDS_LOAD         1L<<6
+#define PLANING_INIT_PERSONSLIST 1L << 0
+#define PLANING_HANDLER_OPEN 1L << 1
+#define PLANING_HANDLER_CLOSE 1L << 2
+#define PLANING_HANDLER_CLEAR 1L << 3
+#define PLANING_HANDLER_SET 1L << 4
+#define PLANING_HANDLER_ADD 1L << 5
+#define PLANING_GUARDS_LOAD 1L << 6
 
 // Counts
-#define PLANING_NR_PERSONS          4
-#define PLANING_NR_GUARDS           4
-#define PLANING_NR_LOOTS            8
-#define PLANING_NR_PLANS            NRBLINES-1
+#define PLANING_NR_PERSONS 4
+#define PLANING_NR_GUARDS 4
+#define PLANING_NR_LOOTS 8
+#define PLANING_NR_PLANS NRBLINES - 1
 
 // getting correct has loot relation
-#define hasLoot(current)            (((LSArea)dbGetObject(livWhereIs(Planing_Name[current])))->ul_ObjectBaseNr + REL_HAS_LOOT_OFFSET)
-
+#define hasLoot(current) \
+    (((LSArea)dbGetObject(livWhereIs(Planing_Name[current])))->ul_ObjectBaseNr + REL_HAS_LOOT_OFFSET)
 
 extern LIST *PersonsList;
 extern LIST *BurglarsList;
@@ -93,8 +93,6 @@ extern char Planing_Name[PLANING_NR_PERSONS + PLANING_NR_GUARDS][20];
 extern LIST *Planing_GuardRoomList[PLANING_NR_GUARDS];
 
 extern uint32_t Planing_BldId;
-
-
 
 void plBuildHandler(NODE *n);
 void plClearHandler(NODE *n);

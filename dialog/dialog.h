@@ -46,8 +46,8 @@
 #endif
 void PlayFromCDROM(void);
 
-#define   DLG_TALKMODE_BUSINESS    1
-#define   DLG_TALKMODE_STANDARD    2
+#define DLG_TALKMODE_BUSINESS 1
+#define DLG_TALKMODE_STANDARD 2
 
 extern void DynamicTalk(uint32_t Person1ID, uint32_t Person2ID, ubyte TalkMode);
 extern ubyte Say(uint32_t TextID, ubyte activ, uword person, char *text);

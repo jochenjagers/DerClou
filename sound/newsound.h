@@ -30,4 +30,3 @@ void sndFading(short int targetVol);
 char *sndGetCurrSoundName(void);
 
 #endif
-

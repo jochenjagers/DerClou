@@ -7,10 +7,10 @@
 #ifndef MODULE_TXT_EH
 #define MODULE_TXT_EH
 
-#define ERR_TXT_READING_LIST     1
-#define ERR_TXT_FAILED_LIST      2
-#define ERR_TXT_NO_XMS           3
-#define ERR_TXT_NO_KEY           4
-#define ERR_TXT_FAILED_BASE		5
+#define ERR_TXT_READING_LIST 1
+#define ERR_TXT_FAILED_LIST 2
+#define ERR_TXT_NO_XMS 3
+#define ERR_TXT_NO_KEY 4
+#define ERR_TXT_FAILED_BASE 5
 
 #endif

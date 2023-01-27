@@ -15,16 +15,16 @@ Internal frame Management:
 
  Frame data:
    There is the "current frame" and the "previous frame" in bitplanar format representing a kind of double buffer
-   When a frame is decoded, the delta frame information modifies the previous frame always. After that the "previous frame"
-   is swapped with the "current frame".
-   The "current frame" can be converted to a useful output format (chunky), to a display suitable frame
-   When opening a file, the first bit planar frame is decoded (frame 0).
-   A call to "NextFrame" decodes the next frame (frame 1).
+   When a frame is decoded, the delta frame information modifies the previous frame always. After that the "previous
+frame" is swapped with the "current frame". The "current frame" can be converted to a useful output format (chunky), to
+a display suitable frame When opening a file, the first bit planar frame is decoded (frame 0). A call to "NextFrame"
+decodes the next frame (frame 1).
 
 
 Output formats
 --------------
-The old bitplanar format isn't useable for today's graphic systems, so the animation frames can be converted to chunky formats.
+The old bitplanar format isn't useable for today's graphic systems, so the animation frames can be converted to chunky
+formats.
  - 1..8 bit are converted to 8 bit, with a "r,g,b,0" palette (byte order exactly as mentioned)
  - HAM and 24 bit frames are converted to 24 bit "r,g,b" images (byte order as mentioned)
  - pitch for a scanline can be defined
@@ -47,7 +47,7 @@ ANIM file is currently only supported in it's standart structure:
   FORM ILBM        first frame (frame 0)
     BMHD             normal type IFF data
     ANHD             optional animation header (chunk for timing of 1st frame)
-    ...            
+    ...
     CMAP             optional cmap
     BODY             normal iff pixel data
   FORM ILBM        frame 1
@@ -69,7 +69,7 @@ known delta compression modes (current decoding support is marked with '*'):
   - ANIM-7 * Anim-5 compression using LONG/WORD data
   - ANIM-8 * Anim-5 compression using LONG/WORD data
   - ANIM-J * Eric Grahams compression format (Sculpt 3D / Sculpt 4D, by "Byte by Byte")
-  
+
  "dctv" animations aren't supported, due to lacking format information.
 */
 

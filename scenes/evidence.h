@@ -49,53 +49,53 @@
 #include "data/dataappl.h"
 #endif
 
-#define FAHN_NOT_ESCAPED      1
-#define FAHN_ESCAPED          2
+#define FAHN_NOT_ESCAPED 1
+#define FAHN_ESCAPED 2
 
-#define FAHN_ALARM            1L<<0
-#define FAHN_ALARM_LOUDN      1L<<1
-#define FAHN_ALARM_RADIO      1L<<2
-#define FAHN_ALARM_PATRO      1L<<3
-#define FAHN_SURROUNDED       1L<<4
-#define FAHN_ESCAPE           1L<<5
-#define FAHN_QUIET_ALARM      1L<<6
-#define FAHN_STD_ESCAPE       1L<<7     /* wenn Einbruch glatt geht (Standardflucht) */
-#define FAHN_ALARM_ALARM      1L<<8
-#define FAHN_ALARM_TIMECLOCK  1L<<9
-#define FAHN_ALARM_POWER      1L<<10
-#define FAHN_ALARM_TIMER      1L<<11
-#define FAHN_ALARM_MICRO      1L<<12
-#define FAHN_ALARM_GUARD      1L<<13
+#define FAHN_ALARM 1L << 0
+#define FAHN_ALARM_LOUDN 1L << 1
+#define FAHN_ALARM_RADIO 1L << 2
+#define FAHN_ALARM_PATRO 1L << 3
+#define FAHN_SURROUNDED 1L << 4
+#define FAHN_ESCAPE 1L << 5
+#define FAHN_QUIET_ALARM 1L << 6
+#define FAHN_STD_ESCAPE 1L << 7 /* wenn Einbruch glatt geht (Standardflucht) */
+#define FAHN_ALARM_ALARM 1L << 8
+#define FAHN_ALARM_TIMECLOCK 1L << 9
+#define FAHN_ALARM_POWER 1L << 10
+#define FAHN_ALARM_TIMER 1L << 11
+#define FAHN_ALARM_MICRO 1L << 12
+#define FAHN_ALARM_GUARD 1L << 13
 
-struct Search	/* wegen Arrays nicht in objects */
-	{
-	word	GuyXPos[4], GuyYPos[4];  /* letzte Position im Falle einer Flucht! */
+struct Search /* wegen Arrays nicht in objects */
+{
+    word GuyXPos[4], GuyYPos[4]; /* letzte Position im Falle einer Flucht! */
 
-	ubyte	Exhaust[4];
+    ubyte Exhaust[4];
 
-	uword	WalkTime[4];
-	uword	WaitTime[4];
-	uword	WorkTime[4];
-	uword	KillTime[4];
+    uword WalkTime[4];
+    uword WaitTime[4];
+    uword WorkTime[4];
+    uword KillTime[4];
 
-	uint32_t DeriTime;         /* Abweichung vom Soll */
+    uint32_t DeriTime; /* Abweichung vom Soll */
 
-	uint32_t	TimeOfBurglary;   /* Zeitpunkt! */
-	uint32_t TimeOfAlarm;      /* Zeitpunkt! */
+    uint32_t TimeOfBurglary; /* Zeitpunkt! */
+    uint32_t TimeOfAlarm;    /* Zeitpunkt! */
 
-	uint32_t BuildingId;       /* Einbruch */
-	uint32_t LastAreaId;       /* zum Zeitpunkt der Flucht */
+    uint32_t BuildingId; /* Einbruch */
+    uint32_t LastAreaId; /* zum Zeitpunkt der Flucht */
 
-	uint32_t EscapeBits;
+    uint32_t EscapeBits;
 
-	word  CallValue;			/* "Wert" der Funkspr., word!!! */
-	uword	CallCount;			/* Anzahl d. FUnkspr. */
+    word CallValue;  /* "Wert" der Funkspr., word!!! */
+    uword CallCount; /* Anzahl d. FUnkspr. */
 
-	uword	WarningCount;		/* Anzahl der Warnungen */
-	ubyte	SpotTouchCount[4];
+    uword WarningCount; /* Anzahl der Warnungen */
+    ubyte SpotTouchCount[4];
 
-	ubyte KaserneOk;        /* ob die Kaserne geschafft wurde! */
-	};
+    ubyte KaserneOk; /* ob die Kaserne geschafft wurde! */
+};
 
 extern int32_t tcCalcCarEscape(int32_t timeLeft);
 extern void tcForgetGuys(void);

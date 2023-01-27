@@ -65,7 +65,6 @@
 #include "data/relation.h"
 #endif
 
-
 #ifndef MODULE_DATABASE
 #include "data/database.h"
 #endif
@@ -86,7 +85,7 @@
 #include "cdrom/cdrom.h"
 #endif
 
-#define STD_BUFFER1_SIZE  ((int32_t)61 * 1024)      /* weniger geht nicht! (Bild + CMAP)*/
+#define STD_BUFFER1_SIZE ((int32_t)61 * 1024) /* weniger geht nicht! (Bild + CMAP)*/
 
 extern char prgname[255];
 extern void *StdBuffer1;

@@ -33,46 +33,48 @@
 #include "landscap/landscap.h"
 #endif
 
-#define LS_SPOT_NAME					((ubyte*)"s")
+#define LS_SPOT_NAME ((ubyte *)"s")
 
-#define LS_SPOT_SMALL_SIZE         16
-#define LS_SPOT_MEDIUM_SIZE        32
-#define LS_SPOT_LARGE_SIZE         48
+#define LS_SPOT_SMALL_SIZE 16
+#define LS_SPOT_MEDIUM_SIZE 32
+#define LS_SPOT_LARGE_SIZE 48
 
-#define LS_SPOT_ON                  1
-#define LS_SPOT_OFF                 2
+#define LS_SPOT_ON 1
+#define LS_SPOT_OFF 2
 
-#define LS_ALL_VISIBLE_SPOTS        1
-#define LS_ALL_INVISIBLE_SPOTS      2
+#define LS_ALL_VISIBLE_SPOTS 1
+#define LS_ALL_INVISIBLE_SPOTS 2
 
-struct SpotPosition {
-	NODE	Link;
+struct SpotPosition
+{
+    NODE Link;
 
-	uword	us_XPos;
-	uword	us_YPos;
+    uword us_XPos;
+    uword us_YPos;
 };
 
-struct Spot {
-	NODE	Link;
+struct Spot
+{
+    NODE Link;
 
-	uword	us_Size;
-	uword	us_Speed;	     /* secconds per move */
+    uword us_Size;
+    uword us_Speed; /* secconds per move */
 
-	uint32_t 	ul_CtrlObjId;  /* data : objId */
+    uint32_t ul_CtrlObjId; /* data : objId */
 
-	uint32_t	ul_AreaId;
+    uint32_t ul_AreaId;
 
-	ubyte	uch_Status;
-	ubyte	Padding;
+    ubyte uch_Status;
+    ubyte Padding;
 
-	uword	us_OldXPos;
-	uword	us_OldYPos;
+    uword us_OldXPos;
+    uword us_OldYPos;
 
-	uword	us_PosCount;
+    uword us_PosCount;
 
-	LIST *	p_positions;
+    LIST *p_positions;
 
-	struct SpotPosition *p_CurrPos; /* for fast access */
+    struct SpotPosition *p_CurrPos; /* for fast access */
 };
 
 extern void lsInitSpots(struct RastPort *rp);

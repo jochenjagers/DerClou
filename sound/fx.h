@@ -13,15 +13,15 @@
 #ifndef TC_FX_H
 #define TC_FX_H
 
-#include "theclou.h"
 #include "sound/mxr.h"
+#include "theclou.h"
 
-#define	SND_FREQUENCY				44100
-#define SND_MAX_VOLUME              255
+#define SND_FREQUENCY 44100
+#define SND_MAX_VOLUME 255
 
-//#define SND_BUFFER_SIZE				247226	// 65536
-#define SND_MUSIC_BUFFER_SIZE		65536
-#define SND_SAMPLES                 1024
+// #define SND_BUFFER_SIZE				247226	// 65536
+#define SND_MUSIC_BUFFER_SIZE 65536
+#define SND_SAMPLES 1024
 
 extern MXR_Mixer *pAudioMixer;
 
@@ -33,4 +33,3 @@ extern void InitAudio(void);
 extern void RemoveAudio(void);
 
 #endif
-

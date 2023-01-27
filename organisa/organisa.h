@@ -31,26 +31,26 @@
 
 /* Display Areas */
 
-#define   ORG_DISP_ABILITIES   (1L<<0)
-#define   ORG_DISP_TOOLS       (1L<<1)
+#define ORG_DISP_ABILITIES (1L << 0)
+#define ORG_DISP_TOOLS (1L << 1)
 
 struct Organisation
-	  {
-	  struct RastPort *rp;
+{
+    struct RastPort *rp;
 
-	  uint32_t     CarID;
-	  uint32_t     DriverID;
-	  uint32_t     BuildingID;
+    uint32_t CarID;
+    uint32_t DriverID;
+    uint32_t BuildingID;
 
-	  ubyte     GuyCount;
-	  ubyte     PlacesInCar;
+    ubyte GuyCount;
+    ubyte PlacesInCar;
 
-	  char		pad[2];
-	  };
+    char pad[2];
+};
 
 extern struct Organisation Organisation;
 
-extern uint32_t  tcOrganisation(void);
-extern void	  tcResetOrganisation(void);
+extern uint32_t tcOrganisation(void);
+extern void tcResetOrganisation(void);
 
 #endif

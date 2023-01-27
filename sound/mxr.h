@@ -41,57 +41,59 @@
 
 /******************************************************************************/
 
-#include "theclou.h"
 #include "memory/memory.h"
+#include "theclou.h"
 
-#define MXR_MemAlloc(size)		MemAlloc(size)
-#define MXR_MemFree(mem,size)	MemFree((mem),(size))
+#define MXR_MemAlloc(size) MemAlloc(size)
+#define MXR_MemFree(mem, size) MemFree((mem), (size))
 
-#define OPL_INTERNAL_FREQ	3579545	/* 3.6 MHz... */
-#define OPL_FREQUENCY		44100
-#define	OPL_NUM_CHIPS		1
-#define OPL_CHIP0			0
+#define OPL_INTERNAL_FREQ 3579545 /* 3.6 MHz... */
+#define OPL_FREQUENCY 44100
+#define OPL_NUM_CHIPS 1
+#define OPL_CHIP0 0
 
 /******************************************************************************/
 
 /*
 ** The audio buffer size (in samples)
 */
-#define MXR_BUFFER_SAMPLES	1024
+#define MXR_BUFFER_SAMPLES 1024
 
 /*
 ** Maximum number of inputs
 */
-#define MXR_MAX_INPUTS	3		// 0 = music, 1 = soundfx, 2 = voice
+#define MXR_MAX_INPUTS 3  // 0 = music, 1 = soundfx, 2 = voice
 
-#define MXR_INPUT_MUSIC	0
-#define MXR_INPUT_FX	1
-#define MXR_INPUT_VOICE	2
+#define MXR_INPUT_MUSIC 0
+#define MXR_INPUT_FX 1
+#define MXR_INPUT_VOICE 2
 
 /******************************************************************************/
 
-typedef struct MXR_Mixer	MXR_Mixer;
-typedef struct MXR_Input	MXR_Input;
+typedef struct MXR_Mixer MXR_Mixer;
+typedef struct MXR_Input MXR_Input;
 
-typedef struct {
-	uint32_t	nSamplesPerSec;		/* 22050, 44100 etc. */
-	uint32_t	nBitsPerChannel;	/* 8 or 16 */
-	uint32_t	nNumChannels;		/* 1 or 2 */
-	uint32_t	nSampleSize;		/* (nNumChannels * nBitsPerChannel / 8) */
+typedef struct
+{
+    uint32_t nSamplesPerSec;  /* 22050, 44100 etc. */
+    uint32_t nBitsPerChannel; /* 8 or 16 */
+    uint32_t nNumChannels;    /* 1 or 2 */
+    uint32_t nSampleSize;     /* (nNumChannels * nBitsPerChannel / 8) */
 } MXR_Format;
 
 typedef uint32_t (*MXR_ProcessInputFunc)(MXR_Input *, void *, uint32_t);
 typedef void (*MXR_DestroyInputFunc)(MXR_Input *);
 
-struct MXR_Input {
-	MXR_Format				fmt;
-	uint32_t			nVolume;
+struct MXR_Input
+{
+    MXR_Format fmt;
+    uint32_t nVolume;
 
-	MXR_ProcessInputFunc	pProcess;
-	MXR_DestroyInputFunc	pDestroy;
+    MXR_ProcessInputFunc pProcess;
+    MXR_DestroyInputFunc pDestroy;
 };
 
-#define MXR_MillisecToSamples(ms,hz)	((ms)*(hz)/1000)
+#define MXR_MillisecToSamples(ms, hz) ((ms) * (hz) / 1000)
 
 /******************************************************************************/
 

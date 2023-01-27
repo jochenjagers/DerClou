@@ -5,31 +5,27 @@
    Based on the original by neo Software GmbH
 */
 
-#define BAR_WIDTH         	 255
+#define BAR_WIDTH 255
 
 struct PresentControl
-     {
-     struct RastPort *p_CurrRP;
+{
+    struct RastPort *p_CurrRP;
 
-     uword     us_BarWidth;
-     uword     us_BarHeight;
+    uword us_BarWidth;
+    uword us_BarHeight;
 
-     ubyte     uch_FCol;
-	  ubyte     uch_BCol;
-	  ubyte		uch_TCol;
-     };
+    ubyte uch_FCol;
+    ubyte uch_BCol;
+    ubyte uch_TCol;
+};
 
 struct presentationInfo
-	{
-	NODE link;
+{
+    NODE link;
 
-	char  extendedText[70];
-	uint32_t extendedNr;
-	uint32_t maxNr;
+    char extendedText[70];
+    uint32_t extendedNr;
+    uint32_t maxNr;
 
-	ubyte presentHow;
-	};
-
-
-
-
+    ubyte presentHow;
+};

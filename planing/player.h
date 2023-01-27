@@ -8,6 +8,7 @@
 #define MODULE_PLANING_PLAYER
 
 #include <stdio.h>
+
 #include "theclou.h"
 
 #ifndef MODULE_MEMORY
@@ -50,6 +51,6 @@
 #include "planing/planer.h"
 #endif
 
-int32_t plPlayer(uint32_t objId , uint32_t actionTime, ubyte (*actionFunc)(uint32_t, uint32_t));
+int32_t plPlayer(uint32_t objId, uint32_t actionTime, ubyte (*actionFunc)(uint32_t, uint32_t));
 
 #endif

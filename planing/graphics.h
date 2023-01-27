@@ -7,8 +7,8 @@
 #ifndef MODULE_PLANING_GRAPHICS
 #define MODULE_PLANING_GRAPHICS
 
-
 #include <stdio.h>
+
 #include "theclou.h"
 
 #ifndef MODULE_MEMORY
@@ -51,20 +51,19 @@
 #include "planing/planer.h"
 #endif
 
-
 // Messages modes
-#define PLANING_MSG_REFRESH   1
-#define PLANING_MSG_WAIT      2
+#define PLANING_MSG_REFRESH 1
+#define PLANING_MSG_WAIT 2
 
 // RefreshRP
-#define PLANING_REFRESH_RP_WIDTH    200
-#define PLANING_REFRESH_RP_HEIGHT   50
-#define PLANING_REFRESH_RP_DEPTH    2
+#define PLANING_REFRESH_RP_WIDTH 200
+#define PLANING_REFRESH_RP_HEIGHT 50
+#define PLANING_REFRESH_RP_DEPTH 2
 
 void plPrintInfo(char *person);
 void plMessage(char *msg, ubyte flags);
 void plPersonPict(uint32_t personId);
-void plDisplayAbilities (void);
+void plDisplayAbilities(void);
 void plDisplayTimer(uint32_t time, ubyte doSpotsImmediatly);
 void plDisplayInfo(void);
 void plRefresh(uint32_t ItemId);

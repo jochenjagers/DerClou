@@ -8,6 +8,7 @@
 #define MODULE_PLANING_GUARDS
 
 #include <stdio.h>
+
 #include "theclou.h"
 
 #ifndef MODULE_MEMORY
@@ -50,16 +51,14 @@
 #include "planing/planer.h"
 #endif
 
-
 /* method definition */
-#define GUARDS_DO_SAVE     1
-#define GUARDS_DO_LOAD     2
+#define GUARDS_DO_SAVE 1
+#define GUARDS_DO_LOAD 2
 
 /* disk definition */
-#define GUARD_DISK         0
-#define GUARD_EXTENSION    ".gua"
-#define GUARD_DIRECTORY    DATA_DIRECTORY
-
+#define GUARD_DISK 0
+#define GUARD_EXTENSION ".gua"
+#define GUARD_DIRECTORY DATA_DIRECTORY
 
 // main method
 void grdDo(FILE *fh, struct System *sys, LIST *PersonsList, uint32_t BurglarsNr, uint32_t PersonsNr, ubyte grdAction);
@@ -70,6 +69,6 @@ ubyte grdDraw(struct RastPort *rp, uint32_t bldId, uint32_t areaId);
 
 // con- & destructor
 ubyte grdInit(FILE **fh, char *mode, uint32_t bldId, uint32_t areaId);
-void  grdDone(FILE *fh);
+void grdDone(FILE *fh);
 
 #endif

@@ -55,7 +55,7 @@
 #include "landscap/raster.h"
 #endif
 
-extern uword	CurrentBackground;
+extern uword CurrentBackground;
 
 /* standard scene functions - look at scenes.c */
 
@@ -92,7 +92,7 @@ void SetCarColors(ubyte index);
 
 void tcSellCar(uint32_t ObjectID);
 void tcColorCar(Car car);
-void tcRepairCar(Car car,char *repairWhat);
+void tcRepairCar(Car car, char *repairWhat);
 void tcCarGeneralOverhoul(Car car);
 void tcToolsShop(void);
 
@@ -101,7 +101,7 @@ int32_t tcEscapeByCar(uint32_t escBits, int32_t timeLeft);
 
 uint32_t tcChooseCar(uint32_t backgroundNr);
 
-LIST  *tcMakeLootList(uint32_t containerID, uint32_t relID);
+LIST *tcMakeLootList(uint32_t containerID, uint32_t relID);
 
 char *tcShowPriceOfCar(uint32_t nr, uint32_t type, void *data);
 char *tcShowPriceOfTool(uint32_t nr, uint32_t type, void *data);
@@ -109,20 +109,20 @@ char *tcShowPriceOfTool(uint32_t nr, uint32_t type, void *data);
 void tcDealerSays(Person dealer, ubyte textNr, int32_t perc);
 void tcDealerOffer(Person dealer, ubyte which);
 
-void  tcBuyCar(void);
-void  tcCarInGarage(uint32_t carID);
+void tcBuyCar(void);
+void tcCarInGarage(uint32_t carID);
 
 ubyte tcBuyTool(ubyte choice);
-void  tcSellTool(void);
+void tcSellTool(void);
 ubyte tcShowTool(ubyte choice);
 ubyte tcDescTool(ubyte choice);
-void  tcDealerDlg(void);
+void tcDealerDlg(void);
 
 uint32_t tcStartEvidence(void);
 uint32_t tcGoInsideOfHouse(uint32_t buildingID);
 
-void  tcShowLootInfo(Loot loot);
-void  tcInsideOfHouse(uint32_t buildingID, uint32_t areaID, ubyte perc);
-void  tcShowObjectData(uint32_t areaID, NODE *node, ubyte perc);
+void tcShowLootInfo(Loot loot);
+void tcInsideOfHouse(uint32_t buildingID, uint32_t areaID, ubyte perc);
+void tcShowObjectData(uint32_t areaID, NODE *node, ubyte perc);
 
 #endif

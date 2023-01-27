@@ -71,10 +71,10 @@ extern void tcPersonGreetsMatt(void);
 
 extern uint32_t StdHandle(uint32_t choice);
 
-extern void SetFunc(struct Scene *sc,void (*init)(void),void (*done)(void));
+extern void SetFunc(struct Scene *sc, void (*init)(void), void (*done)(void));
 extern void PrintStatus(char *text);
 extern void InitTaxiLocations(void);
-extern void	LinkScenes(void);
+extern void LinkScenes(void);
 
 extern void tcGetLastName(char *Name, char *dest, uint32_t maxLength);
 extern void tcCutName(char *Name, char Sign, uint32_t maxLength);
@@ -91,7 +91,7 @@ extern void ShowTime(uint32_t delay);
 extern void RefreshAfterDiskRequester(void);
 
 extern ubyte tcLoadIt(char activ);
-extern void  tcRefreshAfterLoad(ubyte loaded);
+extern void tcRefreshAfterLoad(ubyte loaded);
 
 extern ubyte tcBackToStartupMenu(void);
 

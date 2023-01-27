@@ -5,17 +5,18 @@
    Based on the original by neo Software GmbH
 */
 #include "error/error.h"
+
 #include "text/text.h"
 
-#define ERR_EXIT_ERROR      20L
-#define ERR_EXIT_SHUTDOWN   30L
+#define ERR_EXIT_ERROR 20L
+#define ERR_EXIT_SHUTDOWN 30L
 
 struct ErrorHandler
 {
-	void	(*fp_CloseAll)(void);
+    void (*fp_CloseAll)(void);
 
-	ubyte	puch_Filename[DSK_PATHNAMELENGTH];
-	ubyte	uch_OutputToFile;
+    ubyte puch_Filename[DSK_PATHNAMELENGTH];
+    ubyte uch_OutputToFile;
 };
 
 /* implementation */
@@ -24,73 +25,79 @@ struct ErrorHandler ErrorHandler;
 
 void Log(const char *s, ...)
 {
-	static char log_buffer[1024];
-	FILE *file;
-	if (s)
-	{
-		if (file = fopen(LOG_FILENAME, "a"))
-		{
-			va_list ap;
-			va_start(ap, s);
-			vsprintf(log_buffer, s, ap);
-			#ifndef __LCC__
-			va_end(ap);
-			#endif
-			fprintf(file, "%s\n", log_buffer);
-			fclose(file);
-		}
-	}
+    static char log_buffer[1024];
+    FILE *file;
+    if (s)
+    {
+        if (file = fopen(LOG_FILENAME, "a"))
+        {
+            va_list ap;
+            va_start(ap, s);
+            vsprintf(log_buffer, s, ap);
+#ifndef __LCC__
+            va_end(ap);
+#endif
+            fprintf(file, "%s\n", log_buffer);
+            fclose(file);
+        }
+    }
 }
 
 int32_t pcErrOpen(int32_t l_Mode, void (*fp_CloseAll)(), ubyte *puch_ErrorFilename)
 {
-	if (fp_CloseAll)
-	{
-		ErrorHandler.fp_CloseAll = fp_CloseAll;
-		return(1);
-	}
-	return(0);
+    if (fp_CloseAll)
+    {
+        ErrorHandler.fp_CloseAll = fp_CloseAll;
+        return (1);
+    }
+    return (0);
 }
 
-void pcErrClose()
-{
-}
+void pcErrClose() {}
 
 void NewErrorMsg(int32_t l_ErrorType, const char *filename, const char *funcname, uint32_t ul_ErrorId)
 {
-	ubyte lang = txtGetLanguage();	/* 2014-06-27 templer */
+    ubyte lang = txtGetLanguage(); /* 2014-06-27 templer */
 
-	Log("Error %ld in %s|%s", ul_ErrorId, filename, funcname);
+    Log("Error %ld in %s|%s", ul_ErrorId, filename, funcname);
 
-	if (ErrorHandler.fp_CloseAll)
-		ErrorHandler.fp_CloseAll();
+    if (ErrorHandler.fp_CloseAll) ErrorHandler.fp_CloseAll();
 
-	switch (l_ErrorType)
-	{
-		case Internal_Error:
-			if (lang == TXT_LANG_GERMAN) {
-				Log("Interner Fehler!");
-			} else {
-				Log("Internal Error!");
-			}
-		break;
+    switch (l_ErrorType)
+    {
+        case Internal_Error:
+            if (lang == TXT_LANG_GERMAN)
+            {
+                Log("Interner Fehler!");
+            }
+            else
+            {
+                Log("Internal Error!");
+            }
+            break;
 
-		case No_Mem:
-			if (lang == TXT_LANG_GERMAN) {
-				Log("Sie haben nicht genug Speicher!");
-			} else {
-				Log("You don't have enough memory!");
-			}
-		break;
+        case No_Mem:
+            if (lang == TXT_LANG_GERMAN)
+            {
+                Log("Sie haben nicht genug Speicher!");
+            }
+            else
+            {
+                Log("You don't have enough memory!");
+            }
+            break;
 
-		case Disk_Defect:
-			if (lang == TXT_LANG_GERMAN) {
-				Log("Kann Datei nicht oeffnen!");
-			} else {
-				Log("Can't open file!");
-			}
-		break;
-	}
+        case Disk_Defect:
+            if (lang == TXT_LANG_GERMAN)
+            {
+                Log("Kann Datei nicht oeffnen!");
+            }
+            else
+            {
+                Log("Can't open file!");
+            }
+            break;
+    }
 
-	exit(-1);
+    exit(-1);
 }

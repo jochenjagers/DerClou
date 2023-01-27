@@ -8,6 +8,7 @@
 #define MODULE_PLANING_IO
 
 #include <stdio.h>
+
 #include "theclou.h"
 
 #ifndef MODULE_MEMORY
@@ -50,33 +51,31 @@
 #include "planing/planer.h"
 #endif
 
-
 // Extensions
-#define PLANING_PLAN_EXTENSION       ".pln"
-#define PLANING_PLAN_LIST_EXTENSION  ".pll"
+#define PLANING_PLAN_EXTENSION ".pln"
+#define PLANING_PLAN_LIST_EXTENSION ".pll"
 
 // Disks
-#define PLANING_PLAN_DISK         	  0
+#define PLANING_PLAN_DISK 0
 
 // Tool sequences in file
-#define PLANING_PLAN_TOOL_BEGIN_ID  "TOOB"      // TOOl Begin
-#define PLANING_PLAN_TOOL_END_ID    "TOOE"      // TOOl End
+#define PLANING_PLAN_TOOL_BEGIN_ID "TOOB"  // TOOl Begin
+#define PLANING_PLAN_TOOL_END_ID "TOOE"    // TOOl End
 
 // open cmd
-#define PLANING_OPEN_READ_PLAN        0
-#define PLANING_OPEN_WRITE_PLAN       1
-#define PLANING_OPEN_READ_BURGLARY    2
+#define PLANING_OPEN_READ_PLAN 0
+#define PLANING_OPEN_WRITE_PLAN 1
+#define PLANING_OPEN_READ_BURGLARY 2
 
 // open error
-#define PLANING_OPEN_OK               0
-#define PLANING_OPEN_ERR_NO_CHOICE    1
-#define PLANING_OPEN_ERR_NO_PLAN      2
-
+#define PLANING_OPEN_OK 0
+#define PLANING_OPEN_ERR_NO_CHOICE 1
+#define PLANING_OPEN_ERR_NO_PLAN 2
 
 ubyte plOpen(uint32_t objId, ubyte mode, FILE **fh);
-void  plLoad(uint32_t objId);
-void  plSave(uint32_t objId);
-void  plSaveChanged (uint32_t objId);
+void plLoad(uint32_t objId);
+void plSave(uint32_t objId);
+void plSaveChanged(uint32_t objId);
 
 LIST *plLoadTools(FILE *fh);
 void plSaveTools(FILE *fh);

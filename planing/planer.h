@@ -7,8 +7,8 @@
 #ifndef MODULE_PLANING_PLANER
 #define MODULE_PLANING_PLANER
 
-
 #include <stdio.h>
+
 #include "theclou.h"
 
 #ifndef MODULE_MEMORY
@@ -86,7 +86,6 @@
 extern ubyte AnimCounter;
 extern ubyte PlanChanged;
 
-
-void plPlaner (uint32_t objId);
+void plPlaner(uint32_t objId);
 
 #endif

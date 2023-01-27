@@ -15,9 +15,9 @@
  */
 void EndianW(uword *pw)
 {
-	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	*pw = SDL_Swap16(*pw);
-	#endif
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+    *pw = SDL_Swap16(*pw);
+#endif
 }
 
 /**
@@ -25,7 +25,7 @@ void EndianW(uword *pw)
  */
 void EndianL(uint32_t *pl)
 {
-	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	*pl = SDL_Swap32(*pl);
-	#endif
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+    *pl = SDL_Swap32(*pl);
+#endif
 }

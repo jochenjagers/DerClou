@@ -8,52 +8,48 @@
 #define MODULE_TXT_PH
 
 // includes
-#include "theclou.h"
+#include "base/base.h"
 #include "disk/disk.h"
 #include "list/list.h"
-#include "base/base.h"
-
+#include "theclou.h"
 
 // private defines
-#define TXT_LIST        "TEXTS.LST"
-#define TXT_SUFFIX      ".TXT"
+#define TXT_LIST "TEXTS.LST"
+#define TXT_SUFFIX ".TXT"
 
-#define TXT_CHAR_EOL            13
-#define TXT_CHAR_EOS            '\0'
-#define TXT_CHAR_MARK           '#'
-#define TXT_CHAR_REMARK         ';'
-#define TXT_CHAR_KEY_SEPERATOR  ','
-#define TXT_CHAR_EOF		'^'
+#define TXT_CHAR_EOL 13
+#define TXT_CHAR_EOS '\0'
+#define TXT_CHAR_MARK '#'
+#define TXT_CHAR_REMARK ';'
+#define TXT_CHAR_KEY_SEPERATOR ','
+#define TXT_CHAR_EOF '^'
 
-#define TXT_XOR_VALUE				0x75
-
+#define TXT_XOR_VALUE 0x75
 
 // private structures
 struct TextControl
 {
-   LIST *tc_Texts;
-   
-   ubyte tc_Language;
-ubyte Padding[3];
+    LIST *tc_Texts;
+
+    ubyte tc_Language;
+    ubyte Padding[3];
 };
 
 struct Text
 {
-   NODE  txt_Link;
+    NODE txt_Link;
 
-   void *txt_Handle;
-   char *txt_LastMark;
+    void *txt_Handle;
+    char *txt_LastMark;
 
-   uword txt_Size;
-uword Padding;
+    uword txt_Size;
+    uword Padding;
 };
-
 
 // private gobals definition
 extern char *txtLanguageMark[];
 extern struct TextControl *txtBase;
 extern char keyBuffer[];
-
 
 // private prototypes - LINE
 static char *txtGetLine(struct Text *txt, ubyte lineNr);
