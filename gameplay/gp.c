@@ -369,11 +369,11 @@ void PrepareStory(char *filename)
 {
     int32_t i = 0, j = 0;
     struct Scene *scene = NULL;
-    struct StoryHeader SH;
-    struct NewScene NS;
+    struct StoryHeader SH = {0};
+    struct NewScene NS = {0};
     struct TCEventNode *node = NULL;
     FILE *file = NULL;
-    char pathname[TXT_KEY_LENGTH];
+    char pathname[TXT_KEY_LENGTH] = {0};
 
     dskBuildPathName(DATA_DIRECTORY, filename, pathname);
 

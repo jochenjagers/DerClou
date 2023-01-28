@@ -158,9 +158,9 @@ struct Scene
 
     ubyte Padding[3];
 
-    uint32_t LocationNr; /* Ort, den diese Szene darstellt 	*/
-                         /* == -1 falls Szene = StorySzene 	*/
-                         /* ansonsten Nr des Ortes		*/
+    int32_t LocationNr; /* Ort, den diese Szene darstellt 	*/
+                        /* == -1 falls Szene = StorySzene 	*/
+                        /* ansonsten Nr des Ortes		*/
 };
 
 struct Bedingungen

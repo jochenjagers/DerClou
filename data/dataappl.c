@@ -515,7 +515,7 @@ uint32_t tcGuyUsesTool(uint32_t persId, Building b, uint32_t toolId, uint32_t it
  * diese Funktion darf keine Zufälligkeit enthalten -> Sync!!
  */
 {
-    uint32_t origin = 0, time = 0;
+    int32_t origin = 0, time = 0;
     Person p = (Person)dbGetObject(persId);
 
     origin = time = breakGet(itemId, toolId);

@@ -521,8 +521,9 @@ static void loadConfig(const char *rootPath)
 
 int SDL_main(int argc, char **argv)
 {
-    char result[256], res = 0;
-    int32_t i = 0;
+    char result[256];
+    int32_t res = 0;
+    unsigned long i = 0;
 
 #ifdef THECLOU_DEBUG_ALLOC
     MemInit();
