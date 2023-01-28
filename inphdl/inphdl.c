@@ -311,7 +311,7 @@ int32_t inpWaitFor(int32_t l_Mask)
                     break;
                 case SDL_KEYUP:
                     sym = event.key.keysym.sym;
-                    if ((l_Mask & (INP_LBUTTONP | INP_LBUTTONR)) && ((sym == SDLK_SPACE) || (sym == SDLK_RETURN)))
+                    if ((l_Mask & (INP_LBUTTONP | INP_LBUTTONR)) && ((sym == SDLK_SPACE) || (sym == SDLK_RETURN) ||(sym == SDLK_KP_ENTER)))
                     {
                         action |= INP_KEYBOARD | INP_LBUTTONP;
                     }
