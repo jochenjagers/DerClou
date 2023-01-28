@@ -32,9 +32,15 @@ int dbCompare(KEY key1, KEY key2) { return (key1 == key2); }
 
 char *dbDecode(KEY key)
 {
-    struct dbObject *obj = dbGetObjectReal(key);
-
-    sprintf(decodeStr, "%u", obj->nr);
+    if (key)
+    {
+        struct dbObject *obj = dbGetObjectReal(key);
+        sprintf(decodeStr, "%u", obj->nr);
+    }
+    else
+    {
+        Log("%s|%s: dbDecode(\"%s\")", __FILE__, __func__, key);
+    }
     return decodeStr;
 }
 
