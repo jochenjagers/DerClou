@@ -573,11 +573,8 @@ static void gfxInitCollList(void)
 
         if (bProfidisk)
         {
-            if (bCDRom)
-            {
-                coll->fromDisk = (ubyte)txtGetKeyAsULONG(
-                    7, NODE_NAME(n));  // is nonessential,because all the data are read from the hard disk
-            }
+            // is nonessential,because all the data are read from the hard disk
+            coll->fromDisk = (ubyte)txtGetKeyAsULONG(7, NODE_NAME(n));
         }
     }
 
@@ -959,8 +956,10 @@ struct RastPort *gfxPrepareColl(uword us_CollId)
 
             /* Collection in den PrepareRP kopieren */
             // use temp surface to blit image to because src and dst of pixels must be the same size
-            SDL_Surface *pTmpSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, PrepareRP.us_Width, PrepareRP.us_Height, 8, 0, 0, 0, 0);
-            SDL_SetPalette(pTmpSurface,SDL_LOGPAL | SDL_PHYSPAL, pSurface->format->palette->colors, 0, pSurface->format->palette->ncolors);
+            SDL_Surface *pTmpSurface =
+                SDL_CreateRGBSurface(SDL_SWSURFACE, PrepareRP.us_Width, PrepareRP.us_Height, 8, 0, 0, 0, 0);
+            SDL_SetPalette(pTmpSurface, SDL_LOGPAL | SDL_PHYSPAL, pSurface->format->palette->colors, 0,
+                           pSurface->format->palette->ncolors);
             SDL_BlitSurface(pSurface, NULL, pTmpSurface, NULL);
             memcpy(PrepareRP.p_BitMap, pTmpSurface->pixels, pTmpSurface->w * pTmpSurface->h);
             SDL_FreeSurface(pTmpSurface);

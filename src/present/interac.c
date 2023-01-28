@@ -9,8 +9,6 @@
 
 #include "present/interac_p.h"
 
-extern void PlayFromCDROM(void);
-
 void SetBubbleType(uword type) { CurrentBubbleType = type; }
 
 void SetPictID(uword PictID) { ActivPersonPictID = PictID; }
@@ -446,11 +444,6 @@ ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), uint32_t waitTime)
     gfxSetDrMd(&RefreshRP, GFX_JAM_1);
     gfxSetFont(&RefreshRP, bubbleFont);
     DrawBubble(bubble, firstVis, activ, u_wrp, l_max);
-
-    if (bCDRom)
-    {
-        PlayFromCDROM();
-    }
 
     if (waitTime)
     {

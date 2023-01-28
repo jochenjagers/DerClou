@@ -64,7 +64,6 @@ set(SOURCE_FILES
     intro/iffanim.c
     gfx/filter.c
     gfx/loadimage.c
-    cdrom/cdrom.c
     SDL_win32_main.c)
 
 add_executable(DerClou ${SOURCE_FILES})

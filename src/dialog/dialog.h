@@ -41,11 +41,6 @@
 #include "sound/newsound.h"
 #endif
 
-#ifndef MODULE_CDROM
-#include "cdrom/cdrom.h"
-#endif
-void PlayFromCDROM(void);
-
 #define DLG_TALKMODE_BUSINESS 1
 #define DLG_TALKMODE_STANDARD 2
 

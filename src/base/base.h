@@ -81,10 +81,6 @@
 #include "sound/fx.h"
 #endif
 
-#ifndef MODULE_CDROM
-#include "cdrom/cdrom.h"
-#endif
-
 #define STD_BUFFER1_SIZE ((int32_t)61 * 1024) /* weniger geht nicht! (Bild + CMAP)*/
 
 extern char prgname[255];

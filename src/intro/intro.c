@@ -99,64 +99,35 @@ static int Anim_Play(IffAnim *anim, int nfile, int delayticks)
                 }
             }
 
-            if (bCDRom)
+            for (a = 0; a < NUM_CD_TRACKS; a++)
             {
-                if (CDRomInstalled)
+                if ((nfile == anim_cdframes[a * 6]) && (nframe == anim_cdframes[(a * 6) + 1]))
                 {
-                    for (a = 0; a < NUM_CD_TRACKS; a++)
+                    ntrack = 0;
+                    if (!anim_cdframes[(a * 6) + 2])
                     {
-                        if ((nfile == anim_cdframes[a * 6]) && (nframe == anim_cdframes[(a * 6) + 1]))
+                        ntrack = anim_cdframes[(a * 6) + 3];
+                    }
+                    else
+                    {
+                        /* PlaySequence not supported for WAV */
+                        /* "intro_11.wav" is just played as a whole */
+                        if (!anim_cdframes[(a * 6) + 4])
                         {
-                            sndFading(16);
-                            CDROM_StopAudioTrack();
-
-                            if (!anim_cdframes[(a * 6) + 2])
-                            {
-                                CDROM_PlayAudioTrack(anim_cdframes[(a * 6) + 3]);
-                            }
-                            else
-                            {
-                                CDROM_PlayAudioSequence(anim_cdframes[(a * 6) + 3], anim_cdframes[(a * 6) + 4],
-                                                        anim_cdframes[(a * 6) + 5]);
-                            }
-
-                            break;
+                            ntrack = anim_cdframes[(a * 6) + 3];
                         }
                     }
-                }
-                else
-                {
-                    for (a = 0; a < NUM_CD_TRACKS; a++)
+                    if (ntrack)
                     {
-                        if ((nfile == anim_cdframes[a * 6]) && (nframe == anim_cdframes[(a * 6) + 1]))
-                        {
-                            ntrack = 0;
-                            if (!anim_cdframes[(a * 6) + 2])
-                            {
-                                ntrack = anim_cdframes[(a * 6) + 3];
-                            }
-                            else
-                            {
-                                /* PlaySequence not supported for WAV */
-                                /* "intro_11.wav" is just played as a whole */
-                                if (!anim_cdframes[(a * 6) + 4])
-                                {
-                                    ntrack = anim_cdframes[(a * 6) + 3];
-                                }
-                            }
-                            if (ntrack)
-                            {
-                                sprintf(wavName, "intro_%02d.wav", ntrack - 1);
-                                dskBuildPathName(AUDIO_DIRECTORY, wavName, wavPath);
+                        sprintf(wavName, "intro_%02d.wav", ntrack - 1);
+                        dskBuildPathName(AUDIO_DIRECTORY, wavName, wavPath);
 
-                                sndFading(16);
+                        sndFading(16);
 
-                                MXR_SetInput(pAudioMixer, MXR_INPUT_VOICE, MXR_CreateInputWAV(wavPath));
-                            }
-
-                            break;
-                        }
+                        MXR_SetInput(pAudioMixer, MXR_INPUT_VOICE, MXR_CreateInputWAV(wavPath));
                     }
+
+                    break;
                 }
             }
 
@@ -208,12 +179,6 @@ void tcIntro(void)
         {
             break;
         }
-    }
-
-    if (bCDRom && CDRomInstalled)
-    {
-        CDROM_StopAudioTrack();
-        sndFading(0);
     }
 
     memset(gfxGetGfxBoardBase(), 0, 320 * 200);

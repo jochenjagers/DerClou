@@ -20,8 +20,7 @@ void *StdBuffer1 = 0;
 char prgname[255];
 
 /************************************************/
-char bProfidisk = 0;  // default = 0
-char bCDRom = 0;      // default = 0
+char bProfidisk = 1;  // default = 1
 /************************************************/
 
 void tcClearStdBuffer(void *p_Buffer)
@@ -44,15 +43,6 @@ static void tcDone(void)
     txtDone();
     inpCloseAllInputDevs();
     gfxDone();
-
-    if (bCDRom)
-    {
-        if (CDRomInstalled)
-        {
-            CDROM_StopAudioTrack();
-            CDROM_UnInstall();
-        }
-    }
 
     if (StdBuffer1) MemFree(StdBuffer1, STD_BUFFER1_SIZE);
 
@@ -94,33 +84,6 @@ static ubyte detectLanguage(void)
     return 0;
 }
 
-/* 2014-07-01 templer
- * detect the game version (STD/PROFI/CD) based on the "please wait loading" text in "THECLOUx.TXT"
- * must call after txtInit */
-static void detectGameVersionType(void)
-{
-    if (txtKeyExists(THECLOU_TXT, "BITTE_WARTEN_PC_CD_ROM_PROFI"))
-    {
-        bProfidisk = 1;
-        bCDRom = 1;
-    }
-    else if (txtKeyExists(THECLOU_TXT, "BITTE_WARTEM_PC_CD_ROM"))  // this typo is supposed to be there!
-    {
-        bProfidisk = 0;
-        bCDRom = 1;
-    }
-    else if (txtKeyExists(THECLOU_TXT, "BITTE_WARTEN_PC_PROFI"))
-    {
-        bProfidisk = 1;
-        bCDRom = 0;
-    }
-    else if (txtKeyExists(THECLOU_TXT, "BITTE_WARTEN_PC"))
-    {
-        bProfidisk = 0;
-        bCDRom = 0;
-    }
-}
-
 static int tcInit(void)
 {
     pcErrOpen(ERR_NO_OUTPUT, tcDone, NULL);
@@ -133,25 +96,6 @@ static int tcInit(void)
         inpOpenAllInputDevs();
 
         txtInit(detectLanguage()); /* 2014-06-27 templer */
-
-        detectGameVersionType(); /* 2014-07-01 templer */
-
-        if (bCDRom) /* 2014-07-01 templer */
-        {
-            char flag = 0;
-            while (!flag)
-            {
-                if (CDROM_Install() != 0)
-                {
-                    flag = 1;
-                }
-                else
-                {
-                    Log("%s|%s: could not find or read CD/DVD", __FILE__, __func__);
-                    flag = 1;
-                }
-            }
-        }
 
         InitAnimHandler();
 
@@ -268,29 +212,11 @@ static ubyte StartupMenu(void)
     // 2014-07-01 templer
     if (!bProfidisk)
     {
-        if (!bCDRom)
-        {
-            // txtGetFirstLine(THECLOU_TXT, "BITTE_WARTEN_PC", line);
-            strcat(line, " (Standard)");
-        }
-        else
-        {
-            // txtGetFirstLine(THECLOU_TXT, "BITTE_WARTEN_PC_CD_ROM", line);
-            strcat(line, " (Std. CD-ROM)");
-        }
+        strcat(line, " (Std. CD-ROM)");
     }
     else
     {
-        if (!bCDRom)
-        {
-            // txtGetFirstLine(THECLOU_TXT, "BITTE_WARTEN_PC_PROFI", line);
-            strcat(line, " (Profidisk)");
-        }
-        else
-        {
-            // txtGetFirstLine(THECLOU_TXT, "BITTE_WARTEN_PC_CD_ROM_PROFI", line);
-            strcat(line, " (Prof. CD-ROM)");
-        }
+        strcat(line, " (Prof. CD-ROM)");
     }
 
     PrintStatus(line);

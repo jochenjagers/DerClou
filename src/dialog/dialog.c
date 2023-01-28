@@ -315,97 +315,47 @@ void DynamicTalk(uint32_t Person1ID, uint32_t Person2ID, ubyte TalkMode)
     RemoveList(bubble);
 }
 
-void PlayFromCDROM(void)
-{
-    if ((StartFrame != DLG_NO_SPEECH) && (EndFrame != DLG_NO_SPEECH))
-    {
-        sndFading(16);
-        CDROM_PlayAudioSequence(2, StartFrame, EndFrame);
-    }
-}
-
 ubyte Say(uint32_t TextID, ubyte activ, uword person, char *text)
 {
     LIST *bubble = NULL;
     ubyte choice = 0;
-    char keys[TXT_KEY_LENGTH] = {0};
     char wavName[256];
 
-    if (!bCDRom)
-    {
-        bubble = txtGoKey(TextID, (char *)text);
+    bubble = txtGoKey(TextID, text);
 
-        if (person != (uword)-1)
-        {
-            SetPictID(person);
-        }
+    if (person != (uword)-1)
+    {
+        SetPictID(person);
+    }
+
+    // the voice output must be started from the procedure "Bubble"
+    // because after the start of the voice output no access to the CDROM
+    // may occur (The voice output would be otherwise interrupted)
+
+    dskBuildPathName(AUDIO_DIRECTORY, text, wavName);
+    strcat(wavName, ".WAV");
+    if ((Config.VoiceVolume > 0) && (dskFileLength(wavName) > 0))
+    {  // 2018-10-08
+        sndFading(16);
+
+        MXR_SetInput(pAudioMixer, MXR_INPUT_VOICE, MXR_CreateInputWAV(wavName));
+        MXR_SetInputVolume(pAudioMixer, MXR_INPUT_VOICE, Config.VoiceVolume);  // 2018-09-25
 
         choice = Bubble(bubble, activ, NULL, 0L);
-        RemoveList(bubble);
+
+        MXR_SetInput(pAudioMixer, MXR_INPUT_VOICE, NULL);
     }
     else
     {
-        bubble = txtGoKey(TextID, text);
-
-        if (person != (uword)-1)
-        {
-            SetPictID(person);
-        }
-
-        // the voice output must be started from the procedure "Bubble"
-        // because after the start of the voice output no access to the CDROM
-        // may occur (The voice output would be otherwise interrupted)
-
-        if (CDRomInstalled)
-        {
-            if (txtKeyExists(CDROM_TXT, text))
-            {
-                txtGetFirstLine(CDROM_TXT, text, keys);
-
-                StartFrame =
-                    (txtGetKeyAsULONG(1, keys) * 60L + txtGetKeyAsULONG(2, keys)) * 75L + txtGetKeyAsULONG(3, keys);
-                EndFrame =
-                    (txtGetKeyAsULONG(4, keys) * 60L + txtGetKeyAsULONG(5, keys)) * 75L + txtGetKeyAsULONG(6, keys);
-
-                choice = Bubble(bubble, activ, NULL, 0L);
-            }
-            else
-            {
-                StartFrame = DLG_NO_SPEECH;
-                EndFrame = DLG_NO_SPEECH;
-
-                choice = Bubble(bubble, activ, NULL, 0L);
-            }
-
-            CDROM_StopAudioTrack();
-        }
-        else
-        {
-            dskBuildPathName(AUDIO_DIRECTORY, text, wavName);
-            strcat(wavName, ".WAV");
-            if ((Config.VoiceVolume > 0) && (dskFileLength(wavName) > 0))
-            {  // 2018-10-08
-                sndFading(16);
-
-                MXR_SetInput(pAudioMixer, MXR_INPUT_VOICE, MXR_CreateInputWAV(wavName));
-                MXR_SetInputVolume(pAudioMixer, MXR_INPUT_VOICE, Config.VoiceVolume);  // 2018-09-25
-
-                choice = Bubble(bubble, activ, NULL, 0L);
-
-                MXR_SetInput(pAudioMixer, MXR_INPUT_VOICE, NULL);
-            }
-            else
-            {
-                choice = Bubble(bubble, activ, NULL, 0L);
-            }
-        }
-        sndFading(0);
-
-        StartFrame = DLG_NO_SPEECH;
-        EndFrame = DLG_NO_SPEECH;
-
-        RemoveList(bubble);
+        choice = Bubble(bubble, activ, NULL, 0L);
     }
+
+    sndFading(0);
+
+    StartFrame = DLG_NO_SPEECH;
+    EndFrame = DLG_NO_SPEECH;
+
+    RemoveList(bubble);
 
     return (choice);
 }
