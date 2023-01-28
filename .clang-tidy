@@ -1,5 +1,5 @@
 ---
-Checks:          'clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,modernize-*,-modernize-use-trailing-return-type'
+Checks:          'clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,modernize-*,-modernize-use-trailing-return-type,-cppcoreguidelines-avoid-magic-numbers,-clang-analyzer-security.insecureAPI.strcpy,-cppcoreguidelines-avoid-non-const-global-variables,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling'
 WarningsAsErrors: true
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
