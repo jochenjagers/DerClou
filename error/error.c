@@ -37,6 +37,7 @@ void Log(const char *s, ...)
 #ifndef __LCC__
             va_end(ap);
 #endif
+            printf("%s\n", log_buffer);
             fprintf(file, "%s\n", log_buffer);
             fclose(file);
         }
