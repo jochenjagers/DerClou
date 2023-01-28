@@ -958,27 +958,12 @@ struct RastPort *gfxPrepareColl(uword us_CollId)
             gfxSetColorTable_hack(pSurface);
 
             /* Collection in den PrepareRP kopieren */
-            int w = 0, h = 0;
-            if (pSurface->w > PrepareRP.us_Width)
-            {
-                w = PrepareRP.us_Width;
-                Log("surface too wide");
-            }
-            else
-            {
-                w = pSurface->w;
-            }
-            if (pSurface->h > PrepareRP.us_Height)
-            {
-                h = PrepareRP.us_Height;
-                Log("surface too high");
-            }
-            else
-            {
-                h = pSurface->h;
-            }
-            memcpy(PrepareRP.p_BitMap, pSurface->pixels, w * h);
-
+            // use temp surface to blit image to because src and dst of pixels must be the same size
+            SDL_Surface *pTmpSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, PrepareRP.us_Width, PrepareRP.us_Height, 8, 0, 0, 0, 0);
+            SDL_SetPalette(pTmpSurface,SDL_LOGPAL | SDL_PHYSPAL, pSurface->format->palette->colors, 0, pSurface->format->palette->ncolors);
+            SDL_BlitSurface(pSurface, NULL, pTmpSurface, NULL);
+            memcpy(PrepareRP.p_BitMap, pTmpSurface->pixels, pTmpSurface->w * pTmpSurface->h);
+            SDL_FreeSurface(pTmpSurface);
             SDL_FreeSurface(pSurface);
         }
         else
