@@ -7,12 +7,57 @@
 #include "disk/disk.h"
 
 #include <ctype.h>
+#include <linux/limits.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include "disk/disk_e.h"
 
-static char RootPathName[256];
+static char RootPathName[PATH_MAX] = {0};
+static char UserPathName[PATH_MAX] = {0};
+
+static const char *USER_GAME_DATA_DIR = "DerClou";
 
 void dskSetRootPath(const char *newRootPath) { strcpy(RootPathName, newRootPath); }
+
+void dskInitUserDataPath(void)
+{
+    if (UserPathName[0] == '\0')
+    {
+        char *path = NULL;
+        if ((path = getenv("XDG_DATA_HOME")))
+        {
+            strncpy(UserPathName, path, NAME_MAX);
+        }
+        else if ((path = getenv("HOME")))
+        {
+            strncpy(UserPathName, path, NAME_MAX);
+            strcat(UserPathName, DIR_SEPARATOR ".local" DIR_SEPARATOR "share");
+        }
+        else if ((path = getenv("APPDATA")))
+        {
+            strncpy(UserPathName, path, NAME_MAX);
+        }
+        else
+        {
+            NewErrorMsg(Disk_Defect, __FILE__, __func__, 1);
+        }
+        strcat(UserPathName, DIR_SEPARATOR);
+        strcat(UserPathName, USER_GAME_DATA_DIR);
+        strcat(UserPathName, DIR_SEPARATOR);
+
+        if (access(UserPathName, F_OK) != 0)
+        {
+            mkdir(UserPathName, 0755);
+        }
+        char result[PATH_MAX];
+        dskBuildPathNameUser(DATADISK_DIRECTORY, "", &result[0]);
+        if (access(result, F_OK) != 0)
+        {
+            mkdir(result, 0755);
+        }
+    }
+}
 
 char *dskGetRootPath(char *result)
 {
@@ -79,16 +124,27 @@ int32_t dskLoad(const char *puch_Pathname, void *p_MemDest)
     return (0);
 }
 
-void dskBuildPathName(const char *puch_Directory, const char *puch_Filename, char *puch_Result)
+static void dskBuildPathNameGeneric(const char *puch_Directory, const char *puch_Filename, char *puch_Result,
+                                    const char *rootPath)
 {
-    sprintf(puch_Result, "%s" DIR_SEPARATOR "%s" DIR_SEPARATOR "%s", RootPathName, puch_Directory, puch_Filename);
-    // convert all chars after RootPathName to upper case as all data file names are upper case
-    char *cur = &puch_Result[strlen(RootPathName)];
+    sprintf(puch_Result, "%s" DIR_SEPARATOR "%s" DIR_SEPARATOR "%s", rootPath, puch_Directory, puch_Filename);
+    // convert all chars after rootPath to upper case as all data file names are upper case
+    char *cur = &puch_Result[strlen(rootPath)];
     while (*cur != '\0')
     {
         *cur = (char)toupper(*cur);
         ++cur;
     }
+}
+
+void dskBuildPathName(const char *puch_Directory, const char *puch_Filename, char *puch_Result)
+{
+    dskBuildPathNameGeneric(puch_Directory, puch_Filename, puch_Result, RootPathName);
+}
+
+void dskBuildPathNameUser(const char *puch_Directory, const char *puch_Filename, char *puch_Result)
+{
+    dskBuildPathNameGeneric(puch_Directory, puch_Filename, puch_Result, UserPathName);
 }
 
 int32_t dskFileLength(const char *puch_Pathname)

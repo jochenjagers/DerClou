@@ -35,7 +35,14 @@ void tcSaveTheClou(int bAutoSave)
 
     dskGetRootPath(RootPath);
 
-    dskBuildPathName(DATADISK_DIRECTORY, GAMES_LIST_TXT, pathname);
+    // try to read from user dir first
+    dskBuildPathNameUser(DATADISK_DIRECTORY, GAMES_LIST_TXT, pathname);
+    if (dskFileLength(pathname) == 0)
+    {
+        // use file from game dir if user files do not exist yet
+        dskBuildPathName(DATADISK_DIRECTORY, GAMES_LIST_TXT, pathname);
+    }
+
     if (ReadList(games, 0L, pathname, 0))
     {
         if (!bAutoSave)
@@ -75,6 +82,7 @@ void tcSaveTheClou(int bAutoSave)
             txtGetFirstLine(THECLOU_TXT, "SAVING", line);
             PrintStatus(line);
 
+            dskBuildPathNameUser(DATADISK_DIRECTORY, GAMES_LIST_TXT, pathname);
             WriteList(games, pathname, 0);
 
             /*
@@ -101,25 +109,25 @@ void tcSaveTheClou(int bAutoSave)
 
             // Speichern von tcMain
             sprintf(line, "%s%d%s", MAIN_DATA_NAME, activ, GAME_DATA_EXT);
-            dskBuildPathName(DATADISK_DIRECTORY, line, pathname);
+            dskBuildPathNameUser(DATADISK_DIRECTORY, line, pathname);
             dbSaveAllObjects(pathname, DB_tcMain_OFFSET, DB_tcMain_SIZE, 0);
 
             sprintf(line, "%s%d%s", MAIN_DATA_NAME, activ, GAME_REL_EXT);
-            dskBuildPathName(DATADISK_DIRECTORY, line, pathname);
+            dskBuildPathNameUser(DATADISK_DIRECTORY, line, pathname);
             SaveRelations(pathname, DB_tcMain_OFFSET, DB_tcMain_SIZE, 0);
 
             // Speichern von tcBuild
             sprintf(line, "%s%d%s", BUILD_DATA_NAME, activ, GAME_DATA_EXT);
-            dskBuildPathName(DATADISK_DIRECTORY, line, pathname);
+            dskBuildPathNameUser(DATADISK_DIRECTORY, line, pathname);
             dbSaveAllObjects(pathname, (uint32_t)DB_tcBuild_OFFSET, (uint32_t)DB_tcBuild_SIZE, 0);
 
             sprintf(line, "%s%d%s", BUILD_DATA_NAME, activ, GAME_REL_EXT);
-            dskBuildPathName(DATADISK_DIRECTORY, line, pathname);
+            dskBuildPathNameUser(DATADISK_DIRECTORY, line, pathname);
             SaveRelations(pathname, (uint32_t)DB_tcBuild_OFFSET, (uint32_t)DB_tcBuild_SIZE, 0);
 
             // Speichern der Story
             sprintf(line, "%s%d%s", STORY_DATA_NAME, activ, GAME_DATA_EXT);
-            dskBuildPathName(DATADISK_DIRECTORY, line, pathname);
+            dskBuildPathNameUser(DATADISK_DIRECTORY, line, pathname);
             tcSaveChangesInScenes(pathname);
         }
     }
@@ -186,23 +194,23 @@ ubyte tcLoadIt(char activ)
     /* 2014-06-25 templer */
 
     sprintf(line, "%s%d%s", MAIN_DATA_NAME, (int)activ, GAME_DATA_EXT);
-    dskBuildPathName(DATADISK_DIRECTORY, line, pathname);
+    dskBuildPathNameUser(DATADISK_DIRECTORY, line, pathname);
     if (dbLoadAllObjects(pathname, 0))
     {
         sprintf(line, "%s%d%s", BUILD_DATA_NAME, (int)activ, GAME_DATA_EXT);
-        dskBuildPathName(DATADISK_DIRECTORY, line, pathname);
+        dskBuildPathNameUser(DATADISK_DIRECTORY, line, pathname);
         if (dbLoadAllObjects(pathname, 0))
         {
             sprintf(line, "%s%d%s", MAIN_DATA_NAME, (int)activ, GAME_REL_EXT);
-            dskBuildPathName(DATADISK_DIRECTORY, line, pathname);
+            dskBuildPathNameUser(DATADISK_DIRECTORY, line, pathname);
             if (LoadRelations(pathname, 0))
             {
                 sprintf(line, "%s%d%s", BUILD_DATA_NAME, (int)activ, GAME_REL_EXT);
-                dskBuildPathName(DATADISK_DIRECTORY, line, pathname);
+                dskBuildPathNameUser(DATADISK_DIRECTORY, line, pathname);
                 if (LoadRelations(pathname, 0))
                 {
                     sprintf(line, "%s%d%s", STORY_DATA_NAME, (int)activ, GAME_DATA_EXT);
-                    dskBuildPathName(DATADISK_DIRECTORY, line, pathname);
+                    dskBuildPathNameUser(DATADISK_DIRECTORY, line, pathname);
                     if (tcLoadChangesInScenes(pathname)) loaded = 1;
                 }
             }
@@ -237,9 +245,15 @@ ubyte tcLoadTheClou(void)
     char pathname1[TXT_KEY_LENGTH];
     char pathname2[TXT_KEY_LENGTH];
 
-    dskBuildPathName(DATADISK_DIRECTORY, GAMES_LIST_TXT, pathname1);
-    dskBuildPathName(DATADISK_DIRECTORY, GAMES_ORIG_TXT, pathname2);
+    // try to read from user dir first
+    dskBuildPathNameUser(DATADISK_DIRECTORY, GAMES_LIST_TXT, pathname1);
+    if (dskFileLength(pathname1) == 0)
+    {
+        // use file from game dir if user files do not exist yet
+        dskBuildPathName(DATADISK_DIRECTORY, GAMES_LIST_TXT, pathname1);
+    }
 
+    dskBuildPathName(DATADISK_DIRECTORY, GAMES_ORIG_TXT, pathname2);
     if (ReadList(games, 0L, pathname1, 0) && ReadList(origin, 0L, pathname2, 0))
     {
         ShowMenuBackground();

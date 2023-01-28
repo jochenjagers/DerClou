@@ -550,6 +550,7 @@ int SDL_main(int argc, char **argv)
 
     // und den Pfad für BuildPathName setzen!
     dskSetRootPath(result);
+    dskInitUserDataPath();
 
     loadConfig(result);
 

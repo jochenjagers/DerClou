@@ -37,10 +37,12 @@ extern char CDDrive[256];
 #define ERR_DISK_READ_FAILED 3
 
 extern void dskSetRootPath(const char *newRootPath);
+extern void dskInitUserDataPath(void);
 extern char *dskGetRootPath(char *result);
 
 extern int32_t dskLoad(const char *puch_Pathname, void *p_MemDest);
 extern void dskBuildPathName(const char *puch_Directory, const char *puch_Filename, char *puch_Result);
+extern void dskBuildPathNameUser(const char *puch_Directory, const char *puch_Filename, char *puch_Result);
 extern void dskClose(FILE *p_File);
 extern void dskWrite(FILE *p_File, void *p_MemSource, uint32_t ul_Size);
 extern void dskRead(FILE *p_File, void *p_MemDest, uint32_t ul_Size);

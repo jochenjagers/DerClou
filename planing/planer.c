@@ -423,7 +423,7 @@ static void plLevelDesigner(LSObject lso)
 
                 dbGetObjectName(area, areaName);
                 strcat(areaName, ".dat");
-                dskBuildPathName(DATA_DIRECTORY, areaName, fileName);
+                dskBuildPathNameUser(DATA_DIRECTORY, areaName, fileName);
 
                 dbSaveAllObjects(fileName, ((LSArea)dbGetObject(area))->ul_ObjectBaseNr, 10000, 0);
             }

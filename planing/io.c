@@ -113,7 +113,8 @@ ubyte plOpen(uint32_t objId, ubyte mode, FILE **fh)
         ubyte i = 0;
         FILE *pllFh = NULL;
         uint32_t pllData = 0L;
-        char pllPath[TXT_KEY_LENGTH], name1[TXT_KEY_LENGTH], name2[TXT_KEY_LENGTH], expan[TXT_KEY_LENGTH];
+        char pllPath[TXT_KEY_LENGTH], pllUserPath[TXT_KEY_LENGTH], name1[TXT_KEY_LENGTH], name2[TXT_KEY_LENGTH],
+            expan[TXT_KEY_LENGTH];
         struct IOData *ioData = NULL;
 
         dbGetObjectName(lsGetActivAreaID(), name1);
@@ -122,7 +123,12 @@ ubyte plOpen(uint32_t objId, ubyte mode, FILE **fh)
         // MOD 25-04-94 HG - new paths on pc
         sprintf(name2, "%s%s", name1, PLANING_PLAN_LIST_EXTENSION);
 
-        dskBuildPathName(DATADISK_DIRECTORY, name2, pllPath);
+        dskBuildPathNameUser(DATADISK_DIRECTORY, name2, pllPath);
+        dskBuildPathNameUser(DATADISK_DIRECTORY, name2, pllUserPath);
+        if (dskFileLength(pllPath) == 0)
+        {
+            dskBuildPathName(DATADISK_DIRECTORY, name2, pllPath);
+        }
 
         if ((pllFh = dskOpen(pllPath, "r", PLANING_PLAN_DISK)))
         {
@@ -175,15 +181,14 @@ ubyte plOpen(uint32_t objId, ubyte mode, FILE **fh)
 
                     sprintf(name2, "%s%d%s", name1, i + 1, PLANING_PLAN_EXTENSION);
 
-                    dskBuildPathName(DATADISK_DIRECTORY, name2, name1);
+                    dskBuildPathNameUser(DATADISK_DIRECTORY, name2, name1);
 
                     *fh = dskOpen(name1, Planing_Open[mode], PLANING_PLAN_DISK);
 
                     if (mode == PLANING_OPEN_WRITE_PLAN)
                     {
                         pllData |= 1L << i;
-
-                        if ((pllFh = dskOpen(pllPath, "w", PLANING_PLAN_DISK)))
+                        if ((pllFh = dskOpen(pllUserPath, "w", PLANING_PLAN_DISK)))
                         {
                             fprintf(pllFh, "%u", pllData);
                             dskClose(pllFh);
