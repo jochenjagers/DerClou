@@ -382,7 +382,7 @@ ubyte Say(uint32_t TextID, ubyte activ, uword person, char *text)
         else
         {
             dskBuildPathName(AUDIO_DIRECTORY, text, wavName);
-            strcat(wavName, ".wav");
+            strcat(wavName, ".WAV");
             if ((Config.VoiceVolume > 0) && (dskFileLength(wavName) > 0))
             {  // 2018-10-08
                 sndFading(16);
