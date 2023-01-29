@@ -4,10 +4,7 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "SDL_byteorder.h"
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 #include "SDL_endian.h"
-#endif
 #include "port/port.h"
 
 /**

@@ -141,7 +141,10 @@ ubyte gfxPaletteGlobal[256 * 4];
 
 #define GFX_BOARD_SIZE (640 * 328)
 
+SDL_Texture *ScreenTexture = NULL;
 SDL_Surface *SurfaceScreen = NULL;
+SDL_Window *Window = NULL;
+SDL_Renderer *Renderer = NULL;
 static const char *TitleStr = COSP_TITLE;
 static ubyte *NCH4Buffer = NULL;
 
@@ -158,9 +161,9 @@ static void SetWindowIcon(char *icon)
     {
         colorkey = SDL_MapRGB(image->format, 2, 5, 1);
 
-        SDL_SetColorKey(image, SDL_SRCCOLORKEY, colorkey);
+        SDL_SetColorKey(image, SDL_TRUE, colorkey);
 
-        SDL_WM_SetIcon(image, NULL);
+        SDL_SetWindowIcon(Window, image);
     }
 }
 
@@ -245,7 +248,7 @@ int gfxInitSDL(void)
 
         if (Config.gfxFullScreen)
         {
-            flags |= SDL_FULLSCREEN;
+            flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
         }
 
         gfxScalingFactor = min((Config.gfxScreenWidth / 320), (Config.gfxScreenHeight / 200));
@@ -307,11 +310,14 @@ int gfxInitSDL(void)
         gfxScalingOffsetY = (Config.gfxScreenHeight - (200 * gfxScalingFactor)) / 2;
 
         dskBuildPathName(PICTURE_DIRECTORY, "icon.bmp", iconPath);
+        SDL_CreateWindowAndRenderer(Config.gfxScreenWidth, Config.gfxScreenHeight, flags, &Window, &Renderer);
         SetWindowIcon(iconPath);
-        SurfaceScreen = SDL_SetVideoMode(Config.gfxScreenWidth, Config.gfxScreenHeight, 8, flags);
+        SDL_SetWindowTitle(Window, TitleStr);
+        SurfaceScreen =
+            SDL_CreateRGBSurface(SDL_SWSURFACE, Config.gfxScreenWidth, Config.gfxScreenHeight, 8, 0, 0, 0, 0);
+        ScreenTexture = SDL_CreateTextureFromSurface(Renderer, SurfaceScreen);
         if (SurfaceScreen)
         {
-            SDL_WM_SetCaption(TitleStr, TitleStr);
             pShadowSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 328, 8, 0, 0, 0, 0);
             if (pShadowSurface)
             {
@@ -365,11 +371,10 @@ void gfxUpdateSDL(struct RastPort *rp)
 
         if (bGfxPaletteChanged)
         {
-            SDL_SetPalette(SurfaceScreen, SDL_LOGPAL | SDL_PHYSPAL, (SDL_Color *)gfxPaletteGlobal, 0, 256);
-            SDL_SetPalette(pShadowSurface, SDL_LOGPAL | SDL_PHYSPAL, (SDL_Color *)gfxPaletteGlobal, 0, 256);
+            SDL_SetPaletteColors(SurfaceScreen->format->palette, (SDL_Color *)gfxPaletteGlobal, 0, 256);
+            SDL_SetPaletteColors(pShadowSurface->format->palette, (SDL_Color *)gfxPaletteGlobal, 0, 256);
             bGfxPaletteChanged = 0;
         }
-
         SDL_LockSurface(SurfaceScreen);
 
         dst = (ubyte *)SurfaceScreen->pixels;
@@ -388,7 +393,12 @@ void gfxUpdateSDL(struct RastPort *rp)
 
         SDL_UnlockSurface(SurfaceScreen);
 
-        SDL_UpdateRect(SurfaceScreen, 0, 0, 0, 0);
+        SDL_RenderClear(Renderer);
+        SDL_Surface *target = SDL_ConvertSurfaceFormat(SurfaceScreen, SDL_PIXELFORMAT_ARGB8888, 0);
+        SDL_UpdateTexture(ScreenTexture, NULL, target->pixels, target->pitch);
+        SDL_FreeSurface(target);
+        SDL_RenderCopy(Renderer, ScreenTexture, NULL, NULL);
+        SDL_RenderPresent(Renderer);
     }
     bGfxInvalidate = 0;
 }
@@ -958,8 +968,9 @@ struct RastPort *gfxPrepareColl(uword us_CollId)
             // use temp surface to blit image to because src and dst of pixels must be the same size
             SDL_Surface *pTmpSurface =
                 SDL_CreateRGBSurface(SDL_SWSURFACE, PrepareRP.us_Width, PrepareRP.us_Height, 8, 0, 0, 0, 0);
-            SDL_SetPalette(pTmpSurface, SDL_LOGPAL | SDL_PHYSPAL, pSurface->format->palette->colors, 0,
-                           pSurface->format->palette->ncolors);
+
+            SDL_SetPaletteColors(pTmpSurface->format->palette, pSurface->format->palette->colors, 0,
+                                 pSurface->format->palette->ncolors);
             SDL_BlitSurface(pSurface, NULL, pTmpSurface, NULL);
             memcpy(PrepareRP.p_BitMap, pTmpSurface->pixels, pTmpSurface->w * pTmpSurface->h);
             SDL_FreeSurface(pTmpSurface);

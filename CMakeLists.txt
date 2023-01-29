@@ -6,7 +6,6 @@ project(
   LANGUAGES C)
 
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(SDL12 REQUIRED sdl12_compat)
+find_package(SDL2 REQUIRED)
 
 subdirs(src)

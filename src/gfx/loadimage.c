@@ -240,7 +240,7 @@ static SDL_Surface *gfxLoadILBM(ubyte *pFileBuffer, int32_t ulSizeOfFile, const 
                 currPos++;
                 pc->b = pFileBuffer[currPos];
                 currPos++;
-                pc->unused = 0;
+                pc->a = 0;
             }
         }
     }

@@ -168,7 +168,7 @@ static void inpInitJoystick(void)
     Log("Failed to open joystick #%d. Please try a different one.", Config.UseJoystick);
     for (i = 0; i < numJoys; i++)
     {
-        Log("#%d = \"%s\"", i + 1, SDL_JoystickName(i));
+        Log("#%d = \"%s\"", i + 1, SDL_JoystickNameForIndex(i));
     }
     Config.UseJoystick = 0;
 }
@@ -185,8 +185,6 @@ static void inpQuitJoystick(void)
 
 void inpOpenAllInputDevs(void)
 {
-    inpSetKeyRepeat((1 << 5) | 10);
-
     IHandler.uch_EscStatus = 1;
     IHandler.uch_FunctionKeyStatus = 1;
     IHandler.uch_MouseStatus = 1;
@@ -279,7 +277,7 @@ int32_t inpWaitFor(int32_t l_Mask)
     uint32_t timePrev = SDL_GetTicks();
 
     SDL_Event event;
-    SDLKey sym = (SDLKey)0;
+    SDL_Keycode sym = (SDL_Keycode)0;
 
     if (IHandler.uch_EscStatus && !(l_Mask & INP_NO_ESC)) l_Mask |= INP_ESC;
     if (IHandler.uch_FunctionKeyStatus) l_Mask |= INP_FUNCTION_KEY;
@@ -311,7 +309,8 @@ int32_t inpWaitFor(int32_t l_Mask)
                     break;
                 case SDL_KEYUP:
                     sym = event.key.keysym.sym;
-                    if ((l_Mask & (INP_LBUTTONP | INP_LBUTTONR)) && ((sym == SDLK_SPACE) || (sym == SDLK_RETURN) ||(sym == SDLK_KP_ENTER)))
+                    if ((l_Mask & (INP_LBUTTONP | INP_LBUTTONR)) &&
+                        ((sym == SDLK_SPACE) || (sym == SDLK_RETURN) || (sym == SDLK_KP_ENTER)))
                     {
                         action |= INP_KEYBOARD | INP_LBUTTONP;
                     }
@@ -440,12 +439,13 @@ int32_t inpWaitFor(int32_t l_Mask)
                     }
                     IHandler.us_MouseX = (event.button.x - gfxScalingOffsetX) / gfxScalingFactor;
                     IHandler.us_MouseY = (event.button.y - gfxScalingOffsetY) / gfxScalingFactor;
-
-                    if (event.button.button == SDL_BUTTON_WHEELUP)
+                    break;
+                case SDL_MOUSEWHEEL:
+                    if (event.wheel.y >= 0)
                     {
                         action |= INP_MOUSEWHEEL | INP_UP;
                     }
-                    if (event.button.button == SDL_BUTTON_WHEELDOWN)
+                    else
                     {
                         action |= INP_MOUSEWHEEL | INP_DOWN;
                     }
@@ -508,7 +508,7 @@ void inpSetKeyRepeat(unsigned char rate)
     /* needs some experimenting... */
     // int x = (((rate & 0xe0) >> 5) + 1) << 7;
     // int y = ((rate & 0x1f) + 1) << 1;
-    int x = (((rate & 0xe0) >> 5) + 1) << 8;
-    int y = ((rate & 0x1f) + 1) << 4;
-    SDL_EnableKeyRepeat(x, y);
+    // TODO SDL2 int x = (((rate & 0xe0) >> 5) + 1) << 8;
+    // TODO SDL2 int y = ((rate & 0x1f) + 1) << 4;
+    // TODO SDL2 SDL_EnableKeyRepeat(x, y);
 }
