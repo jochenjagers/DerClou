@@ -79,7 +79,7 @@ ubyte tcBuyTool(ubyte choice)
 
     RemoveList(tools);
 
-    return (oldChoice);
+    return oldChoice;
 }
 
 ubyte tcDescTool(ubyte choice)
@@ -129,7 +129,7 @@ ubyte tcDescTool(ubyte choice)
 
     RemoveList(tools);
 
-    return (oldChoice);
+    return oldChoice;
 }
 
 ubyte tcShowTool(ubyte choice)
@@ -174,7 +174,7 @@ ubyte tcShowTool(ubyte choice)
 
     RemoveList(tools);
 
-    return (oldChoice);
+    return oldChoice;
 }
 
 void tcSellTool()

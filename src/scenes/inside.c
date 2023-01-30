@@ -52,7 +52,7 @@ uint32_t tcGoInsideOfHouse(uint32_t buildingID)
     RemoveList(areas);
     RemoveList(menu);
 
-    return (areaID);
+    return areaID;
 }
 
 void tcInsideOfHouse(uint32_t buildingID, uint32_t areaID, ubyte perc)

@@ -117,5 +117,5 @@ ubyte gfxMCGAReadPixel(struct RastPort *rp, uword us_X, uword us_Y)
         // us_Y += rp->us_TopEdge;
         return (((ubyte *)rp->p_BitMap)[us_X + us_Y * rp->us_Width]);
     }
-    return (0);
+    return 0;
 }

@@ -49,11 +49,11 @@ static uint32_t IFFFindChunk(ubyte *pFileBuffer, int32_t sizeOfForm, const ubyte
         if (!memcmp(&pFileBuffer[currPos], chkID, 4))
         {
             currPos += 4;
-            return (currPos);
+            return currPos;
         }
         currPos += 2;
     }
-    return (0);
+    return 0;
 }
 
 static void MakeMCGA(ubyte b, ubyte *pic, ubyte PlSt, int c)
@@ -151,13 +151,13 @@ static SDL_Surface *gfxLoadILBM(ubyte *pFileBuffer, int32_t ulSizeOfFile, const 
     {
         // file truncated!
         Log("ILBM truncated: %s\n", puch_Pathname);
-        return (NULL);
+        return NULL;
     }
     uint32_t currPos = IFFFindChunk(pFileBuffer, sizeOfForm, idBMHD);
     if (!currPos)
     {
         Log("No BMHD found: %s\n", puch_Pathname);
-        return (NULL);
+        return NULL;
     }
 
     int32_t chunkSize = PeekL_BE(&pFileBuffer[currPos]);
@@ -165,7 +165,7 @@ static SDL_Surface *gfxLoadILBM(ubyte *pFileBuffer, int32_t ulSizeOfFile, const 
     if (chunkSize < 20)
     {
         Log("Invalid BMHD: %s\n", puch_Pathname);
-        return (NULL);
+        return NULL;
     }
 
     ILBMHeader hdr;
@@ -198,14 +198,14 @@ static SDL_Surface *gfxLoadILBM(ubyte *pFileBuffer, int32_t ulSizeOfFile, const 
     if (hdr.compression > 1)
     {
         Log("Unsupported compression: %s\n", puch_Pathname);
-        return (NULL);
+        return NULL;
     }
 
     currPos = IFFFindChunk(pFileBuffer, sizeOfForm, idBODY);
     if (!currPos)
     {
         Log("No BODY found: %s\n", puch_Pathname);
-        return (NULL);
+        return NULL;
     }
     chunkSize = PeekL_BE(&pFileBuffer[currPos]);
     currPos += 4;
@@ -214,7 +214,7 @@ static SDL_Surface *gfxLoadILBM(ubyte *pFileBuffer, int32_t ulSizeOfFile, const 
     if (!pSurface)
     {
         Log("Failed to create surface: %s\n", puch_Pathname);
-        return (NULL);
+        return NULL;
     }
 
     if (hdr.compression == 1)
@@ -251,7 +251,7 @@ static SDL_Surface *gfxLoadILBM(ubyte *pFileBuffer, int32_t ulSizeOfFile, const 
             }
         }
     }
-    return (pSurface);
+    return pSurface;
 }
 
 SDL_Surface *gfxLoadImage(const char *puch_Pathname)
@@ -265,14 +265,14 @@ SDL_Surface *gfxLoadImage(const char *puch_Pathname)
     if (!ul_SizeOfFile)
     {
         Log("gfxLoadImage empty file: %s", puch_Pathname);
-        return (NULL);
+        return NULL;
     }
 
     p_File = dskOpen(puch_Pathname, "rb", 0);
     if (!p_File)
     {
         Log("gfxLoadImage failed to open: %s", puch_Pathname);
-        return (NULL);
+        return NULL;
     }
 
     p_FileBuffer = MemAlloc(ul_SizeOfFile);
@@ -285,7 +285,7 @@ SDL_Surface *gfxLoadImage(const char *puch_Pathname)
     if (!p_FileBuffer)
     {
         Log("gfxLoadImage out of memory: %s", puch_Pathname);
-        return (NULL);
+        return NULL;
     }
 
     if (!memcmp(&p_FileBuffer[0], idFORM, 4) && !memcmp(&p_FileBuffer[8], idILBM, 4))
@@ -303,5 +303,5 @@ SDL_Surface *gfxLoadImage(const char *puch_Pathname)
     }
 
     MemFree(p_FileBuffer, ul_SizeOfFile);
-    return (pSurface);
+    return pSurface;
 }

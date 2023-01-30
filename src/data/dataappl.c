@@ -48,7 +48,7 @@ ubyte tcSpendMoney(int32_t money, ubyte breakAnim)
     else
         tcSetPlayerMoney(tcGetPlayerMoney - money);
 
-    return (enough);
+    return enough;
 }
 
 /* berechnet Auswirkung eines Funkspruches
@@ -211,7 +211,7 @@ uint32_t GetObjNrOfLocation(uint32_t LocNr)
         }
     }
 
-    return (0L);
+    return 0L;
 }
 
 uint32_t GetObjNrOfBuilding(uint32_t LocNr)
@@ -234,7 +234,7 @@ uint32_t GetObjNrOfBuilding(uint32_t LocNr)
         }
     }
 
-    return (0L);
+    return 0L;
 }
 
 uint32_t tcGetPersOffer(Person person, ubyte persCount)
@@ -278,7 +278,7 @@ uint32_t tcGetPersOffer(Person person, ubyte persCount)
     offer = CalcValue(offer, 1, 90, Pers->Avarice, 20);
     offer = CalcValue(offer, 1, 90, 255 - Pers->Known, 10);
 
-    return (offer);
+    return offer;
 }
 
 void tcPersonLearns(uint32_t pId)
@@ -604,7 +604,7 @@ uint32_t tcGuyUsesTool(uint32_t persId, Building b, uint32_t toolId, uint32_t it
     else
         time = 0; /* kein Tool oder kein Item angegeben! */
 
-    return (time);
+    return time;
 }
 
 /*
@@ -680,7 +680,7 @@ int32_t tcGetTotalLoudness(int32_t loudp0, int32_t loudp1, int32_t loudp2, int32
 
     total = CalcValue(total, 0, 255, 255, 20); /* um ca 20 % erhöhen */
 
-    return (total);
+    return total;
 }
 
 /*

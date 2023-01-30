@@ -166,10 +166,10 @@ void *GetNode(void *list, char *name)
     {
         if (!strcmp(NODE_NAME(node), name))
         {
-            return (node);
+            return node;
         }
     }
-    return (NULL);
+    return NULL;
 }
 
 void *GetNthNode(void *list, uint32_t n)
@@ -182,7 +182,7 @@ void *GetNthNode(void *list, uint32_t n)
         if (i == n) return (node);
         i++;
     }
-    return (NULL);
+    return NULL;
 }
 
 uint32_t GetNrOfNodes(void *list)

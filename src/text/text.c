@@ -85,7 +85,7 @@ static char *txtGetLine(struct Text *txt, ubyte lineNr)
         if (line >= ((char *)txt->txt_Handle + txt->txt_Size)) line = NULL;
     }
 
-    return (line);
+    return line;
 }
 
 //  public functions - TEXT
@@ -481,7 +481,7 @@ uint32_t txtCountKey(char *key)
     {
         if (key[j] == TXT_CHAR_KEY_SEPERATOR) k++;
     }
-    return (k + 1);
+    return k + 1;
 }
 
 // functions - STRING
@@ -494,7 +494,7 @@ char *txtGetNthString(uint32_t textId, char *key, uint32_t nth, char *dest)
     else
         dest[0] = '\0';
     RemoveList(txtList);
-    return (dest);
+    return dest;
 }
 
 void txtPutCharacter(LIST *list, uword pos, ubyte c)
@@ -521,7 +521,7 @@ void txtSetLanguage(ubyte lang)
 ubyte txtGetLanguage(void)
 {
     if (txtBase) return (txtBase->tc_Language);
-    return (TXT_LANG_GERMAN);
+    return TXT_LANG_GERMAN;
 }
 
 char *txtGetTemporary(void)
@@ -532,5 +532,5 @@ char *txtGetTemporary(void)
     r = &s[i][0];
     i = (i + 1) & 15;
     memset(r, 0, TXT_KEY_LENGTH);
-    return (r);
+    return r;
 }

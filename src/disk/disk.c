@@ -73,9 +73,9 @@ static int dskModfilesPathName(const char *pszPath, char *pszModfilesPath)
     {
         rootPathLen++;  // also skip the separator
         dskBuildPathName(MODFILES_DIRECTORY, &pszPath[rootPathLen], pszModfilesPath);
-        return (1);
+        return 1;
     }
-    return (0);
+    return 0;
 }
 
 FILE *dskOpen(const char *puch_Pathname, const char *puch_Mode, uword us_DiskId)
@@ -104,7 +104,7 @@ FILE *dskOpen(const char *puch_Pathname, const char *puch_Mode, uword us_DiskId)
         NewErrorMsg(Disk_Defect, __FILE__, __func__, ERR_DISK_OPEN_FAILED);
     }
 
-    return (p_File);
+    return p_File;
 }
 
 int32_t dskLoad(const char *puch_Pathname, void *p_MemDest)
@@ -118,10 +118,10 @@ int32_t dskLoad(const char *puch_Pathname, void *p_MemDest)
         {
             dskRead(p_File, p_MemDest, ul_SizeOfFile);
             dskClose(p_File);
-            return (ul_SizeOfFile);
+            return ul_SizeOfFile;
         }
     }
-    return (0);
+    return 0;
 }
 
 static void dskBuildPathNameGeneric(const char *puch_Directory, const char *puch_Filename, char *puch_Result,
@@ -191,7 +191,7 @@ int dskIsEOF(FILE *p_File)
 {
     if (fgetc(p_File) == EOF) return (-1);
     fseek(p_File, -1, SEEK_CUR);
-    return (0);
+    return 0;
 }
 
 // fgets() has this CR/LF problem
@@ -208,7 +208,7 @@ char *dskGets(char *text, int n, FILE *file)
         {
             *p = '\0';
         }
-        return (text);
+        return text;
     }
-    return (NULL);
+    return NULL;
 }

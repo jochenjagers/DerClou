@@ -312,7 +312,7 @@ static struct Spot *lsAddSpot(uword us_Size, uword us_Speed, uint32_t ul_CtrlObj
 
     lsGetAreaForSpot(spot);
 
-    return (spot);
+    return spot;
 }
 
 void lsSetSpotStatus(uint32_t CtrlObjId, ubyte uch_Status)

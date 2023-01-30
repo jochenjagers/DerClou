@@ -347,7 +347,7 @@ ubyte tcSaveChangesInScenes(char *fileName)
         back = 1;
     }
 
-    return (back);
+    return back;
 }
 
 ubyte tcLoadChangesInScenes(char *fileName)
@@ -382,5 +382,5 @@ ubyte tcLoadChangesInScenes(char *fileName)
     else
         back = 0;
 
-    return (back);
+    return back;
 }

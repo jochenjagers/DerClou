@@ -213,18 +213,18 @@ RELATION AskP(KEY leftKey, RELATION id, KEY rightKey, PARAMETER parameter, COMPA
                     if (comparsion & CMP_EQUAL)
                     {
                         if (comparsion & CMP_HIGHER)
-                            return (r->r_parameter >= parameter ? id : 0);
+                            return r->r_parameter >= parameter ? id : 0;
                         else if (comparsion & CMP_LOWER)
-                            return (r->r_parameter <= parameter ? id : 0);
+                            return r->r_parameter <= parameter ? id : 0;
 
-                        return (r->r_parameter == parameter ? id : 0);
+                        return r->r_parameter == parameter ? id : 0;
                     }
                     else if (comparsion & CMP_HIGHER)
-                        return (r->r_parameter > parameter ? id : 0);
+                        return r->r_parameter > parameter ? id : 0;
                     else if (comparsion & CMP_LOWER)
-                        return (r->r_parameter < parameter ? id : 0);
+                        return r->r_parameter < parameter ? id : 0;
                     else if (comparsion & CMP_NOT_EQUAL)
-                        return (r->r_parameter != parameter ? id : 0);
+                        return r->r_parameter != parameter ? id : 0;
 
                     return 0;
                 }

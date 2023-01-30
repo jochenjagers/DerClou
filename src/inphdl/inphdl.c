@@ -499,7 +499,7 @@ int32_t inpWaitFor(int32_t l_Mask)
         if ((l_Mask & INP_TIME) && (WaitTime >= INP_TICKS_TO_MS(IHandler.ul_WaitTicks))) action |= INP_TIME;
     }
 
-    return (action);
+    return action;
 }
 
 /*

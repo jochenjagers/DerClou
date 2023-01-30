@@ -61,7 +61,7 @@ static int32_t VOCOpen(VOCFile *voc, const char *pszFileName)
     voc->pFile = fopen(pszFileName, "rb");
     if (!voc->pFile)
     {
-        return (0);
+        return 0;
     }
 
     if (fread(&hdr, 1, SIZEOF_VOCHeader, voc->pFile) != SIZEOF_VOCHeader) goto Lgetout;
@@ -81,12 +81,12 @@ static int32_t VOCOpen(VOCFile *voc, const char *pszFileName)
     voc->wChannels = 1;
     voc->wBitsPerSample = 8;
 
-    return (1);
+    return 1;
 
 Lgetout:
     fclose(voc->pFile);
     voc->pFile = NULL;
-    return (0);
+    return 0;
 }
 
 /******************************************************************************/
@@ -112,10 +112,10 @@ static uint32_t MXR_ProcessInputVOC(MXR_InputVOC *pInput, void *pStream, uint32_
         if (nSamplesRead > 0)
         {
             pInput->vocFile.dwPosition += (nSamplesRead * pInput->mxrInput.fmt.nSampleSize);
-            return (nSamplesRead);
+            return nSamplesRead;
         }
     }
-    return (0);  // MXR will destroy this input
+    return 0;  // MXR will destroy this input
 }
 
 static void MXR_DestroyInputVOC(MXR_InputVOC *pInput)
@@ -133,7 +133,7 @@ MXR_Input *MXR_CreateInputVOC(const char *pszFileName)
     pInput = (MXR_InputVOC *)MXR_MemAlloc(sizeof(MXR_InputVOC));
     if (!pInput)
     {
-        return (NULL);
+        return NULL;
     }
     pInput->mxrInput.pProcess = (MXR_ProcessInputFunc)MXR_ProcessInputVOC;
     pInput->mxrInput.pDestroy = (MXR_DestroyInputFunc)MXR_DestroyInputVOC;
@@ -142,7 +142,7 @@ MXR_Input *MXR_CreateInputVOC(const char *pszFileName)
     if (!VOCOpen(&pInput->vocFile, pszFileName))
     {
         MXR_MemFree(pInput, sizeof(MXR_InputVOC));
-        return (NULL);
+        return NULL;
     }
 
     pInput->mxrInput.fmt.nSamplesPerSec = pInput->vocFile.dwSamplesPerSec;

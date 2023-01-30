@@ -184,7 +184,7 @@ uint32_t lsGetStartArea(void)
 
     areaID = OL_NR(LIST_HEAD(ObjectList));
 
-    return (areaID);
+    return areaID;
 }
 
 uword lsGetFloorIndex(uword x, uword y)
@@ -239,7 +239,7 @@ LIST *lsGetObjectsByList(uword x, uword y, uword width, uword height, ubyte show
         }
     }
 
-    return (list);
+    return list;
 }
 
 void lsSetCollMode(ubyte collMode) { ls->uch_CollMode = collMode; }

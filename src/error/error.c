@@ -49,9 +49,9 @@ int32_t pcErrOpen(int32_t l_Mode, void (*fp_CloseAll)(), ubyte *puch_ErrorFilena
     if (fp_CloseAll)
     {
         ErrorHandler.fp_CloseAll = fp_CloseAll;
-        return (1);
+        return 1;
     }
-    return (0);
+    return 0;
 }
 
 void pcErrClose() {}

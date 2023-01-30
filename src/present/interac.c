@@ -648,5 +648,5 @@ ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), uint32_t waitTime)
 
     ContinueAnim();
 
-    return (activ);
+    return activ;
 }

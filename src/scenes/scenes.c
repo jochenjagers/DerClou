@@ -116,7 +116,7 @@ uint32_t Go(LIST *succ)
 
     inpTurnFunctionKey(1);
 
-    return (succ_eventnr);
+    return succ_eventnr;
 }
 
 void Information(void)
@@ -375,7 +375,7 @@ uint32_t tcTelefon(void)
 
     gfxShow(173, GFX_ONE_STEP | GFX_NO_REFRESH, 0, -1, -1);
 
-    return (eventNr);
+    return eventNr;
 }
 
 void tcWait(void)

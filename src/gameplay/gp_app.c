@@ -172,7 +172,7 @@ uint32_t tcBurglary(uint32_t buildingID)
             break;
     }
 
-    return (succNr);
+    return succNr;
 }
 
 void tcRefreshLocationInTitle(uint32_t locNr)
@@ -510,7 +510,7 @@ uint32_t StdHandle(uint32_t choice)
             tcWait();
             break;
     }
-    return (succ_eventnr);
+    return succ_eventnr;
 }
 
 void StdDone(void)
@@ -778,11 +778,11 @@ ubyte tcPersonIsHere(void)
         hasAll(locNr, 0, Object_Person);
 
         if (LIST_EMPTY(ObjectList))
-            return (0);
+            return 0;
         else
-            return (1);
+            return 1;
     }
-    return (0);
+    return 0;
 }
 
 void tcPersonGreetsMatt(void)

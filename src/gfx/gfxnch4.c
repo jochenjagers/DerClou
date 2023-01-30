@@ -115,7 +115,7 @@ ubyte gfxNCH4ReadPixel(struct RastPort *rp, uword us_X, uword us_Y)
     {
         return (((ubyte *)rp->p_BitMap)[us_X + us_Y * 640]);
     }
-    return (0);
+    return 0;
 }
 
 void gfxNCH4SetViewPort(uword x, uword y)

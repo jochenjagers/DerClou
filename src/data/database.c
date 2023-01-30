@@ -54,7 +54,7 @@ KEY dbEncode(char *key)
         Log("%s|%s: dbEncode(\"%s\")", __FILE__, __func__, key);
         // NewErrorMsg(Internal_Error, __FILE__, __func__, 1);
     }
-    return (obj);
+    return obj;
 }
 
 struct dbObject *dbFindRealObject(uint32_t realNr, uint32_t offset, uint32_t size)
@@ -871,7 +871,7 @@ static ubyte dbLoadOrSaveObject(struct dbObjectHeader *objHd, void *obj, FILE *f
                 break;
         }
     }
-    return (1);
+    return 1;
 }
 
 void dbcheckSize(uint32_t objSize, uint32_t structSize)

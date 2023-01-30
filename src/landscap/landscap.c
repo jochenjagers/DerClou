@@ -244,9 +244,9 @@ ubyte lsIsInside(LSObject lso, uword x, uword y, uword x1, uword y1)
     lsCalcExactSize(lso, &lsoX, &lsoY, &lsoX1, &lsoY1);
 
     if ((lsoX <= x1) && (lsoX1 >= x) && (lsoY <= y1) && (lsoY1 >= y))
-        return (1);
+        return 1;
     else
-        return (0);
+        return 0;
 }
 
 void lsSetActivLiving(char *Name, uword x, uword y)
@@ -288,7 +288,7 @@ word lsSortByXCoord(struct ObjectNode *n1, struct ObjectNode *n2)
     lso2 = (LSObject)OL_DATA(n2);
 
     if (lso1->us_DestX > lso2->us_DestX)
-        return (1);
+        return 1;
     else
         return ((word)-1);
 }
@@ -302,7 +302,7 @@ word lsSortByYCoord(struct ObjectNode *n1, struct ObjectNode *n2)
     lso2 = (LSObject)OL_DATA(n2);
 
     if (lso1->us_DestY < lso2->us_DestY)
-        return (1);
+        return 1;
     else
         return ((word)-1);
 }

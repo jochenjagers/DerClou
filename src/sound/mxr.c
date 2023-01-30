@@ -458,7 +458,7 @@ MXR_Mixer *MXR_CreateMixer(const MXR_Format *pFormat)
     pMixer = (MXR_Mixer *)MXR_MemAlloc(sizeof(MXR_Mixer));
     if (!pMixer)
     {
-        return (NULL);
+        return NULL;
     }
 
     pMixer->fmt.nSamplesPerSec = pFormat->nSamplesPerSec;
@@ -489,14 +489,14 @@ MXR_Mixer *MXR_CreateMixer(const MXR_Format *pFormat)
     if (SDL_InitSubSystem(SDL_INIT_AUDIO) != 0)
     {
         MXR_MemFree(pMixer, sizeof(MXR_Mixer));
-        return (NULL);
+        return NULL;
     }
 
     if (SDL_OpenAudio(&spec, NULL))
     {
         Log("SDL_OpenAudio: %s", SDL_GetError());
         MXR_MemFree(pMixer, sizeof(MXR_Mixer));
-        return (NULL);
+        return NULL;
     }
 
     /* YM3812 emulation for the HSC player */
@@ -504,7 +504,7 @@ MXR_Mixer *MXR_CreateMixer(const MXR_Format *pFormat)
 
     SDL_PauseAudio(0);
 
-    return (pMixer);
+    return pMixer;
 }
 
 /******************************************************************************/
@@ -569,7 +569,7 @@ unsigned char MXR_SetOutputVolume(MXR_Mixer *pMixer, unsigned char nVolume)
 
     SDL_UnlockAudio();
 
-    return (nOldVolume);
+    return nOldVolume;
 }
 
 /******************************************************************************/
@@ -588,7 +588,7 @@ unsigned char MXR_SetInputVolume(MXR_Mixer *pMixer, int32_t nInput, unsigned cha
         SDL_UnlockAudio();
     }
 
-    return (nOldVolume);
+    return nOldVolume;
 }
 
 /******************************************************************************/

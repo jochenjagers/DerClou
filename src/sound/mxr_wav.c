@@ -52,7 +52,7 @@ static int32_t WAVOpen(WAVFile *wav, const char *pszFileName)
     wav->pFile = fopen(pszFileName, "rb");
     if (!wav->pFile)
     {
-        return (0);
+        return 0;
     }
 
     if (fread(&chk, 1, sizeof(WAVChunk), wav->pFile) != sizeof(WAVChunk)) goto Lgetout;
@@ -78,12 +78,12 @@ static int32_t WAVOpen(WAVFile *wav, const char *pszFileName)
     if (!wav->dwNumSamples) goto Lgetout;
     wav->dwPosition = 0;
 
-    return (1);
+    return 1;
 
 Lgetout:
     fclose(wav->pFile);
     wav->pFile = NULL;
-    return (0);
+    return 0;
 }
 
 /******************************************************************************/
@@ -109,10 +109,10 @@ static uint32_t MXR_ProcessInputWAV(MXR_InputWAV *pInput, void *pStream, uint32_
         if (nSamplesRead > 0)
         {
             pInput->wavFile.dwPosition += (nSamplesRead * pInput->mxrInput.fmt.nSampleSize);
-            return (nSamplesRead);
+            return nSamplesRead;
         }
     }
-    return (0);  // MXR will destroy this input
+    return 0;  // MXR will destroy this input
 }
 
 static void MXR_DestroyInputWAV(MXR_InputWAV *pInput)
@@ -130,7 +130,7 @@ MXR_Input *MXR_CreateInputWAV(const char *pszFileName)
     pInput = (MXR_InputWAV *)MXR_MemAlloc(sizeof(MXR_InputWAV));
     if (!pInput)
     {
-        return (NULL);
+        return NULL;
     }
     pInput->mxrInput.pProcess = (MXR_ProcessInputFunc)MXR_ProcessInputWAV;
     pInput->mxrInput.pDestroy = (MXR_DestroyInputFunc)MXR_DestroyInputWAV;
@@ -139,7 +139,7 @@ MXR_Input *MXR_CreateInputWAV(const char *pszFileName)
     if (!WAVOpen(&pInput->wavFile, pszFileName))
     {
         MXR_MemFree(pInput, sizeof(MXR_InputWAV));
-        return (NULL);
+        return NULL;
     }
 
     pInput->mxrInput.fmt.nSamplesPerSec = pInput->wavFile.fmt.dwSamplesPerSec;

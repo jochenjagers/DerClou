@@ -114,9 +114,9 @@ static int tcInit(void)
 
         CurrentBackground = BGD_LONDON;
 
-        return (1);
+        return 1;
     }
-    return (0);
+    return 0;
 }
 
 static void InitData(void)
@@ -251,7 +251,7 @@ static ubyte StartupMenu(void)
     }
 
     RemoveList(menu);
-    return (ret);
+    return ret;
 }
 
 static void tcDo(void)
@@ -313,7 +313,7 @@ static char *trimstr(char *str)
     {
         *p = '\0';
     }
-    return (str);
+    return str;
 }
 
 static void loadConfig(const char *rootPath)
@@ -542,5 +542,5 @@ int SDL_main(int argc, char **argv)
 #ifdef THECLOU_DEBUG_ALLOC
     MemQuit();
 #endif
-    return (0);
+    return 0;
 }

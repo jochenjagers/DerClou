@@ -260,7 +260,7 @@ uint32_t PlayStory(void)
 
     StopAnim();
 
-    return (curr->EventNr);
+    return curr->EventNr;
 }
 
 struct Scene *GetStoryScene(struct Scene *curr)
@@ -284,7 +284,7 @@ struct Scene *GetStoryScene(struct Scene *curr)
         }
     }
 
-    return (0);
+    return 0;
 }
 
 struct Scene *GetScene(uint32_t EventNr)
@@ -360,7 +360,7 @@ int32_t CheckConditions(struct Scene *scene)
         }
     }
 
-    return (1L);
+    return 1L;
 }
 
 void PrepareStory(char *filename)
@@ -647,9 +647,9 @@ void AddVTime(uint32_t add)
 uint32_t GetAmountOfScenes(void) /* for extern modules */
 {
     if (film)
-        return (film->AmountOfScenes);
+        return film->AmountOfScenes;
     else
-        return (0L);
+        return 0L;
 }
 
 void SetCurrentScene(struct Scene *scene) { film->act_scene = scene; }
@@ -695,7 +695,7 @@ char *BuildTime(uint32_t min, char language, char *time)
     FormatDigit(min, s);
     strcat(time, s);
 
-    return (time);
+    return time;
 }
 
 char *BuildDate(uint32_t days, char language, char *date)
@@ -746,7 +746,7 @@ char *BuildDate(uint32_t days, char language, char *date)
             break;
     }
 
-    return (date);
+    return date;
 }
 
 char *GetCurrLocName(void)

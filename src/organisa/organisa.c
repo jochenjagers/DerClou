@@ -281,7 +281,7 @@ ubyte tcCheckOrganisation(void)
     else
         Say(BUSINESS_TXT, 0, MATT_PICTID, "PLAN_NO_BUILDING");
 
-    return (check);
+    return check;
 }
 
 uint32_t tcChooseDriver(uint32_t persID)
@@ -331,7 +331,7 @@ uint32_t tcChooseDriver(uint32_t persID)
 
     RemoveList(list);
 
-    return (persID);
+    return persID;
 }
 
 uint32_t tcChooseDestBuilding(uint32_t objID)
@@ -359,7 +359,7 @@ uint32_t tcChooseDestBuilding(uint32_t objID)
 
     RemoveList(list);
 
-    return (objID);
+    return objID;
 }
 
 uint32_t tcChooseEscapeCar(uint32_t objID)
@@ -417,7 +417,7 @@ uint32_t tcChooseEscapeCar(uint32_t objID)
     RemoveList(l2);
     RemoveList(l1);
 
-    return (objID);
+    return objID;
 }
 
 void tcChooseGuys(void)

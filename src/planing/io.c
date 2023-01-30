@@ -100,7 +100,7 @@ LIST *plLoadTools(FILE *fh)
             RemoveList(extList);
         }
     }
-    return (l);
+    return l;
 }
 
 ubyte plOpen(uint32_t objId, ubyte mode, FILE **fh)

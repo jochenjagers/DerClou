@@ -452,7 +452,7 @@ static int32_t HSCOpen(HSC_File *pHSC, const char *pszFileName)
     pFile = fopen(pszFileName, "rb");
     if (!pFile)
     {
-        return (0);
+        return 0;
     }
 
     fseek(pFile, 0, SEEK_END);
@@ -463,7 +463,7 @@ static int32_t HSCOpen(HSC_File *pHSC, const char *pszFileName)
     if (!hsc_file)
     {
         fclose(pFile);
-        return (0);
+        return 0;
     }
 
     fread(hsc_file, 1, hsc_size, pFile);
@@ -537,7 +537,7 @@ static int32_t HSCOpen(HSC_File *pHSC, const char *pszFileName)
     pHSC->hsc_valid_data = TRUE;
     pHSC->hsc_in_process = FALSE;
 
-    return (1);
+    return 1;
 }
 
 /******************************************************************************/
@@ -581,7 +581,7 @@ static uint32_t MXR_ProcessInputHSC(MXR_InputHSC *pInput, void *pStream, uint32_
             pInput->hscFile.hsc_buffer_samples = HSC_BUFFER_SIZE;
         }
     }
-    return (nNumSamples);
+    return nNumSamples;
 }
 
 /******************************************************************************/
@@ -596,7 +596,7 @@ MXR_Input *MXR_CreateInputHSC(const char *pszFileName)
     pInput = (MXR_InputHSC *)MXR_MemAlloc(sizeof(MXR_InputHSC));
     if (!pInput)
     {
-        return (NULL);
+        return NULL;
     }
     pInput->mxrInput.pProcess = (MXR_ProcessInputFunc)MXR_ProcessInputHSC;
     pInput->mxrInput.pDestroy = (MXR_DestroyInputFunc)MXR_DestroyInputHSC;
@@ -610,7 +610,7 @@ MXR_Input *MXR_CreateInputHSC(const char *pszFileName)
     if (!HSCOpen(&pInput->hscFile, pszFileName))
     {
         MXR_MemFree(pInput, sizeof(MXR_InputHSC));
-        return (NULL);
+        return NULL;
     }
 
     return ((MXR_Input *)pInput);

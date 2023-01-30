@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
     if (SDL_Init(SDL_INIT_NOPARACHUTE) < 0)
     {
         printf("WinMain() error: %s", SDL_GetError());
-        return (1);
+        return 1;
     }
     atexit(cleanup_output);
     atexit(cleanup);

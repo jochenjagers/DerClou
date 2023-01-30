@@ -114,7 +114,7 @@ void *MemAlloc(uint32_t size)
         }
     }
 
-    return (mem);
+    return mem;
 }
 
 #ifdef THECLOU_DEBUG_ALLOC

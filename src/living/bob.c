@@ -52,7 +52,7 @@ uword BobInit(void *BitMap, uword Width, uword Height)
     if (ID == MaxBob)
     {
         Log("Too many bobs! Increase 'MaxBob'.");
-        return (-1);
+        return -1;
     }
 
     Bob[ID].SPtr = BitMap;
@@ -71,7 +71,7 @@ uword BobInit(void *BitMap, uword Width, uword Height)
     Bob[ID].frame = 0;
 
     Bob[ID].DrawMe = 1;
-    return (ID);
+    return ID;
 }
 
 static void BobCheckVis(uword ID)

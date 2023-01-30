@@ -92,5 +92,5 @@ uint32_t ShowTheClouRequester(int32_t error_class)
 
     inpTurnESC(1);
 
-    return (answer);
+    return answer;
 }

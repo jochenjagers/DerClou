@@ -148,12 +148,12 @@ static int IffAnim_AllocDeltaFrames(IffAnim *anim)
         anim->curframe = (char *)MemAlloc(framesize);
         if (anim->curframe)
         {
-            return (TRUE);
+            return TRUE;
         }
         MemFree(anim->prevframe, framesize);
         anim->prevframe = NULL;
     }
-    return (FALSE);
+    return FALSE;
 }
 
 static int IffAnim_AllocDisplayFrames(IffAnim *anim)
@@ -169,12 +169,12 @@ static int IffAnim_AllocDisplayFrames(IffAnim *anim)
         anim->disp_frame = (char *)MemAlloc(framesize);
         if (anim->disp_frame)
         {
-            return (TRUE);
+            return TRUE;
         }
         MemFree(anim->prev_disp_frame, framesize);
         anim->prev_disp_frame = NULL;
     }
-    return (FALSE);
+    return FALSE;
 }
 
 static int IffAnim_AllocDisplayCmap(IffAnim *anim)
@@ -190,7 +190,7 @@ static int IffAnim_AllocDisplayCmap(IffAnim *anim)
             anim->disp_cmap = (char *)MemAlloc(framesize);
             if (anim->disp_cmap)
             {
-                return (TRUE);
+                return TRUE;
             }
             MemFree(anim->prev_disp_cmap, framesize);
             anim->prev_disp_cmap = NULL;
@@ -200,9 +200,9 @@ static int IffAnim_AllocDisplayCmap(IffAnim *anim)
     {
         anim->prev_disp_cmap = NULL;
         anim->disp_cmap = NULL;
-        return (TRUE);
+        return TRUE;
     }
-    return (FALSE);
+    return FALSE;
 }
 
 IffAnim *IffAnim_Open(char *fname)
@@ -243,7 +243,7 @@ IffAnim *IffAnim_Open(char *fname)
                                     IffAnim_SetLoop(anim, TRUE);
                                     if (IffAnim_Reset(anim))
                                     {
-                                        return (anim);
+                                        return anim;
                                     }
                                 }
                             }
@@ -255,7 +255,7 @@ IffAnim *IffAnim_Open(char *fname)
         }
         IffAnim_Close(anim);
     }
-    return (NULL);
+    return NULL;
 }
 
 void IffAnim_Close(IffAnim *anim)
@@ -347,7 +347,7 @@ static int IffAnim_ConvertHamTo24bpp(IffAnim *anim, void *dst_, void *src_, void
 
     if ((hambits != 8) && (hambits != 6))
     {
-        return (FALSE);
+        return FALSE;
     }
 
     for (j = 0; j < h; j++)
@@ -389,7 +389,7 @@ static int IffAnim_ConvertHamTo24bpp(IffAnim *anim, void *dst_, void *src_, void
         dstL += dst_pitch;
         srcL += src_pitch;
     }
-    return (TRUE);
+    return TRUE;
 }
 
 // convert a bitplanar frame to chunky
@@ -434,7 +434,7 @@ static int IffAnim_BitplanarToChunky(IffAnim *anim, void *dst_, void *src_, int 
         src += LineLenSrc;
         dst += LineLenDst;
     }
-    return (TRUE);
+    return TRUE;
 }
 
 // decode RLE ("byterun" aka "packer", aka "PackBits" on Macintosh) compressed line
@@ -461,7 +461,7 @@ static int IffAnim_DecodeByteRun(IffAnim *anim, void *dst_, void *data_, int dat
     }
     if (!dst || !src)
     {
-        return (FALSE);
+        return FALSE;
     }
     possrc = 0;  // position in src buffer
 
@@ -505,7 +505,7 @@ static int IffAnim_DecodeByteRun(IffAnim *anim, void *dst_, void *data_, int dat
         }
         dst += planepitch * bpp;  // set pointer to beginning of next line
     }
-    return (TRUE);
+    return TRUE;
 }
 
 // Decode Byte Vertical Delta compression (compression 5)
@@ -571,7 +571,7 @@ static int IffAnim_DecodeByteVerticalDelta(IffAnim *anim, void *dst_, void *data
             }      // end for all columns
         }
     }  // end for all planes
-    return (TRUE);
+    return TRUE;
 }
 
 // decode delta 7 int32_t or short
@@ -708,7 +708,7 @@ static int IffAnim_DecodeLSVerticalDelta7(IffAnim *anim, void *dst_, void *data_
             }
         }
     }
-    return (TRUE);
+    return TRUE;
 }
 
 // decompress delta mode 8 int32_t or short
@@ -861,7 +861,7 @@ static int IffAnim_DecodeLSVerticalDelta8(IffAnim *anim, void *dst_, void *data_
             }
         }
     }
-    return (TRUE);
+    return TRUE;
 }
 
 /*
@@ -1024,11 +1024,11 @@ static int IffAnim_DecodeDeltaJ(IffAnim *anim, void *dst_, void *delta_, int w, 
                 break;
             default:  // unknown type
                 // exitflag = 1;
-                return (FALSE);
+                return FALSE;
                 break;
         }  // end of type switch
     }      // end of while loop
-    return (TRUE);
+    return TRUE;
 }
 
 int IffAnim_CurrentFrameIndex(IffAnim *anim)
@@ -1037,7 +1037,7 @@ int IffAnim_CurrentFrameIndex(IffAnim *anim)
     {
         return (anim->frameno - (anim->nframes - 2));
     }
-    return (anim->frameno);
+    return anim->frameno;
 }
 
 static int32_t fget32(FILE *file)
@@ -1074,10 +1074,10 @@ static int IffAnim_FindChunk(IffAnim *anim, FILE *file, char *idreq, int len)
     }
     if (pos >= len)
     {
-        return (-1);
+        return -1;
     }
     fseek(file, pos, SEEK_SET);
-    return (pos);
+    return pos;
 }
 
 // verify chunk structure
@@ -1094,14 +1094,14 @@ static int IffAnim_GetNumFrames(IffAnim *anim, FILE *file)
     fread(idbuf, 1, 4, file);
     if (memcmp(idbuf, "FORM", 4))
     {
-        return (-1);
+        return -1;
     }
     fseek(file, 4, SEEK_CUR);
     // check for ANIM id
     fread(idbuf, 1, 4, file);
     if (memcmp(idbuf, "ANIM", 4))
     {
-        return (-1);
+        return -1;
     }
     // count number of FORM...ILBM chunks (frames) within file
     do
@@ -1126,7 +1126,7 @@ static int IffAnim_GetNumFrames(IffAnim *anim, FILE *file)
         // frame found
         numframes++;
     } while (TRUE);
-    return (numframes);
+    return numframes;
 }
 
 static int IffAnim_read_ANHD(IffAnim *anim, FILE *file, iffanim_frame *frame)
@@ -1143,7 +1143,7 @@ static int IffAnim_read_ANHD(IffAnim *anim, FILE *file, iffanim_frame *frame)
     frame->interleave = fgetc(file);
     fseek(file, 1, SEEK_CUR);
     frame->bits = fget32(file);
-    return (TRUE);
+    return TRUE;
 }
 
 static int IffAnim_read_CMAP(IffAnim *anim, FILE *file, iffanim_frame *frame)
@@ -1159,7 +1159,7 @@ static int IffAnim_read_CMAP(IffAnim *anim, FILE *file, iffanim_frame *frame)
     frame->cmap = (char *)MemAlloc(palsize);
     if (!frame->cmap)
     {
-        return (FALSE);
+        return FALSE;
     }
     // read cmap, handle EHB mode (second half are darker versions of the previous colors)
     if (anim->ehb)
@@ -1175,7 +1175,7 @@ static int IffAnim_read_CMAP(IffAnim *anim, FILE *file, iffanim_frame *frame)
     {
         fread(frame->cmap, 1, palsize, file);
     }
-    return (TRUE);
+    return TRUE;
 }
 
 /* - make audio interleaved -> reordering
@@ -1193,13 +1193,13 @@ static int IffAnim_InterleaveStereo(IffAnim *anim, char *data, int datasize, int
 
     if (!data)
     {
-        return (FALSE);
+        return FALSE;
     }
     nframes = datasize / 2 / ((bps + 7) / 8);  // number of sample frames in "data"
     newdata = (char *)MemAlloc(datasize);
     if (!newdata)
     {
-        return (FALSE);
+        return FALSE;
     }
     // reorder
     if (bps <= 8)
@@ -1229,7 +1229,7 @@ static int IffAnim_InterleaveStereo(IffAnim *anim, char *data, int datasize, int
     // copy reordered points to old buffer
     memcpy(data, newdata, datasize);
     MemFree(newdata, datasize);
-    return (TRUE);
+    return TRUE;
 }
 
 static int IffAnim_read_SBDY(IffAnim *anim, FILE *file, int searchlen, char **audiobuf, int *audiobufsize)
@@ -1240,7 +1240,7 @@ static int IffAnim_read_SBDY(IffAnim *anim, FILE *file, int searchlen, char **au
 
     if (!audiobuf || !audiobufsize)
     {
-        return (FALSE);
+        return FALSE;
     }
     startpos = ftell(file);
     // file pointer should point to first SBDY chunk
@@ -1249,7 +1249,7 @@ static int IffAnim_read_SBDY(IffAnim *anim, FILE *file, int searchlen, char **au
     *audiobuf = (char *)MemAlloc(chunksize);
     if (!(*audiobuf))
     {
-        return (FALSE);
+        return FALSE;
     }
     *audiobufsize = chunksize;
     fread(*audiobuf, 1, chunksize, file);
@@ -1266,7 +1266,7 @@ static int IffAnim_read_SBDY(IffAnim *anim, FILE *file, int searchlen, char **au
         tptr = (char *)MemAlloc(*audiobufsize + chunksize);
         if (!tptr)
         {
-            return (FALSE);
+            return FALSE;
         }
         memcpy(tptr, *audiobuf, *audiobufsize);           // copy data of first SBDY
         fread(tptr + *audiobufsize, 1, chunksize, file);  // read first SBDY data to mem
@@ -1280,7 +1280,7 @@ static int IffAnim_read_SBDY(IffAnim *anim, FILE *file, int searchlen, char **au
         *audiobufsize += chunksize;
     }
     anim->audio.datasize += *audiobufsize;
-    return (TRUE);
+    return TRUE;
 }
 
 // check file for valid frames, read to mem, get lentime
@@ -1310,7 +1310,7 @@ static int IffAnim_ReadFrames(IffAnim *anim, FILE *file)
 #endif
     if (!anim->frame)
     {
-        return (FALSE);
+        return FALSE;
     }
     /*
     for (i = 0; i < nframes; i++) {
@@ -1322,7 +1322,7 @@ static int IffAnim_ReadFrames(IffAnim *anim, FILE *file)
     fseek(file, 8, SEEK_SET);
     if (IffAnim_FindChunk(anim, file, "ANIM", 100) < 0)
     {
-        return (FALSE);
+        return FALSE;
     }
     fseek(file, 4, SEEK_CUR);
     // for all frames
@@ -1354,7 +1354,7 @@ static int IffAnim_ReadFrames(IffAnim *anim, FILE *file)
 #endif
                 if (!tabuf)
                 {
-                    return (FALSE);
+                    return FALSE;
                 }
 #ifdef THECLOU_DEBUG_ALLOC
                 tabufsize =
@@ -1366,7 +1366,7 @@ static int IffAnim_ReadFrames(IffAnim *anim, FILE *file)
 #endif
                 if (!tabufsize)
                 {
-                    return (FALSE);
+                    return FALSE;
                 }
                 /*
                 for (j = 0; j < audio.n; j++) {  //init dynamically allocated lists
@@ -1387,7 +1387,7 @@ static int IffAnim_ReadFrames(IffAnim *anim, FILE *file)
             if (pos < 0)
             {
                 Log("\tBMHD chunk not found in first frame");
-                return (FALSE);
+                return FALSE;
             }
             fseek(file, 8, SEEK_CUR);
             // read relevant format info
@@ -1402,7 +1402,7 @@ static int IffAnim_ReadFrames(IffAnim *anim, FILE *file)
             if (anim->compressed > 1)
             {
                 Log("\tUnknown compression of first frame");
-                return (FALSE);
+                return FALSE;
             }
             fseek(file, filepos, SEEK_SET);  // back to ilbm chunk start
             // search for CAMG chunk (for identifying HAM mode)
@@ -1430,11 +1430,11 @@ static int IffAnim_ReadFrames(IffAnim *anim, FILE *file)
                 if (pos < 0)
                 {
                     Log("\tNo CMAP chunk found in first frame (bit resolution requires a CMAP)");
-                    return (FALSE);
+                    return FALSE;
                 }
                 if (!IffAnim_read_CMAP(anim, file, &(anim->frame[i])))
                 {
-                    return (FALSE);
+                    return FALSE;
                 }
                 fseek(file, filepos, SEEK_SET);  // back to ilbm chunk start
             }
@@ -1577,9 +1577,9 @@ static int IffAnim_ReadFrames(IffAnim *anim, FILE *file)
     }
     if (!i)
     {
-        return (FALSE);
+        return FALSE;
     }
-    return (TRUE);
+    return TRUE;
 }
 
 static int IffAnim_PrintInfo(IffAnim *anim)
@@ -1647,7 +1647,7 @@ static int IffAnim_PrintInfo(IffAnim *anim)
         sprintf(buffer, " number of sample frames: %d\n", t);
         strcat(anim->formatinfo, buffer);
     }
-    return (TRUE);
+    return TRUE;
 }
 
 int IffAnim_SetLoopAnim(IffAnim *anim, int state)
@@ -1660,7 +1660,7 @@ int IffAnim_SetLoopAnim(IffAnim *anim, int state)
     {
         anim->loopanim = FALSE;
     }
-    return (anim->loopanim);
+    return anim->loopanim;
 }
 
 char *IffAnim_GetInfoText(IffAnim *anim) { return (anim->formatinfo); }
@@ -1672,7 +1672,7 @@ static int IffAnim_DecodeFrame(IffAnim *anim, char *dstframe, int index)
 {
     if (index > anim->nframes)
     {
-        return (FALSE);
+        return FALSE;
     }
     // decode frame
     switch (anim->frame[index].delta_compression)
@@ -1680,7 +1680,7 @@ static int IffAnim_DecodeFrame(IffAnim *anim, char *dstframe, int index)
         // uncompressed
         case 0:
             memcpy(dstframe, anim->frame[index].data, anim->frame[index].datasize);
-            return (TRUE);
+            return TRUE;
             break;
         // Byte vertical delta compression
         case 5:
@@ -1700,7 +1700,7 @@ static int IffAnim_DecodeFrame(IffAnim *anim, char *dstframe, int index)
             return (IffAnim_DecodeDeltaJ(anim, dstframe, anim->frame[index].data, anim->w, anim->h, anim->bpp));
             break;
     }
-    return (FALSE);
+    return FALSE;
 }
 
 char *IffAnim_GetFramePlanar(IffAnim *anim, int *framesize_)
@@ -1709,7 +1709,7 @@ char *IffAnim_GetFramePlanar(IffAnim *anim, int *framesize_)
     {
         *framesize_ = anim->framesize;
     }
-    return (anim->curframe);
+    return anim->curframe;
 }
 
 void *IffAnim_GetFrame(IffAnim *anim) { return (anim->disp_frame); }
@@ -1731,7 +1731,7 @@ int IffAnim_Reset(IffAnim *anim)
     // make prevframe and curframe the same
     memcpy(anim->prevframe, anim->curframe, anim->framesize);
     anim->prevcmap = anim->curcmap;
-    return (TRUE);
+    return TRUE;
 }
 
 int IffAnim_NextFrame(IffAnim *anim)
@@ -1741,7 +1741,7 @@ int IffAnim_NextFrame(IffAnim *anim)
     {  // if last frame
         if (!anim->loop)
         {  // abort, do nothing (display frame remains)
-            return (FALSE);
+            return FALSE;
         }
         else
         {  // handle looping
@@ -1771,7 +1771,7 @@ int IffAnim_NextFrame(IffAnim *anim)
     temp = anim->curcmap;
     anim->curcmap = anim->prevcmap;
     anim->prevcmap = temp;
-    return (TRUE);
+    return TRUE;
 }
 
 int IffAnim_ConvertFrame(IffAnim *anim)
@@ -1814,7 +1814,7 @@ int IffAnim_ConvertFrame(IffAnim *anim)
         }
     }
     anim->num_disp_frames++;
-    return (TRUE);
+    return TRUE;
 }
 
 int IffAnim_GetInfo(IffAnim *anim, int *w_, int *h_, int *bpp_, int *pitch_, int *nframes_, int *mslentime_)
@@ -1857,7 +1857,7 @@ int IffAnim_GetInfo(IffAnim *anim, int *w_, int *h_, int *bpp_, int *pitch_, int
             *mslentime_ = anim->lentime * 1000 / 60;
         }
     }
-    return (TRUE);
+    return TRUE;
 }
 
 int IffAnim_GetDelayTime(IffAnim *anim) { return (anim->frame[anim->frameno].reltime * 1000 / 60); }
@@ -1867,14 +1867,14 @@ int IffAnim_GetDelayTimeOriginal(IffAnim *anim) { return (anim->frame[anim->fram
 int IffAnim_SetLoop(IffAnim *anim, int state)
 {
     anim->loop = state ? TRUE : FALSE;
-    return (anim->loop);
+    return anim->loop;
 }
 
 int IffAnim_GetAudioFormat(IffAnim *anim, int *nch, int *bps, int *freq)
 {
     if (anim->audio.nch <= 0)
     {
-        return (FALSE);
+        return FALSE;
     }
     if (nch)
     {
@@ -1888,7 +1888,7 @@ int IffAnim_GetAudioFormat(IffAnim *anim, int *nch, int *bps, int *freq)
     {
         *freq = anim->audio.freq;
     }
-    return (TRUE);
+    return TRUE;
 }
 
 char *IffAnim_GetAudioData(IffAnim *anim, int *size)
@@ -1897,16 +1897,16 @@ char *IffAnim_GetAudioData(IffAnim *anim, int *size)
     {
         *size = anim->audio.datasize;
     }
-    return (anim->audio.data);
+    return anim->audio.data;
 }
 
 int IffAnim_GetAudioOffset(IffAnim *anim, int index)
 {
     if ((!anim->audio.dataoffset) || (index >= anim->audio.n) || (index < 0))
     {
-        return (0);
+        return 0;
     }
-    return (anim->audio.dataoffset[index]);
+    return anim->audio.dataoffset[index];
 }
 
 int IffAnim_GetAudioOffsetMS(IffAnim *anim, int index, int msoffs)
@@ -1919,11 +1919,11 @@ int IffAnim_GetAudioFrameSize(IffAnim *anim, int index)
 {
     if ((!anim->audio.dataoffset) || (index >= anim->audio.n))
     {
-        return (0);
+        return 0;
     }
     if ((index + 1) >= anim->audio.n)
     {
-        return (anim->audio.datasize - anim->audio.dataoffset[index]);
+        return anim->audio.datasize - anim->audio.dataoffset[index];
     }
-    return (anim->audio.dataoffset[index + 1] - anim->audio.dataoffset[index]);
+    return anim->audio.dataoffset[index + 1] - anim->audio.dataoffset[index];
 }

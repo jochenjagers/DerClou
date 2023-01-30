@@ -16,7 +16,7 @@ int32_t Round(int32_t v, int32_t p) /* p...Stellen ! */
 
     if (v / z != 0) v = (v / z) * z;
 
-    return (v);
+    return v;
 }
 
 int32_t CalcValue(int32_t value, int32_t min, int32_t max, int32_t fact, int32_t perc)
@@ -38,7 +38,7 @@ int32_t ChangeAbs(int32_t item, int32_t value, int32_t min, int32_t max)
     if (item > max) item = max;
     if (item < min) item = min;
 
-    return (item);
+    return item;
 }
 
 int32_t RoundF(float num)

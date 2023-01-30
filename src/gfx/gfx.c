@@ -326,12 +326,12 @@ int gfxInitSDL(void)
                 if (pRefreshSurface)
                 {
                     NCH4Buffer = (ubyte *)MemAlloc(GFX_NCH4_BUFFER_SIZE);
-                    return (1);
+                    return 1;
                 }
             }
         }
     }
-    return (0);
+    return 0;
 }
 
 void gfxDoneSDL(void)
@@ -696,7 +696,7 @@ static struct Font *gfxOpenFont(char *puch_FileName, uword us_Width, uword us_He
 
     font->pSurface = gfxLoadImage(Result);
 
-    return (font);
+    return font;
 }
 
 static void gfxCloseFont(struct Font *font)
@@ -793,7 +793,7 @@ ubyte gfxReadPixel(struct RastPort *rp, uword us_X, uword us_Y)
     if (!rp)
     {
         Log("%s: RastPort is NULL", __func__);
-        return (0);
+        return 0;
     }
 
     if (rp->uch_VideoMode == GFX_VIDEO_MCGA) col = gfxMCGAReadPixel(rp, us_X, us_Y);
@@ -877,7 +877,7 @@ int32_t gfxTextLength(struct RastPort *rp, char *puch_Text, uword us_CharCount)
     if (!rp)
     {
         Log("%s: RastPort is NULL", __func__);
-        return (0);
+        return 0;
     }
     length = (int32_t)strlen(puch_Text);
     return (length * (rp->p_Font->us_Width));
@@ -926,7 +926,7 @@ static int32_t gfxGetRealDestY(struct RastPort *rp, int32_t destY)
     if (!rp)
     {
         Log("%s: RastPort is NULL", __func__);
-        return (0);
+        return 0;
     }
     if (rp->uch_VideoMode == GFX_VIDEO_NCH4)
     {

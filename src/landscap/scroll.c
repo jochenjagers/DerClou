@@ -148,7 +148,7 @@ ubyte lsInitScrollLandScape(ubyte direction, ubyte mode)
         PY = py;
     }
 
-    return (collis);
+    return collis;
 }
 
 ubyte lsIsCollision(uword x, uword y, ubyte direction)

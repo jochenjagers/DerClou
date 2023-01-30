@@ -421,7 +421,7 @@ uint32_t tcChooseCar(uint32_t backgroundNr)
 
     RemoveList(bubble);
 
-    return (carID);
+    return carID;
 }
 
 void tcCarGeneralOverhoul(Car car)

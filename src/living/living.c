@@ -256,28 +256,28 @@ uword livGetXPos(char *Name)
 {
     struct Living *liv = livGet(Name);
 
-    return (liv->us_XPos);
+    return liv->us_XPos;
 }
 
 uword livGetYPos(char *Name)
 {
     struct Living *liv = livGet(Name);
 
-    return (liv->us_YPos);
+    return liv->us_YPos;
 }
 
 ubyte livGetViewDirection(char *uch_Name)
 {
     struct Living *liv = livGet(uch_Name);
 
-    return (liv->uch_ViewDirection);
+    return liv->uch_ViewDirection;
 }
 
 ubyte livGetOldAction(char *uch_Name)
 {
     struct Living *liv = livGet(uch_Name);
 
-    return (liv->uch_OldAction);
+    return liv->uch_OldAction;
 }
 
 ubyte livIsPositionInViewDirection(uword us_GXPos, uword us_GYPos, uword us_XPos, uword us_YPos,
@@ -345,7 +345,7 @@ static struct Living *livGet(char *uch_Name)
 
     if (!liv) NewErrorMsg(Internal_Error, __FILE__, __func__, 1);
 
-    return (liv);
+    return liv;
 }
 
 static void livAdd(char *uch_Name, char *uch_TemplateName, ubyte uch_XSize, ubyte uch_YSize, word s_XSpeed,
@@ -526,5 +526,5 @@ static ubyte livIsVisible(struct Living *liv)
                 if (down > sc->us_VisLScapeY)
                     if (up < (sc->us_VisLScapeY + sc->us_VisLScapeHeight)) visible = 1;
 
-    return (visible);
+    return visible;
 }

@@ -77,7 +77,7 @@ LIST *PrepareQuestions(LIST *keyWords, uint32_t talkBits, ubyte textID)
     RemoveList(stdQuestionList);
     RemoveList(questionList);
 
-    return (preparedList);
+    return preparedList;
 }
 
 LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
@@ -166,7 +166,7 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
         CreateNode(bubble, 0L, line);
     }
 
-    return (keyWords);
+    return keyWords;
 }
 
 void DynamicTalk(uint32_t Person1ID, uint32_t Person2ID, ubyte TalkMode)
@@ -378,7 +378,7 @@ ubyte Say(uint32_t TextID, ubyte activ, uword person, char *text)
 
     RemoveList(bubble);
 
-    return (choice);
+    return choice;
 }
 
 uint32_t Talk(void)
@@ -430,5 +430,5 @@ uint32_t Talk(void)
 
     inpTurnESC(1);
 
-    return (succ_event_nr);
+    return succ_event_nr;
 }

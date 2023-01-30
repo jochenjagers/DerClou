@@ -148,11 +148,11 @@ static int Anim_Play(IffAnim *anim, int nfile, int delayticks)
             }
             if (q)
             {
-                return (0);  // break intro
+                return 0;  // break intro
             }
         }
     }
-    return (1);  // next anim
+    return 1;  // next anim
 }
 
 void tcIntro(void)

@@ -306,5 +306,5 @@ LIST *tcMakeLootList(uint32_t containerID, uint32_t relID)
     RemoveList(lootNameE);
     RemoveList(loots);
 
-    return (out);
+    return out;
 }
