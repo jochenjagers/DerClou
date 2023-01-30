@@ -152,13 +152,16 @@ void plSync(ubyte animate, uint32_t targetTime, uint32_t times, ubyte direction)
     struct Handler *h = NULL;
     uword dir = 0;
     Police pol = NULL;
-    uword xpos = 0, ypos = 0;
+    uword xpos = 0;
+    uword ypos = 0;
     ubyte i = 0;
-    uint32_t seconds = 0, lastAreaId = 0;
+    uint32_t seconds = 0;
+    uint32_t lastAreaId = 0;
     uint32_t state = 0;
     uint32_t weightLoot = 0;
     uint32_t volumeLoot = 0;
-    uint32_t newValue = 0, oldValue = 0;
+    uint32_t newValue = 0;
+    uint32_t oldValue = 0;
 
     for (seconds = 0; seconds < times; seconds++)
     {

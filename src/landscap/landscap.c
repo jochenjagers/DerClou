@@ -38,7 +38,10 @@ static void lsSafeRectFill(word x, word y, word x1, word y1)
 
 void lsSetVisibleWindow(uword x, uword y)
 {
-    word halfX = 0, halfY = 0, wX = 0, wY = 0;
+    word halfX = 0;
+    word halfY = 0;
+    word wX = 0;
+    word wY = 0;
 
     halfX = LS_VISIBLE_X_SIZE / 2;
     halfY = LS_VISIBLE_Y_SIZE / 2;
@@ -83,7 +86,8 @@ static void lsShowRooms(void)
 
 void lsBuildScrollWindow(void)
 {
-    int32_t i = 0, j = 0;
+    int32_t i = 0;
+    int32_t j = 0;
     NODE *node = NULL;
     LSArea area = (LSArea)dbGetObject(ls->ul_AreaID);
     ubyte colortable[768];
@@ -232,7 +236,10 @@ void lsTurnObject(LSObject lso, ubyte status, ubyte Collis)
 
 ubyte lsIsInside(LSObject lso, uword x, uword y, uword x1, uword y1)
 {
-    uword lsoX = 0, lsoY = 0, lsoX1 = 0, lsoY1 = 0;
+    uword lsoX = 0;
+    uword lsoY = 0;
+    uword lsoX1 = 0;
+    uword lsoY1 = 0;
 
     lsCalcExactSize(lso, &lsoX, &lsoY, &lsoX1, &lsoY1);
 
@@ -274,7 +281,8 @@ void lsSetObjectState(uint32_t objID, ubyte bitNr, ubyte value)
 
 word lsSortByXCoord(struct ObjectNode *n1, struct ObjectNode *n2)
 {
-    LSObject lso1 = NULL, lso2 = NULL;
+    LSObject lso1 = NULL;
+    LSObject lso2 = NULL;
 
     lso1 = (LSObject)OL_DATA(n1);
     lso2 = (LSObject)OL_DATA(n2);
@@ -287,7 +295,8 @@ word lsSortByXCoord(struct ObjectNode *n1, struct ObjectNode *n2)
 
 word lsSortByYCoord(struct ObjectNode *n1, struct ObjectNode *n2)
 {
-    LSObject lso1 = NULL, lso2 = NULL;
+    LSObject lso1 = NULL;
+    LSObject lso2 = NULL;
 
     lso1 = (LSObject)OL_DATA(n1);
     lso2 = (LSObject)OL_DATA(n2);
@@ -300,8 +309,11 @@ word lsSortByYCoord(struct ObjectNode *n1, struct ObjectNode *n2)
 
 static void lsSortObjectList(LIST **l)
 {
-    LSObject lso1 = NULL, lso2 = NULL;
-    NODE *node = NULL, *node1 = NULL, *next = NULL;
+    LSObject lso1 = NULL;
+    LSObject lso2 = NULL;
+    NODE *node = NULL;
+    NODE *node1 = NULL;
+    NODE *next = NULL;
     ubyte lastNode = 0;
 
     if (!(LIST_EMPTY((*l))))
@@ -436,7 +448,8 @@ void lsGuyInsideSpot(uword *us_XPos, uword *us_YPos, uint32_t *areaId)
 
 void lsWalkThroughWindow(LSObject lso, uword us_LivXPos, uword us_LivYPos, uword *us_XPos, uword *us_YPos)
 {
-    word deltaX = 0, deltaY = 0;
+    word deltaX = 0;
+    word deltaY = 0;
 
     (*us_XPos) = us_LivXPos;
     (*us_YPos) = us_LivYPos;
@@ -561,7 +574,10 @@ void lsCalcExactSize(LSObject lso, uword *x0, uword *y0, uword *x1, uword *y1)
 static void lsInitDoorRefresh(uint32_t ObjId)
 {
     LSObject lso = (LSObject)dbGetObject(ObjId);
-    uword width = 0, height = 0, destX = 0, destY = 0;
+    uword width = 0;
+    uword height = 0;
+    uword destX = 0;
+    uword destY = 0;
     struct LSDoorRefreshNode *drn = NULL;
     ubyte found = 0;
 
@@ -608,7 +624,8 @@ void lsDoDoorRefresh(LSObject lso)
 // restauriert aus einem XMS Buffer den Hintergrund einer Tür
 {
     struct LSDoorRefreshNode *drn = NULL;
-    uword width = 0, height = 0;
+    uword width = 0;
+    uword height = 0;
 
     lsPrepareFromXMSRastPort(&LS_DOOR_REFRESH_XMS_RP);
 

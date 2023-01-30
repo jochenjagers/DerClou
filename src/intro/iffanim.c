@@ -327,13 +327,17 @@ void IffAnim_Close(IffAnim *anim)
 static int IffAnim_ConvertHamTo24bpp(IffAnim *anim, void *dst_, void *src_, void *cmap_, int w, int h, int hambits,
                                      int dst_pitch)
 {
-    int i = 0, j = 0, k = 0;                      // loop counter
-    int data = 0, mode = 0;                       // parts of a HAM value
+    int i = 0;
+    int j = 0;
+    int k = 0;  // loop counter
+    int data = 0;
+    int mode = 0;                                 // parts of a HAM value
     char colbuf[3];                               // color component buffer: R,G,B
     unsigned char *dstL = (unsigned char *)dst_;  // start of current line in destination
     unsigned char *srcL = (unsigned char *)src_;  // start of current line in source
-    unsigned char *src = NULL, *dst = NULL;       // working pointers
-    int bitpos = 0;                               // bit position in a plane of the soure data
+    unsigned char *src = NULL;
+    unsigned char *dst = NULL;  // working pointers
+    int bitpos = 0;             // bit position in a plane of the soure data
     char *cmap = (char *)cmap_;
     int bitplane_pitch = (w + 15) / 16 * 2;    // pitch of a bitplane multiple of 16 bit  in bytes
     int src_pitch = bitplane_pitch * hambits;  // pitch of line of bitplanes
@@ -395,7 +399,9 @@ static int IffAnim_BitplanarToChunky(IffAnim *anim, void *dst_, void *src_, int 
 {
     unsigned char *dst = (unsigned char *)dst_;
     unsigned char *src = (unsigned char *)src_;
-    int i = 0, j = 0, k = 0;
+    int i = 0;
+    int j = 0;
+    int k = 0;
     int bitval = 0;     // for storing a bit
     int srcBitOfs = 0;  // offset from beginning of line of source in bits
     int dstBitOfs = 0;  // offset from beginning of line of dest. in bits
@@ -436,12 +442,14 @@ static int IffAnim_BitplanarToChunky(IffAnim *anim, void *dst_, void *src_, int 
 // mask plane is ignored (if available)
 static int IffAnim_DecodeByteRun(IffAnim *anim, void *dst_, void *data_, int datasize, int w, int h, int bpp, int mask)
 {
-    int i = 0, j = 0;
+    int i = 0;
+    int j = 0;
     char *dst = (char *)dst_;   // destination (uncompressed)
     char *src = (char *)data_;  // byte code (compressed)
     int planepitch = 0;         // pitch of a bitplane
     int linepitch = 0;          // pitch of a scanline with mask plane
-    int n = 0, val = 0;
+    int n = 0;
+    int val = 0;
     int posdst = 0;  // write position in dst
     int possrc = 0;  // read position in src
 
@@ -505,10 +513,13 @@ static int IffAnim_DecodeByteVerticalDelta(IffAnim *anim, void *dst_, void *data
 {
     unsigned char *data = (unsigned char *)data_;
     char *dst = (char *)dst_;
-    int i = 0, j = 0, k = 0;  // loop counter
-    int ofsdst = 0;           // offset in destination buffer
-    int ofssrc = 0;           // offset in compressed data (delta chunk)
-    int op = 0, val = 0;      // holds opcode , data value
+    int i = 0;
+    int j = 0;
+    int k = 0;       // loop counter
+    int ofsdst = 0;  // offset in destination buffer
+    int ofssrc = 0;  // offset in compressed data (delta chunk)
+    int op = 0;
+    int val = 0;  // holds opcode , data value
     // width of a plane within a line in bytes (number of columns in a plane)
     int ncolumns = ((w + 15) / 16) * 2;
     // total len of a line in destination buffer, in bytes
@@ -568,7 +579,8 @@ static int IffAnim_DecodeLSVerticalDelta7(IffAnim *anim, void *dst_, void *data_
 {
     unsigned char *data = (unsigned char *)data_;  // source buffer
     char *dst = (char *)dst_;
-    int i = 0, j = 0;
+    int i = 0;
+    int j = 0;
     uint32_t p_da = 0;  // offset to data in source
     uint32_t p_op = 0;  // offset to opcode in source buffer
     int ofsdst = 0;     // offset in destination buffer in bytes
@@ -581,7 +593,7 @@ static int IffAnim_DecodeLSVerticalDelta7(IffAnim *anim, void *dst_, void *data_
                         // "wordsize"
     int wordsize = 0;   // bytes for one data word: 32 (int32_t) or 16 bit (short)
     int dstpitch = 0;   // length of a scanline in destination buffer in bytes
-    int half = FALSE;  // last column maybe only with 16 instead of 32 bits
+    int half = FALSE;   // last column maybe only with 16 instead of 32 bits
 
     if (int32_t_data)
     {
@@ -704,7 +716,8 @@ static int IffAnim_DecodeLSVerticalDelta8(IffAnim *anim, void *dst_, void *data_
 {
     unsigned char *data = (unsigned char *)data_;  // source buffer
     char *dst = (char *)dst_;
-    int i = 0, j = 0;
+    int i = 0;
+    int j = 0;
     uint32_t p_op = 0;       // offset to opcode in source buffer
     int ofsdst = 0;          // offset in destination buffer in bytes
     uint32_t op = 0;         // holds opcode
@@ -712,11 +725,11 @@ static int IffAnim_DecodeLSVerticalDelta8(IffAnim *anim, void *dst_, void *data_
     short val16 = 0;         // holds 16 bit data
     int32_t val32 = 0;       // holds 32 bit data
     int t = 0;               // help variable
-    int ncolumns = 0;    // number of columns per bitplane (total number of columns for "int32_t" data), each with size
-                         // "wordsize"
-    int wordsize = 0;    // bytes for one data word: 32 (int32_t) or 16 bit (short)
-    int dstpitch = 0;    // length of a scanline in destination buffer in bytes
-    int half = FALSE;    // last column maybe only with 16 instead of 32 bits
+    int ncolumns = 0;  // number of columns per bitplane (total number of columns for "int32_t" data), each with size
+                       // "wordsize"
+    int wordsize = 0;  // bytes for one data word: 32 (int32_t) or 16 bit (short)
+    int dstpitch = 0;  // length of a scanline in destination buffer in bytes
+    int half = FALSE;  // last column maybe only with 16 instead of 32 bits
 
     if (int32_t_data)
     {
@@ -869,8 +882,15 @@ static int IffAnim_DecodeDeltaJ(IffAnim *anim, void *dst_, void *delta_, int w, 
     unsigned char *delta = (unsigned char *)delta_;
     int32_t pitch = 0;            // scanline width in bytes
     unsigned char *i_ptr = NULL;  // used as destination pointer into the frame buffer
-    uint32_t type = 0, r_flag = 0, b_cnt = 0, g_cnt = 0, r_cnt = 0;
-    int b = 0, g = 0, r = 0, d = 0;        // loop counters
+    uint32_t type = 0;
+    uint32_t r_flag = 0;
+    uint32_t b_cnt = 0;
+    uint32_t g_cnt = 0;
+    uint32_t r_cnt = 0;
+    int b = 0;
+    int g = 0;
+    int r = 0;
+    int d = 0;                             // loop counters
     uint32_t offset = 0;                   // byte offset
     int planepitch_byte = (w + 7) / 8;     // plane pitch as multiple of 8 bits, needed to calc the right offset
     int planepitch = ((w + 15) / 16) * 2;  // width of a line of a single bitplane in bytes (multiple of 16 bit)
@@ -1268,7 +1288,8 @@ static int IffAnim_ReadFrames(IffAnim *anim, FILE *file)
 {
     char **tabuf = NULL;    // temporary audio data buffer list, an allocated block for each frame
     int *tabufsize = NULL;  // list of size of a block in bytes (for each frame)
-    int i = 0, l = 0;
+    int i = 0;
+    int l = 0;
     int chunksize = 0;
     int ILBMsize = 0;  // size of ILBM chunk
     int filepos = 0;   // marks position in file
@@ -1563,7 +1584,9 @@ static int IffAnim_ReadFrames(IffAnim *anim, FILE *file)
 
 static int IffAnim_PrintInfo(IffAnim *anim)
 {
-    int i = 0, n = 0, t = 0;
+    int i = 0;
+    int n = 0;
+    int t = 0;
     char buffer[IFFANIM_FORMATINFO_BUFSIZE];
 
     sprintf(anim->formatinfo,

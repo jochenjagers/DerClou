@@ -25,10 +25,14 @@ struct DynDlgNode
 
 LIST *PrepareQuestions(LIST *keyWords, uint32_t talkBits, ubyte textID)
 {
-    LIST *stdQuestionList = NULL, *questionList = NULL, *preparedList = NULL;
-    NODE *n = NULL, *n2 = NULL;
+    LIST *stdQuestionList = NULL;
+    LIST *questionList = NULL;
+    LIST *preparedList = NULL;
+    NODE *n = NULL;
+    NODE *n2 = NULL;
     char question[TXT_KEY_LENGTH] = {0};
-    uint32_t r = 0, i = 0;
+    uint32_t r = 0;
+    uint32_t i = 0;
     char *name = NULL;
 
     preparedList = (LIST *)CreateList(0);
@@ -79,13 +83,19 @@ LIST *PrepareQuestions(LIST *keyWords, uint32_t talkBits, ubyte textID)
 LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 {
     LIST *keyWords = NULL;
-    NODE *n = NULL, *keyNode = NULL;
+    NODE *n = NULL;
+    NODE *keyNode = NULL;
     char line[TXT_KEY_LENGTH] = {0};
     char key[TXT_KEY_LENGTH] = {0};
     char keyWord[TXT_KEY_LENGTH] = {0};
-    ubyte line_pos = 0, mem_pos = 0, key_pos = 0;
+    ubyte line_pos = 0;
+    ubyte mem_pos = 0;
+    ubyte key_pos = 0;
     char *mem = NULL;
-    ubyte snr[10], snr1[10], nr = 0, nr1 = 0;
+    ubyte snr[10];
+    ubyte snr1[10];
+    ubyte nr = 0;
+    ubyte nr1 = 0;
     uint32_t i = 0;
     uint32_t sl = 0;
 
@@ -164,11 +174,22 @@ void DynamicTalk(uint32_t Person1ID, uint32_t Person2ID, ubyte TalkMode)
     char *Extension[4] = {"_UNKNOWN", "_KNOWN", "_FRIENDLY", "_BUSINESS"};
     char *Standard = "STANDARD";
     ubyte known = 0;
-    Person p1 = NULL, p2 = NULL;
+    Person p1 = NULL;
+    Person p2 = NULL;
     char key[TXT_KEY_LENGTH] = {0};
     char name[TXT_KEY_LENGTH] = {0};
-    ubyte choice = 0, uch_Max = 1, i = 0, uch_Quit = 0, stdcount = 0, j = 0, gencount = 0, textID = 0;
-    LIST *origin = NULL, *questions = NULL, *bubble = NULL, *keyWords = NULL;
+    ubyte choice = 0;
+    ubyte uch_Max = 1;
+    ubyte i = 0;
+    ubyte uch_Quit = 0;
+    ubyte stdcount = 0;
+    ubyte j = 0;
+    ubyte gencount = 0;
+    ubyte textID = 0;
+    LIST *origin = NULL;
+    LIST *questions = NULL;
+    LIST *bubble = NULL;
+    LIST *keyWords = NULL;
     struct DynDlgNode *n = NULL;
 
     p1 = (Person)dbGetObject(Person1ID);
@@ -362,7 +383,9 @@ ubyte Say(uint32_t TextID, ubyte activ, uword person, char *text)
 
 uint32_t Talk(void)
 {
-    uint32_t succ_event_nr = 0L, locNr = 0, personID = 0;
+    uint32_t succ_event_nr = 0L;
+    uint32_t locNr = 0;
+    uint32_t personID = 0;
     LIST *bubble = NULL;
     ubyte choice = 0;
     char helloFriends[TXT_KEY_LENGTH] = {0};

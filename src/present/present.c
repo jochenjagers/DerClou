@@ -14,9 +14,12 @@ struct PresentControl PresentControl = {NULL, 0, 0};
 
 void DrawPresent(LIST *present, ubyte firstLine, struct RastPort *rp, ubyte max)
 {
-    int i = 0, j = 0, k = 0;
+    int i = 0;
+    int j = 0;
+    int k = 0;
     struct presentationInfo *p = NULL;
-    char txt[70], s[10];
+    char txt[70];
+    char s[10];
 
     gfxSetPens(&RefreshRP, 224, 224, 224);
     gfxRectFill(&RefreshRP, 88, 3, 320, 49);
@@ -84,7 +87,8 @@ ubyte Present(uint32_t nr, const char *presentationText, void (*initPresentation
     ubyte maxNr = 0;
     ubyte exitLoop = 0;
     uint32_t action = 0;
-    LIST *presentationData = NULL, *list = NULL;
+    LIST *presentationData = NULL;
+    LIST *list = NULL;
     Person obj = NULL;
     Evidence e = NULL;
     uword y = 0;

@@ -4,8 +4,9 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
-#include "SDL_endian.h"
 #include "port/port.h"
+
+#include "SDL_endian.h"
 
 /**
  * Convert little to native endian word.

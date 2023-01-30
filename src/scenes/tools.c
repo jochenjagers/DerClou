@@ -22,7 +22,9 @@ ubyte tcBuyTool(ubyte choice)
 {
     LIST *tools = NULL;
     NODE *node = NULL;
-    uint32_t toolID = 0, price = 0, count = 0;
+    uint32_t toolID = 0;
+    uint32_t price = 0;
+    uint32_t count = 0;
     Person mary = (Person)dbGetObject(Person_Mary_Bolton);
     Tool tool = NULL;
     ubyte oldChoice = 0;
@@ -82,7 +84,8 @@ ubyte tcBuyTool(ubyte choice)
 
 ubyte tcDescTool(ubyte choice)
 {
-    LIST *tools = NULL, *desc = NULL;
+    LIST *tools = NULL;
+    LIST *desc = NULL;
     char line[TXT_KEY_LENGTH];
     ubyte oldChoice = 0;
     char exp[TXT_KEY_LENGTH];
@@ -176,9 +179,11 @@ ubyte tcShowTool(ubyte choice)
 
 void tcSellTool()
 {
-    LIST *bubble = NULL, *tools = NULL;
+    LIST *bubble = NULL;
+    LIST *tools = NULL;
     NODE *node = NULL;
-    uint32_t toolID = 0, price = 0;
+    uint32_t toolID = 0;
+    uint32_t price = 0;
     ubyte choice = 0;
     Tool tool = NULL;
     Person mary = NULL;

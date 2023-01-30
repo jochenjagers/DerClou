@@ -67,7 +67,8 @@ uint32_t Go(LIST *succ)
 {
     struct TCEventNode *node = NULL;
     struct Scene *sc = NULL;
-    uint32_t prob = 0, succ_eventnr = 0;
+    uint32_t prob = 0;
+    uint32_t succ_eventnr = 0;
     NODE *location = NULL;
     char line[255];
 
@@ -120,8 +121,11 @@ uint32_t Go(LIST *succ)
 
 void Information(void)
 {
-    LIST *bubble = NULL, *list = NULL;
-    ubyte choice = 0, choice1 = 0, ret = 0;
+    LIST *bubble = NULL;
+    LIST *list = NULL;
+    ubyte choice = 0;
+    ubyte choice1 = 0;
+    ubyte ret = 0;
     char enough[TXT_KEY_LENGTH];
     uint32_t objID = 0;
 
@@ -252,8 +256,10 @@ void Information(void)
 
 void Look(uint32_t locNr)
 {
-    LIST *menu = NULL, *bubble = NULL;
-    ubyte choice = 0, choice1 = 0;
+    LIST *menu = NULL;
+    LIST *bubble = NULL;
+    ubyte choice = 0;
+    ubyte choice1 = 0;
     char enough[TXT_KEY_LENGTH];
     uint32_t objID = 0;
 
@@ -376,8 +382,11 @@ void tcWait(void)
 {
     char line[TXT_KEY_LENGTH];
     ubyte ende = 0;
-    uint32_t action = 0L, minutes = 0L, locNr = GetObjNrOfLocation(GetLocation);
-    uint32_t newCount = 0, oldCount = 0;
+    uint32_t action = 0L;
+    uint32_t minutes = 0L;
+    uint32_t locNr = GetObjNrOfLocation(GetLocation);
+    uint32_t newCount = 0;
+    uint32_t oldCount = 0;
 
     inpTurnESC(0);
 

@@ -81,7 +81,8 @@ void tcDoneHotelReception(void)
 {
     Person rig = (Person)dbGetObject(Person_Ben_Riggley);
     Environment env = (Environment)dbGetObject(Environment_TheClou);
-    ubyte choice = 0, evaluation = 0;
+    ubyte choice = 0;
+    ubyte evaluation = 0;
 
     knowsSet(Person_Matt_Stuvysunt, Person_Ben_Riggley);
 
@@ -482,7 +483,8 @@ void tcDonePrison(void)
 
 int32_t tcIsDeadlock(void)
 {
-    int32_t deadlock = 0, total = 0;
+    int32_t deadlock = 0;
+    int32_t total = 0;
     CompleteLoot comp = (CompleteLoot)dbGetObject(CompleteLoot_LastLoot);
 
     hasAll(Person_Matt_Stuvysunt, OLF_NORMAL, Object_Car);
@@ -490,7 +492,8 @@ int32_t tcIsDeadlock(void)
     if (LIST_EMPTY(ObjectList))
     {
         NODE *n = NULL;
-        int32_t money = tcGetPlayerMoney, enough = 0;
+        int32_t money = tcGetPlayerMoney;
+        int32_t enough = 0;
 
         /* jetzt zum Geld noch die vorhandene Beute addieren */
         RemoveList(tcMakeLootList(Person_Matt_Stuvysunt, Relation_has));
@@ -1549,8 +1552,10 @@ void tcDoneSouthhamptonSabienUnknown(void)
 static void tcDoneFirstTimeLonelyInSouth(void)
 {
     LIST *menu = txtGoKey(MENU_TXT, "SouthhamptonMenu");
-    uint32_t startTime = 0, actionTime = 0;
-    ubyte ende = 0, activ = 1;
+    uint32_t startTime = 0;
+    uint32_t actionTime = 0;
+    ubyte ende = 0;
+    ubyte activ = 1;
     Environment Env = (Environment)dbGetObject(Environment_TheClou);
     Person Herb = (Person)dbGetObject(Person_Herbert_Briggs);
 
@@ -1892,7 +1897,8 @@ void tcDoneKaserne(void)
     Environment Env = (Environment)dbGetObject(Environment_TheClou);
     Car car = (Car)dbGetObject(Car_Cadillac_Club_1952);
     LIST *menu = txtGoKey(MENU_TXT, "KaserneMenu");
-    ubyte activ = 0, burglary = 0;
+    ubyte activ = 0;
+    ubyte burglary = 0;
     uint32_t successor = 0;
 
     joined_bySet(Person_Matt_Stuvysunt, Person_Matt_Stuvysunt);
@@ -2008,7 +2014,8 @@ int32_t tcIsLastBurglaryOk(void)
     word carYPos0 = kaserne->CarYPos - 40;
     word carXPos1 = kaserne->CarXPos + 40;
     word carYPos1 = kaserne->CarYPos + 40;
-    int32_t madeIt = 1, i = 0;
+    int32_t madeIt = 1;
+    int32_t i = 0;
     LSObject left = (LSObject)dbGetObject(tcLAST_BURGLARY_LEFT_CTRL_OBJ);
     LSObject right = (LSObject)dbGetObject(tcLAST_BURGLARY_RIGHT_CTRL_OBJ);
 

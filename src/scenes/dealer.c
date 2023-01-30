@@ -10,7 +10,8 @@ void tcDealerDlg(void)
 {
     uint32_t locNr = GetObjNrOfLocation(GetLocation);
     Person dealer = NULL;
-    ubyte dealerNr = 0, choice = 0;
+    ubyte dealerNr = 0;
+    ubyte choice = 0;
 
     if (locNr == Location_Parker)
     {
@@ -110,7 +111,8 @@ void tcDealerSays(Person dealer, ubyte textNr, int32_t perc)
     LIST *specialLoot = txtGoKey(OBJECTS_ENUM_TXT, "enum_LootNameE");
     LIST *dealerText = txtGoKey(BUSINESS_TXT, "DEALER_OFFER");
     LIST *dealerOffer = (LIST *)CreateList(0);
-    char line[TXT_KEY_LENGTH], symp = 0;
+    char line[TXT_KEY_LENGTH];
+    char symp = 0;
     int i = 0;
     struct ObjectNode *n = NULL;
     Person others[3];
@@ -138,7 +140,8 @@ void tcDealerSays(Person dealer, ubyte textNr, int32_t perc)
         for (n = (struct ObjectNode *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (struct ObjectNode *)NODE_SUCC(n))
         {
             Loot loot = (Loot)OL_DATA(n);
-            uint32_t price = hasGet(Person_Matt_Stuvysunt, OL_NR(n)), offer = 0;
+            uint32_t price = hasGet(Person_Matt_Stuvysunt, OL_NR(n));
+            uint32_t offer = 0;
 
             offer = tcGetDealerOffer(price, perc);
             offer = max(offer, 1);

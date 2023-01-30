@@ -42,7 +42,9 @@ void tcJobOffer(Person p)
 
 void tcMyJobAnswer(Person p)
 {
-    char line[TXT_KEY_LENGTH], job[TXT_KEY_LENGTH], temp[TXT_KEY_LENGTH];
+    char line[TXT_KEY_LENGTH];
+    char job[TXT_KEY_LENGTH];
+    char temp[TXT_KEY_LENGTH];
     NODE *n = NULL;
     LIST *bubble = (LIST *)CreateList(0);
     LIST *jobs = txtGoKey(OBJECTS_ENUM_TXT, "enum_JobE");

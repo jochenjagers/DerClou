@@ -103,7 +103,8 @@ ubyte tcMakeCarOk(void)
 uint32_t tcOrganisation(void)
 {
     LIST *menu = txtGoKey(MENU_TXT, "ORGANISATION");
-    ubyte activ = 0, ende = 0;
+    ubyte activ = 0;
+    ubyte ende = 0;
     char line[TXT_KEY_LENGTH];
 
     /***********************************************
@@ -363,7 +364,8 @@ uint32_t tcChooseDestBuilding(uint32_t objID)
 
 uint32_t tcChooseEscapeCar(uint32_t objID)
 {
-    LIST *l1 = NULL, *l2 = NULL;
+    LIST *l1 = NULL;
+    LIST *l2 = NULL;
     ubyte choice = 0;
     Person matt = (Person)dbGetObject(Person_Matt_Stuvysunt);
     uint32_t newObjID = 0;
@@ -472,7 +474,8 @@ void tcChooseGuys(void)
 
 void tcAddGuyToParty(void)
 {
-    LIST *l1 = NULL, *l2 = NULL;
+    LIST *l1 = NULL;
+    LIST *l2 = NULL;
     struct ObjectNode *n = NULL;
     uint32_t persID = 0;
     ubyte choice = 0;

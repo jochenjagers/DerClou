@@ -258,7 +258,8 @@ static ubyte plCarTooFull(void)
 
 static void plPlayerAction(void)
 {
-    ubyte i = 0, patroCounter = 3;
+    ubyte i = 0;
+    ubyte patroCounter = 3;
     ubyte DoScrolling = 0;
 
     PD.timer++;
@@ -385,7 +386,8 @@ static void plPlayerAction(void)
     {
         if (PD.isItDark)
         {
-            ubyte j = 0, i = 0;
+            ubyte j = 0;
+            ubyte i = 0;
             uword xpos[PLANING_NR_PERSONS];
             uword ypos[PLANING_NR_PERSONS];
             uint32_t area[PLANING_NR_PERSONS];
@@ -438,7 +440,8 @@ static void plPlayerAction(void)
             {
                 if (!(PD.timer % 12) && (i >= BurglarsNr) && !(Search.EscapeBits & FAHN_ALARM_GUARD))
                 {
-                    ubyte j = 0, dir = livGetViewDirection(Planing_Name[i]);
+                    ubyte j = 0;
+                    ubyte dir = livGetViewDirection(Planing_Name[i]);
                     uword xpos = livGetXPos(Planing_Name[i]);
                     uword ypos = livGetYPos(Planing_Name[i]);
 
@@ -774,7 +777,8 @@ static void plPlayerAction(void)
                                                       ActionData(PD.action, struct ActionUse *)->ItemId))
                                                      ->Type == Item_Fenster))
                                             {
-                                                uword xpos = 0, ypos = 0;
+                                                uword xpos = 0;
+                                                uword ypos = 0;
 
                                                 lsWalkThroughWindow(
                                                     (LSObject)dbGetObject(
@@ -1258,9 +1262,14 @@ static void plPlayerAction(void)
 int32_t plPlayer(uint32_t objId, uint32_t actionTime, ubyte (*actionFunc)(uint32_t, uint32_t))
 {
     FILE *fh = NULL;
-    LIST *menu = txtGoKey(PLAN_TXT, "PLAYER_MENU"), *l = NULL;
-    ubyte activ = 0, i = 0;
-    uint32_t timeLeft = 0, bitset = 0, choice1 = 0, choice2 = 0;
+    LIST *menu = txtGoKey(PLAN_TXT, "PLAYER_MENU");
+    LIST *l = NULL;
+    ubyte activ = 0;
+    ubyte i = 0;
+    uint32_t timeLeft = 0;
+    uint32_t bitset = 0;
+    uint32_t choice1 = 0;
+    uint32_t choice2 = 0;
     int32_t ret = 0;
 
     plPrepareSys(0L, objId,
@@ -1444,7 +1453,8 @@ int32_t plPlayer(uint32_t objId, uint32_t actionTime, ubyte (*actionFunc)(uint32
                             if (BurglarsNr > 2)
                             {
                                 char exp[TXT_KEY_LENGTH];
-                                NODE *node = NULL, *help = NULL;
+                                NODE *node = NULL;
+                                NODE *help = NULL;
 
                                 plMessage("RADIO_1", PLANING_MSG_REFRESH);
                                 SetPictID(((Person)dbGetObject(OL_NR(GetNthNode(BurglarsList, 0))))->PictID);

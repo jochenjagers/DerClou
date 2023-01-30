@@ -131,7 +131,8 @@ void lsSetRelations(uint32_t areaID)
 
 static void lsInitObjects(void)
 {
-    uint32_t areaCount = 0, i = 0;
+    uint32_t areaCount = 0;
+    uint32_t i = 0;
     LIST *areas = NULL;
     NODE *n = NULL;
 
@@ -172,7 +173,8 @@ static void lsInitObjects(void)
 
 void lsLoadGlobalData(uint32_t bld, uint32_t ul_AreaId)
 {
-    char areaName[TXT_KEY_LENGTH], fileName[TXT_KEY_LENGTH];
+    char areaName[TXT_KEY_LENGTH];
+    char fileName[TXT_KEY_LENGTH];
 
     dbGetObjectName(ul_AreaId, areaName);
     areaName[strlen(areaName) - 1] = '\0';
@@ -186,7 +188,8 @@ void lsLoadGlobalData(uint32_t bld, uint32_t ul_AreaId)
 
 void lsInitObjectDB(uint32_t bld, uint32_t areaID)
 {
-    char fileName[TXT_KEY_LENGTH], areaName[TXT_KEY_LENGTH];
+    char fileName[TXT_KEY_LENGTH];
+    char areaName[TXT_KEY_LENGTH];
 
     dbGetObjectName(areaID, areaName);
     strcat(areaName, OBJ_DATA_EXTENSION);
@@ -214,7 +217,8 @@ void lsInitFloorSquares(void)
 {
     uint32_t count = 0;
     int32_t i = 0;
-    char fileName[TXT_KEY_LENGTH], areaName[TXT_KEY_LENGTH];
+    char fileName[TXT_KEY_LENGTH];
+    char areaName[TXT_KEY_LENGTH];
     NODE *n = NULL;
     LIST *areas = NULL;
 
@@ -281,7 +285,9 @@ void lsSetCurrFloorSquares(uint32_t areaId)
 // gibt alle Bodendaten wieder frei
 static void lsDoneFloorSquares(void)
 {
-    uint32_t count = 0, i = 0, size = 0;
+    uint32_t count = 0;
+    uint32_t i = 0;
+    uint32_t size = 0;
 
     for (i = 0; i < 3; i++)
     {
@@ -317,7 +323,8 @@ void lsDoneObjectDB(uint32_t areaID)
 void lsDoneLandScape(void)
 {
     NODE *n = NULL;
-    int32_t areaCount = 0, i = 0;
+    int32_t areaCount = 0;
+    int32_t i = 0;
 
     if (ls)
     {

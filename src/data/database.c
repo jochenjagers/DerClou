@@ -1095,7 +1095,8 @@ ubyte dbSaveAllObjects(char *fileName, uint32_t offset, uint32_t size, uword dis
 
 void dbDeleteAllObjects(uint32_t offset, uint32_t size)
 {
-    struct dbObject *obj = NULL, *pred = NULL;
+    struct dbObject *obj = NULL;
+    struct dbObject *pred = NULL;
     ubyte objHashValue = 0;
 
     for (objHashValue = 0; objHashValue < OBJ_HASH_SIZE; objHashValue++)
@@ -1247,7 +1248,8 @@ struct ObjectNode *dbAddObjectNode(LIST *objectList, uint32_t nr, uint32_t flags
 
         if ((flags & (OLF_ADD_SUCC_STRING | OLF_ALIGNED)) && ObjectListWidth)
         {
-            ubyte i = 0, len = strlen(name) + strlen(succString);
+            ubyte i = 0;
+            ubyte len = strlen(name) + strlen(succString);
 
             if (flags & OLF_INSERT_STAR) len--;
 
@@ -1347,8 +1349,11 @@ void dbSortPartOfList(LIST *l, struct ObjectNode *start, struct ObjectNode *end,
                       word (*processNode)(struct ObjectNode *, struct ObjectNode *))
 {
     LIST *newList = (LIST *)CreateList(0L);
-    struct ObjectNode *n = NULL, *n1 = NULL, *startPred = NULL;
-    int32_t i = 0, j = 0;
+    struct ObjectNode *n = NULL;
+    struct ObjectNode *n1 = NULL;
+    struct ObjectNode *startPred = NULL;
+    int32_t i = 0;
+    int32_t j = 0;
 
     if (start == (struct ObjectNode *)LIST_HEAD(l))
         startPred = 0L;
@@ -1388,7 +1393,10 @@ void dbSortPartOfList(LIST *l, struct ObjectNode *start, struct ObjectNode *end,
 int32_t dbSortObjectList(LIST **objectList, word (*processNode)(struct ObjectNode *, struct ObjectNode *))
 {
     LIST *newList = NULL;
-    struct ObjectNode *n1 = NULL, *n2 = NULL, *pred = NULL, *newNode = NULL;
+    struct ObjectNode *n1 = NULL;
+    struct ObjectNode *n2 = NULL;
+    struct ObjectNode *pred = NULL;
+    struct ObjectNode *newNode = NULL;
     int32_t i = 0;
 
     if (!LIST_EMPTY(*objectList))

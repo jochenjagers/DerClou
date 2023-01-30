@@ -318,7 +318,11 @@ static char *trimstr(char *str)
 
 static void loadConfig(const char *rootPath)
 {
-    char config_file[256], line[256], *pParam = NULL, *pValue = NULL, *p = NULL;
+    char config_file[256];
+    char line[256];
+    char *pParam = NULL;
+    char *pValue = NULL;
+    char *p = NULL;
     FILE *file = NULL;
 
     // set defaults

@@ -386,7 +386,8 @@ static void livRem(struct Living *liv) { BobDone(liv->us_LivingNr); }
 
 static void livLoadTemplates(void)
 {
-    uword cnt = 0, i = 0;
+    uword cnt = 0;
+    uword i = 0;
     char *line = NULL;
     LIST *l = (LIST *)CreateList(0);
     struct AnimTemplate *tlt = NULL;
@@ -421,7 +422,8 @@ static void livRemTemplate(struct AnimTemplate *tlt)
 
 static void livLoadLivings(void)
 {
-    uword cnt = 0, i = 0;
+    uword cnt = 0;
+    uword i = 0;
     char *line = NULL;
     LIST *l = (LIST *)CreateList(0);
     char pathname[TXT_KEY_LENGTH];
@@ -432,7 +434,8 @@ static void livLoadLivings(void)
 
     for (i = 0; i < cnt; i++)
     {
-        char name[TXT_KEY_LENGTH], templateName[TXT_KEY_LENGTH];
+        char name[TXT_KEY_LENGTH];
+        char templateName[TXT_KEY_LENGTH];
 
         line = NODE_NAME(GetNthNode(l, i));
 
@@ -450,8 +453,11 @@ static void livHide(struct Living *liv) { BobInVis(liv->us_LivingNr); }
 
 static void livShow(struct Living *liv)
 {
-    uword frameNr = 0, action = 0;
-    uword srcX = 0, srcY = 0, offset = 0;
+    uword frameNr = 0;
+    uword action = 0;
+    uword srcX = 0;
+    uword srcY = 0;
+    uword offset = 0;
     struct AnimTemplate *tlt = liv->p_OriginTemplate;
 
     // Scheiss Ausnahme, weil von marx kein ANM_STAND gezeichnet wurde
@@ -503,7 +509,10 @@ static void livLoadData(void)
 
 static ubyte livIsVisible(struct Living *liv)
 {
-    uword left = 0, right = 0, up = 0, down = 0;
+    uword left = 0;
+    uword right = 0;
+    uword up = 0;
+    uword down = 0;
     ubyte visible = 0;
 
     left = liv->us_XPos;

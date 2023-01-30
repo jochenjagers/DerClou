@@ -77,7 +77,8 @@ RELATION CloneRelation(RELATION id, RELATION cloneId)
 
 RELATION RemRelation(RELATION id)
 {
-    struct relationDef *rd = relationsDefBase, *h = NULL;
+    struct relationDef *rd = relationsDefBase;
+    struct relationDef *h = NULL;
 
     while (rd)
     {
@@ -433,7 +434,8 @@ int LoadRelations(char *file, uword disk_id)
 
 void RemRelations(uint32_t offset, uint32_t size)
 {
-    struct relationDef *rd = relationsDefBase, *help = NULL;
+    struct relationDef *rd = relationsDefBase;
+    struct relationDef *help = NULL;
 
     while (rd)
     {

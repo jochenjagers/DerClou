@@ -4,6 +4,9 @@
   \___/\____/___/_/ http://cosp.sourceforge.net
    Based on the original by neo Software GmbH
 */
+#include "text/text.h"
+#include "theclou.h"
+
 #define LS_COLL16_XMS_RP AnimRPInXMS
 #define LS_COLL32_XMS_RP AddRPInXMS
 #define LS_COLL48_XMS_RP LSObjectRPInXMS

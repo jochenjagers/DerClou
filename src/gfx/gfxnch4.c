@@ -31,7 +31,11 @@ void gfxNCH4PrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword u
 
     ubyte *DestPtr1 = NULL;
     ubyte *FontPtr1 = NULL;
-    uword t = 0, h1 = 0, h2 = 0, i = 0, j = 0;
+    uword t = 0;
+    uword h1 = 0;
+    uword h2 = 0;
+    uword i = 0;
+    uword j = 0;
     ubyte c = 0;
 
     for (t = 0; t < Length; t++)
@@ -61,9 +65,11 @@ void gfxNCH4PrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword u
 
 void gfxNCH4RectFill(struct RastPort *rp, uword us_SX, uword us_SY, uword us_EX, uword us_EY)
 {
-    uword us_W = 0, us_H = 0;
+    uword us_W = 0;
+    uword us_H = 0;
     ubyte *bm = NULL;
-    uword i = 0, j = 0;
+    uword i = 0;
+    uword j = 0;
 
     if (!((us_SY >= rp->us_Height) && (us_EY >= rp->us_Height)) || ((us_SX >= rp->us_Width) && (us_EX >= rp->us_Width)))
     {

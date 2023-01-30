@@ -237,7 +237,8 @@ ubyte tcBackToStartupMenu(void)
 
 ubyte tcLoadTheClou(void)
 {
-    char line[TXT_KEY_LENGTH], loaded = 0;
+    char line[TXT_KEY_LENGTH];
+    char loaded = 0;
     LIST *games = (LIST *)CreateList(0);
     LIST *origin = (LIST *)CreateList(0);
     uint32_t activ = 0;
@@ -354,7 +355,8 @@ ubyte tcLoadChangesInScenes(char *fileName)
     int32_t i = 0;
     char buffer[TXT_KEY_LENGTH];
     ubyte back = 1;
-    uint32_t eventNr = 0, count = 0;
+    uint32_t eventNr = 0;
+    uint32_t count = 0;
     FILE *file = NULL;
     struct Scene *sc = NULL;
 

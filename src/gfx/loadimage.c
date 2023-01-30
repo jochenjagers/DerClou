@@ -70,8 +70,12 @@ static void MakeMCGA(ubyte b, ubyte *pic, ubyte PlSt, int c)
 
 static void ILBMUncompressToSurface(ubyte *pBody, ILBMHeader *hdr, SDL_Surface *pSurface)
 {
-    ubyte *pPlane = NULL, *pLine = NULL;
-    int x = 0, y = 0, plane = 0, breite = 0;
+    ubyte *pPlane = NULL;
+    ubyte *pLine = NULL;
+    int x = 0;
+    int y = 0;
+    int plane = 0;
+    int breite = 0;
     uword a = 0;
     ubyte o = 0;
 
@@ -114,8 +118,11 @@ static void ILBMUncompressToSurface(ubyte *pBody, ILBMHeader *hdr, SDL_Surface *
 
 static void ILBMCopyToSurface(ubyte *pBody, ILBMHeader *hdr, SDL_Surface *pSurface)
 {
-    ubyte *pPlane = NULL, *pLine = NULL;
-    int y = 0, plane = 0, breite = 0;
+    ubyte *pPlane = NULL;
+    ubyte *pLine = NULL;
+    int y = 0;
+    int plane = 0;
+    int breite = 0;
     ubyte o = 0;
 
     pLine = (ubyte *)pSurface->pixels;

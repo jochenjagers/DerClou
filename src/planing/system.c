@@ -104,7 +104,9 @@ void SaveSystem(FILE *fh, struct System *sys)
 LIST *LoadSystem(FILE *fh, struct System *sys)
 {
     LIST *l = txtGoKey(PLAN_TXT, "SYSTEM_GUYS_MISSING_1");
-    ubyte foundAll = 1, knowsSomebody = 1, handlerNr = 0;
+    ubyte foundAll = 1;
+    ubyte knowsSomebody = 1;
+    ubyte handlerNr = 0;
     char buffer[32];
 
     if (fh)

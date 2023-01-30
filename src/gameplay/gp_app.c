@@ -59,8 +59,10 @@ void tcTheAlmighty(uint32_t time) { tcMovePersons(2, time); }
 
 void tcMovePersons(uint32_t personCount, uint32_t time)
 {
-    uint32_t i = 0, count = 0;
-    uint32_t persID = 0, locID = 0;
+    uint32_t i = 0;
+    uint32_t count = 0;
+    uint32_t persID = 0;
+    uint32_t locID = 0;
 
     for (i = 0; i < personCount; i++)
     {
@@ -175,7 +177,8 @@ uint32_t tcBurglary(uint32_t buildingID)
 
 void tcRefreshLocationInTitle(uint32_t locNr)
 {
-    char date[TXT_KEY_LENGTH], line[TXT_KEY_LENGTH];
+    char date[TXT_KEY_LENGTH];
+    char line[TXT_KEY_LENGTH];
     NODE *node = NULL;
 
     gfxSetPens(m_wrp, 3, GFX_SAME_PEN, GFX_SAME_PEN);
@@ -377,7 +380,9 @@ void ShowTime(uint32_t delay)
 
 uint32_t StdHandle(uint32_t choice)
 {
-    uint32_t succ_eventnr = 0L, locNr = 0, objNr = 0;
+    uint32_t succ_eventnr = 0L;
+    uint32_t locNr = 0;
+    uint32_t objNr = 0;
     struct Scene *scene = NULL;
     char line[TXT_KEY_LENGTH];
     Location loc = NULL;
@@ -829,7 +834,8 @@ void tcGetLastName(char *Name, char *dest, uint32_t maxLength)
 
 void tcCutName(char *Name, char Sign, uint32_t maxLength)
 {
-    int32_t i = 0, j = 0;
+    int32_t i = 0;
+    int32_t j = 0;
     char Source[TXT_KEY_LENGTH];
 
     strcpy(Source, Name);

@@ -36,7 +36,9 @@ void plSaveTools(FILE *fh)
 LIST *plLoadTools(FILE *fh)
 {
     LIST *l = txtGoKey(PLAN_TXT, "SYSTEM_TOOLS_MISSING_1");
-    ubyte foundAll = 1, canGet = 2, toolsNr = 0;
+    ubyte foundAll = 1;
+    ubyte canGet = 2;
+    ubyte toolsNr = 0;
     char buffer[32];
 
     buffer[0] = '\0';
@@ -113,8 +115,11 @@ ubyte plOpen(uint32_t objId, ubyte mode, FILE **fh)
         ubyte i = 0;
         FILE *pllFh = NULL;
         uint32_t pllData = 0L;
-        char pllPath[TXT_KEY_LENGTH], pllUserPath[TXT_KEY_LENGTH], name1[TXT_KEY_LENGTH], name2[TXT_KEY_LENGTH],
-            expan[TXT_KEY_LENGTH];
+        char pllPath[TXT_KEY_LENGTH];
+        char pllUserPath[TXT_KEY_LENGTH];
+        char name1[TXT_KEY_LENGTH];
+        char name2[TXT_KEY_LENGTH];
+        char expan[TXT_KEY_LENGTH];
         struct IOData *ioData = NULL;
 
         dbGetObjectName(lsGetActivAreaID(), name1);

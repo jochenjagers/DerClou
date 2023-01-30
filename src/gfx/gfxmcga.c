@@ -54,7 +54,11 @@ void gfxMCGAPrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword u
 
     ubyte *DestPtr1 = NULL;
     ubyte *FontPtr1 = NULL;
-    uword t = 0, h1 = 0, h2 = 0, i = 0, j = 0;
+    uword t = 0;
+    uword h1 = 0;
+    uword h2 = 0;
+    uword i = 0;
+    uword j = 0;
     ubyte c = 0;
 
     for (t = 0; t < Length; t++)
@@ -90,7 +94,8 @@ void gfxMCGARectFill(struct RastPort *rp, uword us_X, uword us_Y, uword us_X1, u
     // us_X += rp->us_LeftEdge;
     // us_Y += rp->us_TopEdge;
     ubyte *bm = &((ubyte *)rp->p_BitMap)[us_X + us_Y * rp->us_Width];
-    uword i = 0, j = 0;
+    uword i = 0;
+    uword j = 0;
     for (j = 0; j < us_H; j++)
     {
         for (i = 0; i < us_W; i++)

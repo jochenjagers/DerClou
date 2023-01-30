@@ -13,7 +13,8 @@ void lsShowRaster(uint32_t areaID, ubyte perc)
 {
     LSArea area = (LSArea)dbGetObject(areaID);
     struct ObjectNode *node = NULL;
-    int32_t count = 0, i = 0;
+    int32_t count = 0;
+    int32_t i = 0;
     LIST *objects = NULL;
     LSObject lso = NULL;
 
@@ -109,8 +110,14 @@ NODE *lsGetPredObject(NODE *start)
 
 void lsFadeRasterObject(uint32_t areaID, LSObject lso, ubyte status)
 {
-    uint32_t rasterXSize = 0, rasterYSize = 0, rasterSize = 0, col = 0;
-    uword xStart = 0, yStart = 0, xEnd = 0, yEnd = 0;
+    uint32_t rasterXSize = 0;
+    uint32_t rasterYSize = 0;
+    uint32_t rasterSize = 0;
+    uint32_t col = 0;
+    uword xStart = 0;
+    uword yStart = 0;
+    uword xEnd = 0;
+    uword yEnd = 0;
 
     rasterXSize = lsGetRasterXSize(areaID);
     rasterYSize = lsGetRasterYSize(areaID);
@@ -141,9 +148,17 @@ void lsFadeRasterObject(uint32_t areaID, LSObject lso, ubyte status)
 void lsShowAllConnections(uint32_t areaID, NODE *node, ubyte perc)
 {
     NODE *n = NULL;
-    LSObject lso1 = NULL, lso2 = NULL;
-    uint32_t relID = 0, col = 0, destX = 0, destY = 0, srcX = 0, srcY = 0;
-    uint32_t rasterXSize = 0, rasterYSize = 0, rasterSize = 0;
+    LSObject lso1 = NULL;
+    LSObject lso2 = NULL;
+    uint32_t relID = 0;
+    uint32_t col = 0;
+    uint32_t destX = 0;
+    uint32_t destY = 0;
+    uint32_t srcX = 0;
+    uint32_t srcY = 0;
+    uint32_t rasterXSize = 0;
+    uint32_t rasterYSize = 0;
+    uint32_t rasterSize = 0;
     static ubyte Alarm_Power;
 
     lso1 = (LSObject)OL_DATA(node);
@@ -186,7 +201,10 @@ void lsShowAllConnections(uint32_t areaID, NODE *node, ubyte perc)
 
         for (n = (NODE *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
         {
-            uword x0 = 0, y0 = 0, x1 = 0, y1 = 0;
+            uword x0 = 0;
+            uword y0 = 0;
+            uword x1 = 0;
+            uword y1 = 0;
 
             gfxSetPens(l_wrp, col, GFX_SAME_PEN, GFX_SAME_PEN);
 

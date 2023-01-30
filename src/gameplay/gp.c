@@ -133,9 +133,11 @@ void PatchStory(void)
 
 uint32_t PlayStory(void)
 {
-    struct Scene *curr = NULL, *next = NULL;
+    struct Scene *curr = NULL;
+    struct Scene *next = NULL;
     struct Scene *story_scene = 0;
-    ubyte interr_allowed = 1, first = 1;
+    ubyte interr_allowed = 1;
+    ubyte first = 1;
 
     if (GamePlayMode & GP_STORY_OFF)
     {
@@ -263,7 +265,8 @@ uint32_t PlayStory(void)
 
 struct Scene *GetStoryScene(struct Scene *curr)
 {
-    uint32_t i = 0, j = 0;
+    uint32_t i = 0;
+    uint32_t j = 0;
 
     for (i = 0; i < film->AmountOfScenes; i++)
     {
@@ -367,7 +370,8 @@ void PrepareStory(char *filename)
  * revised : 2014-07-01 - templer
  */
 {
-    int32_t i = 0, j = 0;
+    int32_t i = 0;
+    int32_t j = 0;
     struct Scene *scene = NULL;
     struct StoryHeader SH = {0};
     struct NewScene NS = {0};
@@ -527,7 +531,8 @@ void FreeConditions(struct Scene *scene)
 void LoadSceneforStory(struct NewScene *dest, FILE *file)
 {
     uint32_t *event_nrs = NULL;
-    uint32_t i = 0, tmp = 0;
+    uint32_t i = 0;
+    uint32_t tmp = 0;
 
     /* struct NewScene is byte-aligned
   and needs some padding... */
@@ -696,7 +701,11 @@ char *BuildTime(uint32_t min, char language, char *time)
 char *BuildDate(uint32_t days, char language, char *date)
 {
     ubyte days_per_month[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    uint32_t i = 0, p_year = 0, year = 0, month = 0, day = 0;
+    uint32_t i = 0;
+    uint32_t p_year = 0;
+    uint32_t year = 0;
+    uint32_t month = 0;
+    uint32_t day = 0;
     char s[TXT_KEY_LENGTH];
 
     for (i = 0, p_year = 0; i < 12; i++) p_year += days_per_month[i];

@@ -270,7 +270,8 @@ static LIST *txtGoKeyN(uint32_t textId, char *key)
     LIST *txtList = NULL;
     char *LastMark = NULL;
     struct Text *txt = NULL;
-    ubyte found = 0, i = 0;
+    ubyte found = 0;
+    ubyte i = 0;
     char mark[TXT_KEY_LENGTH];
     char *line = NULL;
 
@@ -333,7 +334,8 @@ LIST *txtGoKey(uint32_t textId, char *key)
     LIST *txtList = NULL;
     char *LastMark = NULL;
     struct Text *txt = NULL;
-    ubyte found = 0, i = 0;
+    ubyte found = 0;
+    ubyte i = 0;
     char mark[TXT_KEY_LENGTH];
     char *line = NULL;
 
@@ -407,7 +409,8 @@ LIST *txtGoKey(uint32_t textId, char *key)
 LIST *txtGoKeyAndInsert(uint32_t textId, char *key, ...)
 {
     va_list argument;
-    LIST *txtList = (LIST *)CreateList(0L), *originList = NULL;
+    LIST *txtList = (LIST *)CreateList(0L);
+    LIST *originList = NULL;
     NODE *node = NULL;
 
     va_start(argument, key);
@@ -417,7 +420,8 @@ LIST *txtGoKeyAndInsert(uint32_t textId, char *key, ...)
     for (node = LIST_HEAD(originList); NODE_SUCC(node); node = NODE_SUCC(node))
     {
         ubyte i = 0;
-        char originLine[256], txtLine[256];
+        char originLine[256];
+        char txtLine[256];
 
         strcpy(originLine, NODE_NAME(node));
         strcpy(txtLine, NODE_NAME(node));
@@ -470,7 +474,9 @@ ubyte txtKeyExists(uint32_t textId, char *key)
 
 uint32_t txtCountKey(char *key)
 {
-    uint32_t i = strlen(key), j = 0, k = 0;
+    uint32_t i = strlen(key);
+    uint32_t j = 0;
+    uint32_t k = 0;
     for (j = 0, k = 0; j < i; j++)
     {
         if (key[j] == TXT_CHAR_KEY_SEPERATOR) k++;

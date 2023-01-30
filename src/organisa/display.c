@@ -189,7 +189,7 @@ void tcDisplayPerson(uint32_t displayMode)
 {
     uint32_t objNr, i;
     NODE *node;
-    char line[TXT_KEY_LENGTH]={0};
+    char line[TXT_KEY_LENGTH] = {0};
     LIST *guys;
 
     joined_byAll(Person_Matt_Stuvysunt, OLF_INCLUDE_NAME | OLF_PRIVATE_LIST, Object_Person);
@@ -223,7 +223,7 @@ void tcDisplayAbilities(uint32_t personNr, uint32_t displayData)
     LIST *abilities;
     NODE *node;
     uint32_t i, abiNr, ability;
-    char line[TXT_KEY_LENGTH]={0};
+    char line[TXT_KEY_LENGTH] = {0};
 
     hasAll(personNr, OLF_PRIVATE_LIST | OLF_INCLUDE_NAME, Object_Ability);
     abilities = ObjectListPrivate;

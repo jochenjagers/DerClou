@@ -56,7 +56,8 @@ void plPrepareData(void)
 void plPrepareSprite(uint32_t livNr, uint32_t areaId)
 {
     LSArea activArea = (LSArea)dbGetObject(areaId);
-    uword xpos = 0, ypos = 0;
+    uword xpos = 0;
+    uword ypos = 0;
 
     livLivesInArea(Planing_Name[livNr], areaId);
 

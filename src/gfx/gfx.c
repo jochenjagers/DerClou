@@ -201,7 +201,8 @@ void gfxScreenshotShadow(void)
 void gfxSetDarkness(ubyte value)
 {
     ubyte *dp = NULL;
-    int h = 0, i = 0;
+    int h = 0;
+    int i = 0;
 
     dp = (ubyte *)l_wrp->p_BitMap;
 
@@ -355,7 +356,8 @@ void gfxDoneSDL(void)
 
 void gfxUpdateSDL(struct RastPort *rp)
 {
-    ubyte *src = NULL, *dst = NULL;
+    ubyte *src = NULL;
+    ubyte *dst = NULL;
     int32_t dstpitch = 0;
 
     if ((rp != &RefreshRP) && (rp != &PrepareRP))
@@ -727,7 +729,11 @@ void gfxDraw(struct RastPort *rp, uword us_X, uword us_Y)
     /* LucyG 2017-10-29 : this never worked at all! */
     /* Hell, it's a simple line drawing function :D */
 
-    int sx = 0, sy = 0, dx = 0, dy = 0, i = 0;
+    int sx = 0;
+    int sy = 0;
+    int dx = 0;
+    int dy = 0;
+    int i = 0;
     ubyte col = 0;
     ubyte *bm = NULL;
 
@@ -1090,7 +1096,9 @@ void gfxPrintExact(struct RastPort *rp, char *puch_Text, uword us_X, uword us_Y)
 
 void gfxPrint(struct RastPort *rp, char *puch_Text, uword us_Y, uint32_t ul_Mode)
 {
-    uword x = 0, y = 0, l = 0;
+    uword x = 0;
+    uword y = 0;
+    uword l = 0;
 
     if (!rp)
     {
@@ -1279,7 +1287,9 @@ void wfd(void)
 
 void gfxClearArea(struct RastPort *rp)
 {
-    ubyte uch_APen = 0, uch_BPen = 0, uch_OPen = 0;
+    ubyte uch_APen = 0;
+    ubyte uch_BPen = 0;
+    ubyte uch_OPen = 0;
 
     if (!rp)
     {
@@ -1309,7 +1319,9 @@ void gfxSetRGB(struct RastPort *rp, ubyte uch_ColNr, ubyte uch_Red, ubyte uch_Gr
 
 void gfxSetPalette24(struct RastPort *rp, ubyte uch_ColStart, ubyte uch_ColEnd, ubyte *p_ColorTable24)
 {
-    int i = 0, i3 = 0, i4 = 0;
+    int i = 0;
+    int i3 = 0;
+    int i4 = 0;
     for (i = uch_ColStart; i < uch_ColEnd; i++)
     {
         i3 = i * 3;
@@ -1326,7 +1338,8 @@ void gfxSetPalette24(struct RastPort *rp, ubyte uch_ColStart, ubyte uch_ColEnd, 
 
 void gfxSetPalette32(struct RastPort *rp, ubyte uch_ColStart, ubyte uch_ColEnd, ubyte *p_ColorTable32)
 {
-    int i = 0, i4 = 0;
+    int i = 0;
+    int i4 = 0;
     for (i = uch_ColStart; i < uch_ColEnd; i++)
     {
         i4 = i << 2;
@@ -1348,7 +1361,9 @@ void gfxSetColorRange(ubyte uch_ColorStart, ubyte uch_ColorEnd)
 
 void gfxGetColorTableFromReg(ubyte *puch_Colortable)
 {
-    int i = 0, i3 = 0, i4 = 0;
+    int i = 0;
+    int i3 = 0;
+    int i4 = 0;
     for (i = 0; i < 256; i++)
     {
         i3 = i * 3;
@@ -1365,9 +1380,13 @@ void gfxChangeColors(struct RastPort *rp, int32_t l_Delay, uint32_t ul_Mode, uby
 {
     ubyte cols[768];
     ubyte cols2[768];
-    uword st = 0, en = 0, st3 = 0, en3 = 0;
+    uword st = 0;
+    uword en = 0;
+    uword st3 = 0;
+    uword en3 = 0;
     uword i = 0;
-    float e = NAN, f = NAN;
+    float e = NAN;
+    float f = NAN;
 
     if (rp)
     {

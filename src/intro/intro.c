@@ -44,12 +44,14 @@ static const int anim_cdframes[NUM_CD_TRACKS * 6] = {
 
 static int Anim_Play(IffAnim *anim, int nfile, int delayticks)
 {
-    ubyte *cmap = NULL, *frame = NULL;
+    ubyte *cmap = NULL;
+    ubyte *frame = NULL;
     ubyte *dst = NULL;
     int q = 0;
     int a = 0;
     int action = 0;
-    int numframes = 0, nframe = 0;
+    int numframes = 0;
+    int nframe = 0;
 
     int ntrack = 0;
     char wavPath[256];
@@ -156,7 +158,8 @@ static int Anim_Play(IffAnim *anim, int nfile, int delayticks)
 void tcIntro(void)
 {
     char anim_path[DSK_PATHNAMELENGTH];
-    int n_file = 0, bContinue = 0;
+    int n_file = 0;
+    int bContinue = 0;
     IffAnim *iff_anim = NULL;
 
     inpTurnESC(1);

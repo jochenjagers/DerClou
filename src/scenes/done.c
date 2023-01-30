@@ -12,9 +12,11 @@ void DoneTaxi(void)
 {
     static ubyte i = 0;
     ubyte j = 0;
-    char name[TXT_KEY_LENGTH], exp[TXT_KEY_LENGTH];
+    char name[TXT_KEY_LENGTH];
+    char exp[TXT_KEY_LENGTH];
     LIST *locs = (LIST *)CreateList(0L);
-    struct ObjectNode *n = NULL, *newNode = NULL;
+    struct ObjectNode *n = NULL;
+    struct ObjectNode *newNode = NULL;
     uint32_t locNr = 0;
     Location loc = NULL;
 
@@ -61,8 +63,11 @@ void DoneTaxi(void)
 void DoneInsideHouse(void)
 {
     LIST *menu = txtGoKey(MENU_TXT, "Mainmenu");
-    uint32_t choice = 0, buildingID = 0, areaID = 0;
-    ubyte activ = 0, perc = 0;
+    uint32_t choice = 0;
+    uint32_t buildingID = 0;
+    uint32_t areaID = 0;
+    ubyte activ = 0;
+    ubyte perc = 0;
     NODE *node = NULL;
 
     SceneArgs.ReturnValue = 0;
@@ -235,7 +240,8 @@ void DoneParking(void)
 {
     LIST *bubble = txtGoKey(BUSINESS_TXT, "PARKING");
     LIST *menu = txtGoKey(MENU_TXT, "Mainmenu");
-    ubyte activ = 0, choice = 0;
+    ubyte activ = 0;
+    ubyte choice = 0;
     uint32_t carID = 0;
     Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
@@ -304,7 +310,8 @@ void DoneGarage(void)
 {
     LIST *menu = txtGoKey(MENU_TXT, "Mainmenu");
     ubyte activ = 0;
-    uint32_t choice = 0, carID = 0;
+    uint32_t choice = 0;
+    uint32_t carID = 0;
     Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
     SceneArgs.Ueberschrieben = 1;

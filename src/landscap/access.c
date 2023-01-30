@@ -132,7 +132,10 @@ uword lsGetObjectCount(void) { return ((uword)GetNrOfNodes(ls->p_ObjectRetrieval
 
 ubyte lsGetLoudness(uword x, uword y)
 {
-    word floorIndex = lsGetFloorIndex(x, y), i = 0, j = 0, k = 0;
+    word floorIndex = lsGetFloorIndex(x, y);
+    word i = 0;
+    word j = 0;
+    word k = 0;
 
     /* Ursprünglich wurde loudness hier mit MaxVolume initialisiert    */
     /* dadurch waren in der Anzeige der Loudness auch die Nachbarn     */
@@ -186,7 +189,9 @@ uint32_t lsGetStartArea(void)
 
 uword lsGetFloorIndex(uword x, uword y)
 {
-    uword fpl = 0, row = 0, line = 0;
+    uword fpl = 0;
+    uword row = 0;
+    uword line = 0;
 
     fpl = LS_FLOORS_PER_LINE;
 

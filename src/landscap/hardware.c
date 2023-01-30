@@ -22,7 +22,12 @@ void lsShowEscapeCar(void)
 
 static void lsSetAlarmPict(LSObject lso)
 {
-    uword x0 = 0, x1 = 0, y0 = 0, y1 = 0, destx = 0, desty = 0;
+    uword x0 = 0;
+    uword x1 = 0;
+    uword y0 = 0;
+    uword y1 = 0;
+    uword destx = 0;
+    uword desty = 0;
 
     lsCalcExactSize(lso, &x0, &y0, &x1, &y1);
 
@@ -66,7 +71,11 @@ static void lsRefreshClosedDoors(uword us_X0, uword us_Y0, uword us_X1, uword us
 // eines dummy Objektes die Funktion lsPrepareFromXMS aufgerufen
 void lsRefreshStatue(LSObject lso)
 {
-    uword srcX = 0, srcY = 0, destX = 0, destY = 0, size = 0;
+    uword srcX = 0;
+    uword srcY = 0;
+    uword destX = 0;
+    uword destY = 0;
+    uword size = 0;
 
     ls->uch_ShowObjectMask = 0x40;
 
@@ -87,7 +96,10 @@ void lsRefreshStatue(LSObject lso)
 
 void lsFastRefresh(LSObject lso)
 {
-    uword x0 = 0, x1 = 0, y0 = 0, y1 = 0;
+    uword x0 = 0;
+    uword x1 = 0;
+    uword y0 = 0;
+    uword y1 = 0;
 
     ls->uch_ShowObjectMask = 0x40;  // Bit 6 ignorieren
 
@@ -99,7 +111,8 @@ void lsFastRefresh(LSObject lso)
         case Item_Mauertor:
             if (lso->ul_Status & (1 << Const_tcOPEN_CLOSE_BIT))
             {
-                word x0 = 0, y0 = 0;
+                word x0 = 0;
+                word y0 = 0;
 
                 lsDoDoorRefresh(lso);
 
@@ -248,7 +261,9 @@ static void lsPrepareFromXMSBySize(ubyte uch_Size)
 static void lsBlitOneObject(uword offsetFact, word destx, word desty, uword size)
 {
     uword srcWidth = 288;  // Quellbildschirm ist für gewöhnlich 288 breit
-    uword srcX = 0, srcY = 0, perRow = 0;
+    uword srcX = 0;
+    uword srcY = 0;
+    uword perRow = 0;
 
     // die 32er Objekte befinden sich auf einem Bildschirm, der
     // 320 Pixel breit ist

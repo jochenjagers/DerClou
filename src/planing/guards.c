@@ -32,7 +32,8 @@ void grdDo(FILE *fh, struct System *sys, LIST *PersonsList, uint32_t BurglarsNr,
 
 ubyte grdInit(FILE **fh, char *mode, uint32_t bldId, uint32_t areaId)
 {
-    char bldName[TXT_KEY_LENGTH], fileName[TXT_KEY_LENGTH];
+    char bldName[TXT_KEY_LENGTH];
+    char fileName[TXT_KEY_LENGTH];
 
     dbGetObjectName(areaId, fileName);
     fileName[strlen(fileName) - 1] = '\0';
@@ -72,8 +73,10 @@ ubyte grdDraw(struct RastPort *rp, uint32_t bldId, uint32_t areaId)
     ubyte ret = 0;
     LIST *GuardsList = NULL;
     struct System *grdSys = NULL;
-    uint32_t GuardsNr = 0, i = 0;
-    uword xpos = 0, ypos = 0;
+    uint32_t GuardsNr = 0;
+    uint32_t i = 0;
+    uword xpos = 0;
+    uword ypos = 0;
     struct Handler *h = NULL;
     struct Action *action = NULL;
     struct ObjectNode *n = NULL;

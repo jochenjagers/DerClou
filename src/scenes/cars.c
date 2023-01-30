@@ -45,7 +45,8 @@ char *tcShowPriceOfCar(uint32_t nr, uint32_t type, void *data)
 void tcBuyCar(void)
 {
     LIST *bubble = NULL;
-    ubyte choice = 0, choice1 = 0;
+    ubyte choice = 0;
+    ubyte choice1 = 0;
     Car matts_car = NULL;
     Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
@@ -160,7 +161,8 @@ void tcCarInGarage(uint32_t carID)
 
 void tcColorCar(Car car)
 {
-    LIST *colors = NULL, *bubble = NULL;
+    LIST *colors = NULL;
+    LIST *bubble = NULL;
     ubyte choice = 0;
     uint32_t costs = 0;
     Person marc = (Person)dbGetObject(Person_Marc_Smith);
@@ -252,8 +254,13 @@ void tcRepairCar(Car car, char *repairWhat)
 {
     LIST *presentationData = (LIST *)CreateList(0);
     LIST *list = NULL;
-    ubyte *item = NULL, enough = 1, type = 7, ready = 0;
-    uint32_t costs = 0L, choice = 0L, totalCosts = 0L;
+    ubyte *item = NULL;
+    ubyte enough = 1;
+    ubyte type = 7;
+    ubyte ready = 0;
+    uint32_t costs = 0L;
+    uint32_t choice = 0L;
+    uint32_t totalCosts = 0L;
     uword line = 0;
     Person marc = (Person)dbGetObject(Person_Marc_Smith);
 
@@ -369,7 +376,8 @@ void tcRepairCar(Car car, char *repairWhat)
 uint32_t tcChooseCar(uint32_t backgroundNr)
 {
     LIST *bubble = NULL;
-    uint32_t carCount = 0, carID = 0L;
+    uint32_t carCount = 0;
+    uint32_t carID = 0L;
     ubyte choice = 0;
     Car matts_car = NULL;
 

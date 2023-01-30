@@ -17,8 +17,11 @@ static void FadeInsideObject(void)
 
 uint32_t tcGoInsideOfHouse(uint32_t buildingID)
 {
-    LIST *menu = txtGoKey(MENU_TXT, "INSIDE_MENU"), *areas = NULL;
-    uint32_t count = 0, i = 0, areaID = 0;
+    LIST *menu = txtGoKey(MENU_TXT, "INSIDE_MENU");
+    LIST *areas = NULL;
+    uint32_t count = 0;
+    uint32_t i = 0;
+    uint32_t areaID = 0;
 
     consistsOfAll(buildingID, OLF_PRIVATE_LIST | OLF_INCLUDE_NAME, Object_LSArea);
     areas = ObjectListPrivate;
@@ -55,10 +58,13 @@ uint32_t tcGoInsideOfHouse(uint32_t buildingID)
 void tcInsideOfHouse(uint32_t buildingID, uint32_t areaID, ubyte perc)
 {
     LIST *objects = NULL;
-    NODE *node = NULL, *n = NULL;
-    uint32_t action = 0, count = 0;
+    NODE *node = NULL;
+    NODE *n = NULL;
+    uint32_t action = 0;
+    uint32_t count = 0;
     char name[TXT_KEY_LENGTH];
-    char alarm[TXT_KEY_LENGTH], power[TXT_KEY_LENGTH];
+    char alarm[TXT_KEY_LENGTH];
+    char power[TXT_KEY_LENGTH];
     LSObject lso = NULL;
     LSArea area = NULL;
     LIST *menu = NULL;

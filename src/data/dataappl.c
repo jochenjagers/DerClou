@@ -60,8 +60,10 @@ void tcCalcCallValue(uint32_t callNr, uint32_t timer, uint32_t persId)
 {
     int32_t callCount = Search.CallCount;
     int32_t callWeight = ChangeAbs(255, callCount * (-30), 0, 255);
-    int32_t perfect = tcIsPlanPerfect(timer), situation = 0;
-    int32_t good = -15, nerves = 0;
+    int32_t perfect = tcIsPlanPerfect(timer);
+    int32_t situation = 0;
+    int32_t good = -15;
+    int32_t nerves = 0;
     Person guy = NULL;
 
     if (persId)
@@ -105,7 +107,8 @@ void tcCalcCallValue(uint32_t callNr, uint32_t timer, uint32_t persId)
 /* vernachlässigt Stockwerke und Personen */
 int32_t tcCalcEscapeTime()
 {
-    int32_t time = 0, i = 0;
+    int32_t time = 0;
+    int32_t i = 0;
     Building build = (Building)dbGetObject(Search.BuildingId);
 
     for (i = 0; i < 4; i++)
@@ -236,9 +239,12 @@ uint32_t GetObjNrOfBuilding(uint32_t LocNr)
 
 uint32_t tcGetPersOffer(Person person, ubyte persCount)
 {
-    uint32_t persCapability = 1, mattCapability = 1;
+    uint32_t persCapability = 1;
+    uint32_t mattCapability = 1;
     uint32_t persID = dbGetObjectNr(person);
-    uint32_t assesment = 0, offer = 0, i = 0;
+    uint32_t assesment = 0;
+    uint32_t offer = 0;
+    uint32_t i = 0;
     Person Pers = NULL;
 
     Pers = (Person)dbGetObject(persID);
@@ -279,7 +285,9 @@ void tcPersonLearns(uint32_t pId)
 {
     struct ObjectNode *n = NULL;
     Person pers = (Person)dbGetObject(pId);
-    int32_t ability = 0, count = 0, growth = 0;
+    int32_t ability = 0;
+    int32_t count = 0;
+    int32_t growth = 0;
 
     /* Abilites */
     hasAll(pId, OLF_NORMAL, Object_Ability);
@@ -319,7 +327,8 @@ void tcPersonLearns(uint32_t pId)
 
 uint32_t tcGetBuildValues(Building bui)
 {
-    uint32_t v = 0, x = 0;
+    uint32_t v = 0;
+    uint32_t x = 0;
 
     x = (255 - bui->Exactlyness) / 3;
 
@@ -336,7 +345,9 @@ uint32_t tcGetBuildValues(Building bui)
 
 int32_t tcGetTeamMood(uint32_t *guyId, uint32_t timer) /* ptr auf 4 uint32_ts */
 {
-    int32_t team = 0, mood = 0, i = 0;
+    int32_t team = 0;
+    int32_t mood = 0;
+    int32_t i = 0;
 
     /* Summe aus Einzelstimmungen */
     for (i = 0; (i < 4) && (guyId[i]); i++)
@@ -515,7 +526,8 @@ uint32_t tcGuyUsesTool(uint32_t persId, Building b, uint32_t toolId, uint32_t it
  * diese Funktion darf keine Zufälligkeit enthalten -> Sync!!
  */
 {
-    int32_t origin = 0, time = 0;
+    int32_t origin = 0;
+    int32_t time = 0;
     Person p = (Person)dbGetObject(persId);
 
     origin = time = breakGet(itemId, toolId);
@@ -851,7 +863,8 @@ int32_t tcCalcMattsPart(void)
 {
     LIST *guys = NULL;
     NODE *node = NULL;
-    int32_t count = 0, part = 0;
+    int32_t count = 0;
+    int32_t part = 0;
 
     joined_byAll(Person_Matt_Stuvysunt, OLF_INCLUDE_NAME | OLF_PRIVATE_LIST, Object_Person);
     guys = ObjectListPrivate;
@@ -1027,7 +1040,8 @@ void tcInsertGuard(LIST *list, LIST *roomsList, uword x, uword y, uword width, u
                    ubyte livId, uint32_t areaId)
 {
     char name[TXT_KEY_LENGTH] = {0};
-    uword gx = 0, gy = 0;
+    uword gx = 0;
+    uword gy = 0;
     uint32_t guardedArea = isGuardedbyGet(lsGetCurrBuildingID(), guardId);
 
     sprintf((char *)name, "Police_%d", livId);

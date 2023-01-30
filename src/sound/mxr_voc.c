@@ -99,7 +99,8 @@ typedef struct
 
 static uint32_t MXR_ProcessInputVOC(MXR_InputVOC *pInput, void *pStream, uint32_t nNumSamples)
 {
-    int32_t nSamplesRemain = 0, nSamplesRead = 0;
+    int32_t nSamplesRemain = 0;
+    int32_t nSamplesRead = 0;
     nSamplesRemain = (pInput->vocFile.dwDataSize - pInput->vocFile.dwPosition) / pInput->mxrInput.fmt.nSampleSize;
     if (nNumSamples > nSamplesRemain)
     {

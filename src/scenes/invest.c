@@ -29,11 +29,20 @@ uint32_t tcShowPatrol(LIST *bubble_l, char *c_time, char *patr, ubyte first, Bui
 
 void Investigate(char *location)
 {
-    NODE *n = NULL, *nextMsg = NULL;
-    LIST *origin = NULL, *bubble_l = NULL;
-    char patr[TXT_KEY_LENGTH], line[TXT_KEY_LENGTH];
+    NODE *n = NULL;
+    NODE *nextMsg = NULL;
+    LIST *origin = NULL;
+    LIST *bubble_l = NULL;
+    char patr[TXT_KEY_LENGTH];
+    char line[TXT_KEY_LENGTH];
     char c_time[10];
-    uint32_t minutes = 0, guarding = 0, choice = 0, count = 0, buiID = 0, first = 0, raise = 0;
+    uint32_t minutes = 0;
+    uint32_t guarding = 0;
+    uint32_t choice = 0;
+    uint32_t count = 0;
+    uint32_t buiID = 0;
+    uint32_t first = 0;
+    uint32_t raise = 0;
     Building bui = NULL;
     uint32_t patrolCount = 0;
 

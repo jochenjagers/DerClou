@@ -148,7 +148,8 @@ static void PrepareAnim(char *AnimID)
 void PlayAnim(char *AnimID, word how_often, uint32_t mode)
 {
     char pict_list[TXT_KEY_LENGTH] = {0};
-    uword pict_id = 0, rate = 0;
+    uword pict_id = 0;
+    uword rate = 0;
 
     GetAnim(AnimID, pict_list);
 
@@ -262,7 +263,8 @@ void animator(void)
 {
     int32_t destX = Handler.destX;
     int32_t destY = Handler.destY;
-    uword sourceX = 0, sourceY = 0;
+    uword sourceX = 0;
+    uword sourceY = 0;
 
     if (!(Handler.AnimatorState & ANIM_STATE_SUSPENDED))
     {

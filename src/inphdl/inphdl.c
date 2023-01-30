@@ -36,10 +36,13 @@ struct IHandler IHandler;
 
 static SDL_Cursor *init_system_cursor(char *image[])
 {
-    int i = 0, row = 0, col = 0;
+    int i = 0;
+    int row = 0;
+    int col = 0;
     Uint8 data[4 * 32];
     Uint8 mask[4 * 32];
-    int hot_x = 0, hot_y = 0;
+    int hot_x = 0;
+    int hot_y = 0;
 
     i = -1;
     for (row = 0; row < 32; ++row)
@@ -132,7 +135,8 @@ static SDL_Joystick *inpJoystick = NULL;
 
 static void inpInitJoystick(void)
 {
-    int numJoys = 0, i = 0;
+    int numJoys = 0;
+    int i = 0;
 
     inpJoystick = NULL;
     if (!Config.UseJoystick)

@@ -76,7 +76,8 @@ uword BobInit(void *BitMap, uword Width, uword Height)
 
 static void BobCheckVis(uword ID)
 {
-    uword s = 0, t = 0;
+    uword s = 0;
+    uword t = 0;
 
     for (t = ID; t < MaxBob; t++)
     {

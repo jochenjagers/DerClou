@@ -343,7 +343,8 @@ static void lsAddSpotPosition(struct Spot *spot, uword us_XPos, uword us_YPos)
 static void lsLoadSpotBitMap(struct SpotControl *spc)
 {
     char Result[TXT_KEY_LENGTH];
-    int32_t i = 0, j = 0;
+    int32_t i = 0;
+    int32_t j = 0;
     ubyte *d = NULL;
 
     // Dateiname erstellen
@@ -379,11 +380,18 @@ static void lsLoadSpotBitMap(struct SpotControl *spc)
 void lsLoadSpots(uint32_t bldId, char *uch_FileName)
 {
     FILE *file = NULL;
-    char filename[TXT_KEY_LENGTH], buffer[TXT_KEY_LENGTH];
-    uword SpotCount = 0, i = 0, j = 0;
+    char filename[TXT_KEY_LENGTH];
+    char buffer[TXT_KEY_LENGTH];
+    uword SpotCount = 0;
+    uword i = 0;
+    uword j = 0;
     uint32_t CtrlObjId = 0;
     struct Spot *spot = NULL;
-    uword Size = 0, Speed = 0, Count = 0, XPos = 0, YPos = 0;
+    uword Size = 0;
+    uword Speed = 0;
+    uword Count = 0;
+    uword XPos = 0;
+    uword YPos = 0;
 
     dskBuildPathName(DATA_DIRECTORY, uch_FileName, filename);
 
@@ -430,7 +438,8 @@ LIST *lsGetSpotList(void) { return (sc->p_spots); }
 static void lsBlitSpot(uword us_Size, uword us_XPos, uword us_YPos, ubyte visible)
 {
     uint32_t sourceX = 0;
-    void *Src = NULL, *Dest = NULL;
+    void *Src = NULL;
+    void *Dest = NULL;
 
     switch (us_Size)
     {

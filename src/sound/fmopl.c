@@ -1190,9 +1190,11 @@ INLINE void OPL_CALC_RH(OPL_CH *CH, unsigned int noise)
 /* generic table initialize */
 static int init_tables(void)
 {
-    signed int i = 0, x = 0;
+    signed int i = 0;
+    signed int x = 0;
     signed int n = 0;
-    double o = NAN, m = NAN;
+    double o = NAN;
+    double m = NAN;
 
     for (x = 0; x < TL_RES_LEN; x++)
     {
@@ -1806,7 +1808,8 @@ static void OPL_UnLockTable(void)
 
 static void OPLResetChip(FM_OPL *OPL)
 {
-    int c = 0, s = 0;
+    int c = 0;
+    int s = 0;
     int i = 0;
 
     OPL->eg_timer = 0;
