@@ -56,7 +56,7 @@ int32_t pcErrOpen(int32_t l_Mode, void (*fp_CloseAll)(), ubyte *puch_ErrorFilena
 
 void pcErrClose() {}
 
-void NewErrorMsg(int32_t l_ErrorType, const char *filename, const char *funcname, uint32_t ul_ErrorId)
+_Noreturn void NewErrorMsg(int32_t l_ErrorType, const char *filename, const char *funcname, uint32_t ul_ErrorId)
 {
     ubyte lang = txtGetLanguage(); /* 2014-06-27 templer */
 
