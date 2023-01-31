@@ -8,7 +8,7 @@
 
 void tcDealerDlg(void)
 {
-    uint32_t locNr = GetObjNrOfLocation(GetLocation);
+    const uint32_t locNr = GetObjNrOfLocation(GetLocation);
     Person dealer = NULL;
     ubyte dealerNr = 0;
     ubyte choice = 0;

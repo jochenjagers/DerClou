@@ -2024,13 +2024,12 @@ static int YM3812NumChips = 0;            /* number of chips */
 
 int YM3812Init(int num, int clock, int rate)
 {
-    int i = 0;
-
     if (YM3812NumChips) return -1; /* duplicate init. */
+    if (num > MAX_OPL_CHIPS) return -1; /* maximum MAX_OPL_CHIPS are allowed */
 
     YM3812NumChips = num;
 
-    for (i = 0; i < YM3812NumChips; i++)
+    for (int i = 0; i < YM3812NumChips; i++)
     {
         /* emulator create */
         OPL_YM3812[i] = OPLCreate(OPL_TYPE_YM3812, clock, rate);
@@ -2047,9 +2046,7 @@ int YM3812Init(int num, int clock, int rate)
 
 void YM3812Shutdown(void)
 {
-    int i = 0;
-
-    for (i = 0; i < YM3812NumChips; i++)
+    for (int i = 0; i < YM3812NumChips; i++)
     {
         /* emulator shutdown */
         OPLDestroy(OPL_YM3812[i]);

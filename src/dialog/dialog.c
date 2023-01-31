@@ -90,7 +90,7 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
     char keyWord[TXT_KEY_LENGTH] = {0};
     ubyte line_pos = 0;
     ubyte mem_pos = 0;
-    ubyte key_pos = 0;
+    uint32_t key_pos = 0;
     char *mem = NULL;
     ubyte snr[10];
     ubyte snr1[10];
@@ -120,7 +120,7 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
                 mem_pos++; /* Klammer überspringen ! */
                 key_pos = 0;
 
-                while (mem[mem_pos] != ']')
+                while (mem[mem_pos] != ']' && key_pos < sizeof(key))
                 {
                     key[key_pos++] = mem[mem_pos++];
                 }

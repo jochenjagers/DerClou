@@ -1249,14 +1249,14 @@ struct ObjectNode *dbAddObjectNode(LIST *objectList, uint32_t nr, uint32_t flags
         if ((flags & (OLF_ADD_SUCC_STRING | OLF_ALIGNED)) && ObjectListWidth)
         {
             ubyte i = 0;
-            ubyte len = strlen(name) + strlen(succString);
-
+            ubyte len = strlen(name);
+            if (succString) len += strlen(succString);
             if (flags & OLF_INSERT_STAR) len--;
 
             for (i = len; i < ObjectListWidth; i++) strcat(name, " ");
         }
 
-        if ((flags & OLF_ADD_SUCC_STRING) && ObjectListSuccString) strcat(name, succString);
+        if ((flags & OLF_ADD_SUCC_STRING) && ObjectListSuccString && succString) strcat(name, succString);
     }
     else
         namePtr = NULL;

@@ -119,22 +119,22 @@ uint32_t tcIsThereATraitor(void)
 
 uint32_t tcStartEvidence(void)
 {
-    int32_t MyEvidence[4][7];
+    int32_t MyEvidence[4][7] = {};
     int32_t guarded = 0;
     int32_t radio = 0;
-    uint32_t totalEvidence[7];
+    uint32_t totalEvidence[7] = {};
     uint32_t i = 0;
     uint32_t j = 0;
-    uint32_t shownEvidence[4];
-    uint32_t Recognition[4];
+    uint32_t shownEvidence[4] = {};
+    uint32_t Recognition[4] = {};
     uint32_t caught = 0;
     ubyte guyReady = 0;
     ubyte guyNr = 0;
     ubyte evidenceNr = 0;
     ubyte guyCount = 0;
-    char line[TXT_KEY_LENGTH];
+    char line[TXT_KEY_LENGTH] = {};
     ubyte shown = 0;
-    Person p[4];
+    Person p[4] = {};
     Evidence evidence = (Evidence)dbGetObject(Evidence_Evidence_1); /* just for presentation */
     struct ObjectNode *n = NULL;
     LIST *guys = NULL;

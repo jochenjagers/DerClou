@@ -243,6 +243,7 @@ IffAnim *IffAnim_Open(char *fname)
                                     IffAnim_SetLoop(anim, TRUE);
                                     if (IffAnim_Reset(anim))
                                     {
+                                        fclose(file);
                                         return anim;
                                     }
                                 }
@@ -471,7 +472,7 @@ static int IffAnim_DecodeByteRun(IffAnim *anim, void *dst_, void *data_, int dat
         posdst = 0;
         j = planepitch * bpp;  // number of bytes for the scanline to decode (without mask)
         // while scanline data is not decoded
-        while (j > 0)
+        while (j > 0 && possrc < datasize)
         {
             n = src[possrc++];  // get type
             if (n >= 0)
@@ -1550,7 +1551,7 @@ static int IffAnim_ReadFrames(IffAnim *anim, FILE *file)
     // correct number of frames (if there are any corrupt frames)
     anim->nframes = i;
     // copy audio to single buffer
-    if (anim->audio.datasize > 0)
+    if (anim->audio.datasize > 0 && tabuf != NULL)
     {
 #ifdef THECLOU_DEBUG_ALLOC
         anim->audio.data = (char *)MemAllocDbg(anim->audio.datasize, __FILE__, "IffAnim_ReadFrames 6");
