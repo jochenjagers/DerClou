@@ -356,8 +356,7 @@ int32_t tcGetTeamMood(uint32_t *guyId, uint32_t timer) /* ptr auf 4 uint32_ts */
                                                                                               Einzelnen   */
         team += mood;
     }
-
-    team /= i;
+    if (i > 0) team /= i;
     TeamMood = CalcValue(team, 0, 255, (tcIsPlanPerfect(timer) * 20) / 35, 100);
 
     return ((int32_t)TeamMood);
