@@ -9,3 +9,5 @@ project(
 find_package(SDL2 REQUIRED)
 
 subdirs(src)
+
+install(DIRECTORY gamedata/ DESTINATION share/DerClou)

@@ -479,7 +479,7 @@ int SDL_main(int argc, char **argv)
     }
 
     // und den Pfad für BuildPathName setzen!
-    dskSetRootPath(result);
+    dskSetRootPath(CMAKE_INSTALL_PREFIX);
     dskInitUserDataPath();
 
     loadConfig(result);

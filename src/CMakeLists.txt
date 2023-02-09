@@ -72,4 +72,7 @@ target_include_directories(DerClou PUBLIC ${CMAKE_CURRENT_LIST_DIR}
                                           ${SDL2_INCLUDE_DIRS})
 target_compile_options(DerClou PUBLIC ${SDL2_CFLAGS_OTHER} -Wall
                                       -Wno-format-overflow -ggdb -g3)
+add_compile_definitions(CMAKE_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
 target_link_libraries(DerClou ${SDL2_LIBRARIES} m)
+
+install(TARGETS DerClou DESTINATION ${CMAKE_INSTALL_BINDIR})
