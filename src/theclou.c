@@ -17,8 +17,8 @@
 /* Set a variable to tell if the stdio redirect has been enabled. */
 static int stdioRedirectEnabled = 0;
 
-static char stdoutPath[NAME_MAX];
-static char stderrPath[NAME_MAX];
+static char stdoutPath[FILENAME_MAX];
+static char stderrPath[FILENAME_MAX];
 
 /* SDL_Quit() shouldn't be used with atexit() directly because
    calling conventions may differ... */
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
     atexit(cleanup);
 
     /* Run the application main() code */
-    status = SDL_main(argc, argv);
+    status = tcStartGame(argc, argv);
 
     /* Exit cleanly, calling atexit() functions */
     exit(status);

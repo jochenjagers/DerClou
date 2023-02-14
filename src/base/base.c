@@ -449,7 +449,7 @@ static void loadConfig(const char *rootPath)
     dskClose(file);
 }
 
-int SDL_main(int argc, char **argv)
+int tcStartGame(int argc, char **argv)
 {
     char result[256];
     int32_t res = 0;

@@ -86,7 +86,7 @@
 extern char prgname[255];
 extern void *StdBuffer1;
 
-extern int SDL_main(int argc, char **argv);
+extern int tcStartGame(int argc, char **argv);
 extern void tcClearStdBuffer(void *p_Buffer);
 extern void tcSetPermanentColors(void);
 

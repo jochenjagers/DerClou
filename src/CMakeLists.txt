@@ -64,7 +64,7 @@ set(SOURCE_FILES
     intro/iffanim.c
     gfx/filter.c
     gfx/loadimage.c
-    SDL_win32_main.c)
+    theclou.c)
 
 add_executable(DerClou ${SOURCE_FILES})
 
