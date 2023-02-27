@@ -102,7 +102,7 @@ void tcMoveAPerson(uint32_t persID, uint32_t newLocID)
     {
         NODE *n = NULL;
 
-        for (n = (NODE *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+        for (n = LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
         {
             oldLocID = OL_NR(n);
 
@@ -542,7 +542,7 @@ void StdDone(void)
             inpTurnESC(0);
             inpTurnFunctionKey(1);
 
-            activ = Menu(menu, SceneArgs.Moeglichkeiten, (ubyte)(activ), NULL, 0L);
+            activ = Menu(menu, SceneArgs.Moeglichkeiten, (activ), NULL, 0L);
 
             if (activ == (ubyte)-1)
             {

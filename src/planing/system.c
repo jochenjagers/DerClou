@@ -163,7 +163,7 @@ LIST *LoadSystem(FILE *fh, struct System *sys)
 
         if (extList)
         {
-            for (n = (NODE *)LIST_HEAD(extList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n)) CreateNode(l, 0, NODE_NAME(n));
+            for (n = LIST_HEAD(extList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n)) CreateNode(l, 0, NODE_NAME(n));
 
             RemoveList(extList);
         }
@@ -435,7 +435,7 @@ struct Action *GoFirstAction(struct System *sys)
     {
         if (!LIST_EMPTY(h->Actions))
         {
-            h->CurrentAction = (NODE *)LIST_HEAD(h->Actions);
+            h->CurrentAction = LIST_HEAD(h->Actions);
             ((struct Action *)h->CurrentAction)->Timer = 0;
             h->Timer = 0;
         }
@@ -456,7 +456,7 @@ struct Action *GoLastAction(struct System *sys)
     {
         if (!LIST_EMPTY(h->Actions))
         {
-            h->CurrentAction = (NODE *)LIST_TPRED(h->Actions);
+            h->CurrentAction = LIST_TPRED(h->Actions);
             ((struct Action *)h->CurrentAction)->Timer = ((struct Action *)h->CurrentAction)->TimeNeeded;
             h->Timer = GetMaxTimer(sys);
         }
@@ -490,13 +490,13 @@ struct Action *NextAction(struct System *sys)
                 {
                     if (h->Flags & SHF_AUTOREVERS)
                     {
-                        h->CurrentAction = (NODE *)LIST_HEAD(h->Actions);
+                        h->CurrentAction = LIST_HEAD(h->Actions);
                         ((struct Action *)h->CurrentAction)->Timer = 1;
                         h->Timer++;
                     }
                     else
                     {
-                        h->CurrentAction = (NODE *)LIST_TPRED(h->Actions);
+                        h->CurrentAction = LIST_TPRED(h->Actions);
                         ((struct Action *)h->CurrentAction)->Timer = ((struct Action *)h->CurrentAction)->TimeNeeded;
                         h->Timer = GetMaxTimer(sys);
 
@@ -538,13 +538,13 @@ struct Action *PrevAction(struct System *sys)
                 {
                     if ((h->Flags & SHF_AUTOREVERS) && h->Timer)
                     {
-                        h->CurrentAction = (NODE *)LIST_TPRED(h->Actions);
+                        h->CurrentAction = LIST_TPRED(h->Actions);
                         ((struct Action *)h->CurrentAction)->Timer = ((struct Action *)h->CurrentAction)->TimeNeeded;
                         h->Timer--;
                     }
                     else
                     {
-                        h->CurrentAction = (NODE *)LIST_HEAD(h->Actions);
+                        h->CurrentAction = LIST_HEAD(h->Actions);
                         ((struct Action *)h->CurrentAction)->Timer = 0;
                         h->Timer = 0;
 
@@ -613,7 +613,7 @@ void RemLastAction(struct System *sys)
                 FreeNode(n);
 
                 h->Timer = GetMaxTimer(sys);
-                h->CurrentAction = (NODE *)LIST_TPRED(h->Actions);
+                h->CurrentAction = LIST_TPRED(h->Actions);
                 ((struct Action *)h->CurrentAction)->Timer = ((struct Action *)h->CurrentAction)->TimeNeeded;
             }
             else
@@ -638,7 +638,7 @@ void IgnoreAction(struct System *sys)
             }
             else
             {
-                h->CurrentAction = (NODE *)LIST_TPRED(h->Actions);
+                h->CurrentAction = LIST_TPRED(h->Actions);
                 ((struct Action *)h->CurrentAction)->Timer = ((struct Action *)h->CurrentAction)->TimeNeeded;
             }
         }
@@ -734,5 +734,5 @@ void CorrectMem(LIST *l)
 {
     NODE *n = NULL;
 
-    for (n = (NODE *)LIST_HEAD(l); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n)) sysUsedMem -= NODE_SIZE(n);
+    for (n = LIST_HEAD(l); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n)) sysUsedMem -= NODE_SIZE(n);
 }

@@ -114,7 +114,7 @@ void lsBuildScrollWindow(void)
     }
 
     /* Objekte setzen - zuerst Wände*/
-    for (node = (NODE *)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+    for (node = LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
     {
         lso = (LSObject)OL_DATA(node);
 
@@ -123,7 +123,7 @@ void lsBuildScrollWindow(void)
     }
 
     /* dann andere */
-    for (node = (NODE *)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+    for (node = LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
     {
         lso = (LSObject)OL_DATA(node);
 
@@ -132,7 +132,7 @@ void lsBuildScrollWindow(void)
     }
 
     /* jetzt noch ein paar Sondefälle (Kassa, Vase, ...) */
-    for (node = (NODE *)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+    for (node = LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
     {
         lso = (LSObject)OL_DATA(node);
 
@@ -146,7 +146,7 @@ void lsBuildScrollWindow(void)
     }
 
     // jetzt alle für alle Türen & Special objects Refresh erzeugen
-    for (node = (NODE *)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+    for (node = LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
     {
         lso = (LSObject)OL_DATA(node);
 
@@ -157,7 +157,7 @@ void lsBuildScrollWindow(void)
     }
 
     // zuletzt müssen am PC die Türen & Specials aufgebaut werden
-    for (node = (NODE *)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+    for (node = LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
     {
         lso = (LSObject)OL_DATA(node);
 
@@ -165,7 +165,7 @@ void lsBuildScrollWindow(void)
             lsTurnObject(lso, lso->uch_Visible, LS_COLLISION);
     }
 
-    for (node = (NODE *)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+    for (node = LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
     {
         lso = (LSObject)OL_DATA(node);
 
@@ -320,7 +320,7 @@ static void lsSortObjectList(LIST **l)
     {
         dbSortObjectList(l, lsSortByYCoord);
 
-        for (node = (NODE *)LIST_HEAD((*l)); (!(lastNode)) && NODE_SUCC(NODE_SUCC(node));)
+        for (node = LIST_HEAD((*l)); (!(lastNode)) && NODE_SUCC(NODE_SUCC(node));)
         {
             node1 = node;
 
@@ -430,7 +430,7 @@ void lsGuyInsideSpot(uword *us_XPos, uword *us_YPos, uint32_t *areaId)
                 {
                     if (areaId[i] == s->ul_AreaId)
                     {
-                        if (((struct Spot *)s)->p_CurrPos)
+                        if ((s)->p_CurrPos)
                         {
                             int32_t x = s->p_CurrPos->us_XPos; /* linke, obere */
                             int32_t y = s->p_CurrPos->us_YPos; /* Ecke des Spot! */
@@ -480,7 +480,7 @@ void lsPatchObjects(void)
 
     ((Item)dbGetObject(Item_Fenster))->OffsetFact = 16;
 
-    for (n = (NODE *)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+    for (n = LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
     {
         lso = (LSObject)OL_DATA(n);
 

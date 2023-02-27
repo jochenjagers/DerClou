@@ -93,7 +93,7 @@ LIST *plLoadTools(FILE *fh)
         }
         if (extList)
         {
-            for (n = (NODE *)LIST_HEAD(extList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+            for (n = LIST_HEAD(extList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
             {
                 CreateNode(l, 0, NODE_NAME(n));
             }

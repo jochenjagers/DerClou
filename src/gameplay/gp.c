@@ -89,7 +89,7 @@ void InitLocations(void)
     dskBuildPathName(TEXT_DIRECTORY, LOCATIONS_TXT, pathname);
 
     if (ReadList(l, (uint32_t)(sizeof(struct TCEventNode)), pathname, 0))
-        film->loc_names = (LIST *)l;
+        film->loc_names = l;
     else
         NewErrorMsg(Disk_Defect, __FILE__, __func__, 1);
 }
@@ -143,17 +143,17 @@ uint32_t PlayStory(void)
     {
         if (GamePlayMode & GP_DEMO)
         {
-            curr = (struct Scene *)GetScene(SCENE_CARS_VANS);
+            curr = GetScene(SCENE_CARS_VANS);
         }
         else
         {
             tcAddPlayerMoney(5000);
-            curr = (struct Scene *)GetScene(SCENE_HOTEL_ROOM);
+            curr = GetScene(SCENE_HOTEL_ROOM);
         }
     }
     else
     {
-        curr = (struct Scene *)GetScene(film->StartScene);
+        curr = GetScene(film->StartScene);
     }
 
     SetCurrentScene(curr);
@@ -341,7 +341,7 @@ int32_t CheckConditions(struct Scene *scene)
 
     if (bed->n_events)
     {
-        for (node = (NODE *)LIST_HEAD(bed->n_events); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+        for (node = LIST_HEAD(bed->n_events); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
         {
             if (GetEventCount(((struct TCEventNode *)node)->EventNr)) return (0L);
         }
@@ -354,7 +354,7 @@ int32_t CheckConditions(struct Scene *scene)
 
     if (bed->events)
     {
-        for (node = (NODE *)LIST_HEAD(bed->events); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+        for (node = LIST_HEAD(bed->events); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
         {
             if (!GetEventCount(((struct TCEventNode *)node)->EventNr)) return (0L);
         }
@@ -442,7 +442,7 @@ void PrepareStory(char *filename)
         scene->Moeglichkeiten = NS.Moeglichkeiten;
         scene->Dauer = NS.Dauer;
         scene->Anzahl = NS.Anzahl;
-        scene->Geschehen = (uword)(NS.Geschehen);
+        scene->Geschehen = (NS.Geschehen);
         scene->Probability = NS.Possibility;
         scene->LocationNr = NS.NewOrt;
 
@@ -588,7 +588,7 @@ void LoadSceneforStory(struct NewScene *dest, FILE *file)
     else
         event_nrs = NULL;
 
-    dest->events = (uint32_t *)event_nrs;
+    dest->events = event_nrs;
 
     /* allocate mem for n_events and read them */
     if (dest->AnzahlderN_Events)
@@ -605,7 +605,7 @@ void LoadSceneforStory(struct NewScene *dest, FILE *file)
     else
         event_nrs = NULL;
 
-    dest->n_events = (uint32_t *)event_nrs;
+    dest->n_events = event_nrs;
 
     /* allocate mem for successors and read them */
     if (dest->AnzahlderNachfolger)

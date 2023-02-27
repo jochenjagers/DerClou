@@ -26,7 +26,7 @@ void DoneTaxi(void)
     for (n = (struct ObjectNode *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (struct ObjectNode *)NODE_SUCC(n))
     {
         loc = (Location)OL_DATA(n);
-        locNr = ((Location)loc)->LocationNr;
+        locNr = (loc)->LocationNr;
 
         sprintf(name, "*%s", NODE_NAME(GetNthNode(film->loc_names, locNr)));
 
@@ -79,7 +79,7 @@ void DoneInsideHouse(void)
     consistsOfAll(buildingID, OLF_NORMAL, Object_LSArea);
 
     /* jetzt alle Stockwerke laden */
-    for (node = (NODE *)LIST_HEAD(ObjectList); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+    for (node = LIST_HEAD(ObjectList); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
     {
         areaID = OL_NR(node);
 
@@ -107,7 +107,7 @@ void DoneInsideHouse(void)
         {
             inpTurnFunctionKey(0);
             inpTurnESC(0);
-            activ = Menu(menu, SceneArgs.Moeglichkeiten, (ubyte)(activ), NULL, 0L);
+            activ = Menu(menu, SceneArgs.Moeglichkeiten, (activ), NULL, 0L);
             inpTurnFunctionKey(1);
             inpTurnESC(1);
 
@@ -125,7 +125,7 @@ void DoneInsideHouse(void)
                 case GO:
                     if (!(areaID = tcGoInsideOfHouse(buildingID)))
                         SceneArgs.ReturnValue =
-                            (uint32_t)(((struct TCEventNode *)(LIST_HEAD((GetCurrentScene()->std_succ))))->EventNr);
+                            (((struct TCEventNode *)(LIST_HEAD((GetCurrentScene()->std_succ))))->EventNr);
                     else
                     {
                         lsSetRelations(areaID);
@@ -144,8 +144,7 @@ void DoneInsideHouse(void)
     consistsOfAll(buildingID, OLF_NORMAL, Object_LSArea);
 
     /* jetzt alle Stockwerke entfernen */
-    for (node = (NODE *)LIST_HEAD(ObjectList); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
-        lsDoneObjectDB(OL_NR(node));
+    for (node = LIST_HEAD(ObjectList); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node)) lsDoneObjectDB(OL_NR(node));
 
     StopAnim();
     gfxChangeColors(l_wrp, 5L, GFX_FADE_OUT, 0L);
@@ -170,7 +169,7 @@ void DoneTools(void)
 
         inpTurnFunctionKey(0); /* dont save in tools shop */
         inpTurnESC(0);
-        activ = Menu(menu, SceneArgs.Moeglichkeiten, (ubyte)(activ), NULL, 0L);
+        activ = Menu(menu, SceneArgs.Moeglichkeiten, (activ), NULL, 0L);
         inpTurnESC(1);
 
         choice = (uint32_t)1L << (activ);
@@ -215,7 +214,7 @@ void DoneDealer(void)
     {
         inpTurnFunctionKey(0); /* or call save functions in case of space */
         inpTurnESC(0);
-        activ = Menu(menu, SceneArgs.Moeglichkeiten, (ubyte)(activ), NULL, 0L);
+        activ = Menu(menu, SceneArgs.Moeglichkeiten, (activ), NULL, 0L);
         inpTurnESC(1);
         inpTurnFunctionKey(1);
 
@@ -253,7 +252,7 @@ void DoneParking(void)
         inpTurnFunctionKey(0); /* or call save functions in case of space */
         inpTurnESC(0);
 
-        activ = Menu(menu, SceneArgs.Moeglichkeiten, (ubyte)(activ), 0L, 0L);
+        activ = Menu(menu, SceneArgs.Moeglichkeiten, (activ), 0L, 0L);
 
         inpTurnESC(1);
         inpTurnFunctionKey(1);
@@ -322,7 +321,7 @@ void DoneGarage(void)
         inpTurnFunctionKey(0); /* or call save functions in case of space */
         inpTurnESC(0);
 
-        activ = Menu(menu, SceneArgs.Moeglichkeiten, (ubyte)(activ), NULL, 0);
+        activ = Menu(menu, SceneArgs.Moeglichkeiten, (activ), NULL, 0);
 
         inpTurnESC(1);
         inpTurnFunctionKey(1);

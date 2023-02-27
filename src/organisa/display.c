@@ -43,7 +43,7 @@ void tcDoneDisplayOrganisation(void)
 void tcDisplayOrganisation(void)
 {
     tcDisplayCommon();
-    tcDisplayPerson(ORG_DISP_ABILITIES);
+    tcDisplayPerson(ORG_DISP_ABILITIES_Y);
 
     gfxBlit(&RefreshRP, 0, 0, l_wrp, 0, 0, 320, 140, GFX_ONE_STEP);
 }

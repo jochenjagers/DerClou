@@ -91,7 +91,7 @@ static int tcInit(void)
 {
     pcErrOpen(ERR_NO_OUTPUT, tcDone, NULL);
 
-    StdBuffer1 = (void *)MemAlloc(STD_BUFFER1_SIZE);
+    StdBuffer1 = MemAlloc(STD_BUFFER1_SIZE);
 
     if (StdBuffer1)
     {

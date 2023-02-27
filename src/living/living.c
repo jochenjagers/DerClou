@@ -53,7 +53,7 @@ void livDone(void)
         {
             NODE *node = NULL;
 
-            for (node = (NODE *)LIST_HEAD(sc->p_Livings); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+            for (node = LIST_HEAD(sc->p_Livings); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
                 livRem((struct Living *)node);
 
             RemoveList(sc->p_Livings);
@@ -64,7 +64,7 @@ void livDone(void)
         {
             NODE *node = NULL;
 
-            for (node = (NODE *)LIST_HEAD(sc->p_Template); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+            for (node = LIST_HEAD(sc->p_Template); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
                 livRemTemplate((struct AnimTemplate *)node);
 
             RemoveList(sc->p_Template);
@@ -236,7 +236,7 @@ void livDoAnims(ubyte uch_Play, ubyte uch_Move)
 
                 // Action != ANM_STAND -> Scheiss Ausnahme, weil von Marx
                 // keine Stand Anim gezeichnet wurde
-                if ((uch_Play) && (liv->uch_Action != ANM_STAND)) liv->ch_CurrFrameNr += (char)sc->ch_PlayDirection;
+                if ((uch_Play) && (liv->uch_Action != ANM_STAND)) liv->ch_CurrFrameNr += sc->ch_PlayDirection;
 
                 if ((ubyte)liv->ch_CurrFrameNr == sc->uch_LastFrame) livAnimate(NODE_NAME(liv), ANM_STAND, 0, 0);
             }

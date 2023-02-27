@@ -96,7 +96,7 @@ uint32_t tcIsThereATraitor(void)
         {
             joined_byAll(Person_Matt_Stuvysunt, OLF_INCLUDE_NAME, Object_Person);
 
-            for (n = (NODE *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+            for (n = LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
             {
                 Person pers = (Person)OL_DATA(n);
 
@@ -186,7 +186,7 @@ uint32_t tcStartEvidence(void)
                            div;
         MyEvidence[i][3] = (((tcGetTrail(p[i], 3) * (int32_t)Search.KillTime[i] * (max(1, 255 - guarded))) /
                              ((int32_t)Search.TimeOfBurglary + 1)));
-        MyEvidence[i][4] = ChangeAbs(0, (int32_t)Search.CallCount * (int32_t)radio / 5, 0, 255);
+        MyEvidence[i][4] = ChangeAbs(0, (int32_t)Search.CallCount * radio / 5, 0, 255);
         MyEvidence[i][5] = (p[i]->KnownToPolice * (max(1, guarded))) / (div * 3);
         MyEvidence[i][6] = ChangeAbs(0, (int32_t)CalcRandomNr(200, 255) * (int32_t)Search.SpotTouchCount[i], 0, 255);
 
@@ -254,7 +254,7 @@ uint32_t tcStartEvidence(void)
                 Recognition[guyNr] += MyEvidence[guyNr][evidenceNr];
 
                 evidence->Recognition = Recognition[guyNr] / 3; /* change also: totalEvidence /= 3.... */
-                evidence->pers = (uint32_t)OL_NR(GetNthNode(guys, (uint32_t)guyNr));
+                evidence->pers = OL_NR(GetNthNode(guys, (uint32_t)guyNr));
 
                 /* für alle "Evidences" - stimmt so, da für alle */
                 /* Personen die selbe Evidence Struct benutzt wird -> */
@@ -354,7 +354,7 @@ void tcForgetGuys(void)
     joined_byAll(Person_Matt_Stuvysunt, OLF_PRIVATE_LIST, Object_Person);
     guys = ObjectListPrivate;
 
-    for (node = (NODE *)LIST_HEAD(guys); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+    for (node = LIST_HEAD(guys); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
     {
         if (OL_NR(node) != Person_Matt_Stuvysunt)
         {

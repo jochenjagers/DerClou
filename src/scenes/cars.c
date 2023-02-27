@@ -169,7 +169,7 @@ void tcColorCar(Car car)
 
     costs = (uint32_t)tcColorCosts(car);
 
-    bubble = txtGoKeyAndInsert(BUSINESS_TXT, "LACKIEREN", (uint32_t)costs, NULL);
+    bubble = txtGoKeyAndInsert(BUSINESS_TXT, "LACKIEREN", costs, NULL);
 
     SetPictID(marc->PictID);
     Bubble(bubble, 0, 0L, 0L);
@@ -190,7 +190,7 @@ void tcColorCar(Car car)
 
             if (ChoiceOk(choice = Bubble(colors, (ubyte)car->ColorIndex, 0L, 0L), GET_OUT, colors))
             {
-                car->ColorIndex = (ubyte)choice;
+                car->ColorIndex = choice;
 
                 SetCarColors(car->ColorIndex);
                 gfxPrepareRefresh();
@@ -296,7 +296,7 @@ void tcRepairCar(Car car, char *repairWhat)
     list = txtGoKey(PRESENT_TXT, repairWhat);
 
     gfxPrepareRefresh();
-    gfxShow((uword)BIG_SHEET, GFX_NO_REFRESH | GFX_OVERLAY, 0L, -1L, -1L);
+    gfxShow(BIG_SHEET, GFX_NO_REFRESH | GFX_OVERLAY, 0L, -1L, -1L);
     inpSetWaitTicks(30);  // 3
 
     PlayAnim("Reperatur", 30000, GFX_DONT_SHOW_FIRST_PIC);
@@ -314,7 +314,7 @@ void tcRepairCar(Car car, char *repairWhat)
         AddPresentLine(presentationData, PRESENT_AS_BAR, (uint32_t)(car->State), 255L, list, line++);
 
         AddPresentLine(presentationData, PRESENT_AS_NUMBER, totalCosts, 0L, list, line++);
-        AddPresentLine(presentationData, PRESENT_AS_NUMBER, (uint32_t)tcGetPlayerMoney, 0L, list, line++);
+        AddPresentLine(presentationData, PRESENT_AS_NUMBER, tcGetPlayerMoney, 0L, list, line++);
 
         DrawPresent(presentationData, 0, u_wrp, (ubyte)GetNrOfNodes(presentationData));
 

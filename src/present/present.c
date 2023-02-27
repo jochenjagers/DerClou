@@ -120,7 +120,7 @@ ubyte Present(uint32_t nr, const char *presentationText, void (*initPresentation
         gfxShow(((Loot)(dbGetObject(nr)))->PictID, GFX_NO_REFRESH | GFX_OVERLAY | GFX_BLEND_UP, 0, -1, -1);
     }
 
-    gfxShow((uword)BIG_SHEET, GFX_NO_REFRESH | GFX_OVERLAY, 0, -1, -1); /* nur die Farben ! */
+    gfxShow(BIG_SHEET, GFX_NO_REFRESH | GFX_OVERLAY, 0, -1, -1); /* nur die Farben ! */
 
     list = txtGoKey(PRESENT_TXT, (char *)presentationText);
 
@@ -199,7 +199,7 @@ ubyte Present(uint32_t nr, const char *presentationText, void (*initPresentation
 
     if (exitLoop == 1)
     {
-        return ((ubyte)GET_OUT);
+        return (GET_OUT);
     }
     else
     {

@@ -23,7 +23,7 @@ void plMessage(char *msg, ubyte flags)
 
     if (flags & PLANING_MSG_REFRESH) ShowMenuBackground();
 
-    if (m) plPrintInfo((char *)NODE_NAME(LIST_HEAD(m)));
+    if (m) plPrintInfo(NODE_NAME(LIST_HEAD(m)));
 
     RemoveList(m);
 

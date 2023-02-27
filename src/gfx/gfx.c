@@ -568,7 +568,7 @@ static void gfxInitCollList(void)
     dskBuildPathName(TEXT_DIRECTORY, COLL_LIST_TXT, pathname);
     ReadList(tempList, 0, pathname, 0);
 
-    for (n = (NODE *)LIST_HEAD(tempList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+    for (n = LIST_HEAD(tempList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
     {
         coll = (struct Collection *)CreateNode(CollectionList, sizeof(struct Collection), txtGetKey(2, NODE_NAME(n)));
 
@@ -605,7 +605,7 @@ static void gfxInitPictList(void)
     dskBuildPathName(TEXT_DIRECTORY, PICT_LIST_TXT, pathname);
     ReadList(tempList, 0, pathname, 0);
 
-    for (n = (NODE *)LIST_HEAD(tempList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+    for (n = LIST_HEAD(tempList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
     {
         pict = (struct Picture *)CreateNode(PictureList, sizeof(struct Picture), NULL);
 
@@ -1447,7 +1447,7 @@ void gfxChangeColors(struct RastPort *rp, int32_t l_Delay, uint32_t ul_Mode, uby
                 gfxSetPalette24(rp, st, en, cols);
                 inpWaitFor(INP_TIME);
             } while (--l_Delay);
-            gfxSetPalette24(rp, st, en, (ubyte *)colorTable);
+            gfxSetPalette24(rp, st, en, colorTable);
             inpWaitFor(INP_TIME);
             break;
     }

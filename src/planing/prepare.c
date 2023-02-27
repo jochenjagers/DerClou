@@ -172,7 +172,7 @@ void plPrepareRel(void)
     consistsOfAll(Planing_BldId, OLF_PRIVATE_LIST, Object_LSArea);
     areas = ObjectListPrivate;
 
-    for (n = (NODE *)LIST_HEAD(areas); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+    for (n = LIST_HEAD(areas); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
     {
         area = (LSArea)OL_DATA(n);
 

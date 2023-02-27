@@ -199,7 +199,7 @@ void lsShowAllConnections(uint32_t areaID, NODE *node, ubyte perc)
         srcX = (srcX * rasterSize) / LS_RASTER_X_SIZE;
         srcY = (srcY * rasterSize) / LS_RASTER_Y_SIZE;
 
-        for (n = (NODE *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+        for (n = LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
         {
             uword x0 = 0;
             uword y0 = 0;

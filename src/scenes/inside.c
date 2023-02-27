@@ -86,7 +86,7 @@ void tcInsideOfHouse(uint32_t buildingID, uint32_t areaID, ubyte perc)
     // lsSortObjectList(&objects);
 
     count = (GetNrOfNodes(objects) * perc) / 255;
-    node = lsGetSuccObject((NODE *)LIST_HEAD(objects));
+    node = lsGetSuccObject(LIST_HEAD(objects));
 
     CurrAreaId = areaID;
 
@@ -212,7 +212,7 @@ void tcShowObjectData(uint32_t areaID, NODE *node, ubyte perc)
     if (!LIST_EMPTY(ObjectList))
     {
         /* alle Loots durchgehen und anzeigen! */
-        for (n = (NODE *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+        for (n = LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
         {
             /* zur Variablenübergabe... (DIRTY, DIRTY...) */
             SetP(OL_DATA(n), hasLootRelationID, OL_DATA(n), GetP(OL_DATA(node), hasLootRelationID, OL_DATA(n)));

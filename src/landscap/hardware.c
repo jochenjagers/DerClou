@@ -49,7 +49,7 @@ static void lsRefreshClosedDoors(uword us_X0, uword us_Y0, uword us_X1, uword us
 
     ls->uch_ShowObjectMask = 0x40;
 
-    for (node = (NODE *)LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+    for (node = LIST_HEAD(ls->p_ObjectRetrieval); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
     {
         LSObject lso = (LSObject)OL_DATA(node);
 

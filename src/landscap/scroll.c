@@ -25,7 +25,7 @@ ubyte lsScrollLandScape(ubyte direction)
         l->us_PersonXPos += (PX * speed);
         l->us_PersonYPos += (PY * speed);
 
-        back = (ubyte)direction;
+        back = direction;
     }
 
     return back;

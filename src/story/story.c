@@ -507,7 +507,7 @@ int32_t tcIsDeadlock(void)
         hasAll(Person_Marc_Smith, OLF_NORMAL, Object_Car);
 
         /* get cheapest car! */
-        for (n = (NODE *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+        for (n = LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
         {
             Car car = (Car)OL_DATA(n);
 
@@ -1765,7 +1765,7 @@ static void tcInitTowerBurglary(void)
 
     joined_byAll(Person_Matt_Stuvysunt, OLF_NORMAL, Object_Person);
 
-    for (node = (NODE *)LIST_HEAD(ObjectList); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+    for (node = LIST_HEAD(ObjectList); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
         joined_byUnSet(Person_Matt_Stuvysunt, OL_NR(node));
 
     /* und Personen, Abilities neu setzen! */

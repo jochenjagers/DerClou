@@ -39,7 +39,7 @@ LIST *PrepareQuestions(LIST *keyWords, uint32_t talkBits, ubyte textID)
     stdQuestionList = txtGoKey(BUSINESS_TXT, "STD_QUEST");
     questionList = txtGoKey((uint32_t)textID, "QUESTIONS");
 
-    for (n = (NODE *)LIST_HEAD(keyWords); NODE_SUCC((NODE *)n); n = (NODE *)NODE_SUCC(n))
+    for (n = LIST_HEAD(keyWords); NODE_SUCC((NODE *)n); n = (NODE *)NODE_SUCC(n))
     {
         r = CalcRandomNr(0L, 6L);
         if ((n2 = (NODE *)GetNthNode(questionList, r)))
@@ -101,7 +101,7 @@ LIST *ParseTalkText(LIST *origin, LIST *bubble, ubyte known)
 
     keyWords = (LIST *)CreateList(0);
 
-    for (n = (NODE *)LIST_HEAD(origin); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+    for (n = LIST_HEAD(origin); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
     {
         line_pos = key_pos = mem_pos = 0;
 

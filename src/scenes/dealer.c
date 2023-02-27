@@ -236,7 +236,7 @@ LIST *tcMakeLootList(uint32_t containerID, uint32_t relID)
 
     if (!(LIST_EMPTY(loots)))
     {
-        for (n = (NODE *)LIST_HEAD(loots); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+        for (n = LIST_HEAD(loots); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
         {
             if (OL_TYPE(n) == Object_Loot)
             {

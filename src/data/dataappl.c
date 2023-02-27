@@ -870,7 +870,7 @@ int32_t tcCalcMattsPart(void)
 
     count = GetNrOfNodes(guys);
 
-    for (node = (NODE *)LIST_HEAD(guys); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
+    for (node = LIST_HEAD(guys); NODE_SUCC(node); node = (NODE *)NODE_SUCC(node))
     {
         if (OL_NR(node) != Person_Matt_Stuvysunt) part += tcGetPersOffer((Person)(OL_DATA(node)), count);
     }
@@ -906,7 +906,7 @@ int32_t tcCheckTimeClocks(uint32_t buildId)
 
     /* und kontrollieren, ob die Zeit abgelaufen ist */
 
-    for (n = (NODE *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+    for (n = LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
     {
         uint32_t timerId = OL_NR(n);
         int32_t time = (int32_t)ClockTimerGet(timerId, timerId);
@@ -928,7 +928,7 @@ static int32_t tcInsideSameRoom(LIST *roomsList, word polX, word polY, word livX
     int32_t detected = 0;
     LSRoom room = NULL;
 
-    for (node = (NODE *)LIST_HEAD(roomsList); NODE_SUCC(node) && detected == 0; node = (NODE *)NODE_SUCC(node))
+    for (node = LIST_HEAD(roomsList); NODE_SUCC(node) && detected == 0; node = (NODE *)NODE_SUCC(node))
     {
         room = (LSRoom)OL_DATA(node);
 
@@ -996,7 +996,7 @@ int32_t tcAlarmByPowerLoss(uint32_t powerId)
 
     /* eine davon mit einer Alarmanlage verbunden? */
 
-    for (n = (NODE *)LIST_HEAD(friendlyList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+    for (n = LIST_HEAD(friendlyList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
     {
         LSObject lso = (LSObject)OL_DATA(n);
 
@@ -1023,7 +1023,7 @@ static int32_t tcIsConnectedWithEnabledAlarm(uint32_t lsoId)
 
     /* ist eine davon eingeschalten? */
 
-    for (n = (NODE *)LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+    for (n = LIST_HEAD(ObjectList); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
     {
         LSObject alarm = (LSObject)OL_DATA(n);
 

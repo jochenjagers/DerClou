@@ -17,7 +17,7 @@ uint32_t tcShowPatrol(LIST *bubble_l, char *c_time, char *patr, ubyte first, Bui
 
     SetBubbleType(THINK_BUBBLE);
 
-    Bubble(bubble_l, (ubyte)first, 0, 140L);
+    Bubble(bubble_l, first, 0, 140L);
     choice = GetExtBubbleActionInfo();
 
     tcAddBuildExactlyness(bui, raise);
@@ -103,7 +103,7 @@ void Investigate(char *location)
 
         if (!(GetMinute % 60)) ShowTime(0);
 
-        for (n = (NODE *)LIST_HEAD(origin); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+        for (n = LIST_HEAD(origin); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
         {
             if (strncmp(NODE_NAME(n), c_time, 5) == 0) nextMsg = n;
         }
@@ -149,7 +149,7 @@ void Investigate(char *location)
                 if (NODE_SUCC(NODE_SUCC(nextMsg)))
                     nextMsg = (NODE *)NODE_SUCC(nextMsg);
                 else
-                    nextMsg = (NODE *)LIST_HEAD(origin);
+                    nextMsg = LIST_HEAD(origin);
             }
         }
 

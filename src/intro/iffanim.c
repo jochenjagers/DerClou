@@ -1205,9 +1205,9 @@ static int IffAnim_InterleaveStereo(IffAnim *anim, char *data, int datasize, int
     // reorder
     if (bps <= 8)
     {  // 8 bit per point
-        char *sl8 = (char *)data;
-        char *sr8 = (char *)(data + (datasize / 2));
-        char *dst8 = (char *)newdata;
+        char *sl8 = data;
+        char *sr8 = (data + (datasize / 2));
+        char *dst8 = newdata;
         for (i = 0; i < nframes; i++)
         {
             *dst8 = sl8[i];

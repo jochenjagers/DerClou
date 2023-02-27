@@ -113,7 +113,7 @@ static void PrepareAnim(char *AnimID)
 
     GetAnim(AnimID, pict_list);
 
-    if ((uint32_t)(txtCountKey(pict_list)) > PIC_1_ID_POS)
+    if ((txtCountKey(pict_list)) > PIC_1_ID_POS)
     {
         coll = gfxGetCollection((uword)txtGetKeyAsULONG((uword)ANIM_COLL_ID_POS, pict_list));
 
@@ -167,7 +167,7 @@ void PlayAnim(char *AnimID, word how_often, uint32_t mode)
         {
             if (!mode)
             {
-                mode = (uint32_t)txtGetKeyAsULONG((uword)PIC_MODE_POS, (char *)pict_list);
+                mode = txtGetKeyAsULONG((uword)PIC_MODE_POS, (char *)pict_list);
             }
             pict_id = (uword)txtGetKeyAsULONG((uword)PIC_1_ID_POS, (char *)pict_list);
         }
@@ -177,7 +177,7 @@ void PlayAnim(char *AnimID, word how_often, uint32_t mode)
             gfxShow(pict_id, mode, 2, -1L, -1L);
         }
 
-        if ((uint32_t)(txtCountKey((char *)pict_list)) > PIC_1_ID_POS)
+        if ((txtCountKey((char *)pict_list)) > PIC_1_ID_POS)
         {
             rate = (uword)txtGetKeyAsULONG((uword)PIC_P_SEC_POS, (char *)pict_list);
 
@@ -192,7 +192,7 @@ void PlayAnim(char *AnimID, word how_often, uint32_t mode)
             Handler.WaitCounter = 1;
 
             /* DoAnim ist ready to play and our anim is decrunched */
-            strcpy((char *)Handler.RunningAnimID, (char *)AnimID);
+            strcpy((char *)Handler.RunningAnimID, AnimID);
 
             ContinueAnim();  // falls Anim zuvor "suspended" wurde
         }
@@ -219,7 +219,7 @@ void StopAnim(void)
             /* 2015-01-07 LucyG: Baris reported NULL pointer access in exploding Jaguar scene */
             if (pict)
             {
-                gfxUnPrepareColl((uword)pict->us_CollId);
+                gfxUnPrepareColl(pict->us_CollId);
             }
             else
             {
@@ -247,7 +247,7 @@ static void GetAnim(char *AnimID, char *Dest)
     int32_t i = 0;
     char ID[TXT_KEY_LENGTH] = {0};
 
-    strcpy(ID, (char *)AnimID);
+    strcpy(ID, AnimID);
 
     for (i = 0; i < strlen(ID); i++)
         if (ID[i] == ',') ID[i] = '_';

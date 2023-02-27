@@ -161,7 +161,7 @@ ubyte Menu(LIST *menu, uint32_t possibility, ubyte activ, void (*func)(ubyte), u
 
         x = 0;
 
-        for (ub_max = 0, n = (NODE *)LIST_HEAD(menu); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n), ub_max++)
+        for (ub_max = 0, n = LIST_HEAD(menu); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n), ub_max++)
         {
             if ((ub_max % 2) == 0)
             {
@@ -441,7 +441,7 @@ ubyte Bubble(LIST *bubble, ubyte activ, void (*func)(ubyte), uint32_t waitTime)
         gfxShow((uword)CurrentBubbleType, GFX_NO_REFRESH | GFX_OVERLAY, 0, -1, -1);
     else
     {
-        gfxShow((uword)ActivPersonPictID, GFX_NO_REFRESH | GFX_OVERLAY | GFX_BLEND_UP, 0, -1, -1);
+        gfxShow(ActivPersonPictID, GFX_NO_REFRESH | GFX_OVERLAY | GFX_BLEND_UP, 0, -1, -1);
         gfxShow((uword)CurrentBubbleType, GFX_NO_REFRESH | GFX_OVERLAY, 0, -1, -1);
 
         if (CurrentBubbleType == SPEAK_BUBBLE) gfxShow((uword)9, GFX_NO_REFRESH | GFX_OVERLAY, 0, -1, -1);

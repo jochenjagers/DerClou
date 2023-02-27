@@ -100,7 +100,7 @@ uint32_t Go(LIST *succ)
 
         prob = Menu(succ, prob, 0, NULL, 0L);
 
-        succ_eventnr = ((struct TCEventNode *)GetNthNode(succ, (uint32_t)prob))->EventNr;
+        succ_eventnr = ((struct TCEventNode *)GetNthNode(succ, prob))->EventNr;
 
         /* jetzt die Zuweisung wieder entfernen, damit der Name */
         /* nicht 2 mal freigegeben wird */
@@ -111,7 +111,7 @@ uint32_t Go(LIST *succ)
     }
     else
     {
-        succ_eventnr = (uint32_t)((struct TCEventNode *)GetNthNode(succ, 0L))->EventNr;
+        succ_eventnr = ((struct TCEventNode *)GetNthNode(succ, 0L))->EventNr;
     }
 
     inpTurnFunctionKey(1);
@@ -161,7 +161,7 @@ void Information(void)
                     {
                         SetBubbleType(THINK_BUBBLE);
 
-                        objID = (uint32_t)(((struct ObjectNode *)GetNthNode(list, (uint32_t)choice1))->nr);
+                        objID = (((struct ObjectNode *)GetNthNode(list, (uint32_t)choice1))->nr);
                         ret = Present(objID, "Car", InitCarPresent);
                     }
                 }
@@ -185,7 +185,7 @@ void Information(void)
                     {
                         SetBubbleType(THINK_BUBBLE);
 
-                        objID = (uint32_t)(((struct ObjectNode *)GetNthNode(list, (uint32_t)choice1))->nr);
+                        objID = (((struct ObjectNode *)GetNthNode(list, (uint32_t)choice1))->nr);
                         ret = tcDisplayInfoAboutPerson(objID);
                     }
                 }
@@ -209,7 +209,7 @@ void Information(void)
                     {
                         SetBubbleType(THINK_BUBBLE);
 
-                        objID = (uint32_t)(((struct ObjectNode *)GetNthNode(list, (uint32_t)choice1))->nr);
+                        objID = (((struct ObjectNode *)GetNthNode(list, (uint32_t)choice1))->nr);
                         ret = Present(objID, "Tool", InitToolPresent);
                     }
                 }
@@ -233,7 +233,7 @@ void Information(void)
                     {
                         SetBubbleType(THINK_BUBBLE);
 
-                        objID = (uint32_t)(((struct ObjectNode *)GetNthNode(list, (uint32_t)choice1))->nr);
+                        objID = (((struct ObjectNode *)GetNthNode(list, (uint32_t)choice1))->nr);
                         ret = Present(objID, "Building", InitBuildingPresent);
                     }
                 }
@@ -347,7 +347,7 @@ uint32_t tcTelefon(void)
         {
             if (ChoiceOk((choice = Bubble(ObjectList, 0, 0L, 0L)), GET_OUT, ObjectList))
             {
-                persID = (uint32_t)(((struct ObjectNode *)GetNthNode(ObjectList, (uint32_t)choice))->nr);
+                persID = (((struct ObjectNode *)GetNthNode(ObjectList, (uint32_t)choice))->nr);
 
                 if (persID == Person_Ben_Riggley) Say(BUSINESS_TXT, 0, ben->PictID, "ALREADY_PHONING");
 

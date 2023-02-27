@@ -500,7 +500,7 @@ void tcAddGuyToParty(void)
 
             if (ChoiceOk(choice = Bubble(l1, 0, 0L, 0L), GET_OUT, l1))
             {
-                persID = (uint32_t)(((struct ObjectNode *)GetNthNode(l1, (uint32_t)choice))->nr);
+                persID = (((struct ObjectNode *)GetNthNode(l1, (uint32_t)choice))->nr);
 
                 Organisation.GuyCount++;
                 joined_bySet(Person_Matt_Stuvysunt, persID);
@@ -550,7 +550,7 @@ void tcRemGuyFromParty(void)
 
         if (ChoiceOk(choice = Bubble(list, 0, 0L, 0L), GET_OUT, list))
         {
-            persID = (uint32_t)(((struct ObjectNode *)GetNthNode(list, (uint32_t)choice))->nr);
+            persID = (((struct ObjectNode *)GetNthNode(list, (uint32_t)choice))->nr);
 
             Organisation.GuyCount--;
             joined_byUnSet(Person_Matt_Stuvysunt, persID);

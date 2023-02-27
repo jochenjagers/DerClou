@@ -738,7 +738,7 @@ static ubyte plCheckAbilities(uint32_t persId, uint32_t checkToolId)
     toolRequiresAll(checkToolId, OLF_PRIVATE_LIST, Object_Ability);
     requires = ObjectListPrivate;
 
-    for (n = (NODE *)LIST_HEAD(requires); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+    for (n = LIST_HEAD(requires); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
     {
         if (!has(persId, OL_NR(n)))
         {
@@ -771,13 +771,13 @@ static ubyte plCheckRequiredTools(uint32_t checkToolId)
 
     hasAll(Person_Matt_Stuvysunt, OLF_NORMAL, Object_Tool);
 
-    for (n = (NODE *)LIST_HEAD(trl); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
+    for (n = LIST_HEAD(trl); NODE_SUCC(n); n = (NODE *)NODE_SUCC(n))
     {
         ubyte found = 0;
 
         ret = 0;
 
-        for (h = (NODE *)LIST_HEAD(ObjectList); NODE_SUCC(h); h = (NODE *)NODE_SUCC(h))
+        for (h = LIST_HEAD(ObjectList); NODE_SUCC(h); h = (NODE *)NODE_SUCC(h))
         {
             if (OL_NR(n) == OL_NR(h)) found = 1;
         }
