@@ -339,7 +339,7 @@ ubyte tcSaveChangesInScenes(char *fileName)
 
         for (i = 0; i < film->AmountOfScenes; i++)
         {
-            fprintf(file, "%ld\n", film->gameplay[i].EventNr);
+            fprintf(file, "%ld\n", (long int)film->gameplay[i].EventNr);
             fprintf(file, "%d\n", film->gameplay[i].Geschehen);
         }
 

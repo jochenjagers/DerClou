@@ -238,7 +238,7 @@ void AddPresentLine(LIST *l, ubyte presentHow, intptr_t data, uint32_t maxNr, LI
         break;
         case PRESENT_AS_NUMBER:
         {
-            sprintf(p->extendedText, "%ld", data);
+            sprintf(p->extendedText, "%ld", (long int)data);
             p->presentHow = PRESENT_AS_TEXT;
         }
         break;
