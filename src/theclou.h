@@ -175,6 +175,7 @@ uint32_t ShowTheClouRequester(int32_t error_class); /* siehe Base.c */
 #else
 #define DIR_SEPARATOR "/"
 #define DIR_SEPARATOR_CHAR '/'
+#define SDL_main main
 #endif
 
 #endif
