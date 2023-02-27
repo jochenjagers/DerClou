@@ -23,3 +23,5 @@ set(INSTALL_PATH_DATA ".")
 set(INSTALL_PATH_BIN ".")
 
 add_link_options("$<$<CONFIG:DEBUG>:-mconsole>")
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/_deps/sdl2-src/x86_64-w64-mingw32/bin/SDL2.dll DESTINATION ${INSTALL_PATH_BIN})
+
