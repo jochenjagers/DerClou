@@ -71,8 +71,17 @@ add_executable(DerClou ${SOURCE_FILES})
 target_include_directories(DerClou PUBLIC ${CMAKE_CURRENT_LIST_DIR}
                                           ${SDL2_INCLUDE_DIRS})
 target_compile_options(DerClou PUBLIC ${SDL2_CFLAGS_OTHER} -Wall
-                                      -Wno-format-overflow -ggdb -g3)
-add_compile_definitions(CMAKE_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
+                                      -Wno-format-overflow)
+
+add_compile_options("$<$<CONFIG:DEBUG>:-g3 -ggdb>")
+add_compile_options("$<$<CONFIG:RELEASE>:-O2>")
+add_link_options("$<$<CONFIG:RELEASE>:-s>")
+add_compile_definitions(CMAKE_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}"
+                        INSTALL_PATH_BIN="${INSTALL_PATH_BIN}")
 target_link_libraries(DerClou ${SDL2_LIBRARIES} m)
 
-install(TARGETS DerClou DESTINATION ${CMAKE_INSTALL_BINDIR})
+if(NOT DEFINED INSTALL_PATH_BIN)
+  set(INSTALL_PATH_BIN ${CMAKE_INSTALL_BINDIR})
+endif()
+
+install(TARGETS DerClou DESTINATION ${INSTALL_PATH_BIN})
