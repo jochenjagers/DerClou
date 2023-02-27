@@ -6,15 +6,20 @@
 */
 #include "disk/disk.h"
 
+#include <SDL.h>
 #include <ctype.h>
-#include <linux/limits.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
 #include "disk/disk_e.h"
 
-static char RootPathName[PATH_MAX] = {0};
-static char UserPathName[PATH_MAX] = {0};
+#if (defined(_WIN32) || defined(__WIN32__))
+#define mkdir(A, B) mkdir(A)
+#endif
+
+
+static char RootPathName[FILENAME_MAX] = {0};
+static char UserPathName[FILENAME_MAX] = {0};
 
 static const char *USER_GAME_DATA_DIR = "DerClou";
 
@@ -24,33 +29,17 @@ void dskInitUserDataPath(void)
 {
     if (UserPathName[0] == '\0')
     {
-        char *path = NULL;
-        if ((path = getenv("XDG_DATA_HOME")))
-        {
-            strncpy(UserPathName, path, NAME_MAX);
-        }
-        else if ((path = getenv("HOME")))
-        {
-            strncpy(UserPathName, path, NAME_MAX);
-            strcat(UserPathName, DIR_SEPARATOR ".local" DIR_SEPARATOR "share");
-        }
-        else if ((path = getenv("APPDATA")))
-        {
-            strncpy(UserPathName, path, NAME_MAX);
-        }
-        else
-        {
+        char *path = SDL_GetPrefPath("", USER_GAME_DATA_DIR);
+        if(!path) {
             NewErrorMsg(Disk_Defect, __FILE__, __func__, 1);
         }
-        strcat(UserPathName, DIR_SEPARATOR);
-        strcat(UserPathName, USER_GAME_DATA_DIR);
-        strcat(UserPathName, DIR_SEPARATOR);
-
+        strncpy(UserPathName, path, FILENAME_MAX);
+        SDL_free(path);
         if (access(UserPathName, F_OK) != 0)
         {
             mkdir(UserPathName, 0755);
         }
-        char result[PATH_MAX];
+        char result[FILENAME_MAX];
         dskBuildPathNameUser(DATADISK_DIRECTORY, "", &result[0]);
         if (access(result, F_OK) != 0)
         {
@@ -101,6 +90,7 @@ FILE *dskOpen(const char *puch_Pathname, const char *puch_Mode, uword us_DiskId)
 
     if (!p_File)
     {
+        Log("Could not open file %s\n", puch_Pathname);
         NewErrorMsg(Disk_Defect, __FILE__, __func__, ERR_DISK_OPEN_FAILED);
     }
 
