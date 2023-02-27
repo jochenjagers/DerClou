@@ -6,6 +6,9 @@
 */
 #include "base/base.h"
 
+#include <libgen.h>
+#include <string.h>
+
 #include "SDL.h"
 #include "intro/intro.h"
 
@@ -451,10 +454,7 @@ static void loadConfig(const char *rootPath)
 
 int tcStartGame(int argc, char **argv)
 {
-    char result[256];
     int32_t res = 0;
-    unsigned long i = 0;
-
 #ifdef THECLOU_DEBUG_ALLOC
     MemInit();
 #endif
@@ -467,22 +467,17 @@ int tcStartGame(int argc, char **argv)
 
     rndInit();
 
-    strcpy(result, argv[0]);
-
-    for (i = strlen(result) - 1; i > 0; i--)
+    char *rootPath = dirname(argv[0]);
+    if (strcmp(rootPath, CMAKE_INSTALL_PREFIX DIR_SEPARATOR INSTALL_PATH_BIN) == 0)
     {
-        if (result[i] == DIR_SEPARATOR_CHAR)
-        {
-            result[i] = '\0';
-            break;
-        }
+        // game is installed in install prefix -> gamedata is in other directory
+        rootPath = CMAKE_INSTALL_PREFIX DIR_SEPARATOR INSTALL_PATH_BIN;
     }
-
+    dskSetRootPath(rootPath);
     // und den Pfad für BuildPathName setzen!
-    dskSetRootPath(CMAKE_INSTALL_PREFIX);
     dskInitUserDataPath();
 
-    loadConfig(result);
+    loadConfig(rootPath);
 
     if (Config.gfxScreenWidth < 320)
     {
