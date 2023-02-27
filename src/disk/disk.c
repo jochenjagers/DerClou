@@ -8,15 +8,16 @@
 
 #include <SDL.h>
 #include <ctype.h>
+#include <errno.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
 #include "disk/disk_e.h"
 
 #if (defined(_WIN32) || defined(__WIN32__))
-#define mkdir(A, B) mkdir(A)
+#include <direct.h> /* _mkdir */
+#define mkdir(A, B) _mkdir(A)
 #endif
-
 
 static char RootPathName[FILENAME_MAX] = {0};
 static char UserPathName[FILENAME_MAX] = {0};
@@ -25,26 +26,30 @@ static const char *USER_GAME_DATA_DIR = "DerClou";
 
 void dskSetRootPath(const char *newRootPath) { strcpy(RootPathName, newRootPath); }
 
+void dskMakeDirectory(const char *path)
+{
+    int result = mkdir(path, 0755);
+    if (result && errno != EEXIST)
+    {
+        Log("The directory \"%s\" could not be created.", path);
+    }
+}
+
 void dskInitUserDataPath(void)
 {
     if (UserPathName[0] == '\0')
     {
         char *path = SDL_GetPrefPath("", USER_GAME_DATA_DIR);
-        if(!path) {
+        if (!path)
+        {
             NewErrorMsg(Disk_Defect, __FILE__, __func__, 1);
         }
         strncpy(UserPathName, path, FILENAME_MAX);
         SDL_free(path);
-        if (access(UserPathName, F_OK) != 0)
-        {
-            mkdir(UserPathName, 0755);
-        }
+        dskMakeDirectory(UserPathName);
         char result[FILENAME_MAX];
         dskBuildPathNameUser(DATADISK_DIRECTORY, "", &result[0]);
-        if (access(result, F_OK) != 0)
-        {
-            mkdir(result, 0755);
-        }
+        dskMakeDirectory(result);
     }
 }
 
