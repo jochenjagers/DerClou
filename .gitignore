@@ -1,3 +1,6 @@
 /build/
+/build_win32/
 /.cache/
 /.vscode/
+/gamedata/DerClou
+/gamedata/clou.log
